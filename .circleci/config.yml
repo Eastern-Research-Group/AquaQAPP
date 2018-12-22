@@ -3,8 +3,6 @@ jobs:
   deploy:
     docker:
       - image: buildpack-deps:trusty
-    environment:
-      HEROKU_APP_NAME: turbosap-dev
     steps:
       - checkout
       - run:
@@ -18,6 +16,8 @@ workflows:
   build-deploy:
     jobs:
       - deploy:
+          environment:
+            HEROKU_APP_NAME: turbosap-dev
           filters:
             branches:
               only: master
