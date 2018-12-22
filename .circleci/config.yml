@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  develop:
+  develop-branch:
     docker:
       - image: buildpack-deps:trusty
     environment:
@@ -16,7 +16,7 @@ workflows:
   version: 2
   build-deploy-dev:
     jobs:
-      - develop:
+      - develop-branch:
           filters:
             branches:
               only: master
