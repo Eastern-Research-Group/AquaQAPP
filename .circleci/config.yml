@@ -10,13 +10,29 @@ jobs:
       - run:
           name: $HEROKU_APP_NAME
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+            git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
 
+  master-branch:
+    docker:
+      - image: buildpack-deps:trusty
+    environment:
+      HEROKU_APP_NAME: turbosap
+    steps:
+      - checkout
+      - run:
+          name: $HEROKU_APP_NAME
+          command: |
+            git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
+            
 workflows:
   version: 2
-  build-deploy-dev:
+  main:
     jobs:
       - develop-branch:
+          filters:
+            branches:
+              only: develop
+      - master-branch:
           filters:
             branches:
               only: master
