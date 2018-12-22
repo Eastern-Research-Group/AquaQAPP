@@ -16,8 +16,8 @@ workflows:
   build-deploy:
     jobs:
       - deploy:
-          environment:
-            HEROKU_APP_NAME: turbosap-dev
           filters:
+            environment:
+              HEROKU_APP_NAME: turbosap-dev
             branches:
               only: master
