@@ -1,1 +1,68 @@
-Test HTML file
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Sample JSON to Generate QAPP</title>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="images/favicon.png">
+</head>
+
+<body>
+
+   <form action="/api/qapp" method="post">
+
+      <div class="button">
+          <button type="submit">Generate QAPP</button>
+      </div>
+
+       <textarea rows="30" cols="150" id="qapp_data" name="qapp_data">
+      {
+      	"aquaqapp_version": "1.0.0",
+      	"aquaqapp_contenxt": "massbays",
+      	"qapp_prepared_by": "Pam DiBona",
+      	"project_name": "",
+      	"project_short_title": "",
+      	"qapp_approvals": [{
+      			"title": "Quality Officer",
+      			"printed_fullname": "Brad Cooper"},
+      			{
+      			"title": "Quality Officer",
+      			"printed_fullname": "Brad Cooper"}
+      			],
+      	"qapp_distribution_list": [{
+      				"title": "1_title_example",
+      				"organization": "1_organization_example",
+      				"fullname": "Brad Cooper",
+      				"telephone": "703-633-1685",
+      				"address_1": "14555 Avion Pkwy #200",
+      				"address_2": null,
+      				"city": "Chantilly",
+      				"state": "Virginia",
+      				"zip": "20151",
+      				"e-mail": "brad.cooper@erg.com"
+      			},
+      			{
+      				"title": "2_title_example",
+      				"organization": "2_organization_example",
+      				"fullname": "Linda Diamond",
+      				"telephone": "703-633-1685",
+      				"address_1": "110 Hartwell Ave",
+      				"address_2": null,
+      				"city": "Lexington",
+      				"state": "Massachusetts",
+      				"zip": "02421",
+      				"e-mail": "Linda.Diamond@erg.com"
+      			}]
+      }
+       </textarea>
+
+
+   </form>
+</body>
+
+</html>

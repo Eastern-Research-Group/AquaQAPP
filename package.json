@@ -13,7 +13,8 @@
     "body-parser": "^1.18.3",
     "docxtemplater": "^3.9.6",
     "ejs": "^2.5.6",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "jszip": "^2.6.1"
   },
   "devDependencies": {
     "request": "^2.81.0",

@@ -11,9 +11,9 @@ const getQAPPRoutes = (app) => {
 			res.send("You must use post.");
 		})
 		.post('/', (req, res) => {
-			const body = req.body;
-			const result = qappControl.generate(body);
-			res.send(result);
+			//const body = req.body;
+			const result = qappControl.generate(req,res);
+			//res.send(result);
 		});
 
 	app.use('/api/qapp', router);
