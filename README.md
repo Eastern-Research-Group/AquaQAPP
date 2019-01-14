@@ -26,4 +26,4 @@ Staging
 For more information
 
 - [How to contriube changes to the project codebase](/docs/contribute.md)
-- [DevOps information](/docs/devops.md)
+- [Continuous build, testing and deployment pipeline information](/docs/devops.md)
