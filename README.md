@@ -2,7 +2,7 @@
 
 Production (BETA) Location
 
-- CNAME: https://inlandwaters.geoplatform.gov/apps/mywaterway/
+- CNAME: https://aquaqapp.erg.com/ (to be registered) 
 - Heroku: https://aquaqapp.herokuapp.com/
 
 Development Location
