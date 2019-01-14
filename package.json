@@ -7,8 +7,7 @@
   },
   "main": "app/index.js",
   "scripts": {
-    "start": "node app/index.js",
-    "test": "node app/test.js"
+    "start": "node app/index.js"
   },
   "dependencies": {
     "ejs": "^2.5.6",
