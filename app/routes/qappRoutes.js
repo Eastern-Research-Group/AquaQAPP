@@ -1,22 +1,20 @@
 'use strict';
 
 const Router = require('express');
+const qappControl = require('../controllers/qappController');
 
 const getQAPPRoutes = (app) => {
 	const router = new Router();
 
 	router
-	.get('/:id', (req, res) => {
-		const id = parseInt(req.params.id);
-		res.send("get by id" + id);
-	})
-	.get('/', (req, res) => {
-		res.send("get root");
-	})
-	.post('/', (req, res) => {
-		const body = req.body;
-		res.send(body);
-	});
+		.get('/', (req, res) => {
+			res.send("You must use post.");
+		})
+		.post('/', (req, res) => {
+			const body = req.body;
+			const result = qappControl.generate(body);
+			res.send(result);
+		});
 
 	app.use('/api/qapp', router);
 };

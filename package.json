@@ -1,34 +1,35 @@
 {
-	"name": "AquaQAPP",
-	"version": "1.0.0",
-	"description": "A web-based tool that can generate a Quality Assurance Project Plan (QAPP) / Sampling and Analysis Plan (SAP) to accompany water quality monitoring projects",
-	"engines": {
-		"node": "10.x"
-	},
-	"main": "app/server.js",
-	"scripts": {
-		"start": "nodemon --inspect app/server.js"
-	},
-	"dependencies": {
-		"ejs": "^2.5.6",
-		"body-parser": "^1.18.3",
-		"express": "^4.16.4"
-	},
-	"devDependencies": {
-		"request": "^2.81.0",
-		"tape": "^4.7.0",
-		"nodemon": "^1.18.9"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Eastern-Research-Group/AquaQAPP"
-	},
-	"keywords": [
-		"node",
-		"heroku",
-		"express",
-		"ERG",
-		"QAPP"
-	],
-	"license": "MIT"
+  "name": "AquaQAPP",
+  "version": "1.0.0",
+  "description": "A web-based tool that can generate a Quality Assurance Project Plan (QAPP) / Sampling and Analysis Plan (SAP) to accompany water quality monitoring projects",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "app/server.js",
+  "scripts": {
+    "start": "nodemon --inspect app/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "docxtemplater": "^3.9.6",
+    "ejs": "^2.5.6",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0",
+    "nodemon": "^1.18.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Eastern-Research-Group/AquaQAPP"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express",
+    "ERG",
+    "QAPP"
+  ],
+  "license": "MIT"
 }
