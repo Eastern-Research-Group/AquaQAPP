@@ -26,7 +26,4 @@ Staging
 For more information
 
 - [How to contriube changes to the project codebase](/docs/contribute.md)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+- [DevOps information](/docs/devops.md)
