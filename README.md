@@ -1,12 +1,11 @@
 [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop)
 
-# AquaQAPP
-
 ## Environments
 Production (BETA) Location
 
 - CNAME: https://aquaqapp.erg.com/ (to be registered) 
 - Heroku: https://aquaqapp.herokuapp.com/
+- Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop)
 
 Development Location
 
