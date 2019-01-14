@@ -1,4 +1,27 @@
-# node-js-getting-started
+# AquaQAPP
+
+Production (BETA) Location
+
+- CNAME: https://inlandwaters.geoplatform.gov/apps/mywaterway/
+- Heroku: https://aquaqapp.herokuapp.com/
+
+Development Location
+
+- Heroku: https://aquaqapp-dev.herokuapp.com/
+- user: xxx
+- password: xx
+
+Staging Location
+
+- Heroku: https://aquaqapp-stage.herokuapp.com/
+- user: xxx
+- password: xx
+
+
+
+
+
+
 
 A barebones Node.js app using [Express 4](http://expressjs.com/).
 
