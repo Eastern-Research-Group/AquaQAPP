@@ -5,7 +5,7 @@ class QAPP {
    }
 
    generate(params) {
-      return "params";
+      return "params: " + JSON.stringify(params);
    }
 }
 
