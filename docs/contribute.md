@@ -1,4 +1,4 @@
-**General Information
+**General Information**
 
 We currently use three git-based branches to support development on the project. The associated continuous build, test and deployment configuration for the project is available in DevOps.
 
@@ -6,7 +6,7 @@ We currently use three git-based branches to support development on the project.
 - staging = we use this environment for user acceptance testing (UAT). Authorized GitHub project users can issue a pull request against the staging branch from the develop branch to have the code automatically deployed to the staging environment. 
 - master = Only a designated GitHub gatekeeper for the project (e.g. Brad Cooper) can/should issue pull requests from staging against the master branch. Merges will be auto deployed to the Production environment.
 
-**Instructions for contributing via git
+**Instructions for contributing via git**
 
 - Make sure you are on the Develop branch.
 
