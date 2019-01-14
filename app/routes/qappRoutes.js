@@ -18,7 +18,7 @@ const getQAPPRoutes = (app) => {
 		res.send(body);
 	});
 
-	app.use('/qapp', router);
+	app.use('/api/qapp', router);
 };
 
 module.exports = getQAPPRoutes;
