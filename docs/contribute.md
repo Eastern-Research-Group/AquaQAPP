@@ -30,4 +30,4 @@ git push origin feature/your-branch-name
 ```
 
 - Then you can make a pull request by finding your branch on the
-  [AquaQAPP GitHub repository]https://github.com/Eastern-Research-Group/AquaQAPP/branches)
+  [AquaQAPP GitHub repository](https://github.com/Eastern-Research-Group/AquaQAPP/branches)
