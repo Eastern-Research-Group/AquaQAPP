@@ -1,36 +1,29 @@
-# node-js-getting-started
+## Environments
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+Production (BETA) Location
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+- Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/master.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/master)
+- CNAME: https://aquaqapp.erg.com/ (to be registered) 
+- Heroku: https://aquaqapp.herokuapp.com/
 
-## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
+Development Location
 
-```sh
-$ git clone https://github.com/heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
+- Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop)
+- Heroku: https://aquaqapp-dev.herokuapp.com/
+- user: xxx
+- password: xx
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+Staging Location
 
-## Deploying to Heroku
-
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+- Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop)
+- Heroku: https://aquaqapp-stage.herokuapp.com/
+- user: xxx
+- password: xx
 
 ## Documentation
 
-For more information about using Node.js on Heroku, see these Dev Center articles:
+For more information
 
 - [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
 - [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
