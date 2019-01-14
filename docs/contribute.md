@@ -1,6 +1,6 @@
 **General Information**
 
-We currently use three git-based branches to support development on the project. The associated continuous build, test and deployment configuration for the project is available in DevOps.
+We currently use three git-based branches to support development on the project. The associated continuous build, test and deployment configuration for the project is available in [DevOps](devops.md).
 
 - develop = we use a feature branch strategy to submit code changes to this branch. Merges will be auto deployed to the Development environment.
 - staging = we use this environment for user acceptance testing (UAT). Authorized GitHub project users can issue a pull request against the staging branch from the develop branch to have the code automatically deployed to the staging environment. 
