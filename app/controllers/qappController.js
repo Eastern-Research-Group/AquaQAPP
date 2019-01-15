@@ -56,7 +56,10 @@ class QAPP {
       response.header('Content-type', 'application/octet-stream');
       response.header('Content-disposition', 'inline; filename=' + "output.docx");
 
-      response.status(200).send(buf);
+      response.write(buf,'binary');
+      response.status(200).end(null, 'binary');
+
+      //response.status(200).send(buf);
 
       //response.send("output available @ <a href='" + request.protocol + "://" + request.hostname + ":" + request.socket.localPort + "/output/output.docx" +"'>Output</a>");
    }
