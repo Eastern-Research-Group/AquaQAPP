@@ -52,10 +52,11 @@ class QAPP {
       //fs.writeFileSync(path.resolve(__dirname + "/../public/output/", 'output.docx'), buf);
 
       response.type('application/octet-stream');
+      response.set('Content-Type', 'application/octet-stream');
       response.header('Content-type', 'application/octet-stream');
       response.header('Content-disposition', 'inline; filename=' + "output.docx");
 
-      return response.status(200).send(buf);
+      response.status(200).send(buf);
 
       //response.send("output available @ <a href='" + request.protocol + "://" + request.hostname + ":" + request.socket.localPort + "/output/output.docx" +"'>Output</a>");
    }
