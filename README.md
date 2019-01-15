@@ -26,4 +26,5 @@ Staging
 For more information
 
 - [How to contriube changes to the project codebase](/docs/contribute.md)
+- [How to run the code locally](/docs/run-locally.md)
 - [Continuous build, testing and deployment pipeline information](/docs/devops.md)
