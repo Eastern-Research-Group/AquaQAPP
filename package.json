@@ -10,6 +10,7 @@
     "start": "nodemon --inspect app/server.js"
   },
   "dependencies": {
+    "angular-expressions": "^1.0.0",
     "body-parser": "^1.18.3",
     "docxtemplater": "^3.9.6",
     "ejs": "^2.5.6",

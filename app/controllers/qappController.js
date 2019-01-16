@@ -2,6 +2,8 @@
 
 var JSZip = require('jszip');
 var Docxtemplater = require('docxtemplater');
+var expressions = require('angular-expressions');
+
 var fs = require('fs');
 var path = require('path');
 
@@ -9,25 +11,28 @@ class QAPP {
    constructor() {
    }
 
-   generate(request,response) {
+   generate(request, response) {
       //return "params: " + JSON.stringify(params);
 
       //Load the docx file as a binary
       var content = fs
-         .readFileSync(path.resolve(__dirname + "/../templates/massbays", 'input.docx'), 'binary');
+         .readFileSync(path.resolve(__dirname + "/../templates/massbays", 'GroupA.docx'), 'binary');
 
       var zip = new JSZip(content);
 
-      var doc = new Docxtemplater();
+      var angularParser = function(tag) {
+         return {
+            get: tag === '.' ? function(s) { return s; } : function(s) {
+               return expressions.compile(tag.replace(/(’|“|”)/g, "'"))(s);
+            }
+         };
+      }
+
+      var doc = new Docxtemplater().setOptions({ parser: angularParser });
       doc.loadZip(zip);
 
-      //set the templateVariables
-      doc.setData({
-         first_name: 'John',
-         last_name: 'Doe',
-         phone: '0652455478',
-         description: 'New Website'
-      });
+      var templatevars = JSON.parse(request.body.qapp_data);
+      doc.setData(templatevars);
 
       try {
          // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
@@ -56,7 +61,7 @@ class QAPP {
       response.header('Content-type', 'application/octet-stream');
       response.header('Content-disposition', 'inline; filename=' + "output.docx");
 
-      response.write(buf,'binary');
+      response.write(buf, 'binary');
       response.status(200).end(null, 'binary');
 
       //response.status(200).send(buf);
