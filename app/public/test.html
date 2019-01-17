@@ -8,8 +8,6 @@
 
   <title>Sample JSON to Generate QAPP</title>
 
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="icon" href="images/favicon.png">
 </head>
 
 <body>
@@ -22,27 +20,52 @@
 
        <textarea rows="30" cols="150" id="qapp_data" name="qapp_data">
       {
-         "app_version": "1.0.0",
-         "context": {
-            "organizational_indicator": "massbays",
-            "organizational_qapp_type": "general"
+     "app_version": "1.0.0",
+     "context": {
+       "organizational_indicator": "massbays",
+       "organizational_qapp_type": "general"
+     },
+     "qapp": {
+       "revision_number": "1.0",
+       "revision_date": "Jan 16, 2019",
+       "short_name": "Broadrun SW Monitoring",
+       "name": "Monitoring of Surface Water on Broadrun",
+       "prepared_by": "Friends of the Broadrun",
+       "approval_list": [
+         {
+           "title": "Friends of the Broadrun Chairperson"
          },
-         "qapp": {
-            "revision_number": "1.0",
-            "revision_date": "Jan 16, 2019",
-            "short_name": "Broadrun SW Monitoring",
-            "name": "Monitoring of Surface Water on Broadrun",
-            "prepared_by": "Friends of the Broadrun",
-            "approval_list": [{
-               "title": "Friends of the Broadrun Chairperson",
-               "printed_fullname": "Brad Cooper"
-            }, {
-               "title": "MassBays Quality Officer",
-               "printed_fullname": "Pam DiBona"
+         {
+           "title": "MassBays Quality Officer"
+         }
+       ],
+       "distribution_list": [
+         {
+            "organizational_name":"Organization #1",
+            "organizational_contacts": [{
+              "fullname": "Brad Cooper",
+              "title": "Friends of the Broadrun Chairperson"
+            },
+            {
+              "fullname": "Pam DiBona",
+              "title": "MassBays Quality Officer"
+            }]
+         },
+         {
+            "organizational_name":"Organization #2",
+            "organizational_contacts": [{
+              "fullname": "Linda Diamond",
+              "title": "Chairperson"
+            },
+            {
+              "fullname": "Prassede Vella",
+              "title": "Quality Officer"
             }]
          }
-      }
-       </textarea>
+       ]
+     }
+   }
+</textarea>
 
 
    </form>

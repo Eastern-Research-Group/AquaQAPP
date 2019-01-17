@@ -59,7 +59,7 @@ class QAPP {
       response.type('application/octet-stream');
       response.set('Content-Type', 'application/octet-stream');
       response.header('Content-type', 'application/octet-stream');
-      response.header('Content-disposition', 'inline; filename=' + "output.docx");
+      response.header('Content-disposition', 'inline; filename=' + templatevars.qapp.short_name +" QAPP.docx");
 
       response.write(buf, 'binary');
       response.status(200).end(null, 'binary');
