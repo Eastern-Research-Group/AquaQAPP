@@ -13,10 +13,13 @@ class QAPP {
 
     generate(request, response) {
         //return "params: " + JSON.stringify(params);
+        var templatevars = JSON.parse(request.body.qapp_data);
+        var organizational_indicator = templatevars.context.organizational_indicator;
+        var organizational_qapp_type = templatevars.context.organizational_qapp_type;
 
         //Load the docx file as a binary
         var content = fs
-            .readFileSync(path.resolve(__dirname + "/../templates/massbays", 'GroupA.docx'), 'binary');
+            .readFileSync(path.resolve(__dirname + "/../templates/" + organizational_indicator + "/" + organizational_qapp_type, 'GroupA.docx'), 'binary');
 
         var zip = new JSZip(content);
 
@@ -31,7 +34,6 @@ class QAPP {
         var doc = new Docxtemplater().setOptions({ parser: angularParser });
         doc.loadZip(zip);
 
-        var templatevars = JSON.parse(request.body.qapp_data);
         doc.setData(templatevars);
 
         try {
