@@ -2,67 +2,72 @@
 
 var JSZip = require('jszip');
 var Docxtemplater = require('docxtemplater');
+var expressions = require('angular-expressions');
+
 var fs = require('fs');
 var path = require('path');
 
 class QAPP {
-   constructor() {
-   }
+    constructor() {
+    }
 
-   generate(request,response) {
-      //return "params: " + JSON.stringify(params);
+    generate(request, response) {
+        //return "params: " + JSON.stringify(params);
 
-      //Load the docx file as a binary
-      var content = fs
-         .readFileSync(path.resolve(__dirname + "/../templates/massbays", 'input.docx'), 'binary');
+        //Load the docx file as a binary
+        var content = fs
+            .readFileSync(path.resolve(__dirname + "/../templates/massbays", 'GroupA.docx'), 'binary');
 
-      var zip = new JSZip(content);
+        var zip = new JSZip(content);
 
-      var doc = new Docxtemplater();
-      doc.loadZip(zip);
+        var angularParser = function(tag) {
+            return {
+                get: tag === '.' ? function(s) { return s; } : function(s) {
+                    return expressions.compile(tag.replace(/(’|“|”)/g, "'"))(s);
+                }
+            };
+        }
 
-      //set the templateVariables
-      doc.setData({
-         first_name: 'John',
-         last_name: 'Doe',
-         phone: '0652455478',
-         description: 'New Website'
-      });
+        var doc = new Docxtemplater().setOptions({ parser: angularParser });
+        doc.loadZip(zip);
 
-      try {
-         // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-         doc.render()
-      }
-      catch (error) {
-         var e = {
-            message: error.message,
-            name: error.name,
-            stack: error.stack,
-            properties: error.properties,
-         }
-         console.log(JSON.stringify({ error: e }));
-         // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-         throw error;
-      }
+        var templatevars = JSON.parse(request.body.qapp_data);
+        doc.setData(templatevars);
 
-      var buf = doc.getZip()
-         .generate({ type: 'nodebuffer' });
+        try {
+            // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+            doc.render()
+        }
+        catch (error) {
+            var e = {
+                message: error.message,
+                name: error.name,
+                stack: error.stack,
+                properties: error.properties,
+            }
+            console.log(JSON.stringify({ error: e }));
+            // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+            throw error;
+        }
 
-      // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-      //fs.writeFileSync(path.resolve(__dirname + "/../public/output/", 'output.docx'), buf);
+        var buf = doc.getZip()
+            .generate({ type: 'nodebuffer' });
 
-      response.type('application/octet-stream');
-      response.set('Content-Type', 'application/octet-stream');
-      response.header('Content-type', 'application/octet-stream');
-      response.header('Content-disposition', 'inline; filename=' + "output.docx");
+        // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+        //fs.writeFileSync(path.resolve(__dirname + "/../public/output/", 'output.docx'), buf);
 
-      response.write(buf,'binary');
-      response.status(200).end(null, 'binary');
+        response.type('application/octet-stream');
+        response.set('Content-Type', 'application/octet-stream');
+        response.header('Content-type', 'application/octet-stream');
+        response.header('Content-disposition', 'inline; filename=' + templatevars.qapp.short_name +" QAPP.docx");
 
-      //response.status(200).send(buf);
+        response.write(buf, 'binary');
+        response.status(200).end(null, 'binary');
 
-      //response.send("output available @ <a href='" + request.protocol + "://" + request.hostname + ":" + request.socket.localPort + "/output/output.docx" +"'>Output</a>");
-   }
+        //response.status(200).send(buf);
+
+        //response.send("output available @ <a href='" + request.protocol + "://" + request.hostname + ":" + request.socket.localPort + "/output/output.docx" +"'>Output</a>");
+    }
 }
 
 const qapp = new QAPP();
