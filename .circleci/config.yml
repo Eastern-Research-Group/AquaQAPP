@@ -7,8 +7,17 @@ jobs:
       HEROKU_APP_NAME: aquaqapp-dev
     steps:
       - checkout
+      - run: 
+          name: Install Sonarqube scanner
+          command: |
+            wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+            unzip sonar-scanner-cli-3.3.0.1492-linux.zip
       - run:
-          name: $HEROKU_APP_NAME
+          name: Run Sonarqube scanner
+          command: |
+            ./sonar-scanner-3.3.0.1492-linux/bin/sonar-scanner -Dsonar.projectKey=AquaQAPP -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN
+      - run:
+          name: Deploy $HEROKU_APP_NAME to Heroku
           command: |
             git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
 
@@ -20,7 +29,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: $HEROKU_APP_NAME
+          name: Deploy $HEROKU_APP_NAME to Heroku
           command: |
             git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
             
@@ -32,7 +41,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: $HEROKU_APP_NAME
+          name: Deploy $HEROKU_APP_NAME to Heroku
           command: |
             git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
 
