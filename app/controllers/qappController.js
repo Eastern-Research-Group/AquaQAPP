@@ -17,12 +17,12 @@ class QAPP {
 
         //Load the docx file as a binary
         var content = fs
-            .readFileSync(path.resolve(__dirname + "/../templates/" + organizational_indicator + "/" + organizational_qapp_type, 'swapi-simple.docx'), 'binary');
+            .readFileSync(path.resolve("app/templates/" + organizational_indicator + "/" + organizational_qapp_type, 'GroupA.docx'));
 
         var buffer;
         try {
             buffer = await createReport({
-                template: 'swapi-simple.docx',
+                template: content,
                 output: 'buffer',
                 data: templatevars
             });

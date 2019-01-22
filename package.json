@@ -12,7 +12,7 @@
   "dependencies": {
     "angular-expressions": "^1.0.0",
     "body-parser": "^1.18.3",
-    "docxtemplater": "^3.9.6",
+    "docx-templates": "^2.9.1",
     "ejs": "^2.5.6",
     "express": "^4.16.4",
     "jszip": "^2.6.1"
