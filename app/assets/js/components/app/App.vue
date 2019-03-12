@@ -64,7 +64,7 @@
 
 <script>
 
-  import Treeview from './Treeview';
+  import Treeview from '../shared/Treeview';
 
   export default {
     components: {
