@@ -9,10 +9,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 require('./routes/qappRoutes')(app);
 
 var static_options = {
-  index: "test.html"
+  index: "index.html"
 };
 
-app.use('/', express.static('./app/public', static_options));
+app.use('/', express.static('../', static_options));
 
 
 app.listen(PORT, () => {
