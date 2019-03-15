@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="dataSourceStorageLocal">
-    <data-source name="aquaqapp" uuid="0fb08d45-e627-4239-8e69-272da899090a">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
-      <introspection-schemas>*:</introspection-schemas>
-    </data-source>
-  </component>
-</project>
