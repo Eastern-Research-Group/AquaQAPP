@@ -4,14 +4,22 @@ const dashboardController = require('./controllers/dashboardController');
 const isAuthenticated = require('./policies/isAuthenticated');
 
 module.exports = (app) => {
-    app.post('/register',
+    app.post('/auth/register',
         authenticationControllerPolicy.register,
         authenticationController.register);
 
-    app.post('/login',
+    app.post('/auth/login',
         authenticationController.login);
 
-    app.get('/dashboard',
+    app.get('/auth/user',
+        isAuthenticated,
+        authenticationController.user);
+
+    app.post('/auth/logout',
+        isAuthenticated,
+        authenticationController.logout);
+
+    app.get('/api/qapps',
         isAuthenticated,
         dashboardController.dashboard);
 };

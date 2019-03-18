@@ -1,16 +1,10 @@
-const {User} = require('../models');
+const {Qapp} = require('../models');
 
 module.exports = {
   async dashboard (req, res) {
       try {
-          const userId = req.user.id;
-          const user = await User.findOne({
-              where: {
-                  UserId: userId
-              }
-          });
-          res.send(user);
-          console.log(user);
+        const qapps = await Qapp.findAll();
+        res.send(qapps);
       } catch (err) {
           res.status(400).send({
               err: 'Dashboard data unavailable.'

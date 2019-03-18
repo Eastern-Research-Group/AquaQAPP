@@ -13,24 +13,24 @@
         <v-toolbar-items>
 
             <v-btn
-               v-if="!$store.state.isUserLoggedIn"
+               v-if="!$auth.check()"
                @click="navigateTo({name: 'login'})"
                flat dark
             >Log In</v-btn>
 
             <v-btn
-                v-if="!$store.state.isUserLoggedIn"
+                v-if="!$auth.check()"
                 @click="navigateTo({name: 'register'})"
                 flat dark
             >Sign Up</v-btn>
 
             <v-toolbar-title
                     class="mr-4 pt-3"
-                    v-if="$store.state.isUserLoggedIn"
-            >Welcome {{user_Name}}!</v-toolbar-title>
+                    v-if="$auth.check()"
+            >Welcome {{ $auth.user.name }}!</v-toolbar-title>
 
             <v-btn
-                    v-if="$store.state.isUserLoggedIn"
+                    v-if="$auth.check()"
                     @click="logout"
                     flat dark
             >Log Out</v-btn>
@@ -47,18 +47,14 @@
             'userName'
         ],
         data: function () {
-          return {
-              user_Name: this.$store.state.user.userName
-          }
+          return {}
         },
         methods: {
             navigateTo (route) {
                 this.$router.push(route)
             },
             logout () {
-                this.$store.dispatch('setToken', null);
-                this.$store.dispatch('setUser', null);
-                this.$router.push({name: 'root'})
+                this.$auth.logout();
             }
         }
     }

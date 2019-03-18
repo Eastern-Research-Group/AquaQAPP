@@ -11,7 +11,7 @@
               name="register-form"
               autocomplete="off">
               <v-text-field
-                      v-model="userName"
+                      v-model="name"
                       label="Name"
               ></v-text-field>
               <br>
@@ -43,32 +43,29 @@
 </template>
 
 <script>
-
-import authenticationService from "../services/authenticationService";
-
 export default {
   data () {
     return {
-        userName: '',
+        name: '',
         email: '',
         password: '',
         error: null
     }
   },
   methods: {
-      async register () {
-          try {
-              const response = await authenticationService.register({
-                  email: this.email,
-                  password: this.password,
-                  userName: this.userName
-              });
-              this.$store.dispatch('setToken', response.data.token);
-              this.$store.dispatch('setUser', response.data.user);
-              this.$router.push({name: 'dashboard'});
-          } catch (err) {
-              this.error = err.response.data.error
+      register () {
+        this.$auth.register({
+          data: {
+            name: this.name,
+            email: this.email,
+            password: this.password
+          },
+          success: (response) => {
+            // globally set the user and token
+            this.$auth.user = response.data.user;
+            this.$auth.token(null, response.data.token);
           }
+        });
       }
     }
 }

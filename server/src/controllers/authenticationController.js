@@ -13,6 +13,7 @@ module.exports = {
     async register (req, res) {
         try {
             const user = await User.create(req.body);
+          // todo: remove the hashed password from the user JSON response
             const userJson = user.toJSON();
             res.send({
                 user: userJson,
@@ -45,7 +46,7 @@ module.exports = {
                     error: 'The login information was incorrect.'
                 })
             }
-
+            // todo: remove the hashed password from the user JSON response
             const userJson = user.toJSON();
             res.send({
                 user: userJson,
@@ -53,8 +54,21 @@ module.exports = {
             })
         } catch (err) {
             res.status(500).send({
-                error: 'An error has occured trying to log in'
+                error: 'An error has occurred trying to log in'
             })
         }
+    },
+
+    async user (req, res) {
+      // todo: remove the hashed password from the user JSON response
+      const userJson = req.user.toJSON();
+      res.send({
+        user: userJson,
+        token: jwtSignUser(userJson)
+      })
+    },
+
+    async logout (req, res) {
+      req.logout();
     }
 };

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
+    <v-app v-if="$auth.ready()">
       <page-header/>
       <main>
         <v-container fluid>

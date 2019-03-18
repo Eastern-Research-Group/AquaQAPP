@@ -32,9 +32,6 @@
 </template>
 
 <script>
-
-import authenticationService from "../services/authenticationService";
-
 export default {
   data () {
     return {
@@ -44,18 +41,19 @@ export default {
     }
   },
   methods: {
-      async login () {
-          try {
-              const response = await authenticationService.login({
-                  email: this.email,
-                  password: this.password
-              });
-              this.$store.dispatch('setToken', response.data.token);
-              this.$store.dispatch('setUser', response.data.user);
-              this.$router.push({name: 'dashboard'});
-          } catch (err) {
-              this.error = err.response.data.error
+      login () {
+        this.$auth.login({
+          data: {
+            email: this.email,
+            password: this.password
+          },
+          fetchUser: false,
+          success: (response) => {
+            // globally set the user and token
+            this.$auth.user = response.data.user;
+            this.$auth.token(null, response.data.token);
           }
+        });
       }
     }
 }

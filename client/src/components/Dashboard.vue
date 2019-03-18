@@ -24,6 +24,11 @@
 
 <script>
     export default {
+        async mounted () {
+          // todo: move this logic into vuex and populate the dashboard table based on the actual response
+          const response = await this.$http.get('api/qapps');
+          console.log(response);
+        },
         data () {
             return {
                 headers: [
