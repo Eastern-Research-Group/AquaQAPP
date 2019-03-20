@@ -36,28 +36,27 @@
             >Log Out</v-btn>
 
 
-
         </v-toolbar-items>
     </v-toolbar>
 </template>
 
 <script>
-    export default {
-        props: [
-            'userName'
-        ],
-        data: function () {
-          return {}
-        },
-        methods: {
-            navigateTo (route) {
-                this.$router.push(route)
-            },
-            logout () {
-                this.$auth.logout();
-            }
-        }
-    }
+export default {
+  props: [
+    'userName',
+  ],
+  data() {
+    return {};
+  },
+  methods: {
+    navigateTo(route) {
+      this.$router.push(route);
+    },
+    logout() {
+      this.$auth.logout();
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

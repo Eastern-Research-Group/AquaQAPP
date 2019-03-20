@@ -33,30 +33,30 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-        email: '',
-        password: '',
-        error: null
-    }
+      email: '',
+      password: '',
+      error: null,
+    };
   },
   methods: {
-      login () {
-        this.$auth.login({
-          data: {
-            email: this.email,
-            password: this.password
-          },
-          fetchUser: false,
-          success: (response) => {
-            // globally set the user and token
-            this.$auth.user = response.data.user;
-            this.$auth.token(null, response.data.token);
-          }
-        });
-      }
-    }
-}
+    login() {
+      this.$auth.login({
+        data: {
+          email: this.email,
+          password: this.password,
+        },
+        fetchUser: false,
+        success: (response) => {
+          // globally set the user and token
+          this.$auth.user = response.data.user;
+          this.$auth.token(null, response.data.token);
+        },
+      });
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
