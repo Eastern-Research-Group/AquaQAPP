@@ -1,7 +1,7 @@
 
 **Prerequisites**
 - install Node.js from https://nodejs.org
-- install postgresl from https://www.postgresql.org/
+- install postgresql from https://www.postgresql.org/
 
 ** Steps to run application locally**
 - git clone this repo
