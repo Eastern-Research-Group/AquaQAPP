@@ -6,7 +6,8 @@ module.exports = {
     return Qapp.findOrCreate( {
       where: { title: 'Test QAPP' },
       defaults: {
-        name: 'Test QAPP',
+        title: 'Test QAPP',
+        userId: 1,
         description: 'This is a test QAPP.',
         createdAt: new Date(),
         updatedAt: new Date()
