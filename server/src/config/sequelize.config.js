@@ -7,6 +7,6 @@ module.exports = {
     database: config.db.database,
     host: config.db.options.host,
     port: config.db.options.port,
-    dialect: config.db.options.dialect
-  }
-}
+    dialect: config.db.options.dialect,
+  },
+};
