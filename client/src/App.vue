@@ -12,13 +12,14 @@
 </template>
 
 <script>
-  import PageHeader from './components/Header'
+import PageHeader from './components/Header';
+
 export default {
   name: 'App',
-    components: {
-      PageHeader
-    }
-}
+  components: {
+    PageHeader,
+  },
+};
 </script>
 
 <style>

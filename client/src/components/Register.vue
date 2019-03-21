@@ -44,31 +44,31 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-        name: '',
-        email: '',
-        password: '',
-        error: null
-    }
+      name: '',
+      email: '',
+      password: '',
+      error: null,
+    };
   },
   methods: {
-      register () {
-        this.$auth.register({
-          data: {
-            name: this.name,
-            email: this.email,
-            password: this.password
-          },
-          success: (response) => {
-            // globally set the user and token
-            this.$auth.user = response.data.user;
-            this.$auth.token(null, response.data.token);
-          }
-        });
-      }
-    }
-}
+    register() {
+      this.$auth.register({
+        data: {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+        },
+        success: (response) => {
+          // globally set the user and token
+          this.$auth.user = response.data.user;
+          this.$auth.token(null, response.data.token);
+        },
+      });
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

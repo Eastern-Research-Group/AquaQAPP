@@ -16,3 +16,5 @@ docker-compose.yml
 
 # phpStorm
 .idea
+!.idea/codeStyles/
+!.idea/inspectionProfiles/

@@ -23,46 +23,46 @@
 </template>
 
 <script>
-    export default {
-        async mounted () {
-          // todo: move this logic into vuex and populate the dashboard table based on the actual response
-          const response = await this.$http.get('api/qapps');
-          console.log(response);
+export default {
+  async mounted() {
+    // todo: move this logic into vuex and populate the dashboard table based on the actual response
+    const response = await this.$http.get('api/qapps');
+    console.log(response);
+  },
+  data() {
+    return {
+      headers: [
+        {
+          text: 'Short Title',
+          value: 'title',
+          align: 'center',
         },
-        data () {
-            return {
-                headers: [
-                    {
-                        text: 'Short Title',
-                        value: 'title',
-                        align: 'center',
-                    },
-                    {
-                        text: 'Project Name',
-                        value: 'project_name',
-                        align: 'center',
-                    },
-                    {
-                        text: 'Author',
-                        value: 'user_name',
-                        align: 'center',
-                    }
-                ],
-                accounts: [
-                    {
-                        title: 'First QAPP',
-                        project_name: 'Aqua',
-                        user_name: 'John Doe',
-                    },
-                    {
-                        title: 'Second QAPP',
-                        project_name: 'MassBays',
-                        user_name: 'Jack Doe'
-                    }
-                ]
-            }
-        }
-    }
+        {
+          text: 'Project Name',
+          value: 'project_name',
+          align: 'center',
+        },
+        {
+          text: 'Author',
+          value: 'user_name',
+          align: 'center',
+        },
+      ],
+      accounts: [
+        {
+          title: 'First QAPP',
+          project_name: 'Aqua',
+          user_name: 'John Doe',
+        },
+        {
+          title: 'Second QAPP',
+          project_name: 'MassBays',
+          user_name: 'Jack Doe',
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
