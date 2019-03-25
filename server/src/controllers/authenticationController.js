@@ -13,11 +13,13 @@ module.exports = {
   async register(req, res) {
     try {
       const user = await User.create(req.body);
-      // todo: remove the hashed password from the user JSON response
       const userJson = user.toJSON();
+      const token = jwtSignUser(userJson);
+      delete userJson.password;
+      res.header('Access-Control-Expose-Headers', 'Authorization');
+      res.header('Authorization', `Bearer ${token}`);
       res.send({
-        user: userJson,
-        token: jwtSignUser(userJson),
+        data: userJson,
       });
     } catch (err) {
       res.status(400).send({
@@ -46,25 +48,29 @@ module.exports = {
           error: 'The login information was incorrect.',
         });
       }
-      // todo: remove the hashed password from the user JSON response
       const userJson = user.toJSON();
+      const token = jwtSignUser(userJson);
+      delete userJson.password;
+      res.header('Access-Control-Expose-Headers', 'Authorization');
+      res.header('Authorization', `Bearer ${token}`);
       return res.send({
-        user: userJson,
-        token: jwtSignUser(userJson),
+        data: userJson,
       });
     } catch (err) {
       return res.status(500).send({
-        error: 'An error has occurred trying to log in',
+        error: `An error has occurred trying to log in: ${err}`,
       });
     }
   },
 
   async user(req, res) {
-    // todo: remove the hashed password from the user JSON response
     const userJson = req.user.toJSON();
-    res.send({
-      user: userJson,
-      token: jwtSignUser(userJson),
+    const token = jwtSignUser(userJson);
+    delete userJson.password;
+    res.header('Access-Control-Expose-Headers', 'Authorization');
+    res.header('Authorization', `Bearer ${token}`);
+    return res.send({
+      data: userJson,
     });
   },
 
