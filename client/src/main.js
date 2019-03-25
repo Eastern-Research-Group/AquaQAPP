@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import BootstrapVue from 'bootstrap-vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 import './registerServiceWorker';
 import router from './router';
 import store from './store/store';
@@ -10,7 +11,7 @@ import App from './App';
 
 Vue.config.productionTip = false;
 
-Vue.use(Vuetify);
+Vue.use(BootstrapVue);
 
 Vue.use(VueAxios, axios);
 Vue.axios.defaults.baseURL = 'http://localhost:3000';
@@ -27,6 +28,7 @@ Vue.use(require('@websanova/vue-auth'), {
     redirect: '/dashboard',
   },
   refreshData: { enabled: false },
+  notFoundRedirect: { path: '/dashboard' },
 });
 
 new Vue({
