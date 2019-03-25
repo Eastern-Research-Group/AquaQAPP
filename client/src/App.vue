@@ -1,34 +1,47 @@
 <template>
   <div id="app">
-    <v-app v-if="$auth.ready()">
-      <page-header/>
-      <main>
-        <v-container fluid>
+    <div v-if="$auth.ready()">
+      <info-header class="info-header" v-if="$auth.check()"/>
+      <page-header class="page-header"/>
+      <progress-bar v-if="$route.name === 'generate'"/>
+      <main class="main-section">
+        <b-container>
           <router-view/>
-        </v-container>
+        </b-container>
       </main>
-    </v-app>
+    </div>
   </div>
 </template>
 
 <script>
-import PageHeader from './components/Header';
+import InfoHeader from './components/InfoHeader';
+import PageHeader from './components/PageHeader';
+import ProgressBar from './components/ProgressBar';
 
 export default {
   name: 'App',
   components: {
     PageHeader,
+    InfoHeader,
+    ProgressBar,
   },
 };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+$theme-colors: (
+  "primary": #1650AC,
+  "secondary": #182E51,
+  "success": #40A132
+);
+
+body {
+  background-color: #1650AC;
+}
+.main-section {
+  color: #FFF;
+}
+.main-view {
+  margin-top: 1em;
 }
 </style>
