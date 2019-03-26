@@ -3,7 +3,9 @@ const { Qapp } = require('../models');
 module.exports = {
   async dashboard(req, res) {
     try {
-      const qapps = await Qapp.findAll();
+      const qapps = await Qapp.findAll({
+        where: {userId: req.user.id},
+      });
       res.send(qapps);
     } catch (err) {
       res.status(400).send({

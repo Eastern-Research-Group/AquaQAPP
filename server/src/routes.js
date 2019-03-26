@@ -1,7 +1,7 @@
 const authenticationController = require('./controllers/authenticationController');
-const authenticationControllerPolicy = require('./policies/authenticationControllerPolicy');
+const authenticationControllerPolicy = require('./middleware/authenticationControllerPolicy');
 const dashboardController = require('./controllers/dashboardController');
-const isAuthenticated = require('./policies/isAuthenticated');
+const isAuthenticated = require('./middleware/isAuthenticated');
 
 module.exports = (app) => {
   app.post('/auth/register',
