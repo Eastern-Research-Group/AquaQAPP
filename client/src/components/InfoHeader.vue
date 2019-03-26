@@ -5,6 +5,11 @@
         <b-navbar-toggle target="nav_collapse" />
 
         <b-collapse is-nav id="nav_collapse" class="font-weight-bold">
+          <b-navbar-nav v-if="currentQapp">
+            <b-nav-item>
+              {{ currentQapp.title }}
+            </b-nav-item>
+          </b-navbar-nav>
           <b-navbar-nav class="ml-auto" v-if="$auth.check()">
             <b-nav-item-dropdown right>
               <template slot="button-content">
@@ -23,6 +28,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   props: [
     'userName',
@@ -34,6 +40,9 @@ export default {
     logout() {
       this.$auth.logout();
     },
+  },
+  computed: {
+    ...mapState('qapp', ['currentQapp']),
   },
 };
 </script>
