@@ -75,7 +75,7 @@ export default {
     },
     async handleSubmit() {
       await this.$store.dispatch('qapp/add', this.$auth.user().id);
-      this.$router.push('generate');
+      this.$router.push('navigate');
     },
   },
   data() {

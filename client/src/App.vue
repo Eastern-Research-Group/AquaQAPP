@@ -3,7 +3,7 @@
     <div v-if="$auth.ready()">
       <info-header class="info-header" v-if="$auth.check()"/>
       <page-header class="page-header"/>
-      <progress-bar v-if="$route.name === 'generate'"/>
+      <progress-bar v-if="$route.name === 'navigate'"/>
       <main class="main-section">
         <b-container>
           <router-view/>

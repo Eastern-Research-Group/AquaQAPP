@@ -4,7 +4,7 @@ import Welcome from '@/views/Welcome';
 import Register from '@/views/Register';
 import Login from '@/views/Login';
 import Dashboard from '@/views/Dashboard';
-import Generate from '@/views/Generate';
+import Navigate from '@/views/Navigate';
 
 Vue.use(Router);
 
@@ -34,9 +34,9 @@ export default new Router({
       meta: { auth: true },
     },
     {
-      path: '/generate',
-      name: 'generate',
-      component: Generate,
+      path: '/navigate',
+      name: 'navigate',
+      component: Navigate,
       meta: { auth: true },
     },
   ],
