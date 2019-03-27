@@ -27,7 +27,7 @@ const actions = {
       return;
     }
     const postData = {
-      userId: userId,
+      userId,
       title: state.title,
       description: state.description,
     };
