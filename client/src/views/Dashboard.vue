@@ -1,62 +1,62 @@
 <template>
-    <div class="main-view">
-        <b-row>
-            <b-col>
-                <h2>Dashboard</h2>
-            </b-col>
-            <b-col align-self="end" md="1">
-                <b-button
-                    class="add-button"
-                    size="lg"
-                    align-self="end"
-                    v-b-modal.modalPrevent>
-                  Add
-                </b-button>
-            </b-col>
-        </b-row>
-        <br/>
-        <b-row>
-            <b-table striped hover :items="this.$store.state.qapps.data" :fields="fields">
-                <template slot="title" slot-scope="data">
-                    <a href="#" @click="editQapp(data.item)">{{ data.value }}</a>
-                </template>
-            </b-table>
-        </b-row>
+  <div class="main-view">
+    <b-row>
+      <b-col>
+        <h2>Dashboard</h2>
+      </b-col>
+      <b-col align-self="end" md="1">
+        <b-button
+            class="add-button"
+            size="lg"
+            align-self="end"
+            v-b-modal.modalPrevent>
+          Add
+        </b-button>
+      </b-col>
+    </b-row>
+    <br/>
+    <b-row>
+      <b-table striped hover :items="this.$store.state.qapps.data" :fields="fields">
+        <template slot="title" slot-scope="data">
+          <a href="#" @click="editQapp(data.item)">{{ data.value }}</a>
+        </template>
+      </b-table>
+    </b-row>
 
-        <b-modal
-            id="modalPrevent"
-            ref="modal"
-            @ok="handleOk"
-            @shown="clearName"
-        >
-            <div class="d-block">Add a new QAPP</div>
-            <br/>
-            <form id="addQappForm" @submit.stop.prevent="handleSubmit">
-                <b-form-group>
-                    <b-form-input
-                        type="text"
-                        placeholder="Enter a title"
-                        v-model="title"
-                        :state="titleValidation"
-                    />
-                    <b-form-invalid-feedback :state="titleValidation">
-                        Title is required.
-                    </b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group>
-                    <b-form-input
-                        type="text"
-                        placeholder="Enter a description"
-                        v-model="description"
-                        :state="descValidation"
-                    />
-                    <b-form-invalid-feedback :state="descValidation">
-                        Description is required.
-                    </b-form-invalid-feedback>
-                </b-form-group>
-            </form>
-        </b-modal>
-    </div>
+    <b-modal
+        id="modalPrevent"
+        ref="modal"
+        @ok="handleOk"
+        @shown="clearName"
+    >
+      <div class="d-block">Add a new QAPP</div>
+      <br/>
+      <form id="addQappForm" @submit.stop.prevent="handleSubmit">
+        <b-form-group>
+          <b-form-input
+              type="text"
+              placeholder="Enter a title"
+              v-model="title"
+              :state="titleValidation"
+          />
+          <b-form-invalid-feedback :state="titleValidation">
+            Title is required.
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <b-form-group>
+          <b-form-input
+              type="text"
+              placeholder="Enter a description"
+              v-model="description"
+              :state="descValidation"
+          />
+          <b-form-invalid-feedback :state="descValidation">
+            Description is required.
+          </b-form-invalid-feedback>
+        </b-form-group>
+      </form>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -150,10 +150,12 @@ export default {
 table {
   background-color: #FFF;
 }
+
 .d-block {
-    color: black !important;
+  color: black !important;
 }
+
 .add-button {
-    background-color: #3AA02B;
+  background-color: #3AA02B;
 }
 </style>
