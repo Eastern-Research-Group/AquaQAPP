@@ -27,7 +27,7 @@
               required
               placeholder="Enter password" />
         </b-form-group>
-
+        <b-alert show variant="danger" class="text-center" v-if="error" v-html="error"/>
         <b-button @click="login" variant="primary" class="btn-block">Log In</b-button>
       </b-form>
     </b-col>
@@ -45,13 +45,17 @@ export default {
     };
   },
   methods: {
-    login() {
-      this.$auth.login({
-        data: {
-          email: this.email,
-          password: this.password,
-        },
-      });
+    async login() {
+      try {
+        await this.$auth.login({
+          data: {
+            email: this.email,
+            password: this.password,
+          },
+        });
+      } catch (error) {
+        this.error = error.response.data.error;
+      }
     },
   },
 };
