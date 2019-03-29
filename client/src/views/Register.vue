@@ -39,6 +39,7 @@
               required
               placeholder="Enter password" />
         </b-form-group>
+        <b-alert show variant="danger" class="text-center" v-if="error" v-html="error"/>
 
         <b-button @click="register" variant="primary" class="btn-block">Register</b-button>
       </b-form>
@@ -58,24 +59,28 @@ export default {
     };
   },
   methods: {
-    register() {
-      this.$auth.register({
-        data: {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        },
-        redirect: '/dashboard',
-        success: () => {
-          // auto-login after registration
-          this.$auth.login({
-            data: {
-              email: this.email,
-              password: this.password,
-            },
-          });
-        },
-      });
+    async register() {
+      try {
+        await this.$auth.register({
+          data: {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+          },
+          redirect: '/dashboard',
+          success: () => {
+            // auto-login after registration
+            this.$auth.login({
+              data: {
+                email: this.email,
+                password: this.password,
+              },
+            });
+          },
+        });
+      } catch (error) {
+        this.error = error.response.data.error;
+      }
     },
   },
 };
