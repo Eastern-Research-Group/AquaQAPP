@@ -1,0 +1,11 @@
+{
+  "name": "aquaqapp",
+  "scripts": {
+    "heroku-prebuild": "cd client && npm install --only=prod && npm install --only=dev && npm run build && cd ../server && npm install",
+    "build": "cd server && npm run migrate && npm run seed",
+    "start": "cd server && npm run prod"
+  },
+  "engines": {
+    "node": "10.15.3"
+  }
+}
