@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && nodemon --inspect src/server.js",
-    "migrate": "sequelize --url $DATABASE_URL --dialect postgres db:migrate:undo:all && sequelize --url $DATABASE_URL --dialect postgres db:migrate",
-    "seed": "sequelize --url $DATABASE_URL --dialect postgres db:seed:all",
+    "migrate": "sequelize --url $DATABASE_URL db:migrate:undo:all && sequelize --url $DATABASE_URL db:migrate",
+    "seed": "sequelize --url $DATABASE_URL db:seed:all",
     "prod": "node src/server.js",
     "lint": "eslint src"
   },
