@@ -3,7 +3,7 @@
     <b-col></b-col>
     <b-col>
       <h2 class="text-center">Log In</h2>
-      <b-form>
+      <b-form @submit.prevent="login">
         <b-form-group
             label="Email"
             label-for="email"
@@ -28,7 +28,7 @@
               placeholder="Enter password" />
         </b-form-group>
         <b-alert show variant="danger" class="text-center" v-if="error" v-html="error"/>
-        <b-button @click="login" variant="primary" class="btn-block">Log In</b-button>
+        <b-button type="submit" variant="primary" class="btn-block">Log In</b-button>
       </b-form>
     </b-col>
     <b-col></b-col>
