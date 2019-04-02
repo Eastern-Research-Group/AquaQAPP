@@ -5,12 +5,14 @@ const config = require('../config/config');
 
 const db = {};
 
-const sequelize = new Sequelize(
-  config.db.database,
-  config.db.user,
-  config.db.password,
-  config.db.options,
-);
+const sequelize = process.env.DATABASE_URL ?
+  new Sequelize(process.env.DATABASE_URL) :
+  new Sequelize(
+    config.db.database,
+    config.db.user,
+    config.db.password,
+    config.db.options,
+  );
 
 fs
   .readdirSync(__dirname)
