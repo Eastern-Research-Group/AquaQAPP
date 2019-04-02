@@ -1,8 +1,8 @@
 {
   "name": "aquaqapp",
   "scripts": {
-    "heroku-prebuild": "cd client && rm -rf node_modules && npm install && npm run build && cd ../server && npm install",
-    "heroku-postinstall": "",
+    "heroku-prebuild": "cd client && npm install && cd ../server && npm install",
+    "heroku-postinstall": "cd client && npm install @vue/cli-service && npm run build",
     "start": "cd server && npm start"
   },
   "engines": {
