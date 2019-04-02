@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const state = {
   data: [],
-  isFetching: true,
+  isFetching: false,
 };
 
 const mutations = {

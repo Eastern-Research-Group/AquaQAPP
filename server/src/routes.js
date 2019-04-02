@@ -27,7 +27,12 @@ module.exports = (app) => {
   app.get('/api/qapps',
     isAuthenticated,
     dashboardController.dashboard);
+
   app.post('/api/qapps',
     isAuthenticated,
     dashboardController.addQapp);
+
+  app.delete('/api/qapps',
+    isAuthenticated,
+    dashboardController.deleteQapp);
 };

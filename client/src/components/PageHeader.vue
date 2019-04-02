@@ -8,7 +8,7 @@
 
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav class="ml-auto" v-if="$auth.check()">
-            <b-nav-item to="/dashboard" :active="$route.name === 'dashboard'">Dashboard</b-nav-item>
+            <b-nav-item to="/dashboard" :active="$route.name === 'dashboard'" @click="setCurrentQapp">Dashboard</b-nav-item>
             <b-nav-item to="">Generate</b-nav-item>
           </b-navbar-nav>
 
@@ -37,6 +37,9 @@ export default {
     },
     logout() {
       this.$auth.logout();
+    },
+    setCurrentQapp() {
+      this.$store.commit('qapp/SET_CURRENT_QAPP', null);
     },
   },
 };

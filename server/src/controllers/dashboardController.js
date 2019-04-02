@@ -23,11 +23,23 @@ module.exports = {
         description: qappJson.description,
         updatedAt: qappJson.updatedAt,
       });
-      console.log(res);
     } catch (err) {
       res.status(400).send({
         error: err,
       });
     }
   },
+  async deleteQapp(req, res) {
+    try {
+      console.log(req.body);
+      const qapp = await Qapp.destroy({
+        where: {id: req.body.id},
+      });
+      res.json(qapp);
+    } catch (err) {
+      res.status(400).send({
+        error: err,
+      });
+    }
+  }
 };

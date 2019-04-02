@@ -34,6 +34,14 @@ const actions = {
     const newQapp = await axios.post('api/qapps', postData);
     await commit('SET_CURRENT_QAPP', newQapp.data);
   },
+  async delete({ state, dispatch }) {
+    await axios.delete('api/qapps', {
+      data: {
+        id: state.currentQapp.id,
+      },
+    });
+    await dispatch('qapps/getQapps', null, {root: true});
+  },
 };
 
 export default {

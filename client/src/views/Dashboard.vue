@@ -9,6 +9,7 @@
             class="add-button"
             size="lg"
             align-self="end"
+            @click="onAddQapp"
             v-b-modal.modalPrevent>
           Add
         </b-button>
@@ -20,17 +21,21 @@
         <template slot="title" slot-scope="data">
           <a href="#" @click="editQapp(data.item)">{{ data.value }}</a>
         </template>
+        <template slot="edit" slot-scope="data">
+          <div id="edit-container">
+            <font-awesome-icon class="icon" id="edit-icon" icon="edit" @click="editQapp(data.item)"/>
+            <font-awesome-icon class="icon" icon="trash-alt" @click="onDeleteQapp(data.item)" v-b-modal.modalPrevent/>
+          </div>
+        </template>
       </b-table>
     </b-row>
 
-    <b-modal
-        id="modalPrevent"
-        ref="modal"
-        @ok="handleOk"
-        @shown="clearName"
-    >
-      <div class="d-block">Add a new QAPP</div>
-      <br/>
+
+    <SideNav
+      v-if="isAdd"
+      :handleOk="handleAddQapp"
+      :handleShown="clearName"
+      >
       <form id="addQappForm" @submit.stop.prevent="handleSubmit">
         <b-form-group>
           <b-form-input
@@ -55,18 +60,30 @@
           </b-form-invalid-feedback>
         </b-form-group>
       </form>
-    </b-modal>
+    </SideNav>
+    <SideNav
+        v-if="isDelete"
+        :handleOk="handleDeleteQapp"
+        >
+        <div>
+          <b-alert show variant="danger">Are you sure you want to delete this qapp</b-alert><br/>
+          <p>{{isCurrentQapp.title}}</p>
+        </div>
+    </SideNav>
   </div>
 </template>
 
 <script>
 import {
   mapActions,
+  mapState,
 } from 'vuex';
 import BRow from 'bootstrap-vue/src/components/layout/row';
+import BAlert from 'bootstrap-vue/src/components/alert/alert';
+import SideNav from '../components/SideNav'
 
 export default {
-  components: { BRow },
+  components: { BAlert, BRow, SideNav },
   async mounted() {
     this.getQapps();
   },
@@ -74,11 +91,21 @@ export default {
     ...mapActions('qapps', [
       'getQapps',
     ]),
+    onAddQapp() {
+      this.isDelete = false;
+      this.isAdd = true;
+    },
+    async onDeleteQapp(qapp) {
+      this.isAdd = false;
+      this.isDelete = true;
+      this.isCurrentQapp = qapp;
+      this.$store.commit('qapp/SET_CURRENT_QAPP', qapp);
+    },
     clearName() {
       this.title = '';
       this.description = '';
     },
-    handleOk(e) {
+    handleAddQapp(e) {
       // Prevent modal from closing
       e.preventDefault();
       if (!this.title) {
@@ -97,9 +124,16 @@ export default {
       this.$store.commit('qapp/SET_CURRENT_QAPP', qapp);
       this.$router.push('navigate');
     },
+    async handleDeleteQapp() {
+      await this.$store.dispatch('qapp/delete');
+      await this.$store.commit('qapp/SET_CURRENT_QAPP', null);
+    },
   },
   data() {
     return {
+      isAdd: false,
+      isDelete: false,
+      isCurrentQapp: '',
       fields: [
         {
           key: 'title',
@@ -113,6 +147,14 @@ export default {
           key: 'updatedAt',
           label: 'Date Updated',
         },
+        {
+          key: 'progress',
+          label: 'Progress',
+        },
+        {
+          key: 'edit',
+          label: 'Edit/Remove',
+        }
       ],
     };
   },
@@ -157,5 +199,21 @@ table {
 
 .add-button {
   background-color: #3AA02B;
+}
+
+#edit-container {
+  padding-left: 30px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+#edit-icon {
+  margin-right: 10px;
+}
+
+.d-block {
+  color: white !important;
 }
 </style>
