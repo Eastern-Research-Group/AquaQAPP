@@ -1,10 +1,11 @@
 const { Qapp } = require('../models');
+const config = require('../config/config');
 
 module.exports = {
   async dashboard(req, res) {
     try {
       const qapps = await Qapp.findAll({
-        where: {userId: req.user.id},
+        where: {userId: req.user.id, instanceId: config.instanceId },
       });
       res.send(qapps);
     } catch (err) {
@@ -19,6 +20,7 @@ module.exports = {
       const qappJson = qapp.toJSON();
       res.send({
         userId: qappJson.userId,
+        instanceId: config.instanceId,
         title: qappJson.title,
         description: qappJson.description,
         updatedAt: qappJson.updatedAt,

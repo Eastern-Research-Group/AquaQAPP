@@ -117,7 +117,10 @@ export default {
       }
     },
     async handleSubmit() {
-      await this.$store.dispatch('qapp/add', this.$auth.user().id);
+      await this.$store.dispatch('qapp/add', {
+        userId: this.$auth.user().id,
+        instanceId: this.$instanceId,
+      });
       this.$router.push('navigate');
     },
     editQapp(qapp) {

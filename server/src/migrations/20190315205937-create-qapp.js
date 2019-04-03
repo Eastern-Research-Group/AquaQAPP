@@ -7,6 +7,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
+    instanceId: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      references: { model: 'Instances', key: 'id' },
+    },
     userId: {
       allowNull: false,
       type: Sequelize.INTEGER,
