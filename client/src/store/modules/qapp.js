@@ -22,12 +22,13 @@ const mutations = {
 };
 
 const actions = {
-  async add({ commit, state }, userId) {
+  async add({ commit, state }, { userId, instanceId }) {
     if (!state.title || !state.description) {
       return;
     }
     const postData = {
       userId,
+      instanceId: instanceId,
       title: state.title,
       description: state.description,
     };
