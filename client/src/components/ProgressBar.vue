@@ -10,14 +10,11 @@
       </b-row>
     </b-container>
   </section>
-
 </template>
 
 <script>
 export default {
-  props: [
-    'userName',
-  ],
+  props: ['userName'],
   data() {
     return {};
   },
@@ -34,7 +31,7 @@ export default {
 
 <style>
 .progress-bar {
-  background-color: #182E51;
+  background-color: #182e51;
   padding: 0.5em;
   font-size: 0.9em;
 }

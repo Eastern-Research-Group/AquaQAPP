@@ -17,28 +17,12 @@
       </b-col>
       <b-col cols="9" class="entry-section">
         <b-form>
-          <b-form-group
-              label="Field 1"
-              label-for="field1"
-          >
-            <b-form-input
-                id="field1"
-                type="text"
-                v-model="field1"
-                required
-                placeholder="Enter Field 1" />
+          <b-form-group label="Field 1" label-for="field1">
+            <b-form-input id="field1" type="text" v-model="field1" required placeholder="Enter Field 1" />
           </b-form-group>
 
-          <b-form-group
-              label="Field 2"
-              label-for="field2"
-          >
-            <b-form-input
-                id="field2"
-                type="text"
-                v-model="field2"
-                required
-                placeholder="Enter Field 2" />
+          <b-form-group label="Field 2" label-for="field2">
+            <b-form-input id="field2" type="text" v-model="field2" required placeholder="Enter Field 2" />
           </b-form-group>
         </b-form>
       </b-col>
@@ -60,7 +44,7 @@ export default {
 <style scoped>
 .side-nav {
   padding-top: 1em;
-  border-right: 1px solid #3B81D1;
+  border-right: 1px solid #3b81d1;
 }
 .entry-section {
   padding-top: 1em;

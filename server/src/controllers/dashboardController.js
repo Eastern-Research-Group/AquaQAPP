@@ -5,7 +5,7 @@ module.exports = {
   async dashboard(req, res) {
     try {
       const qapps = await Qapp.findAll({
-        where: {userId: req.user.id, instanceId: config.instanceId },
+        where: { userId: req.user.id, instanceId: config.instanceId },
       });
       res.send(qapps);
     } catch (err) {
@@ -35,7 +35,7 @@ module.exports = {
     try {
       console.log(req.body);
       const qapp = await Qapp.destroy({
-        where: {id: req.body.id},
+        where: { id: req.body.id },
       });
       res.json(qapp);
     } catch (err) {
@@ -43,5 +43,5 @@ module.exports = {
         error: err,
       });
     }
-  }
+  },
 };

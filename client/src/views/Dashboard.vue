@@ -5,17 +5,12 @@
         <h2>Dashboard</h2>
       </b-col>
       <b-col align-self="end" md="1">
-        <b-button
-            class="add-button"
-            size="lg"
-            align-self="end"
-            @click="onAddQapp"
-            v-b-modal.modalPrevent>
+        <b-button class="add-button" size="lg" align-self="end" @click="onAddQapp" v-b-modal.modalPrevent>
           Add
         </b-button>
       </b-col>
     </b-row>
-    <br/>
+    <br />
     <b-row>
       <b-table striped hover :items="this.$store.state.qapps.data" :fields="fields">
         <template slot="title" slot-scope="data">
@@ -23,64 +18,43 @@
         </template>
         <template slot="edit" slot-scope="data">
           <div id="edit-container">
-            <font-awesome-icon class="icon" id="edit-icon" icon="edit" @click="editQapp(data.item)"/>
-            <font-awesome-icon class="icon" icon="trash-alt" @click="onDeleteQapp(data.item)" v-b-modal.modalPrevent/>
+            <font-awesome-icon class="icon" id="edit-icon" icon="edit" @click="editQapp(data.item)" />
+            <font-awesome-icon class="icon" icon="trash-alt" @click="onDeleteQapp(data.item)" v-b-modal.modalPrevent />
           </div>
         </template>
       </b-table>
     </b-row>
 
-
-    <SideNav
-      v-if="isAdd"
-      :handleOk="handleAddQapp"
-      :handleShown="clearName"
-      >
+    <SideNav v-if="isAdd" :handleOk="handleAddQapp" :handleShown="clearName">
       <form id="addQappForm" @submit.stop.prevent="handleSubmit">
         <b-form-group>
-          <b-form-input
-              type="text"
-              placeholder="Enter a title"
-              v-model="title"
-              :state="titleValidation"
-          />
+          <b-form-input type="text" placeholder="Enter a title" v-model="title" :state="titleValidation" />
           <b-form-invalid-feedback :state="titleValidation">
             Title is required.
           </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group>
-          <b-form-input
-              type="text"
-              placeholder="Enter a description"
-              v-model="description"
-              :state="descValidation"
-          />
+          <b-form-input type="text" placeholder="Enter a description" v-model="description" :state="descValidation" />
           <b-form-invalid-feedback :state="descValidation">
             Description is required.
           </b-form-invalid-feedback>
         </b-form-group>
       </form>
     </SideNav>
-    <SideNav
-        v-if="isDelete"
-        :handleOk="handleDeleteQapp"
-        >
-        <div>
-          <b-alert show variant="danger">Are you sure you want to delete this qapp</b-alert><br/>
-          <p>{{isCurrentQapp.title}}</p>
-        </div>
+    <SideNav v-if="isDelete" :handleOk="handleDeleteQapp">
+      <div>
+        <b-alert show variant="danger">Are you sure you want to delete this qapp</b-alert><br />
+        <p>{{ isCurrentQapp.title }}</p>
+      </div>
     </SideNav>
   </div>
 </template>
 
 <script>
-import {
-  mapActions,
-  mapState,
-} from 'vuex';
+import { mapActions } from 'vuex';
 import BRow from 'bootstrap-vue/src/components/layout/row';
 import BAlert from 'bootstrap-vue/src/components/alert/alert';
-import SideNav from '../components/SideNav'
+import SideNav from '../components/SideNav';
 
 export default {
   components: { BAlert, BRow, SideNav },
@@ -88,9 +62,7 @@ export default {
     this.getQapps();
   },
   methods: {
-    ...mapActions('qapps', [
-      'getQapps',
-    ]),
+    ...mapActions('qapps', ['getQapps']),
     onAddQapp() {
       this.isDelete = false;
       this.isAdd = true;
@@ -157,7 +129,7 @@ export default {
         {
           key: 'edit',
           label: 'Edit/Remove',
-        }
+        },
       ],
     };
   },
@@ -193,7 +165,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 table {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .d-block {
@@ -201,7 +173,7 @@ table {
 }
 
 .add-button {
-  background-color: #3AA02B;
+  background-color: #3aa02b;
 }
 
 #edit-container {

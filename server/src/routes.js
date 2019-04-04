@@ -9,30 +9,17 @@ module.exports = (app) => {
   // serve up built Vue files from express server
   app.use('/', express.static(path.resolve(__dirname, '../../client/dist')));
 
-  app.post('/auth/register',
-    authenticationControllerPolicy.register,
-    authenticationController.register);
+  app.post('/auth/register', authenticationControllerPolicy.register, authenticationController.register);
 
-  app.post('/auth/login',
-    authenticationController.login);
+  app.post('/auth/login', authenticationController.login);
 
-  app.get('/auth/user',
-    isAuthenticated,
-    authenticationController.user);
+  app.get('/auth/user', isAuthenticated, authenticationController.user);
 
-  app.post('/auth/logout',
-    isAuthenticated,
-    authenticationController.logout);
+  app.post('/auth/logout', isAuthenticated, authenticationController.logout);
 
-  app.get('/api/qapps',
-    isAuthenticated,
-    dashboardController.dashboard);
+  app.get('/api/qapps', isAuthenticated, dashboardController.dashboard);
 
-  app.post('/api/qapps',
-    isAuthenticated,
-    dashboardController.addQapp);
+  app.post('/api/qapps', isAuthenticated, dashboardController.addQapp);
 
-  app.delete('/api/qapps',
-    isAuthenticated,
-    dashboardController.deleteQapp);
+  app.delete('/api/qapps', isAuthenticated, dashboardController.deleteQapp);
 };
