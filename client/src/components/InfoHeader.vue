@@ -31,9 +31,7 @@
 import { mapState } from 'vuex';
 
 export default {
-  props: [
-    'userName',
-  ],
+  props: ['userName'],
   data() {
     return {};
   },
@@ -51,7 +49,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .info-header {
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
   font-size: 0.8em;
 
   .navbar {

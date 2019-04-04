@@ -1,12 +1,6 @@
 <template>
-  <b-modal
-      id="modalPrevent"
-      ref="modal"
-      title="AquaQapp"
-      @ok="handleOk"
-      @shown="handleShown"
-  >
-    <slot/>
+  <b-modal id="modalPrevent" ref="modal" title="AquaQapp" @ok="handleOk" @shown="handleShown">
+    <slot />
   </b-modal>
 </template>
 
@@ -45,7 +39,7 @@ export default {
   top: 0;
   border-radius: 0;
   height: 100%;
-  background-color: #162A49;
+  background-color: #162a49;
   color: white !important;
 }
 

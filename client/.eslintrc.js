@@ -3,18 +3,28 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: [
-    'plugin:vue/essential',
-    '@vue/airbnb',
-  ],
+  plugins: ['prettier'],
+  extends: ['plugin:vue/essential', '@vue/airbnb'],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-param-reassign': 0,
-    'import/extensions': ['error', {
-      vue: 'never',
-    }],
+    'import/extensions': [
+      'error',
+      {
+        vue: 'never',
+      },
+    ],
     'global-require': 0,
+    'no-shadow': [
+      'error',
+      {
+        allow: ['state'],
+      },
+    ],
+    'max-len': [2, 120, 2],
+    'arrow-parens': 'off',
+    'prettier/prettier': 'error',
   },
   parserOptions: {
     parser: 'babel-eslint',

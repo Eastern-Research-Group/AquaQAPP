@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <div v-if="$auth.ready()">
-      <info-header class="info-header" v-if="$auth.check()"/>
-      <page-header class="page-header"/>
-      <progress-bar v-if="$route.name === 'navigate'"/>
+      <info-header class="info-header" v-if="$auth.check()" />
+      <page-header class="page-header" />
+      <progress-bar v-if="$route.name === 'navigate'" />
       <main class="main-section">
         <b-container>
-          <router-view/>
+          <router-view />
         </b-container>
       </main>
     </div>
@@ -30,16 +30,16 @@ export default {
 
 <style lang="scss">
 $theme-colors: (
-  "primary": #1650AC,
-  "secondary": #182E51,
-  "success": #40A132
+  'primary': #1650ac,
+  'secondary': #182e51,
+  'success': #40a132,
 );
 
 body {
-  background-color: #1650AC;
+  background-color: #1650ac;
 }
 .main-section {
-  color: #FFF;
+  color: #fff;
 }
 .main-view {
   margin-top: 1em;

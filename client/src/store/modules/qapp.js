@@ -28,7 +28,7 @@ const actions = {
     }
     const postData = {
       userId,
-      instanceId: instanceId,
+      instanceId,
       title: state.title,
       description: state.description,
     };
@@ -41,7 +41,7 @@ const actions = {
         id: state.currentQapp.id,
       },
     });
-    await dispatch('qapps/getQapps', null, {root: true});
+    await dispatch('qapps/getQapps', null, { root: true });
   },
 };
 
