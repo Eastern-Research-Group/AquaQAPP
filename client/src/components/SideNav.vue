@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="modalPrevent" ref="modal" title="AquaQapp" @ok="handleOk" @shown="handleShown">
+  <b-modal id="modalPrevent" ref="modal" :title="title" @ok="handleOk" @shown="handleShown">
     <slot />
   </b-modal>
 </template>
@@ -17,6 +17,11 @@ export default {
       required: false,
       default: () => {},
     },
+    title: {
+      type: String,
+      required: false,
+      default: '',
+    }
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <section class="page-header">
     <b-container>
       <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand href="/">AquaQAPP</b-navbar-brand>
+        <b-navbar-brand to="/">AquaQAPP</b-navbar-brand>
 
         <b-navbar-toggle target="nav_collapse" />
 
@@ -11,7 +11,11 @@
             <b-nav-item to="/dashboard" :active="$route.name === 'dashboard'" @click="setCurrentQapp">
               Dashboard
             </b-nav-item>
-            <b-nav-item to="">Generate</b-nav-item>
+            <b-nav-item v-if="$route.name === 'navigate'">
+              <b-button class="generate-btn" variant="success">
+                Generate
+              </b-button>
+            </b-nav-item>
           </b-navbar-nav>
 
           <b-navbar-nav class="ml-auto" v-if="!$auth.check()">
@@ -48,5 +52,8 @@ export default {
 .page-header {
   background-color: #fff;
   font-weight: bold;
+}
+.generate-btn {
+  padding: 0 0.5em;
 }
 </style>
