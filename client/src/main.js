@@ -4,17 +4,11 @@ import VueAxios from 'vue-axios';
 import BootstrapVue from 'bootstrap-vue';
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import fontawesome from '@fortawesome/fontawesome';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import regular from '@fortawesome/fontawesome-free-regular';
-import solid from '@fortawesome/fontawesome-free-solid';
+import '@fortawesome/fontawesome-free/js/all';
 import './registerServiceWorker';
 import router from './router';
 import store from './store/index';
 import App from './App';
-
-fontawesome.library.add(regular, solid);
-Vue.component(FontAwesomeIcon.name, FontAwesomeIcon);
 
 Vue.config.productionTip = false;
 
