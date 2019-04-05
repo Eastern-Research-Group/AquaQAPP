@@ -13,6 +13,7 @@ module.exports = {
   },
   devServer: {
     host: 'localhost',
+  },
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {
       args[0].template = `${__dirname}/client/public/index.html`;
