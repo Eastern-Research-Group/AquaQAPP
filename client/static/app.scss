@@ -1,0 +1,57 @@
+// override bulma colors and variables
+$blue: #1650AC;
+$darkBlue: #182E51;
+$lightBlue: #00B0E6;
+$green: #3AA02B;
+$gray: #E6E6E6;
+
+$primary: $lightBlue;
+$success: $green;
+$info: $blue;
+
+// set app content to take up full page height
+html, body {
+  height: 100%;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: $blue;
+}
+
+// style overrides
+html {
+  overflow-y: auto !important;
+}
+
+.table td, .table th {
+  vertical-align: middle !important;
+}
+
+.section {
+  padding: 2rem 1.5rem;
+}
+
+.main-section {
+  .title, .subtitle, .label {
+    color: #FFF;
+  }
+  .label {
+    font-weight: normal;
+  }
+}
+
+.svg-inline--fa {
+  margin-right: 0.2em;
+}
+
+// lastly, import bulma
+@import '../../node_modules/bulma/bulma';

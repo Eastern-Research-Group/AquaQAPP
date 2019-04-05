@@ -1,30 +1,50 @@
 <template>
   <section class="page-header">
-    <b-container>
-      <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand to="/">AquaQAPP</b-navbar-brand>
+    <div class="container">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <router-link class="navbar-item is-size-5" to="/">
+            AquaQAPP
+          </router-link>
 
-        <b-navbar-toggle target="nav_collapse" />
+          <a
+            role="button"
+            :class="'navbar-burger burger' + (isActive ? ' is-active' : '')"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="mainNav"
+            @click="isActive = !isActive"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
 
-        <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav class="ml-auto" v-if="$auth.check()">
-            <b-nav-item to="/dashboard" :active="$route.name === 'dashboard'" @click="setCurrentQapp">
-              Dashboard
-            </b-nav-item>
-            <b-nav-item v-if="$route.name === 'navigate'">
-              <b-button class="generate-btn" variant="success">
-                Generate
-              </b-button>
-            </b-nav-item>
-          </b-navbar-nav>
-
-          <b-navbar-nav class="ml-auto" v-if="!$auth.check()">
-            <b-nav-item to="/login">Log In</b-nav-item>
-            <b-nav-item to="/register">Register</b-nav-item>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
-    </b-container>
+        <div id="mainNav" :class="'navbar-menu burger' + (isActive ? ' is-active' : '')">
+          <div class="navbar-end" v-if="!$auth.check()">
+            <div class="navbar-item">
+              <router-link class="navbar-item" to="/login">
+                <strong>Log In</strong>
+              </router-link>
+              <router-link class="navbar-item" to="/login">
+                <strong>Register</strong>
+              </router-link>
+            </div>
+          </div>
+          <div class="navbar-end" v-if="$auth.check()">
+            <div class="navbar-item">
+              <router-link class="navbar-item" to="/dashboard">
+                <strong>Dashboard</strong>
+              </router-link>
+              <a class="button is-success" v-if="$route.name === 'navigate'">
+                <strong>Generate</strong>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
   </section>
 </template>
 
@@ -32,7 +52,9 @@
 export default {
   props: ['userName'],
   data() {
-    return {};
+    return {
+      isActive: false,
+    };
   },
   methods: {
     navigateTo(route) {

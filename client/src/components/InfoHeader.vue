@@ -1,29 +1,54 @@
 <template>
   <section class="info-header">
-    <b-container>
-      <b-navbar toggleable="lg" type="light">
-        <b-navbar-toggle target="nav_collapse" />
+    <div class="container">
+      <nav class="navbar" role="navigation">
+        <div class="navbar-brand">
+          <a
+            role="button"
+            class="navbar-burger burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="infoNav"
+            @click="isActive = !isActive"
+          >
+            {{ $auth.user().name }}
+          </a>
+        </div>
 
-        <b-collapse is-nav id="nav_collapse" class="font-weight-bold">
-          <b-navbar-nav v-if="currentQapp">
-            <b-nav-item>
+        <div id="infoNav" :class="'navbar-menu' + (isActive ? ' is-active' : '')" v-if="isActive">
+          <a class="navbar-item">
+            Profile
+          </a>
+          <a class="navbar-item" @click="logout">
+            Log Out
+          </a>
+        </div>
+
+        <div class="navbar-menu">
+          <div class="navbar-start">
+            <div class="navbar-item" v-if="currentQapp">
               {{ currentQapp.title }}
-            </b-nav-item>
-          </b-navbar-nav>
-          <b-navbar-nav class="ml-auto" v-if="$auth.check()">
-            <b-nav-item-dropdown right>
-              <template slot="button-content">
+            </div>
+          </div>
+          <div class="navbar-end">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link has-text-weight-semibold">
                 {{ $auth.user().name }}
-              </template>
-              <b-dropdown-item href="#">Profile</b-dropdown-item>
-              <b-dropdown-item @click="logout">
-                Log Out
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
-    </b-container>
+              </a>
+
+              <div class="navbar-dropdown">
+                <a class="navbar-item">
+                  Profile
+                </a>
+                <a class="navbar-item" @click="logout">
+                  Log Out
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
   </section>
 </template>
 
@@ -33,7 +58,9 @@ import { mapState } from 'vuex';
 export default {
   props: ['userName'],
   data() {
-    return {};
+    return {
+      isActive: false,
+    };
   },
   methods: {
     logout() {
@@ -51,9 +78,17 @@ export default {
 .info-header {
   background-color: #e6e6e6;
   font-size: 0.8em;
+  z-index: 50;
 
-  .navbar {
+  .navbar, .navbar-brand, .navbar-burger {
+    background-color: #e6e6e6;
     padding: 0;
+    min-height: unset;
+    height: 2.5em;
+  }
+
+  .navbar-burger {
+    padding: 0.5em;
   }
 }
 </style>

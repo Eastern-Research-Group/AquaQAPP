@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <div v-if="$auth.ready()">
+    <div v-if="$auth.ready()" class="app-container">
       <info-header class="info-header" v-if="$auth.check()" />
       <page-header class="page-header" />
       <progress-bar v-if="$route.name === 'navigate'" />
-      <main class="main-section">
-        <b-container>
+      <section class="main-section section has-text-white">
+        <div class="container">
           <router-view />
-        </b-container>
-      </main>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -34,14 +34,4 @@ $theme-colors: (
   'secondary': #182e51,
   'success': #40a132,
 );
-
-body {
-  background-color: #1650ac;
-}
-.main-section {
-  color: #fff;
-}
-.main-view {
-  margin-top: 1em;
-}
 </style>

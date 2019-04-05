@@ -1,18 +1,12 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import BootstrapVue from 'bootstrap-vue';
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import '../static/app.scss';
 import '@fortawesome/fontawesome-free/js/all';
 import './registerServiceWorker';
 import router from './router';
 import store from './store/index';
 import App from './App';
-
-Vue.config.productionTip = false;
-
-Vue.use(BootstrapVue);
 
 Vue.use(VueAxios, axios);
 Vue.axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
