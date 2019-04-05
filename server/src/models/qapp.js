@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Qapp = sequelize.define(
     'Qapp',
     {
-      instanceId: DataTypes.INTEGER,
+      projectId: DataTypes.INTEGER,
       title: DataTypes.STRING,
       userId: DataTypes.INTEGER,
       description: DataTypes.STRING,

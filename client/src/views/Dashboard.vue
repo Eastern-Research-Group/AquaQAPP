@@ -100,7 +100,7 @@ export default {
     async handleSubmit() {
       await this.$store.dispatch('qapp/add', {
         userId: this.$auth.user().id,
-        instanceId: this.$instanceId,
+        projectId: this.$projectId,
       });
       this.$router.push('navigate');
     },
