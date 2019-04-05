@@ -13,5 +13,5 @@ module.exports = {
   authentication: {
     jwtSecret: process.env.JWT_SECRET || 'secret',
   },
-  instanceId: 1,
+  projectId: 1,
 };

@@ -7,7 +7,7 @@ module.exports = {
       where: { title: 'Test QAPP' },
       defaults: {
         title: 'Test QAPP',
-        instanceId: 1,
+        projectId: 1,
         userId: 1,
         description: 'This is a test QAPP.',
         createdAt: new Date(),
