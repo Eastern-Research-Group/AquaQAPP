@@ -5,7 +5,7 @@ import qapp from './modules/qapp';
 
 Vue.use(Vuex);
 
-Vue.prototype.$instanceId = 1;
+Vue.prototype.$projectId = 1;
 
 export default new Vuex.Store({
   modules: {

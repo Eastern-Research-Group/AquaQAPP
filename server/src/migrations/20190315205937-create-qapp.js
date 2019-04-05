@@ -7,10 +7,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      instanceId: {
+      projectId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Instances', key: 'id' },
+        references: { model: 'Projects', key: 'id' },
       },
       userId: {
         allowNull: false,
