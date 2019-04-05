@@ -1,8 +1,6 @@
 <template>
-  <b-row class="main-view">
-    <b-col>
-      <h1>Welcome</h1>
-      <p>Please log in or register to continue.</p>
-    </b-col>
-  </b-row>
+  <div>
+      <h1 class="title">Welcome</h1>
+      <h2 class="subtitle">Please log in or register to continue.</h2>
+  </div>
 </template>

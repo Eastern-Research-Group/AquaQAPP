@@ -1,33 +1,32 @@
 <template>
-  <section>
-    <b-row>
-      <b-col class="side-nav">
-        <ol>
-          <li>Step 1</li>
-          <li>Step 2</li>
-          <li>Step 3</li>
-          <li>Step 4</li>
-          <li>Step 5</li>
-          <li>Step 6</li>
-          <li>Step 7</li>
-          <li>Step 8</li>
-          <li>Step 9</li>
-          <li>Step 10</li>
-        </ol>
-      </b-col>
-      <b-col cols="9" class="entry-section">
-        <b-form>
-          <b-form-group label="Field 1" label-for="field1">
-            <b-form-input id="field1" type="text" v-model="field1" required placeholder="Enter Field 1" />
-          </b-form-group>
-
-          <b-form-group label="Field 2" label-for="field2">
-            <b-form-input id="field2" type="text" v-model="field2" required placeholder="Enter Field 2" />
-          </b-form-group>
-        </b-form>
-      </b-col>
-    </b-row>
-  </section>
+  <div class="columns">
+    <aside class="menu column is-one-quarter">
+      <ol class="menu-list">
+        <li>Step 1</li>
+        <li>Step 2</li>
+        <li>Step 3</li>
+        <li>Step 4</li>
+        <li>Step 5</li>
+        <li>Step 6</li>
+        <li>Step 7</li>
+        <li>Step 8</li>
+        <li>Step 9</li>
+        <li>Step 10</li>
+      </ol>
+    </aside>
+    <section class="column is-three-quarters">
+      <form @submit.prevent="login">
+        <div class="field">
+          <label class="label">Field 1</label>
+          <input class="input" type="text" placeholder="Enter field 1" />
+        </div>
+        <div class="field">
+          <label class="label">Field 2</label>
+          <input class="input" type="text" placeholder="Enter field 2" />
+        </div>
+      </form>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -42,11 +41,7 @@ export default {
 </script>
 
 <style scoped>
-.side-nav {
-  padding-top: 1em;
-  border-right: 1px solid #3b81d1;
-}
-.entry-section {
-  padding-top: 1em;
+.menu {
+  border-right: 1px solid #00b0e6;
 }
 </style>

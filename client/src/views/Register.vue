@@ -1,27 +1,33 @@
 <template>
-  <b-row class="main-view">
-    <b-col></b-col>
-    <b-col>
-      <h2 class="text-center">Register</h2>
-      <b-form>
-        <b-form-group label="Name" label-for="name">
-          <b-form-input id="name" type="text" v-model="name" required placeholder="Enter name" />
-        </b-form-group>
-
-        <b-form-group label="Email" label-for="email">
-          <b-form-input id="email" type="email" v-model="email" required placeholder="Enter email" />
-        </b-form-group>
-
-        <b-form-group label="Password" label-for="password">
-          <b-form-input id="password" type="password" v-model="password" required placeholder="Enter password" />
-        </b-form-group>
-        <b-alert show variant="danger" class="text-center" v-if="error" v-html="error" />
-
-        <b-button @click="register" variant="primary" class="btn-block">Register</b-button>
-      </b-form>
-    </b-col>
-    <b-col></b-col>
-  </b-row>
+  <div>
+    <div class="columns">
+      <div class="column"></div>
+      <div class="column">
+        <h1 class="title has-text-centered">Register</h1>
+        <form @submit.prevent="register">
+          <div class="field">
+            <label class="label">Name</label>
+            <input class="input" type="text" required placeholder="Enter name" v-model="name" />
+          </div>
+          <div class="field">
+            <label class="label">Email</label>
+            <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <input class="input" type="password" required placeholder="Enter password" v-model="password" />
+          </div>
+          <Alert v-if="error" :message="error" />
+          <div class="field">
+            <div class="control">
+              <button class="button is-primary is-fullwidth">Register</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="column"></div>
+    </div>
+  </div>
 </template>
 
 <script>

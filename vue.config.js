@@ -1,4 +1,5 @@
 module.exports = {
+  productionTip: false,
   runtimeCompiler: true,
   outputDir: `${__dirname}/client/dist`,
   configureWebpack: {
