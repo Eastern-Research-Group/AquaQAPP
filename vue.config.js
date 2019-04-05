@@ -11,4 +11,10 @@ module.exports = {
       app: './client/src/main.js',
     },
   },
+  chainWebpack: (config) => {
+    config.plugin('html').tap((args) => {
+      args[0].template = `${__dirname}/client/public/index.html`;
+      return args;
+    });
+  },
 };
