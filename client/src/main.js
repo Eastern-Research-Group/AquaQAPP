@@ -8,6 +8,8 @@ import router from './router';
 import store from './store/index';
 import App from './App';
 
+Vue.config.productionTip = false;
+
 Vue.use(VueAxios, axios);
 Vue.axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
 Vue.router = router;
