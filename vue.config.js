@@ -11,4 +11,7 @@ module.exports = {
       app: './client/src/main.js',
     },
   },
+  devServer: {
+    host: 'localhost',
+  },
 };
