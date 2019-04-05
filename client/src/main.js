@@ -15,7 +15,7 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 
 Vue.use(VueAxios, axios);
-Vue.axios.defaults.baseURL = process.env.API_BASE_URL || 'http://localhost:3000';
+Vue.axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
 Vue.router = router;
 
 Vue.use(require('@websanova/vue-auth'), {
