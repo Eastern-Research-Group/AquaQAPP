@@ -33,7 +33,6 @@ module.exports = {
   },
   async deleteQapp(req, res) {
     try {
-      console.log(req.body);
       const qapp = await Qapp.destroy({
         where: { id: req.body.id },
       });

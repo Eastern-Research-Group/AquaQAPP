@@ -20,7 +20,6 @@ const actions = {
     commit('SET_IS_FETCHING', true);
 
     const qapps = await axios.get('api/qapps');
-    console.log(qapps);
     commit('SET_DATA', qapps.data);
     commit('SET_IS_FETCHING', false);
   },

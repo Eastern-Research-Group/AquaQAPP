@@ -27,7 +27,7 @@
               <router-link class="navbar-item" to="/login">
                 <strong>Log In</strong>
               </router-link>
-              <router-link class="navbar-item" to="/login">
+              <router-link class="navbar-item" to="/register">
                 <strong>Register</strong>
               </router-link>
             </div>
