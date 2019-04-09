@@ -55,45 +55,50 @@
       :handleClose="() => (this.shouldShowAdd = false)"
       title="Add QAPP"
     >
-      <form id="addQappForm" @submit.prevent="handleSubmit">
-        <div class="field">
-          <label class="label">Title</label>
-          <input class="input" type="text" required placeholder="Enter a title" v-model="title" />
-        </div>
-        <div class="field">
-          <label class="label">Description</label>
-          <input class="input" type="text" required placeholder="Enter a description" v-model="description" />
-        </div>
+      <!-- #deafult="props" gives us access to SideNav's props from inside this template tag -->
+      <template #default="props">
+        <form id="addQappForm" @submit.prevent="handleSubmit">
+          <div class="field">
+            <label class="label">Title</label>
+            <input class="input" type="text" required placeholder="Enter a title" v-model="title" />
+          </div>
+          <div class="field">
+            <label class="label">Description</label>
+            <input class="input" type="text" required placeholder="Enter a description" v-model="description" />
+          </div>
+          <hr />
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-info">
+                Submit
+              </button>
+            </div>
+            <div class="control">
+              <button class="button has-background-grey-light" @click.prevent="props.close">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </template>
+    </SideNav>
+    <SideNav v-if="shouldShowDelete" title="Delete QAPP" :handleClose="() => (this.shouldShowDelete = false)">
+      <template #default="props">
+        <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" />
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-info">
-              Submit
+            <button class="button is-info" @click="handleDeleteQapp">
+              Delete
             </button>
           </div>
           <div class="control">
-            <button class="button has-background-grey-light" @click.prevent="shouldShowAdd = false">
+            <button class="button has-background-grey-light" @click.prevent="props.close">
               Cancel
             </button>
           </div>
         </div>
-      </form>
-    </SideNav>
-    <SideNav v-if="shouldShowDelete" title="Delete QAPP" :handleClose="() => (this.shouldShowDelete = false)">
-      <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" />
-      <hr />
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-info" @click="handleDeleteQapp">
-            Delete
-          </button>
-        </div>
-        <div class="control">
-          <button class="button has-background-grey-light" @click.prevent="shouldShowDelete = false">
-            Cancel
-          </button>
-        </div>
-      </div>
+      </template>
     </SideNav>
   </div>
 </template>
