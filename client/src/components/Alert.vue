@@ -1,8 +1,8 @@
 <template>
   <div class="notification has-text-centered">
     <span class="fa fa-exclamation-circle is-size-5"></span>
-    <span class="has-text-danger">
-      {{ message }}
+    <span class="has-text-danger" v-for="line in message.split('\n')">
+      {{ line }}<br>
     </span>
   </div>
 </template>

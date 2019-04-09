@@ -89,7 +89,7 @@
           </button>
         </div>
         <div class="control">
-          <button class="button has-background-grey-light" @click.prevent="shouldShowAdd = false">
+          <button class="button has-background-grey-light" @click.prevent="shouldShowDelete = false">
             Cancel
           </button>
         </div>
@@ -111,10 +111,6 @@ export default {
   },
   methods: {
     ...mapActions('qapps', ['getQapps']),
-    onAddQapp() {
-      this.shouldShowDelete = false;
-      this.shouldShowAdd = true;
-    },
     async onDeleteQapp(qapp) {
       this.shouldShowAdd = false;
       this.shouldShowDelete = true;

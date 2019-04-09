@@ -31,7 +31,12 @@
 </template>
 
 <script>
+import Alert from '@/components/Alert';
+
 export default {
+  components: {
+    Alert
+  },
   data() {
     return {
       name: '',
@@ -70,7 +75,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.error {
-  color: red;
-}
 </style>
