@@ -1,13 +1,14 @@
 <template>
   <div class="modal is-active">
-    <div class="modal-background" @click="handleClose"></div>
-    <div class="modal-content">
+    <div class="modal-background" @click="close"></div>
+    <div :class="`modal-content ${this.shouldDismiss ? 'dismiss' : ''}`">
       <span class="title is-size-4">{{ title }}</span>
-      <button class="button is-text has-text-white is-pulled-right" @click="handleClose">
+      <button class="button is-text has-text-white is-pulled-right" @click="close">
         <span class="fa fa-times"></span>
       </button>
       <hr />
-      <slot />
+      <!-- give slots access to the close function outside of this component -->
+      <slot :close="close" />
     </div>
   </div>
 </template>
@@ -31,21 +32,31 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      shouldDismiss: false,
+    }
+  },
   mounted() {
     this.handleShown();
   },
+  methods: {
+    close() {
+      this.shouldDismiss = true;
+      // delay 500ms for slide animation to complete
+      setTimeout(() => (this.handleClose()), 500);
+    }
+  }
 };
 </script>
 
-<style scoped>
-#modalPrevent {
-  transition: none !important;
-}
-</style>
-
-<style>
+<style lang="scss">
 .modal {
   z-index: 60;
+}
+
+.modal-background {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .modal-content {
@@ -59,6 +70,30 @@ export default {
   height: 100%;
   background-color: #162a49;
   color: white !important;
+
+  animation: slide-in 0.5s forwards;
+
+  &.dismiss {
+    animation: slide-out 0.5s forwards;
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    -webkit-transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(0%);
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    -webkit-transform: translateX(0%);
+  }
+  100% {
+    -webkit-transform: translateX(100%);
+  }
 }
 
 .close {
