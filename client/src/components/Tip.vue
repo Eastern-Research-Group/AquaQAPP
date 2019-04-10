@@ -7,7 +7,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -23,13 +22,12 @@ export default {
 </script>
 
 <style scoped>
-.message{
+.message {
   background-color: #162a49;
 }
 
 .tip {
-  background-color: #00B0E6;
+  background-color: #00b0e6;
   color: #162a49;
 }
-
 </style>

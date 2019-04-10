@@ -21,7 +21,8 @@
       <form>
         <div class="field" v-for="question in currentQuestions" :key="question.id">
           <label class="label is-size-4">{{ question.questionLabel }}</label>
-          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions: </p><div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
+          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
+          <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
           <input
             v-if="question.dataEntryType === 'text'"
             class="input"
@@ -34,10 +35,9 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="column is-3 is-offset-10">
-            <button
-                v-if="question.hasExamples.trim() === 'Y'"
-                class="button has-text-white is-medium example"
-                >Example(s)</button>
+            <button v-if="question.hasExamples.trim() === 'Y'" class="button has-text-white is-medium example">
+              Example(s)
+            </button>
           </div>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
@@ -48,7 +48,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Tip  from '@/components/Tip';
+import Tip from '@/components/Tip';
 
 export default {
   components: { Tip },
