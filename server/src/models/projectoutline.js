@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const ProjectOutlines = sequelize.define(
-    'ProjectOutlines',
+  const ProjectOutline = sequelize.define(
+    'ProjectOutline',
     {
       projectId: DataTypes.INTEGER,
       outlineNumber: DataTypes.STRING,
@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  ProjectOutlines.associate = function(models) {
+  ProjectOutline.associate = function(models) {
     // associations can be defined here
   };
-  return ProjectOutlines;
+  return ProjectOutline;
 };
