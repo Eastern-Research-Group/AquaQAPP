@@ -21,7 +21,7 @@
       <form>
         <div class="field" v-for="question in currentQuestions" :key="question.id">
           <label class="label is-size-4">{{ question.questionLabel }}</label>
-          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
+          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions: </p>
           <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
           <input
             v-if="question.dataEntryType === 'text'"

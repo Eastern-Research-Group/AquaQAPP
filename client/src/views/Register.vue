@@ -6,18 +6,24 @@
         <h1 class="title has-text-centered">Register</h1>
         <form @submit.prevent="register">
           <div class="field">
-            <label class="label">Name</label>
+            <label class="label is-size-5">Name</label>
             <input class="input" type="text" required placeholder="Enter name" v-model="name" />
           </div>
           <div class="field">
-            <label class="label">Email</label>
+            <label class="label is-size-5">Email</label>
             <input class="input" type="email" required placeholder="Enter email" v-model="email" />
           </div>
           <div class="field">
-            <label class="label">Password</label>
+            <label class="label is-size-5">Password</label>
             <input class="input" type="password" required placeholder="Enter password" v-model="password" />
+            <p class="is-size-7">It must be at least 8 characters in length.</p>
+            <p class="is-size-7">It must contain one of the following characters: lower case, upper case, numerics.</p>
           </div>
-          <Alert v-if="error" :message="error" />
+          <div class="field">
+            <label class="label is-size-5">Confirm Password</label>
+            <input class="input" type="password" required placeholder="Confirm password" v-model="confirmPassword" />
+          </div>
+          <Alert v-if="error" :message="error" class="error" />
           <div class="field">
             <div class="control">
               <button class="button is-primary is-fullwidth">Register</button>
@@ -35,7 +41,7 @@ import Alert from '@/components/Alert';
 
 export default {
   components: {
-    Alert
+    Alert,
   },
   data() {
     return {
@@ -43,6 +49,7 @@ export default {
       email: '',
       password: '',
       error: null,
+      confirmPassword: '',
     };
   },
   methods: {
@@ -53,6 +60,7 @@ export default {
             name: this.name,
             email: this.email,
             password: this.password,
+            confirmPassword: this.confirmPassword,
           },
           redirect: '/dashboard',
           success: () => {
@@ -75,4 +83,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.error {
+  font-size: 15px;
+}
 </style>
