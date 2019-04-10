@@ -10,6 +10,7 @@ module.exports = {
         .min(3)
         .max(30)
         .required(),
+      confirmPassword: Joi.any().valid(Joi.ref('password')),
     };
 
     const { error } = Joi.validate(req.body, schema);
@@ -22,9 +23,13 @@ module.exports = {
           break;
         case 'password':
           res.status(400).send({
-            error: `The password provided failed to match the following rules:
-                        1. It must contain ONLY the following characters: lower case, upper case, numerics.
-                        2. It must be at least 8 characters in length and not greater than 32 characters in length.`,
+            error: `It must be at least 8 characters in length.
+                    It must contain one the following characters: lower case, upper case, numerics.`,
+          });
+          break;
+        case 'confirmPassword':
+          res.status(400).send({
+            error: 'Your password and confirmation password do not match.'
           });
           break;
         default:
