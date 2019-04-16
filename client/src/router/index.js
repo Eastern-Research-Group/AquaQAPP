@@ -5,6 +5,7 @@ import Register from '@/views/Register';
 import Login from '@/views/Login';
 import Dashboard from '@/views/Dashboard';
 import Navigate from '@/views/Navigate';
+import Reset from '@/views/Reset';
 
 Vue.use(Router);
 
@@ -26,6 +27,12 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register,
+      meta: { auth: false },
+    },
+    {
+      path: '/resetPassword',
+      name: 'resetPassword',
+      component: Reset,
       meta: { auth: false },
     },
     {

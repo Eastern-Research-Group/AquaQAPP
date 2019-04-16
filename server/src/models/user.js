@@ -26,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: DataTypes.STRING,
       name: DataTypes.STRING,
+      resetPasswordToken: DataTypes.STRING,
+      resetPasswordExpires: DataTypes.STRING,
     },
     {
       hooks: {
@@ -37,6 +39,16 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.comparePassword = function bcrpytCompare(password) {
     return bcrypt.compareAsync(password, this.password);
+  };
+
+  User.prototype.hashPassword = function hashPassword(user) {
+    const SALT_FACTOR = 8;
+    return bcrypt
+      .genSaltAsync(SALT_FACTOR)
+      .then((salt) => bcrypt.hashAsync(user.password, salt, null))
+      .then((hash) => {
+        user.setDataValue('password', hash);
+      });
   };
 
   /* associations defined here
