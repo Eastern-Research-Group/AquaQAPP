@@ -28,6 +28,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      resetPasswordToken: {
+        allowNull: true,
+        type: Sequelize.STRING(500),
+      },
+      resetPasswordExpires: {
+        allowNull: true,
+        type: Sequelize.BIGINT,
+      }
     }),
   down: (queryInterface) => queryInterface.dropTable('Users'),
 };
