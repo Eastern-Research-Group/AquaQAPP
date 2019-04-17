@@ -105,8 +105,8 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Alert from '@/components/Alert';
-import SideNav from '../components/SideNav';
+import Alert from '@/components/shared/Alert';
+import SideNav from '@/components/shared/SideNav';
 
 export default {
   components: { Alert, SideNav },

@@ -33,7 +33,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Alert from '@/components/Alert';
+import Alert from '@/components/shared/Alert';
 
 export default {
   components: {

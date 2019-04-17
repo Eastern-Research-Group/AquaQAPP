@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import Alert from '@/components/Alert';
-import HoverText from '@/components/HoverText';
+import Alert from '@/components/shared/Alert';
+import HoverText from '@/components/shared/HoverText';
 
 export default {
   components: {

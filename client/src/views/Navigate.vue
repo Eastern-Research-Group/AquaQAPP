@@ -48,7 +48,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Tip from '@/components/Tip';
+import Tip from '@/components/shared/Tip';
 
 export default {
   components: { Tip },
