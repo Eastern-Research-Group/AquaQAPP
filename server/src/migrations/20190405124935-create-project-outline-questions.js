@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       hasExamples: {
-        type: Sequelize.CHAR
+        type: Sequelize.BOOLEAN
       },
       outlineQuestionSort: {
         type: Sequelize.INTEGER
