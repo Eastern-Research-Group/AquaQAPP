@@ -127,7 +127,7 @@ module.exports = {
           to: updatedUserJson.email,
           from: 'aqua.qapp@gmail.com',
           template: 'forgot-password-email',
-          subject: 'Password help has arrived!',
+          subject: 'AquaQAPP Password Reset',
           context: {
             url: config.baseUrl + '/#/resetPassword?token=' + updatedUserJson.resetPasswordToken,
             name: updatedUserJson.name.split(' ')[0],
@@ -158,7 +158,7 @@ module.exports = {
 
       if (!user) {
         return res.status(422).send({
-          error: 'User not found.',
+          error: 'The password reset token has expired. Please follow steps to reset again.',
         });
       } else {
         const { newPassword, confirmNewPassword } = req.body;
@@ -203,7 +203,7 @@ module.exports = {
           });
         } else {
           return res.status(422).send({
-            error: 'Passwords do not match',
+            error: 'Passwords do not match.',
           });
         }
       }
