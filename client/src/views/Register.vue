@@ -14,10 +14,14 @@
             <input class="input" type="email" required placeholder="Enter email" v-model="email" />
           </div>
           <div class="field">
-            <label class="label is-size-5">Password</label>
+            <label class="label is-size-5">
+              Password
+              <HoverText icon="true" hoverId="passwordInfo">
+                Must be at least 8 characters in length and contain at least one lower-case and upper-case character and
+                one number.
+              </HoverText>
+            </label>
             <input class="input" type="password" required placeholder="Enter password" v-model="password" />
-            <p class="is-size-7">It must be at least 8 characters in length.</p>
-            <p class="is-size-7">It must contain one of the following characters: lower case, upper case, numerics.</p>
           </div>
           <div class="field">
             <label class="label is-size-5">Confirm Password</label>
@@ -38,10 +42,12 @@
 
 <script>
 import Alert from '@/components/Alert';
+import HoverText from '@/components/HoverText';
 
 export default {
   components: {
     Alert,
+    HoverText,
   },
   data() {
     return {
