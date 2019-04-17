@@ -84,7 +84,7 @@
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete QAPP" :handleClose="() => (this.shouldShowDelete = false)">
       <template #default="props">
-        <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" />
+        <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" type="warning" />
         <hr />
         <div class="field is-grouped">
           <div class="control">

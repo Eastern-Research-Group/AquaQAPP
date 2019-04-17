@@ -23,7 +23,7 @@
             <label class="label is-size-5">Confirm Password</label>
             <input class="input" type="password" required placeholder="Confirm password" v-model="confirmPassword" />
           </div>
-          <Alert v-if="error" :message="error" class="error" />
+          <Alert v-if="error" :message="error" type="error" />
           <div class="field">
             <div class="control">
               <button class="button is-primary is-fullwidth">Register</button>
@@ -80,10 +80,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.error {
-  font-size: 15px;
-}
-</style>

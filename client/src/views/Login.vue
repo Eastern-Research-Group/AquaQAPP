@@ -12,7 +12,7 @@
           <label class="label">Password</label>
           <input class="input" type="password" required placeholder="Enter password" v-model="password" />
         </div>
-        <Alert v-if="error" :message="error" />
+        <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
             <button class="button is-primary is-fullwidth">Log In</button>
@@ -37,7 +37,8 @@
               <button class="button is-primary is-fullwidth">Send Email</button>
             </div>
           </div>
-          <Success v-if="showSuccessMessage" :message="successMessage" />
+          <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />
+          <Alert v-if="resetError" :message="resetError" type="error" />
         </form>
       </SideNav>
     </div>
@@ -49,13 +50,11 @@
 import { mapActions } from 'vuex';
 import Alert from '@/components/Alert';
 import SideNav from '@/components/SideNav';
-import Success from '@/components/Success';
 
 export default {
   components: {
     Alert,
     SideNav,
-    Success,
   },
   data() {
     return {

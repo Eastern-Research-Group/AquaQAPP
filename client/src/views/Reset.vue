@@ -18,13 +18,13 @@
             v-model="confirmNewPassword"
           />
         </div>
-        <Alert v-if="error" :message="error" />
+        <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
             <button class="button is-primary is-fullwidth">Reset</button>
           </div>
         </div>
-        <Success v-if="showSuccessMessage" :message="successMessage" />
+        <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />
       </form>
     </div>
     <div class="column"></div>
@@ -34,12 +34,10 @@
 <script>
 import { mapActions } from 'vuex';
 import Alert from '@/components/Alert';
-import Success from '@/components/Success';
 
 export default {
   components: {
     Alert,
-    Success,
   },
   data() {
     return {
