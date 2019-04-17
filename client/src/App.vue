@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import InfoHeader from './components/InfoHeader';
-import PageHeader from './components/PageHeader';
-import ProgressBar from './components/ProgressBar';
+import InfoHeader from './components/app/InfoHeader';
+import PageHeader from './components/app/PageHeader';
+import ProgressBar from './components/app/ProgressBar';
 
 export default {
   name: 'App',

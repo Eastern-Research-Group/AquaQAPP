@@ -2,7 +2,7 @@
   <div>
     <div class="columns">
       <div class="column"></div>
-      <div class="column">
+      <div class="column is-5">
         <h1 class="title has-text-centered">Register</h1>
         <form @submit.prevent="register">
           <div class="field">
@@ -14,16 +14,20 @@
             <input class="input" type="email" required placeholder="Enter email" v-model="email" />
           </div>
           <div class="field">
-            <label class="label is-size-5">Password</label>
+            <label class="label is-size-5">
+              Password
+              <HoverText icon="true" hoverId="passwordInfo">
+                Must be at least 8 characters in length and contain at least one lower-case and upper-case character and
+                one number.
+              </HoverText>
+            </label>
             <input class="input" type="password" required placeholder="Enter password" v-model="password" />
-            <p class="is-size-7">It must be at least 8 characters in length.</p>
-            <p class="is-size-7">It must contain one of the following characters: lower case, upper case, numerics.</p>
           </div>
           <div class="field">
             <label class="label is-size-5">Confirm Password</label>
             <input class="input" type="password" required placeholder="Confirm password" v-model="confirmPassword" />
           </div>
-          <Alert v-if="error" :message="error" class="error" />
+          <Alert v-if="error" :message="error" type="error" />
           <div class="field">
             <div class="control">
               <button class="button is-primary is-fullwidth">Register</button>
@@ -37,11 +41,13 @@
 </template>
 
 <script>
-import Alert from '@/components/Alert';
+import Alert from '@/components/shared/Alert';
+import HoverText from '@/components/shared/HoverText';
 
 export default {
   components: {
     Alert,
+    HoverText,
   },
   data() {
     return {
@@ -80,10 +86,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.error {
-  font-size: 15px;
-}
-</style>

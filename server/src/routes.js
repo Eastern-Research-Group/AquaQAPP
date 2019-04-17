@@ -17,7 +17,7 @@ module.exports = (app) => {
   app.post('/auth/logout', isAuthenticated, authenticationController.logout);
   app.post('/auth/forgotPassword', authenticationController.forgotPassword);
   app.get('/auth/resetPassword', authenticationController.renderResetPasswordTemplate);
-  app.post('/auth/resetPassword', authenticationController.resetPassword);
+  app.post('/auth/resetPassword', authenticationControllerPolicy.reset, authenticationController.resetPassword);
 
   // qapp routes
   app.get('/api/qapps', isAuthenticated, qappController.index);

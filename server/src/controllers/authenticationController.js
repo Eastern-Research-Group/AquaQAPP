@@ -7,9 +7,7 @@ const config = require('../config/config');
 
 function jwtSignUser(user) {
   const ONE_WEEK = 60 * 60 * 24 * 7;
-  return jwt.sign(user, config.authentication.jwtSecret, {
-    expiresIn: ONE_WEEK,
-  });
+  return jwt.sign({ id: user.id, email: user.email }, config.authentication.jwtSecret, { expiresIn: ONE_WEEK });
 }
 
 let transporter = nodemailer.createTransport({
@@ -61,14 +59,14 @@ module.exports = {
 
       if (!user) {
         return res.status(403).send({
-          error: 'Incorrect email address',
+          error: 'The credentials do not match our records. Please try again or reset your password.',
         });
       }
 
       const isPasswordValid = await user.comparePassword(password);
-      if (!isPasswordValid) {
+      if (!isPasswordValid || !user) {
         return res.status(403).send({
-          error: 'Incorrect password',
+          error: 'The credentials do not match our records. Please try again or reset your password.',
         });
       }
       const userJson = user.toJSON();
@@ -127,9 +125,9 @@ module.exports = {
           to: updatedUserJson.email,
           from: 'aqua.qapp@gmail.com',
           template: 'forgot-password-email',
-          subject: 'Password help has arrived!',
+          subject: 'AquaQAPP Password Reset',
           context: {
-            url: 'http://localhost:8080/#/resetPassword?token=' + updatedUserJson.resetPasswordToken,
+            url: config.baseUrl + '/#/resetPassword?token=' + updatedUserJson.resetPasswordToken,
             name: updatedUserJson.name.split(' ')[0],
           },
         };
@@ -158,7 +156,7 @@ module.exports = {
 
       if (!user) {
         return res.status(422).send({
-          error: 'User not found.',
+          error: 'The password reset token has expired. Please follow steps to reset again.',
         });
       } else {
         const { newPassword, confirmNewPassword } = req.body;
@@ -203,7 +201,7 @@ module.exports = {
           });
         } else {
           return res.status(422).send({
-            error: 'Passwords do not match',
+            error: 'Passwords do not match.',
           });
         }
       }

@@ -84,7 +84,7 @@
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete QAPP" :handleClose="() => (this.shouldShowDelete = false)">
       <template #default="props">
-        <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" />
+        <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" type="warning" />
         <hr />
         <div class="field is-grouped">
           <div class="control">
@@ -105,8 +105,8 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Alert from '@/components/Alert';
-import SideNav from '../components/SideNav';
+import Alert from '@/components/shared/Alert';
+import SideNav from '@/components/shared/SideNav';
 
 export default {
   components: { Alert, SideNav },

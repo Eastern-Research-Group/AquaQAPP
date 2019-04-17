@@ -1,0 +1,79 @@
+<template>
+  <div :class="'message ' + getClass()">
+    <div class="message-body">
+      <span :class="'fa is-size-3 ' + getIcon()"></span>
+      <span class="alert-message has-text-weight-semibold">{{ message }}</span>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Alert',
+  props: {
+    message: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: false,
+      default: 'error',
+    }
+  },
+  methods: {
+    getIcon() {
+      switch (this.type) {
+        case 'error':
+          return 'fa-exclamation-circle';
+        case 'warning':
+          return 'fa-exclamation-triangle';
+        case 'success':
+          return 'fa-check-circle';
+      }
+    },
+    getClass() {
+      switch (this.type) {
+        case 'error':
+          return 'is-danger';
+        case 'warning':
+          return 'is-warning';
+        case 'success':
+          return 'is-success';
+      }
+    }
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.svg-inline--fa {
+  margin: auto 0.5em auto 0;
+}
+
+.message {
+  font-size: 0.95em;
+
+  &.is-danger {
+    background-color: #f9dede;
+  }
+
+  &.is-success {
+    background-color: #e7f4e4;
+  }
+
+  &.is-warning {
+    background-color: #fff1d2;
+  }
+
+  .message-body {
+    display: flex;
+    border-left-width: 0.5em;
+    padding: 1em;
+
+    .alert-message {
+      margin: auto 0;
+    }
+  }
+}
+</style>

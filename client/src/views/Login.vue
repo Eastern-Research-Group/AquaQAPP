@@ -1,43 +1,45 @@
 <template>
   <div class="columns">
     <div class="column"></div>
-    <div class="column">
+    <div class="column is-5">
       <h1 class="title has-text-centered">Log In</h1>
       <form @submit.prevent="login">
         <div class="field">
-          <label class="label">Email</label>
+          <label class="label is-size-5">Email</label>
           <input class="input" type="email" required placeholder="Enter email" v-model="email" />
         </div>
         <div class="field">
-          <label class="label">Password</label>
+          <label class="label is-size-5">Password</label>
           <input class="input" type="password" required placeholder="Enter password" v-model="password" />
         </div>
-        <Alert v-if="error" :message="error" />
+        <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
-            <button class="button is-primary is-fullwidth">Log In</button>
+            <button class="button is-primary is-fullwidth is-size-5">Log In</button>
           </div>
         </div>
+        <div class="field">
+          <button type="button" class="button is-link is-fullwidth" @click="shouldShowReset = true">
+            Reset Password?
+          </button>
+        </div>
       </form>
-      <br />
-      <button v-if="error === 'Incorrect password'" class="button is-primary is-fullwidth" @click="onResetPassword">
-        Reset Password?
-      </button>
       <SideNav v-if="shouldShowReset" title="Reset Password?" :handleClose="() => (this.shouldShowReset = false)">
-        <form @submit.prevent="forgotPassword">
+        <form @submit.prevent="resetPassword">
           <div class="field">
-            <h2>An email will be sent to this address to reset your password.</h2>
+            <p>Enter your email address to receive a link to reset your password.</p>
           </div>
           <div class="field">
-            <label class="label">Email</label>
-            <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+            <label class="label sr-only">Email</label>
+            <input class="input" type="email" required placeholder="Enter email" v-model="resetEmail" />
           </div>
           <div class="field">
             <div class="control">
               <button class="button is-primary is-fullwidth">Send Email</button>
             </div>
           </div>
-          <Success v-if="showSuccessMessage" :message="successMessage" />
+          <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />
+          <Alert v-if="resetError" :message="resetError" type="error" />
         </form>
       </SideNav>
     </div>
@@ -47,37 +49,28 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Alert from '@/components/Alert';
-import SideNav from '@/components/SideNav';
-import Success from '@/components/Success';
+import Alert from '@/components/shared/Alert';
+import SideNav from '@/components/shared/SideNav';
 
 export default {
   components: {
     Alert,
     SideNav,
-    Success,
   },
   data() {
     return {
+      email: '',
       password: '',
       error: null,
+      resetEmail: '',
+      resetError: null,
       shouldShowReset: false,
       successMessage: 'Check your email!',
       showSuccessMessage: false,
     };
   },
-  computed: {
-    email: {
-      get() {
-        return this.$store.state.user.email;
-      },
-      set(value) {
-        this.$store.commit('user/SET_EMAIL', value);
-      },
-    },
-  },
   methods: {
-    ...mapActions('user', ['forgot_Password']),
+    ...mapActions('user', ['forgotPassword']),
     async login() {
       try {
         await this.$auth.login({
@@ -90,28 +83,20 @@ export default {
         this.error = error.response.data.error;
       }
     },
-    async onResetPassword() {
-      this.shouldShowReset = true;
-    },
-    async forgotPassword() {
+    async resetPassword() {
+      this.resetError = null;
+      this.showSuccessMessage = false;
       try {
-        await this.forgot_Password({
+        await this.forgotPassword({
           data: {
-            email: this.email,
+            email: this.resetEmail,
           },
         });
         this.showSuccessMessage = true;
       } catch (error) {
-        this.error = error.response.data.error;
+        this.resetError = error.response.data.error;
       }
     },
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.inline-icon {
-  color: hsl(0, 0%, 4%);
-}
-</style>

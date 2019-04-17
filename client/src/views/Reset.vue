@@ -1,9 +1,9 @@
 <template>
   <div class="columns">
     <div class="column"></div>
-    <div class="column">
-      <h1 class="title has-text-centered">Reset</h1>
-      <form @submit.prevent="resetPassword">
+    <div class="column is-5">
+      <h1 class="title has-text-centered">Reset Password</h1>
+      <form @submit.prevent="submitPasswordReset">
         <div class="field">
           <label class="label">New Password</label>
           <input class="input" type="password" required placeholder="Enter New password" v-model="newPassword" />
@@ -18,13 +18,13 @@
             v-model="confirmNewPassword"
           />
         </div>
-        <Alert v-if="error" :message="error" />
+        <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
             <button class="button is-primary is-fullwidth">Reset</button>
           </div>
         </div>
-        <Success v-if="showSuccessMessage" :message="successMessage" />
+        <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />
       </form>
     </div>
     <div class="column"></div>
@@ -33,18 +33,16 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Alert from '@/components/Alert';
-import Success from '@/components/Success';
+import Alert from '@/components/shared/Alert';
 
 export default {
   components: {
     Alert,
-    Success,
   },
   data() {
     return {
       error: null,
-      successMessage: 'Confirmation email sent!',
+      successMessage: 'Your password was successfully reset. Please log in with your new password to continue.',
       showSuccessMessage: false,
     };
   },
@@ -78,10 +76,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions('user', ['reset_Password']),
-    async resetPassword() {
+    ...mapActions('user', ['resetPassword']),
+    async submitPasswordReset() {
       try {
-        await this.reset_Password({
+        await this.resetPassword({
           data: {
             newPassword: this.newPassword,
             confirmNewPassword: this.confirmNewPassword,

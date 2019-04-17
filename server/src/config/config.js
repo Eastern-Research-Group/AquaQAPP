@@ -16,4 +16,5 @@ module.exports = {
   },
   projectId: 1,
   service: process.env.SERVICE_PROVIDER || 'Gmail',
+  baseUrl: process.env.BASE_URL || 'http://localhost:8080',
 };
