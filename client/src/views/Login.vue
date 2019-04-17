@@ -5,32 +5,33 @@
       <h1 class="title has-text-centered">Log In</h1>
       <form @submit.prevent="login">
         <div class="field">
-          <label class="label">Email</label>
+          <label class="label is-size-5">Email</label>
           <input class="input" type="email" required placeholder="Enter email" v-model="email" />
         </div>
         <div class="field">
-          <label class="label">Password</label>
+          <label class="label is-size-5">Password</label>
           <input class="input" type="password" required placeholder="Enter password" v-model="password" />
         </div>
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
-            <button class="button is-primary is-fullwidth">Log In</button>
+            <button class="button is-primary is-fullwidth is-size-5">Log In</button>
           </div>
         </div>
+        <div class="field">
+          <button type="button" class="button is-link is-fullwidth" @click="shouldShowReset = true">
+            Reset Password?
+          </button>
+        </div>
       </form>
-      <br />
-      <button v-if="error === 'Incorrect password'" class="button is-primary is-fullwidth" @click="onResetPassword">
-        Reset Password?
-      </button>
       <SideNav v-if="shouldShowReset" title="Reset Password?" :handleClose="() => (this.shouldShowReset = false)">
         <form @submit.prevent="forgotPassword">
           <div class="field">
-            <h2>An email will be sent to this address to reset your password.</h2>
+            <p>Enter your email address to receive a link to reset your password.</p>
           </div>
           <div class="field">
-            <label class="label">Email</label>
-            <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+            <label class="label sr-only">Email</label>
+            <input class="input" type="email" required placeholder="Enter email" v-model="resetEmail" />
           </div>
           <div class="field">
             <div class="control">
@@ -107,10 +108,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.inline-icon {
-  color: hsl(0, 0%, 4%);
-}
-</style>
