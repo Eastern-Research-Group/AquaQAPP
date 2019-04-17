@@ -8,6 +8,7 @@ module.exports = {
         projectName: 'AquaQAPP',
         projectTitle: 'Friends of the Charles River Watershed Group QAPP',
         projectDescription: 'Longer description if desired for splash page or documentation.',
+        showOutlineNumber: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

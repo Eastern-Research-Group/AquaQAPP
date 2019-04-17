@@ -25,6 +25,9 @@ module.exports = {
       dataEntryType: {
         type: Sequelize.STRING
       },
+      maxLength: {
+        type: Sequelize.INTEGER
+      },
       hasExamples: {
         type: Sequelize.CHAR
       },
