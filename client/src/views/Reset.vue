@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       error: null,
-      successMessage: 'Confirmation email sent!',
+      successMessage: 'Your password was successfully reset. Please log in with your new password to continue.',
       showSuccessMessage: false,
     };
   },
