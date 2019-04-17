@@ -35,7 +35,7 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="column is-3 is-offset-10">
-            <button v-if="question.hasExamples.trim() === 'Y'" class="button has-text-white is-medium example">
+            <button type="button" v-if="question.hasExamples" class="button has-text-white is-medium example">
               Example(s)
             </button>
           </div>
