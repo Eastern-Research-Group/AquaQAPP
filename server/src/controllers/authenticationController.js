@@ -129,7 +129,7 @@ module.exports = {
           template: 'forgot-password-email',
           subject: 'Password help has arrived!',
           context: {
-            url: 'http://localhost:8080/#/resetPassword?token=' + updatedUserJson.resetPasswordToken,
+            url: config.baseUrl + '/#/resetPassword?token=' + updatedUserJson.resetPasswordToken,
             name: updatedUserJson.name.split(' ')[0],
           },
         };
