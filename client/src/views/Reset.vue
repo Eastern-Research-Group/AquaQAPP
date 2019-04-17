@@ -76,10 +76,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions('user', ['reset_Password']),
-    async resetPassword() {
+    ...mapActions('user', ['resetPassword']),
+    async submitPasswordReset() {
       try {
-        await this.reset_Password({
+        await this.resetPassword({
           data: {
             newPassword: this.newPassword,
             confirmNewPassword: this.confirmNewPassword,

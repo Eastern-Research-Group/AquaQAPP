@@ -23,16 +23,13 @@ const mutations = {
 };
 
 const actions = {
-  async forgot_Password({ commit, state }) {
-    if (!state.email) {
-      return;
-    }
+  async forgotPassword({ state }, payload) {
     const postData = {
-      email: state.email,
+      email: payload.data.email,
     };
     await axios.post('auth/forgotPassword', postData);
   },
-  async reset_Password({ state }) {
+  async resetPassword({ state }) {
     if (!state.newPassword || !state.confirmNewPassword || !state.resetPasswordToken) {
       return;
     }

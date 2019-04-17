@@ -25,7 +25,7 @@
         </div>
       </form>
       <SideNav v-if="shouldShowReset" title="Reset Password?" :handleClose="() => (this.shouldShowReset = false)">
-        <form @submit.prevent="forgotPassword">
+        <form @submit.prevent="resetPassword">
           <div class="field">
             <p>Enter your email address to receive a link to reset your password.</p>
           </div>
@@ -59,25 +59,18 @@ export default {
   },
   data() {
     return {
+      email: '',
       password: '',
       error: null,
+      resetEmail: '',
+      resetError: null,
       shouldShowReset: false,
       successMessage: 'Check your email!',
       showSuccessMessage: false,
     };
   },
-  computed: {
-    email: {
-      get() {
-        return this.$store.state.user.email;
-      },
-      set(value) {
-        this.$store.commit('user/SET_EMAIL', value);
-      },
-    },
-  },
   methods: {
-    ...mapActions('user', ['forgot_Password']),
+    ...mapActions('user', ['forgotPassword']),
     async login() {
       try {
         await this.$auth.login({
@@ -90,19 +83,18 @@ export default {
         this.error = error.response.data.error;
       }
     },
-    async onResetPassword() {
-      this.shouldShowReset = true;
-    },
-    async forgotPassword() {
+    async resetPassword() {
+      this.resetError = null;
+      this.showSuccessMessage = false;
       try {
-        await this.forgot_Password({
+        await this.forgotPassword({
           data: {
-            email: this.email,
+            email: this.resetEmail,
           },
         });
         this.showSuccessMessage = true;
       } catch (error) {
-        this.error = error.response.data.error;
+        this.resetError = error.response.data.error;
       }
     },
   },
