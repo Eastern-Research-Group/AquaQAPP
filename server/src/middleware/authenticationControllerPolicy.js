@@ -23,13 +23,13 @@ module.exports = {
           break;
         case 'password':
           res.status(400).send({
-            error: `It must be at least 8 characters in length.
-                    It must contain one the following characters: lower case, upper case, numerics.`,
+            error: `Password must be at least 8 characters in length.
+                    Password must contain at least one lower-case and upper-case character, and one number.`,
           });
           break;
         case 'confirmPassword':
           res.status(400).send({
-            error: 'Your password and confirmation password do not match.'
+            error: 'Your password and confirmation password do not match.',
           });
           break;
         default:

@@ -61,14 +61,14 @@ module.exports = {
 
       if (!user) {
         return res.status(403).send({
-          error: 'Incorrect email address',
+          error: 'The credentials do not match our records. Please try again or reset your password.',
         });
       }
 
       const isPasswordValid = await user.comparePassword(password);
-      if (!isPasswordValid) {
+      if (!isPasswordValid || !user) {
         return res.status(403).send({
-          error: 'Incorrect password',
+          error: 'The credentials do not match our records. Please try again or reset your password.',
         });
       }
       const userJson = user.toJSON();
