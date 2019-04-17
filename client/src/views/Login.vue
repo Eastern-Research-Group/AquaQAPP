@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
     <div class="column"></div>
-    <div class="column">
+    <div class="column is-5">
       <h1 class="title has-text-centered">Log In</h1>
       <form @submit.prevent="login">
         <div class="field">

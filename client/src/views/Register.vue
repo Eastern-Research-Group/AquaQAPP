@@ -2,7 +2,7 @@
   <div>
     <div class="columns">
       <div class="column"></div>
-      <div class="column">
+      <div class="column is-5">
         <h1 class="title has-text-centered">Register</h1>
         <form @submit.prevent="register">
           <div class="field">

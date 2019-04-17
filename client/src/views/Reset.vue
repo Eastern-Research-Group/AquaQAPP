@@ -1,9 +1,9 @@
 <template>
   <div class="columns">
     <div class="column"></div>
-    <div class="column">
-      <h1 class="title has-text-centered">Reset</h1>
-      <form @submit.prevent="resetPassword">
+    <div class="column is-5">
+      <h1 class="title has-text-centered">Reset Password</h1>
+      <form @submit.prevent="submitPasswordReset">
         <div class="field">
           <label class="label">New Password</label>
           <input class="input" type="password" required placeholder="Enter New password" v-model="newPassword" />
