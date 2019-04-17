@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       dataEntryInstructions: DataTypes.STRING,
       dataEntryTip: DataTypes.STRING,
       dataEntryType: DataTypes.STRING,
+      maxLength: DataTypes.INTEGER,
       hasExamples: DataTypes.CHAR,
       outlineQuestionSort: DataTypes.INTEGER
     },
