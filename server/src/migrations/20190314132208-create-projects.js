@@ -16,6 +16,9 @@ module.exports = {
       projectDescription: {
         type: Sequelize.STRING,
       },
+      showOutlineNumber: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

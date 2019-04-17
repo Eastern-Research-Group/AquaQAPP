@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       projectName: DataTypes.STRING,
       projectTitle: DataTypes.STRING,
       projectDescription: DataTypes.STRING,
+      showOutlineNumber: DataTypes.BOOLEAN,
     },
     {}
   );
