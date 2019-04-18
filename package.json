@@ -8,7 +8,8 @@
     "seed": "sequelize db:seed:all",
     "server": "npm run migrate && npm run seed && nodemon --ignore 'client/*' --inspect server/src/server.js",
     "client": "vue-cli-service serve",
-    "start": "concurrently --kill-others -n server,client \"npm run server\" \"npm run client\""
+    "start": "concurrently --kill-others -n server,client \"npm run server\" \"npm run client\"",
+    "test": "jest"
   },
   "engines": {
     "node": "10.15.3"
