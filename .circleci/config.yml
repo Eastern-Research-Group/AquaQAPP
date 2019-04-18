@@ -3,6 +3,7 @@ jobs:
   develop-branch:
     docker:
       - image: buildpack-deps:trusty
+      - image: circleci/node:lts
     environment:
       HEROKU_APP_NAME: aquaqapp-dev
     steps:
