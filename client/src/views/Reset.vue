@@ -5,7 +5,13 @@
       <h1 class="title has-text-centered">Reset Password</h1>
       <form @submit.prevent="submitPasswordReset">
         <div class="field">
-          <label class="label">New Password</label>
+          <label class="label">
+            New Password
+            <HoverText icon="true" hoverId="passwordInfo">
+              Must be at least 8 characters in length and contain at least one lower-case and upper-case character and
+              one number.
+            </HoverText>
+          </label>
           <input class="input" type="password" required placeholder="Enter New password" v-model="newPassword" />
         </div>
         <div class="field">
@@ -34,10 +40,12 @@
 <script>
 import { mapActions } from 'vuex';
 import Alert from '@/components/shared/Alert';
+import HoverText from '@/components/shared/HoverText';
 
 export default {
   components: {
     Alert,
+    HoverText,
   },
   data() {
     return {
