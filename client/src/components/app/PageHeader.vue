@@ -24,7 +24,7 @@
         <div id="mainNav" :class="'navbar-menu burger' + (isActive ? ' is-active' : '')">
           <div class="navbar-end" v-if="!$auth.check()">
             <div class="navbar-item">
-              <router-link class="navbar-item" to="/login">
+              <router-link class="navbar-item" to="/">
                 <strong>Log In</strong>
               </router-link>
               <router-link class="navbar-item" to="/register">
