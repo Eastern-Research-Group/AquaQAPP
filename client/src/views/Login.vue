@@ -5,12 +5,12 @@
       <h1 class="title has-text-centered">Log In</h1>
       <form @submit.prevent="login">
         <div class="field">
-          <label class="label is-size-5">Email</label>
-          <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+          <label for="email" class="label is-size-5">Email</label>
+          <input id="email" class="input" type="email" required placeholder="Enter email" v-model="email" />
         </div>
         <div class="field">
-          <label class="label is-size-5">Password</label>
-          <input class="input" type="password" required placeholder="Enter password" v-model="password" />
+          <label for="password" class="label is-size-5">Password</label>
+          <input id="password" class="input" type="password" required placeholder="Enter password" v-model="password" />
         </div>
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
