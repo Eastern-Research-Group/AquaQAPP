@@ -2,8 +2,7 @@ version: 2
 jobs:
   develop-branch:
     docker:
-      - image: buildpack-deps:trusty
-      - image: circleci/node:lts
+      - image: circleci/node:dubnium-stretch
     environment:
       HEROKU_APP_NAME: aquaqapp-dev
     steps:
@@ -17,6 +16,9 @@ jobs:
           name: Update npm
           command: |
             sudo npm install -g npm
+      - restore_cache: # special step to restore the dependency cache
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Build npm dependencies
           command: |
