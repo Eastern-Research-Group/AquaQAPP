@@ -8,10 +8,18 @@ jobs:
     steps:
       - checkout
       - run:
-            name: Install Sonarqube scanner
-            command: |
-              wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
-              unzip sonar-scanner-cli-3.3.0.1492-linux.zip
+          name: Install Sonarqube scanner
+          command: |
+            wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+            unzip sonar-scanner-cli-3.3.0.1492-linux.zip
+      - run:
+          name: Build npm dependencies
+          command: |
+            npm install
+      - run:
+          name: Run automated tests
+          command: |
+            npm test
       - run:
           name: Deploy $HEROKU_APP_NAME to Heroku
           command: |
