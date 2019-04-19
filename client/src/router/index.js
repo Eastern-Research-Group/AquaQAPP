@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Welcome from '@/views/Welcome';
 import Register from '@/views/Register';
 import Login from '@/views/Login';
 import Dashboard from '@/views/Dashboard';

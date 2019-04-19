@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
 const { User } = require('../models');
 const config = require('../config/config');
+const { Op } = require('sequelize');
 
 function jwtSignUser(user) {
   const ONE_WEEK = 60 * 60 * 24 * 7;
@@ -104,7 +105,7 @@ module.exports = {
         await User.update(
           {
             resetPasswordToken: token,
-            resetPasswordExpires: Date.now() + 1000 * 60 * 60 * 24 * 3,
+            resetPasswordExpires: Date.now() + 1000 * 60 * 60 * 24,
           },
           {
             where: {
@@ -151,6 +152,9 @@ module.exports = {
       const user = await User.findOne({
         where: {
           resetPasswordToken: resetPasswordToken,
+          resetPasswordExpires: {
+            [Op.gt]: Date.now(),
+          }
         },
       });
 

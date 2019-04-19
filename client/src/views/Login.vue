@@ -20,11 +20,11 @@
         </div>
         <div class="field">
           <button type="button" class="button is-link is-fullwidth" @click="shouldShowReset = true">
-            Reset Password?
+            Forgot Password?
           </button>
         </div>
       </form>
-      <SideNav v-if="shouldShowReset" title="Reset Password?" :handleClose="() => (this.shouldShowReset = false)">
+      <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (this.shouldShowReset = false)">
         <form @submit.prevent="resetPassword">
           <div class="field">
             <p>Enter your email address to receive a link to reset your password.</p>
