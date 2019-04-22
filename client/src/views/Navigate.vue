@@ -51,7 +51,7 @@
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
         <div class="field" v-if="shouldDisplayMap">
-          <Map />
+          <Locations />
         </div>
       </form>
     </section>
@@ -61,10 +61,10 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Tip from '@/components/shared/Tip';
-import Map from '@/components/shared/Map';
+import Locations from '@/components/app/Locations/Locations';
 
 export default {
-  components: { Tip, Map },
+  components: { Locations, Tip },
   data() {
     return {
       currentOutlineNum: '1.1',
