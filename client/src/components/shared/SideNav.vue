@@ -52,7 +52,7 @@ export default {
 
 <style lang="scss">
 .modal {
-  z-index: 60;
+  z-index: 999;
 }
 
 .modal-background {
