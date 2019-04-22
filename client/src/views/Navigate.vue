@@ -9,10 +9,19 @@
                 currentOutlineNum === section.outlineNumber ? 'has-text-weight-bold' : ''
               }`
             "
-            @click="currentOutlineNum = section.outlineNumber"
+            @click="changeSection(section.outlineNumber)"
           >
             <span class="step-number">{{ section.outlineNumber }}</span>
             {{ section.outlineLabel }}
+          </button>
+        </li>
+        <li>
+          <button
+            :class="`button is-text has-text-white ${shouldDisplayMap ? 'has-text-weight-bold' : ''}`"
+            @click="shouldDisplayMap = true"
+          >
+            <span class="step-number">3</span>
+            Locations
           </button>
         </li>
       </ul>
@@ -21,7 +30,7 @@
       <form>
         <div class="field" v-for="question in currentQuestions" :key="question.id">
           <label class="label is-size-4">{{ question.questionLabel }}</label>
-          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions: </p>
+          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
           <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
           <input
             v-if="question.dataEntryType === 'text'"
@@ -41,6 +50,9 @@
           </div>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
+        <div class="field" v-if="shouldDisplayMap">
+          <Locations />
+        </div>
       </form>
     </section>
   </div>
@@ -49,17 +61,20 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Tip from '@/components/shared/Tip';
+import Locations from '@/components/app/Locations/Locations';
 
 export default {
-  components: { Tip },
+  components: { Locations, Tip },
   data() {
     return {
       currentOutlineNum: '1.1',
+      shouldDisplayMap: false,
     };
   },
   computed: {
     ...mapState('structure', ['sections', 'questions']),
     currentQuestions() {
+      if (this.shouldDisplayMap) return [];
       return this.questions.filter((q) => q.outlineNumber === this.currentOutlineNum);
     },
   },
@@ -69,6 +84,10 @@ export default {
   },
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
+    changeSection(outlineNumber) {
+      this.shouldDisplayMap = false;
+      this.currentOutlineNum = outlineNumber;
+    },
   },
 };
 </script>
