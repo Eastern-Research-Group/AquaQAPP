@@ -13,6 +13,10 @@ jobs:
             wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
             unzip sonar-scanner-cli-3.3.0.1492-linux.zip
       - run:
+          name: Run Sonarqube scanner
+          command: |
+            ./sonar-scanner-3.3.0.1492-linux/bin/sonar-scanner -Dsonar.projectKey=AquaQAPP -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_TOKEN
+      - run:
           name: Update npm
           command: |
             sudo npm install -g npm
@@ -23,10 +27,10 @@ jobs:
           name: Build npm dependencies
           command: |
             npm install
-      # - run:
-          # name: Run automated tests
-          # command: |
-            # npm test
+      - run:
+          name: Run automated tests
+          command: |
+            npm test
       - run:
           name: Deploy $HEROKU_APP_NAME to Heroku
           command: |
