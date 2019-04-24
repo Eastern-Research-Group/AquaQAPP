@@ -36,7 +36,7 @@ describe('Login', () => {
     wrapper.find('.button.is-link').trigger('click');
     expect(wrapper.vm.shouldShowReset).toBe(true);
     expect(wrapper.find(SideNav).exists()).toBe(true);
-    expect(wrapper.html()).toContain('<span class="title is-size-4">Reset Password?</span>');
+    expect(wrapper.html()).toContain('<span class="title is-size-4">Forgot Password?</span>');
   });
 
   test('triggers resetPassword method when reset form submitted', () => {
