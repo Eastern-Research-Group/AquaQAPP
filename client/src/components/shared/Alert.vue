@@ -2,7 +2,8 @@
   <div :class="'message ' + getClass()">
     <div class="message-body">
       <span :class="'fa is-size-3 ' + getIcon()"></span>
-      <span class="alert-message has-text-weight-semibold">{{ message }}</span>
+      <span v-if="isMessageHTML" class="alert-message has-text-white-semibold" :is="contentComp"></span>
+      <span v-if="!isMessageHTML" class="alert-message has-text-weight-semibold">{{ message }}</span>
     </div>
   </div>
 </template>
@@ -19,6 +20,16 @@ export default {
       type: String,
       required: false,
       default: 'error',
+    },
+    isMessageHTML: {
+      type: Boolean,
+      required: false,
+      default: false,
+    }
+  },
+  computed: {
+    contentComp () {
+      return { template: `<p>${this.message}</p>` }
     }
   },
   methods: {
