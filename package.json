@@ -9,7 +9,7 @@
     "server": "npm run migrate && npm run seed && nodemon --ignore 'client/*' --inspect server/src/server.js",
     "client": "vue-cli-service serve",
     "start": "concurrently --kill-others -n server,client \"npm run server\" \"npm run client\"",
-    "test": "jest"
+    "test": "vue-cli-service test:unit"
   },
   "engines": {
     "node": "10.15.3"
@@ -44,6 +44,7 @@
     "vuex": "^3.1.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.4.3",
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
     "@vue/cli-plugin-pwa": "^3.5.0",
