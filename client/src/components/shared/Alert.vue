@@ -2,7 +2,7 @@
   <div :class="'message ' + getClass()">
     <div class="message-body">
       <span :class="'fa is-size-3 ' + getIcon()"></span>
-      <span v-if="isMessageHTML" class="alert-message has-text-white-semibold" :is="contentComp"></span>
+      <span v-if="isMessageHTML" class="alert-message has-text-weight-semibold" :is="contentComp"></span>
       <span v-if="!isMessageHTML" class="alert-message has-text-weight-semibold">{{ message }}</span>
     </div>
   </div>

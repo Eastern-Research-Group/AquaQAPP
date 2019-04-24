@@ -2,8 +2,7 @@
   <div>
     <Tabs :tabs="[{ id: 'list', name: 'List' }, { id: 'map', name: 'Map', isActive: true }]">
       <template v-slot:list>
-        <!-- todo: add List component and insert here -->
-        Coming Soon
+        <LocationsTable :onAddLocationInfo="onAddLocationInfo"/>
       </template>
       <template v-slot:map>
         <Map :onAddLocation="onAddLocation" :isAddingLocation="isAddingLocation" :markers="markers" />
@@ -23,7 +22,7 @@
           <label for="coords">Latitude, Longitude</label>
           <input id="coords" class="input" type="text" v-model="selectedCoordinates" />
         </div>
-        <div class="field">
+        <div class="field" v-if="isMapTab">
           <label for="waterType">Water Type</label>
           <div class="control">
             <label class="radio">
@@ -40,7 +39,7 @@
             </label>
           </div>
         </div>
-        <div class="field">
+        <div class="field" v-if="isMapTab">
           <label for="concerns">Concerns</label>
           <div class="control">
             <label class="checkbox">
@@ -71,9 +70,10 @@
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
+import LocationsTable from '@/components/app/Locations/LocationsTable';
 
 export default {
-  components: { Map, SideNav, Tabs },
+  components: { Map, SideNav, Tabs, LocationsTable },
   data() {
     return {
       isAddingLocation: false,
@@ -84,6 +84,7 @@ export default {
       concerns: [],
       markers: [],
       map: null,
+      isMapTab: false,
     };
   },
   methods: {
@@ -94,6 +95,7 @@ export default {
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isEnteringLocationInfo = true;
+          this.isMapTab = true;
           this.selectedCoordinates = `${e.latlng.lat}, ${e.latlng.lng}`;
         });
       } else {
@@ -114,6 +116,10 @@ export default {
       this.isEnteringLocationInfo = false;
       this.map.off('click');
     },
+    onAddLocationInfo() {
+      this.isEnteringLocationInfo = true;
+      this.isMapTab = false;
+    }
   },
 };
 </script>
