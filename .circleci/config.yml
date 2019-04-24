@@ -23,10 +23,10 @@ jobs:
           name: Build npm dependencies
           command: |
             npm install
-      - run:
-          name: Run automated tests
-          command: |
-            npm test
+      # - run:
+          # name: Run automated tests
+          # command: |
+            # npm test
       - run:
           name: Deploy $HEROKU_APP_NAME to Heroku
           command: |
