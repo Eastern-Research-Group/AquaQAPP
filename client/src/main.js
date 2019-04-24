@@ -3,7 +3,7 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import '../static/app.scss';
 import '@fortawesome/fontawesome-free/js/all';
-import './registerServiceWorker';
+// import './registerServiceWorker';
 import router from './router';
 import store from './store/index';
 import App from './App';
