@@ -1,7 +1,7 @@
 <template>
   <div class="aq-map-container">
     <div class="aq-map-add-btn">
-      <button type="button" class="button is-link" @click="onAddLocation(map)">
+      <button type="button" class="button is-dark" @click="onAddLocation(map)">
         {{ isAddingLocation ? 'Cancel' : 'Add Location' }}
       </button>
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
