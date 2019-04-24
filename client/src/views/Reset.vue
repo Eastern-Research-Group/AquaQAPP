@@ -30,7 +30,7 @@
             <button class="button is-primary is-fullwidth">Reset</button>
           </div>
         </div>
-        <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />
+        <Alert v-if="showSuccessMessage" v-bind:isMessageHTML="true" v-bind:message="successMessage" type="success" />
       </form>
     </div>
     <div class="column"></div>
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       error: null,
-      successMessage: 'Your password was successfully reset. Please log in with your new password to continue.',
+      successMessage: 'Your password was successfully reset. Please <router-link to="/">log in</router-link> with your new password to continue.',
       showSuccessMessage: false,
     };
   },

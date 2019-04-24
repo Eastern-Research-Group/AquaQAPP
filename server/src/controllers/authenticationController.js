@@ -193,6 +193,7 @@ module.exports = {
             subject: 'Password Reset Confirmation',
             context: {
               name: updatedUser.name.split(' ')[0],
+              url: config.baseUrl,
             },
           };
 
