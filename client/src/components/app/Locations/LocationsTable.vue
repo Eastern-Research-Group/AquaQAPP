@@ -11,17 +11,17 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="" :key="">
-            <td>pending</td>
-            <td>pending</td>
-            <td>pending</td>
+          <tr v-for="row in rows" :key="row.id" ref="row">
+            <td>{{ row.title }}</td>
+            <td>{{ row.lat }}</td>
+            <td>{{ row.lng }}</td>
             <td>
               <div class="field is-grouped">
                 <div class="control">
-                  <Button label="Edit" type="primary" icon="edit" v-bind:shouldShowIcon="true"/>
+                  <Button label="Edit" type="primary" icon="edit" v-bind:shouldShowIcon="true" v-bind:onClick="onEditRow"/>
                 </div>
                 <div class="control">
-                  <Button label="Delete" type="danger" icon="trash" v-bind:shouldShowIcon="true"/>
+                  <Button label="Delete" type="danger" icon="trash" v-bind:shouldShowIcon="true" v-bind:onClick="onDeleteRow"/>
                 </div>
               </div>
             </td>
@@ -31,9 +31,9 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column is-9">
+      <div class="column is-7">
       </div>
-      <div class="column is-3">
+      <div class="column is-5">
         <Button class="section-btn" label="Add" type="success" v-bind:onClick="onAddLocationInfo"/>
         <Button class="section-btn" label="Delete All" type="danger" v-bind:onClick="onDeleteAll"/>
       </div>
@@ -55,6 +55,20 @@ export default {
     onDeleteAll: {
       type: Function,
       required: false,
+    },
+    rows: {
+      type: Array,
+      required: true,
+    },
+    onEditRow: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+    onDeleteRow: {
+      type: Function,
+      required: false,
+      default: () => {},
     }
   },
   data() {
@@ -62,7 +76,7 @@ export default {
       fields: [
         {
           key: 'location',
-          label: 'Location',
+          label: 'Location Name',
         },
         {
           key: 'latitude',
@@ -85,6 +99,9 @@ export default {
 <style scoped>
 .section-btn {
   border-radius: 0;
-  margin-left: 17px;
+  width: 8em;
+  height: 3em;
+  margin-left: 33px;
+  margin-bottom: 10px;
 }
 </style>
