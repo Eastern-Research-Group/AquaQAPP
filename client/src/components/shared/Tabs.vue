@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="is-12">
     <div class="tabs aq-tabs is-boxed">
       <ul>
         <li v-for="tab in tabs" :key="tab.id" :class="tab.id === activeTabId ? 'is-active' : ''">

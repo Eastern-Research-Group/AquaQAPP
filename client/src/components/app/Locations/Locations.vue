@@ -2,8 +2,7 @@
   <div>
     <Tabs :tabs="[{ id: 'list', name: 'List' }, { id: 'map', name: 'Map', isActive: true }]">
       <template v-slot:list>
-        <!-- todo: add List component and insert here -->
-        Coming Soon
+        <LocationsTable :onAddLocationInfo="onAddLocationInfo" :rows="markers" :onEditRow="onEditRowInfo" :onDeleteRow="onDeleteRowInfo" :onDeleteAll="onDeleteAllRows"/>
       </template>
       <template v-slot:map>
         <Map :onAddLocation="onAddLocation" :isAddingLocation="isAddingLocation" :markers="markers" />
@@ -23,7 +22,7 @@
           <label for="coords">Latitude, Longitude</label>
           <input id="coords" class="input" type="text" v-model="selectedCoordinates" />
         </div>
-        <div class="field">
+        <div class="field" v-if="isMapTab">
           <label for="waterType">Water Type</label>
           <div class="control">
             <label class="radio">
@@ -40,7 +39,7 @@
             </label>
           </div>
         </div>
-        <div class="field">
+        <div class="field" v-if="isMapTab">
           <label for="concerns">Concerns</label>
           <div class="control">
             <label class="checkbox">
@@ -64,6 +63,45 @@
         <button class="button is-success">Add</button>
       </form>
     </SideNav>
+    <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
+      <template #default="props">
+        <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all locations?`" type="warning" />
+        <Alert v-if="shouldDeleteOne" :message="`Are you sure you want to delete ${locationName}?`" type="warning" />
+        <hr />
+        <div class="field is-grouped">
+          <div class="control">
+            <Button label="Delete" type="danger"/>
+          </div>
+          <div class="control">
+            <button class="button has-background-grey-light" @click.prevent="props.close">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </template>
+    </SideNav>
+    <SideNav v-if="shouldShowEdit" title="Edit Location" :handleClose="() => (this.shouldShowEdit = false)">
+      <template #default="props">
+        <div class="field">
+          <label for="locationName">Location Name</label>
+          <input class="input" type="text" v-model="locationName" />
+        </div>
+        <div class="field">
+          <label for="coords">Latitude, Longitude</label>
+          <input class="input" type="text" v-model="selectedCoordinates" />
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <Button label="Edit" type="primary"/>
+          </div>
+          <div class="control">
+            <button class="button has-background-grey-light" @click.prevent="props.close">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </template>
+    </SideNav>
   </div>
 </template>
 
@@ -71,9 +109,12 @@
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
+import LocationsTable from '@/components/app/Locations/LocationsTable';
+import Alert from '@/components/shared/Alert';
+import Button from '@/components/shared/Button';
 
 export default {
-  components: { Map, SideNav, Tabs },
+  components: { Map, SideNav, Tabs, LocationsTable, Alert, Button },
   data() {
     return {
       isAddingLocation: false,
@@ -84,16 +125,23 @@ export default {
       concerns: [],
       markers: [],
       map: null,
+      isMapTab: false,
+      shouldShowDelete: false,
+      shouldShowEdit: false,
+      shouldDeleteAll: false,
+      shouldDeleteOne: false,
     };
   },
   methods: {
     onAddLocation(map) {
+      this.locationName= '';
       this.map = map;
       this.isAddingLocation = !this.isAddingLocation;
       // after clicking Add Location button, add click event to get Lat/Long of clicked area
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isEnteringLocationInfo = true;
+          this.isMapTab = true;
           this.selectedCoordinates = `${e.latlng.lat}, ${e.latlng.lng}`;
         });
       } else {
@@ -102,18 +150,47 @@ export default {
     },
     addLocationData() {
       const coordsArray = this.selectedCoordinates.split(', ');
-      if (coordsArray.length === 2) {
+      if (coordsArray.length === 2 && this.isMapTab) {
         this.markers.push({
           title: this.locationName,
           waterType: this.waterType,
           concerns: this.concerns,
           latLng: coordsArray,
+          lat: coordsArray[0],
+          lng: coordsArray[1],
         });
+      } else {
+        this.markers.push({
+          title: this.locationName,
+          lat: coordsArray[0],
+          lng: coordsArray[1],
+          latLng: coordsArray,
+        })
       }
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
       this.map.off('click');
     },
+    onAddLocationInfo() {
+      this.isEnteringLocationInfo = true;
+      this.isMapTab = false;
+      this.locationName= '';
+      this.selectedCoordinates = '';
+      this.map.off('click');
+    },
+    onDeleteRowInfo() {
+      this.shouldShowDelete = true;
+      this.shouldDeleteOne = true;
+      this.shouldDeleteAll = false;
+    },
+    onEditRowInfo() {
+      this.shouldShowEdit = true;
+    },
+    onDeleteAllRows() {
+      this.shouldShowDelete = true;
+      this.shouldDeleteAll = true;
+      this.shouldDeleteOne = false;
+    }
   },
 };
 </script>
