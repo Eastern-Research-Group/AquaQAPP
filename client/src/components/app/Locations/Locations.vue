@@ -132,7 +132,7 @@ export default {
     },
     addLocationData() {
       const coordsArray = this.selectedCoordinates.split(', ');
-      if (coordsArray.length === 2 && this.isMapTab) {
+      if (coordsArray.length === 2) {
         this.markers.push({
           title: this.locationName,
           waterType: this.waterType,
