@@ -126,7 +126,7 @@ export default {
           this.isEnteringLocationInfo = true;
           this.selectedCoordinates = `${e.latlng.lat}, ${e.latlng.lng}`;
         });
-      } else {
+      } else if (this.map) {
         this.map.off('click');
       }
     },
