@@ -15,12 +15,12 @@
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
-            <Button class="is-fullwidth is-size-5" label="Log In" type="primary" attr="submit" />
+            <Button class="is-fullwidth is-size-5" label="Log In" type="primary" submit />
           </div>
         </div>
       </form>
       <br />
-      <Button class="is-fullwidth is-link" label="Forgot Password?" @onClick="() => (this.shouldShowReset = true)" />
+      <Button class="is-fullwidth is-link" label="Forgot Password?" @click="() => (this.shouldShowReset = true)" />
       <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (this.shouldShowReset = false)">
         <form @submit.prevent="resetPassword">
           <div class="field">
@@ -32,7 +32,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <Button class="is-fullwidth" label="Send Email" type="primary" attr="submit" />
+              <Button class="is-fullwidth" label="Send Email" type="primary" submit />
             </div>
           </div>
           <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />

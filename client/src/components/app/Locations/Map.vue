@@ -4,7 +4,7 @@
       <Button
         :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
         type="dark"
-        @onClick="onAddLocation(map)"
+        @click="onAddLocation(map)"
       />
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
     </div>

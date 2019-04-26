@@ -43,8 +43,8 @@
             class="input"
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
-          <div class="column is-3 is-offset-9 column-btn">
-            <Button class="example" label="Example(s)" type="dark-blue" v-if="question.hasExamples" />
+          <div class="btn-container has-text-right">
+            <Button class="is-size-5" label="Example(s)" type="dark" v-if="question.hasExamples" />
           </div>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
@@ -121,6 +121,7 @@ p {
 .instructions {
   display: inline;
 }
+
 textarea {
   resize: vertical;
   height: 8em;
@@ -132,13 +133,7 @@ textarea {
   margin-left: 3%;
 }
 
-.example {
-  width: 10em;
-  height: 3em;
-  font-size: 19px;
-}
-
-.column-btn {
-  padding-left: 25px;
+.btn-container {
+  margin-bottom: 1em;
 }
 </style>

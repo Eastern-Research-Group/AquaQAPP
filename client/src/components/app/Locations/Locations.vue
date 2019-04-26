@@ -66,8 +66,8 @@
             </label>
           </div>
         </div>
-        <Button v-if="!shouldShowEdit" label="Add" type="success" attr="submit" />
-        <Button v-if="shouldShowEdit" label="Edit" type="primary" attr="submit" />
+        <Button v-if="!shouldShowEdit" label="Add" type="success" submit />
+        <Button v-if="shouldShowEdit" label="Edit" type="primary" submit />
       </form>
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">

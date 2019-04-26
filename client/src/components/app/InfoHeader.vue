@@ -80,7 +80,9 @@ export default {
   font-size: 0.8em;
   z-index: 50;
 
-  .navbar, .navbar-brand, .navbar-burger {
+  .navbar,
+  .navbar-brand,
+  .navbar-burger {
     background-color: #e6e6e6;
     padding: 0;
     min-height: unset;
