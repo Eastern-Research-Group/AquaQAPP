@@ -38,7 +38,7 @@ export default {
     },
     attr: {
       type: String,
-      required: true,
+      required: false,
       default: 'button',
     },
   },
