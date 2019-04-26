@@ -17,8 +17,7 @@
     <SideNav
       v-if="isEnteringLocationInfo"
       :handleClose="() => (this.isEnteringLocationInfo = false)"
-      :data-toggle="this.shouldShowEdit ? (this.title = 'Edit Location') : (this.title = 'Add Location')"
-      :title="this.title"
+      :title="this.shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
       <form @submit.prevent="addLocationData">
         <div class="field">
@@ -81,7 +80,7 @@
             <Button label="Delete" type="info" />
           </div>
           <div class="control">
-            <Button label="Cancel" type="cancel" :preventEvent="true" @onClick="props.close" />
+            <Button label="Cancel" type="cancel" :preventEvent="true" @click="props.close" />
           </div>
         </div>
       </template>
