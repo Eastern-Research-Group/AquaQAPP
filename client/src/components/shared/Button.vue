@@ -1,7 +1,11 @@
 <template>
-  <button :class="'button ' + getClass()" @click="onClick">
+  <button :type="getType()" v-if="!preventEvent" :class="'button ' + getClass()" @click="onClick">
     <span v-if="shouldShowIcon" :class="'fa is-size-3 ' + getIcon()"></span>
-    {{label}}
+    {{ label }}
+  </button>
+  <button v-else-if="preventEvent" :class="'button ' + getClass()" @click.prevent="onClick">
+    <span v-if="shouldShowIcon" :class="'fa is-size-3 ' + getIcon()"></span>
+    {{ label }}
   </button>
 </template>
 
@@ -16,7 +20,6 @@ export default {
     type: {
       type: String,
       required: false,
-      default: 'success',
     },
     shouldShowIcon: {
       type: Boolean,
@@ -28,13 +31,29 @@ export default {
       required: false,
       default: '',
     },
-    onClick: {
-      type: Function,
+    preventEvent: {
+      type: Boolean,
       required: false,
-      default: () => {},
-    }
+      default: false,
+    },
+    attr: {
+      type: String,
+      required: true,
+      default: 'button',
+    },
   },
   methods: {
+    onClick() {
+      this.$emit('onClick');
+    },
+    getType() {
+      switch (this.attr) {
+        case 'submit':
+          return 'submit';
+        case 'button':
+          return 'button';
+      }
+    },
     getClass() {
       switch (this.type) {
         case 'danger':
@@ -43,6 +62,12 @@ export default {
           return 'is-success';
         case 'primary':
           return 'is-primary';
+        case 'cancel':
+          return 'has-background-grey-light';
+        case 'info':
+          return 'is-info';
+        case 'dark-blue':
+          return 'dark-blue';
       }
     },
     getIcon() {
@@ -55,13 +80,20 @@ export default {
           return 'fa-trash-alt';
       }
     },
-  }
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .svg-inline--fa {
-  height: 0.6em;
-  margin-right: 0;
+  height: 0.5em;
+  margin: 0;
+  width: 0.6em;
+}
+
+.dark-blue {
+  background-color: #162a49;
+  border-color: #162a49;
+  color: white;
 }
 </style>

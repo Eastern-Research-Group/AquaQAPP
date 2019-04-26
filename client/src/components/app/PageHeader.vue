@@ -37,9 +37,7 @@
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <a class="button is-success" v-if="$route.name === 'navigate'">
-                <strong>Generate</strong>
-              </a>
+              <Button label="Generate" type="success" v-if="$route.name === 'navigate'" />
             </div>
           </div>
         </div>
@@ -49,8 +47,11 @@
 </template>
 
 <script>
+import Button from '@/components/shared/Button';
+
 export default {
   props: ['userName'],
+  components: { Button },
   data() {
     return {
       isActive: false,
