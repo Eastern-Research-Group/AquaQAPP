@@ -21,13 +21,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../../../static/variables';
+
 .message {
-  background-color: #162a49;
+  background-color: $darkBlue;
 }
 
 .tip {
-  background-color: #00b0e6;
-  color: #162a49;
+  background-color: $lightBlue;
+  color: $darkBlue;
 }
 </style>
