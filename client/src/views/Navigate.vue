@@ -43,10 +43,8 @@
             class="input"
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
-          <div class="column is-3 is-offset-10">
-            <button type="button" v-if="question.hasExamples" class="button has-text-white is-medium example">
-              Example(s)
-            </button>
+          <div class="column is-3 is-offset-9 column-btn">
+            <Button class="example" label="Example(s)" type="dark-blue" v-if="question.hasExamples" />
           </div>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
@@ -62,9 +60,10 @@
 import { mapActions, mapState } from 'vuex';
 import Tip from '@/components/shared/Tip';
 import Locations from '@/components/app/Locations/Locations';
+import Button from '@/components/shared/Button';
 
 export default {
-  components: { Locations, Tip },
+  components: { Locations, Tip, Button },
   data() {
     return {
       currentOutlineNum: '1.1',
@@ -129,12 +128,17 @@ textarea {
   margin-bottom: 1em;
 }
 
-.example {
-  background-color: #162a49;
-  border-color: #162a49;
-}
-
 .right {
   margin-left: 3%;
+}
+
+.example {
+  width: 10em;
+  height: 3em;
+  font-size: 19px;
+}
+
+.column-btn {
+  padding-left: 25px;
 }
 </style>

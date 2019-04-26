@@ -2,7 +2,13 @@
   <div>
     <Tabs :tabs="[{ id: 'list', name: 'List' }, { id: 'map', name: 'Map', isActive: true }]">
       <template v-slot:list>
-        <LocationsTable :onAddLocationInfo="onAddLocationInfo" :rows="markers" :onEditRow="onEditRowInfo" :onDeleteRow="onDeleteRowInfo" :onDeleteAll="onDeleteAllRows"/>
+        <LocationsTable
+          :onAddLocationInfo="onAddLocationInfo"
+          :rows="markers"
+          :onEditRow="onEditRowInfo"
+          :onDeleteRow="onDeleteRowInfo"
+          :onDeleteAll="onDeleteAllRows"
+        />
       </template>
       <template v-slot:map>
         <Map :onAddLocation="onAddLocation" :isAddingLocation="isAddingLocation" :markers="markers" />
@@ -11,7 +17,8 @@
     <SideNav
       v-if="isEnteringLocationInfo"
       :handleClose="() => (this.isEnteringLocationInfo = false)"
-      title="Add Location"
+      :data-toggle="this.shouldShowEdit ? (this.title = 'Edit Location') : (this.title = 'Add Location')"
+      :title="this.title"
     >
       <form @submit.prevent="addLocationData">
         <div class="field">
@@ -22,7 +29,7 @@
           <label for="coords">Latitude, Longitude</label>
           <input id="coords" class="input" type="text" v-model="selectedCoordinates" />
         </div>
-        <div class="field" v-if="isMapTab">
+        <div class="field">
           <label for="waterType">Water Type</label>
           <div class="control">
             <label class="radio">
@@ -39,7 +46,7 @@
             </label>
           </div>
         </div>
-        <div class="field" v-if="isMapTab">
+        <div class="field">
           <label for="concerns">Concerns</label>
           <div class="control">
             <label class="checkbox">
@@ -60,7 +67,8 @@
             </label>
           </div>
         </div>
-        <button class="button is-success">Add</button>
+        <Button v-if="!shouldShowEdit" label="Add" type="success" attr="submit" />
+        <Button v-if="shouldShowEdit" label="Edit" type="primary" attr="submit" />
       </form>
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
@@ -70,34 +78,10 @@
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="danger"/>
+            <Button label="Delete" type="info" />
           </div>
           <div class="control">
-            <button class="button has-background-grey-light" @click.prevent="props.close">
-              Cancel
-            </button>
-          </div>
-        </div>
-      </template>
-    </SideNav>
-    <SideNav v-if="shouldShowEdit" title="Edit Location" :handleClose="() => (this.shouldShowEdit = false)">
-      <template #default="props">
-        <div class="field">
-          <label for="locationName">Location Name</label>
-          <input class="input" type="text" v-model="locationName" />
-        </div>
-        <div class="field">
-          <label for="coords">Latitude, Longitude</label>
-          <input class="input" type="text" v-model="selectedCoordinates" />
-        </div>
-        <div class="field is-grouped">
-          <div class="control">
-            <Button label="Edit" type="primary"/>
-          </div>
-          <div class="control">
-            <button class="button has-background-grey-light" @click.prevent="props.close">
-              Cancel
-            </button>
+            <Button label="Cancel" type="cancel" :preventEvent="true" @onClick="props.close" />
           </div>
         </div>
       </template>
@@ -125,23 +109,22 @@ export default {
       concerns: [],
       markers: [],
       map: null,
-      isMapTab: false,
       shouldShowDelete: false,
       shouldShowEdit: false,
       shouldDeleteAll: false,
       shouldDeleteOne: false,
+      title: '',
     };
   },
   methods: {
     onAddLocation(map) {
-      this.locationName= '';
+      this.locationName = '';
       this.map = map;
       this.isAddingLocation = !this.isAddingLocation;
       // after clicking Add Location button, add click event to get Lat/Long of clicked area
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isEnteringLocationInfo = true;
-          this.isMapTab = true;
           this.selectedCoordinates = `${e.latlng.lat}, ${e.latlng.lng}`;
         });
       } else {
@@ -165,7 +148,7 @@ export default {
           lat: coordsArray[0],
           lng: coordsArray[1],
           latLng: coordsArray,
-        })
+        });
       }
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
@@ -173,10 +156,9 @@ export default {
     },
     onAddLocationInfo() {
       this.isEnteringLocationInfo = true;
-      this.isMapTab = false;
-      this.locationName= '';
+      this.locationName = '';
       this.selectedCoordinates = '';
-      this.map.off('click');
+      this.shouldShowEdit = false;
     },
     onDeleteRowInfo() {
       this.shouldShowDelete = true;
@@ -184,13 +166,14 @@ export default {
       this.shouldDeleteAll = false;
     },
     onEditRowInfo() {
+      this.isEnteringLocationInfo = true;
       this.shouldShowEdit = true;
     },
     onDeleteAllRows() {
       this.shouldShowDelete = true;
       this.shouldDeleteAll = true;
       this.shouldDeleteOne = false;
-    }
+    },
   },
 };
 </script>

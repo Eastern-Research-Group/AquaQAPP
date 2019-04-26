@@ -30,7 +30,7 @@
           <Alert v-if="error" :message="error" type="error" />
           <div class="field">
             <div class="control">
-              <button class="button is-primary is-fullwidth">Register</button>
+              <Button class="is-fullwidth is-size-5" label="Register" type="primary" attr="submit" />
             </div>
           </div>
         </form>
@@ -43,11 +43,13 @@
 <script>
 import Alert from '@/components/shared/Alert';
 import HoverText from '@/components/shared/HoverText';
+import Button from '@/components/shared/Button';
 
 export default {
   components: {
     Alert,
     HoverText,
+    Button,
   },
   data() {
     return {

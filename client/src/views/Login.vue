@@ -15,15 +15,12 @@
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
-            <button class="button is-primary is-fullwidth is-size-5">Log In</button>
+            <Button class="is-fullwidth is-size-5" label="Log In" type="primary" attr="submit" />
           </div>
         </div>
-        <div class="field">
-          <button type="button" class="button is-link is-fullwidth" @click="shouldShowReset = true">
-            Forgot Password?
-          </button>
-        </div>
       </form>
+      <br />
+      <Button class="is-fullwidth is-link" label="Forgot Password?" @onClick="() => (this.shouldShowReset = true)" />
       <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (this.shouldShowReset = false)">
         <form @submit.prevent="resetPassword">
           <div class="field">
@@ -35,7 +32,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <button class="button is-primary is-fullwidth">Send Email</button>
+              <Button class="is-fullwidth" label="Send Email" type="primary" attr="submit" />
             </div>
           </div>
           <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />
@@ -51,11 +48,13 @@
 import { mapActions } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
+import Button from '@/components/shared/Button';
 
 export default {
   components: {
     Alert,
     SideNav,
+    Button,
   },
   data() {
     return {

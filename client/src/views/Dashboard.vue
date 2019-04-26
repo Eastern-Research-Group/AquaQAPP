@@ -5,10 +5,14 @@
         <h1 class="title is-size-2">Dashboard</h1>
       </div>
       <div class="column has-text-right">
-        <button class="button is-success is-medium" @click="shouldShowAdd = true">
-          <span class="fa fa-plus"></span>
-          Add
-        </button>
+        <Button
+          class="section-btn"
+          label="Add"
+          type="success"
+          @onClick="() => (this.shouldShowAdd = true)"
+          :shouldShowIcon="true"
+          icon="plus"
+        />
       </div>
     </div>
     <div class="columns">
@@ -30,16 +34,16 @@
               <td>
                 <div class="field is-grouped">
                   <div class="control">
-                    <button class="button is-primary" @click="editQapp(qapp)">
-                      <span class="fa fa-edit"></span>
-                      Edit
-                    </button>
+                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @onClick="editQapp(qapp)" />
                   </div>
                   <div class="control">
-                    <button class="button is-danger" @click="onDeleteQapp(qapp)">
-                      <span class="fa fa-trash-alt"></span>
-                      Delete
-                    </button>
+                    <Button
+                      label="Delete"
+                      type="danger"
+                      icon="trash"
+                      :shouldShowIcon="true"
+                      @onClick="onDeleteQapp(qapp)"
+                    />
                   </div>
                 </div>
               </td>
@@ -69,14 +73,10 @@
           <hr />
           <div class="field is-grouped">
             <div class="control">
-              <button class="button is-info">
-                Submit
-              </button>
+              <Button label="Submit" type="info" attr="submit" />
             </div>
             <div class="control">
-              <button class="button has-background-grey-light" @click.prevent="props.close">
-                Cancel
-              </button>
+              <Button label="Cancel" type="cancel" :preventEvent="true" @onClick="props.close" />
             </div>
           </div>
         </form>
@@ -88,14 +88,10 @@
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-info" @click="handleDeleteQapp">
-              Delete
-            </button>
+            <Button label="Delete" type="info" @onClick="handleDeleteQapp" />
           </div>
           <div class="control">
-            <button class="button has-background-grey-light" @click.prevent="props.close">
-              Cancel
-            </button>
+            <Button label="Cancel" type="cancel" @onClick="props.close" />
           </div>
         </div>
       </template>
@@ -107,9 +103,10 @@
 import { mapActions } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
+import Button from '@/components/shared/Button';
 
 export default {
-  components: { Alert, SideNav },
+  components: { Alert, SideNav, Button },
   async mounted() {
     this.currentQapp = null;
     this.getQapps();
@@ -201,3 +198,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.section-btn {
+  width: 8em;
+  height: 3em;
+}
+</style>

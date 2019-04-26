@@ -1,9 +1,12 @@
 <template>
   <div class="aq-map-container">
     <div class="aq-map-add-btn">
-      <button type="button" class="button is-dark" @click="onAddLocation(map)">
-        {{ isAddingLocation ? 'Cancel' : 'Add Location' }}
-      </button>
+      <Button
+        :label="this.label"
+        type="dark-blue"
+        @onClick="onAddLocation(map)"
+        :data-toggle="this.isAddingLocation ? (this.label = 'Cancel') : (this.label = 'Add Location')"
+      />
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
     </div>
     <LMap
@@ -25,6 +28,7 @@
 </template>
 
 <script>
+import Button from '@/components/shared/Button';
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet';
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -43,6 +47,7 @@ export default {
     LMarker,
     LPopup,
     LTileLayer,
+    Button,
   },
   props: {
     onAddLocation: {
@@ -66,6 +71,7 @@ export default {
       center: [39.8333333, -98.585522],
       bounds: null,
       map: null,
+      label: '',
     };
   },
   methods: {
