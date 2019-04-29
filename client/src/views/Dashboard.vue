@@ -6,10 +6,10 @@
       </div>
       <div class="column has-text-right">
         <Button
-          class="section-btn"
+          class="is-size-5"
           label="Add"
           type="success"
-          @onClick="() => (this.shouldShowAdd = true)"
+          @click="() => (this.shouldShowAdd = true)"
           :shouldShowIcon="true"
           icon="plus"
         />
@@ -34,15 +34,15 @@
               <td>
                 <div class="field is-grouped">
                   <div class="control">
-                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @onClick="editQapp(qapp)" />
+                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click="editQapp(qapp)" />
                   </div>
                   <div class="control">
                     <Button
                       label="Delete"
                       type="danger"
-                      icon="trash"
+                      icon="trash-alt"
                       :shouldShowIcon="true"
-                      @onClick="onDeleteQapp(qapp)"
+                      @click="onDeleteQapp(qapp)"
                     />
                   </div>
                 </div>
@@ -73,10 +73,10 @@
           <hr />
           <div class="field is-grouped">
             <div class="control">
-              <Button label="Submit" type="info" attr="submit" />
+              <Button label="Submit" type="info" submit />
             </div>
             <div class="control">
-              <Button label="Cancel" type="cancel" :preventEvent="true" @onClick="props.close" />
+              <Button label="Cancel" type="cancel" :preventEvent="true" @click="props.close" />
             </div>
           </div>
         </form>
@@ -88,10 +88,10 @@
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="info" @onClick="handleDeleteQapp" />
+            <Button label="Delete" type="info" @click="handleDeleteQapp" />
           </div>
           <div class="control">
-            <Button label="Cancel" type="cancel" @onClick="props.close" />
+            <Button label="Cancel" type="cancel" @click="props.close" />
           </div>
         </div>
       </template>
@@ -198,10 +198,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.section-btn {
-  width: 8em;
-  height: 3em;
-}
-</style>

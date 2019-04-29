@@ -43,28 +43,28 @@
             class="input"
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
-          <div class="column is-3 is-offset-9 column-btn">
-            <Button
-              class="example"
-              label="Example(s)"
-              type="dark-blue"
-              v-if="question.hasExamples"
-              @onClick="showExample"
-            />
-            <ExampleModal v-if="shouldShowExample" :handleClose="() => (this.shouldShowExample = false)">
-              <Tabs
-                :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
-              >
-                <template v-slot:example1>
-                  Example 1
-                </template>
-                <template v-slot:example2>
-                  Example 2
-                </template>
-              </Tabs>
-              <Button class="addExample" label="Add Example" type="success" />
-            </ExampleModal>
+          <div class="btn-container has-text-right">
+            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click="toggleShouldShowExample" />
           </div>
+          <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
+            <Tabs
+              :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
+            >
+              <template v-slot:example1>
+                <p class="has-text-black">
+                  Example 1
+                </p>
+              </template>
+              <template v-slot:example2>
+                <p class="has-text-black">
+                  Example 2
+                </p>
+              </template>
+            </Tabs>
+            <div class="has-text-right">
+              <Button class="addExample" label="Add Example" type="success" />
+            </div>
+          </ExampleModal>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
         <div class="field" v-if="shouldDisplayMap">
@@ -109,8 +109,8 @@ export default {
       this.shouldDisplayMap = false;
       this.currentOutlineNum = outlineNumber;
     },
-    showExample() {
-      this.shouldShowExample = true;
+    toggleShouldShowExample() {
+      this.shouldShowExample = !this.shouldShowExample;
     },
   },
 };
@@ -139,13 +139,10 @@ export default {
   margin-top: 1em;
 }
 
-p {
-  display: inline;
-}
-
 .instructions {
   display: inline;
 }
+
 textarea {
   resize: vertical;
   height: 8em;
@@ -157,19 +154,7 @@ textarea {
   margin-left: 3%;
 }
 
-.example {
-  width: 10em;
-  height: 3em;
-  font-size: 19px;
-}
-
-.column-btn {
-  padding-left: 25px;
-}
-
-.addExample {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.btn-container {
+  margin-bottom: 1em;
 }
 </style>

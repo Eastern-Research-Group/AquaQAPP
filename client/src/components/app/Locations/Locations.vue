@@ -17,8 +17,7 @@
     <SideNav
       v-if="isEnteringLocationInfo"
       :handleClose="() => (this.isEnteringLocationInfo = false)"
-      :data-toggle="this.shouldShowEdit ? (this.title = 'Edit Location') : (this.title = 'Add Location')"
-      :title="this.title"
+      :title="this.shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
       <form @submit.prevent="addLocationData">
         <div class="field">
@@ -67,8 +66,8 @@
             </label>
           </div>
         </div>
-        <Button v-if="!shouldShowEdit" label="Add" type="success" attr="submit" />
-        <Button v-if="shouldShowEdit" label="Edit" type="primary" attr="submit" />
+        <Button v-if="!shouldShowEdit" label="Add" type="success" submit />
+        <Button v-if="shouldShowEdit" label="Edit" type="primary" submit />
       </form>
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
@@ -81,7 +80,7 @@
             <Button label="Delete" type="info" />
           </div>
           <div class="control">
-            <Button label="Cancel" type="cancel" :preventEvent="true" @onClick="props.close" />
+            <Button label="Cancel" type="cancel" :preventEvent="true" @click="props.close" />
           </div>
         </div>
       </template>
@@ -127,13 +126,13 @@ export default {
           this.isEnteringLocationInfo = true;
           this.selectedCoordinates = `${e.latlng.lat}, ${e.latlng.lng}`;
         });
-      } else {
+      } else if (this.map) {
         this.map.off('click');
       }
     },
     addLocationData() {
       const coordsArray = this.selectedCoordinates.split(', ');
-      if (coordsArray.length === 2 && this.isMapTab) {
+      if (coordsArray.length === 2) {
         this.markers.push({
           title: this.locationName,
           waterType: this.waterType,
@@ -152,7 +151,7 @@ export default {
       }
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
-      this.map.off('click');
+      if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
       this.isEnteringLocationInfo = true;

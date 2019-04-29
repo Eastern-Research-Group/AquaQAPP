@@ -2,10 +2,9 @@
   <div class="aq-map-container">
     <div class="aq-map-add-btn">
       <Button
-        :label="this.label"
-        type="dark-blue"
-        @onClick="onAddLocation(map)"
-        :data-toggle="this.isAddingLocation ? (this.label = 'Cancel') : (this.label = 'Add Location')"
+        :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
+        type="dark"
+        @click="onAddLocation(map)"
       />
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
     </div>

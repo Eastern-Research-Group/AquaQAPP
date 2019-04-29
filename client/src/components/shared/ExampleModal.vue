@@ -1,10 +1,10 @@
 <template>
   <div class="modal is-active">
     <div class="modal-background" @click="closeExample"></div>
-    <button class="button close-btn is-text has-text-grey is-pulled-right" @click="closeExample">
-      <span class="fa fa-times"></span>
-    </button>
     <div class="modal-content">
+      <button class="button close-btn is-text has-text-grey is-pulled-right" @click="closeExample">
+        <span class="fa fa-times"></span>
+      </button>
       <slot :close="closeExample" />
     </div>
   </div>
@@ -32,57 +32,15 @@ export default {
   font-size: 22px;
 }
 
+.modal-content {
+  background: white;
+  padding: 2em;
+}
+
 .close-btn {
   position: absolute;
-  right: 2%;
-  top: 4%;
+  right: 0;
+  top: 10px;
 }
 
-.close {
-  color: white !important;
-}
-
-.modal {
-  width: 750px;
-  height: 350px;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  z-index: 999;
-  position: absolute;
-  color: black;
-}
-
-.modal-background {
-  background-color: white;
-}
-
-.modal-content {
-  max-height: 80%;
-  height: 100%;
-  width: 90%;
-}
-
-.modal-close {
-  background-color: white !important;
-  max-height: 80px !important;
-  max-width: 80px !important;
-}
-
-.modal-close::before,
-.delete::before,
-.modal-close::after,
-.delete::after {
-  background-color: gray !important;
-}
-
-.modal-close::before,
-.delete::before {
-  height: 4px;
-}
-
-.modal-close::after,
-.delete::after {
-  width: 4px;
-}
 </style>
