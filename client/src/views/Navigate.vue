@@ -44,27 +44,27 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="btn-container has-text-right">
-            <Button
-              class="example"
-              label="Example(s)"
-              type="dark"
-              v-if="question.hasExamples"
-              @click="showExample"
-            />
-            <ExampleModal v-if="shouldShowExample" :handleClose="() => (this.shouldShowExample = false)">
-              <Tabs
-                :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
-              >
-                <template v-slot:example1>
-                  Example 1
-                </template>
-                <template v-slot:example2>
-                  Example 2
-                </template>
-              </Tabs>
-              <Button class="addExample" label="Add Example" type="success" />
-            </ExampleModal>
+            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click="showExample" />
           </div>
+          <ExampleModal v-if="shouldShowExample" :handleClose="() => (this.shouldShowExample = false)">
+            <Tabs
+              :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
+            >
+              <template v-slot:example1>
+                <p class="has-text-black">
+                  Example 1
+                </p>
+              </template>
+              <template v-slot:example2>
+                <p class="has-text-black">
+                  Example 2
+                </p>
+              </template>
+            </Tabs>
+            <div class="has-text-right">
+              <Button class="addExample" label="Add Example" type="success" />
+            </div>
+          </ExampleModal>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
         <div class="field" v-if="shouldDisplayMap">
@@ -139,10 +139,6 @@ export default {
   margin-top: 1em;
 }
 
-p {
-  display: inline;
-}
-
 .instructions {
   display: inline;
 }
@@ -160,11 +156,5 @@ textarea {
 
 .btn-container {
   margin-bottom: 1em;
-}
-
-.addExample {
-  position: absolute;
-  right: 0;
-  bottom: 0;
 }
 </style>
