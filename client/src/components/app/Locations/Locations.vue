@@ -151,7 +151,7 @@ export default {
       }
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
-      this.map.off('click');
+      if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
       this.isEnteringLocationInfo = true;
