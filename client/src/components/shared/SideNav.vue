@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       shouldDismiss: false,
-    }
+    };
   },
   mounted() {
     this.handleShown();
@@ -44,13 +44,13 @@ export default {
     close() {
       this.shouldDismiss = true;
       // delay 500ms for slide animation to complete
-      setTimeout(() => (this.handleClose()), 500);
-    }
-  }
+      setTimeout(() => this.handleClose(), 500);
+    },
+  },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .modal {
   z-index: 999;
 }
@@ -99,7 +99,9 @@ export default {
 .close {
   color: white !important;
 }
+</style>
 
+<style lang="scss">
 .button.is-text:hover {
   background: none;
 }

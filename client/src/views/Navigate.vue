@@ -44,7 +44,26 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="btn-container has-text-right">
-            <Button class="is-size-5" label="Example(s)" type="dark" v-if="question.hasExamples" />
+            <Button
+              class="example"
+              label="Example(s)"
+              type="dark"
+              v-if="question.hasExamples"
+              @click="showExample"
+            />
+            <ExampleModal v-if="shouldShowExample" :handleClose="() => (this.shouldShowExample = false)">
+              <Tabs
+                :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
+              >
+                <template v-slot:example1>
+                  Example 1
+                </template>
+                <template v-slot:example2>
+                  Example 2
+                </template>
+              </Tabs>
+              <Button class="addExample" label="Add Example" type="success" />
+            </ExampleModal>
           </div>
           <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
         </div>
@@ -61,13 +80,16 @@ import { mapActions, mapState } from 'vuex';
 import Tip from '@/components/shared/Tip';
 import Locations from '@/components/app/Locations/Locations';
 import Button from '@/components/shared/Button';
+import ExampleModal from '@/components/shared/ExampleModal';
+import Tabs from '@/components/shared/Tabs';
 
 export default {
-  components: { Locations, Tip, Button },
+  components: { Locations, Tip, Button, ExampleModal, Tabs },
   data() {
     return {
       currentOutlineNum: '1.1',
       shouldDisplayMap: false,
+      shouldShowExample: false,
     };
   },
   computed: {
@@ -86,6 +108,9 @@ export default {
     changeSection(outlineNumber) {
       this.shouldDisplayMap = false;
       this.currentOutlineNum = outlineNumber;
+    },
+    showExample() {
+      this.shouldShowExample = true;
     },
   },
 };
@@ -135,5 +160,11 @@ textarea {
 
 .btn-container {
   margin-bottom: 1em;
+}
+
+.addExample {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 </style>
