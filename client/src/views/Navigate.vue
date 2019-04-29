@@ -44,9 +44,9 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="btn-container has-text-right">
-            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click="showExample" />
+            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click="toggleShouldShowExample" />
           </div>
-          <ExampleModal v-if="shouldShowExample" :handleClose="() => (this.shouldShowExample = false)">
+          <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
             <Tabs
               :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
             >
@@ -109,8 +109,8 @@ export default {
       this.shouldDisplayMap = false;
       this.currentOutlineNum = outlineNumber;
     },
-    showExample() {
-      this.shouldShowExample = true;
+    toggleShouldShowExample() {
+      this.shouldShowExample = !this.shouldShowExample;
     },
   },
 };
