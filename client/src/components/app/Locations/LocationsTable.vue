@@ -18,10 +18,10 @@
               <td>
                 <div class="field is-grouped">
                   <div class="control">
-                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click="onEditRow" />
+                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click.native="onEditRow" />
                   </div>
                   <div class="control">
-                    <Button label="Delete" type="danger" icon="trash-alt" :shouldShowIcon="true" @click="onDeleteRow" />
+                    <Button label="Delete" type="danger" icon="trash-alt" :shouldShowIcon="true" @click.native="onDeleteRow" />
                   </div>
                 </div>
               </td>
@@ -31,8 +31,8 @@
       </div>
     </div>
     <div class="has-text-right btn-container">
-      <Button label="Add" type="success" @click="onAddLocationInfo" />
-      <Button label="Delete All" type="danger" @click="onDeleteAll" />
+      <Button label="Add" type="success" @click.native="onAddLocationInfo" />
+      <Button label="Delete All" type="danger" @click.native="onDeleteAll" />
     </div>
   </div>
 </template>

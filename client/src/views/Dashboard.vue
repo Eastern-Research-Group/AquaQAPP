@@ -9,7 +9,7 @@
           class="is-size-5"
           label="Add"
           type="success"
-          @click="() => (this.shouldShowAdd = true)"
+          @click.native="() => (shouldShowAdd = true)"
           :shouldShowIcon="true"
           icon="plus"
         />
@@ -34,7 +34,13 @@
               <td>
                 <div class="field is-grouped">
                   <div class="control">
-                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click="editQapp(qapp)" />
+                    <Button
+                      label="Edit"
+                      type="primary"
+                      icon="edit"
+                      :shouldShowIcon="true"
+                      @click.native="editQapp(qapp)"
+                    />
                   </div>
                   <div class="control">
                     <Button
@@ -42,7 +48,7 @@
                       type="danger"
                       icon="trash-alt"
                       :shouldShowIcon="true"
-                      @click="onDeleteQapp(qapp)"
+                      @click.native="onDeleteQapp(qapp)"
                     />
                   </div>
                 </div>
@@ -56,7 +62,7 @@
     <SideNav
       v-if="shouldShowAdd"
       :handleShown="clearName"
-      :handleClose="() => (this.shouldShowAdd = false)"
+      :handleClose="() => (shouldShowAdd = false)"
       title="Add QAPP"
     >
       <!-- #deafult="props" gives us access to SideNav's props from inside this template tag -->
@@ -76,7 +82,7 @@
               <Button label="Submit" type="info" submit />
             </div>
             <div class="control">
-              <Button label="Cancel" type="cancel" :preventEvent="true" @click="props.close" />
+              <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
             </div>
           </div>
         </form>
@@ -88,10 +94,10 @@
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="info" @click="handleDeleteQapp" />
+            <Button label="Delete" type="info" @click.native="handleDeleteQapp" />
           </div>
           <div class="control">
-            <Button label="Cancel" type="cancel" @click="props.close" />
+            <Button label="Cancel" type="cancel" @click.native="props.close" />
           </div>
         </div>
       </template>

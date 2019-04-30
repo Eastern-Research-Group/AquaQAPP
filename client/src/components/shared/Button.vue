@@ -1,5 +1,5 @@
 <template>
-  <button :type="submit ? 'submit' : 'button'" :class="'button ' + getClass()" @click="$emit('click')">
+  <button :type="submit ? 'submit' : 'button'" :class="'button ' + getClass()">
     <span v-if="icon" :class="'fa is-size-3 fa-' + icon"></span>
     {{ label }}
   </button>
@@ -38,7 +38,7 @@ export default {
       if (this.type === 'cancel') {
         return 'has-background-grey-light';
       }
-      return 'is-' + this.type;
+      return `is-${this.type}`;
     },
   },
 };

@@ -20,7 +20,7 @@
         </div>
       </form>
       <br />
-      <Button class="is-fullwidth is-link" label="Forgot Password?" @click="() => (this.shouldShowReset = true)" />
+      <Button class="is-fullwidth is-link" label="Forgot Password?" @click.native="() => (this.shouldShowReset = true)" />
       <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (this.shouldShowReset = false)">
         <form @submit.prevent="resetPassword">
           <div class="field">
