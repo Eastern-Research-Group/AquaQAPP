@@ -20,8 +20,13 @@
         </div>
       </form>
       <br />
-      <Button class="is-fullwidth is-link" label="Forgot Password?" @click.native="() => (this.shouldShowReset = true)" />
-      <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (this.shouldShowReset = false)">
+      <Button
+        class="is-fullwidth"
+        label="Forgot Password?"
+        @click.native="() => (shouldShowReset = true)"
+        type="link"
+      />
+      <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (shouldShowReset = false)">
         <form @submit.prevent="resetPassword">
           <div class="field">
             <p>Enter your email address to receive a link to reset your password.</p>
