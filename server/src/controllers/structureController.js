@@ -1,7 +1,19 @@
-const { ProjectOutline, ProjectOutlineQuestion } = require('../models');
+const { Project, ProjectOutline, ProjectOutlineQuestion } = require('../models');
 const config = require('../config/config');
 
 module.exports = {
+  async projects(req, res) {
+    try {
+      const sections = await Project.findAll({
+        where: { id: config.projectId },
+      });
+      res.send(sections);
+    } catch (err) {
+      res.status(400).send({
+        err: 'Projects data unavailable. ' + err,
+      });
+    }
+  },
   async sections(req, res) {
     try {
       const sections = await ProjectOutline.findAll({

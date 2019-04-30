@@ -1,12 +1,16 @@
 import axios from 'axios';
 
 const state = {
+  projects: [],
   sections: [],
   questions: [],
   isFetching: false,
 };
 
 const mutations = {
+  SET_PROJECTS(state, value) {
+    state.projects = value;
+  },
   SET_SECTIONS(state, value) {
     state.sections = value;
   },
@@ -19,6 +23,14 @@ const mutations = {
 };
 
 const actions = {
+  async getProjects({ commit }) {
+    commit('SET_PROJECTS', []);
+    commit('SET_IS_FETCHING', true);
+
+    const projects = await axios.get('api/projects');
+    commit('SET_PROJECTS', projects.data);
+    commit('SET_IS_FETCHING', false);
+  },
   async getSections({ commit }) {
     commit('SET_SECTIONS', []);
     commit('SET_IS_FETCHING', true);

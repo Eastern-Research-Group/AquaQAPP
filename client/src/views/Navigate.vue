@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
     <aside class="menu column is-one-quarter">
-      <ul class="menu-list">
+      <ul class="menu-list" v-for="project in projects" :key="project.id">
         <li v-for="section in sections" :key="section.id">
           <button
             :class="
@@ -11,7 +11,7 @@
             "
             @click="changeSection(section.outlineNumber)"
           >
-            <span class="step-number">{{ section.outlineNumber }}</span>
+            <span class="step-number">{{ project.showOutlineNumber ? section.outlineNumber : '' }}</span>
             {{ section.outlineLabel }}
           </button>
         </li>
@@ -20,7 +20,7 @@
             :class="`button is-text has-text-white ${shouldDisplayMap ? 'has-text-weight-bold' : ''}`"
             @click="shouldDisplayMap = true"
           >
-            <span class="step-number">3</span>
+            <span class="step-number">{{ project.showOutlineNumber ? '3' : '' }}</span>
             Locations
           </button>
         </li>
@@ -93,18 +93,19 @@ export default {
     };
   },
   computed: {
-    ...mapState('structure', ['sections', 'questions']),
+    ...mapState('structure', ['projects', 'sections', 'questions']),
     currentQuestions() {
       if (this.shouldDisplayMap) return [];
       return this.questions.filter((q) => q.outlineNumber === this.currentOutlineNum);
     },
   },
   mounted() {
+    this.getProjects();
     this.getSections();
     this.getQuestions();
   },
   methods: {
-    ...mapActions('structure', ['getSections', 'getQuestions']),
+    ...mapActions('structure', ['getProjects', 'getSections', 'getQuestions']),
     changeSection(outlineNumber) {
       this.shouldDisplayMap = false;
       this.currentOutlineNum = outlineNumber;
