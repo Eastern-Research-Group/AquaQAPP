@@ -44,7 +44,7 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="btn-container has-text-right">
-            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click="toggleShouldShowExample" />
+            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click.native="toggleShouldShowExample" />
           </div>
           <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
             <Tabs

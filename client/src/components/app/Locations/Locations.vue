@@ -80,7 +80,7 @@
             <Button label="Delete" type="info" />
           </div>
           <div class="control">
-            <Button label="Cancel" type="cancel" :preventEvent="true" @click="props.close" />
+            <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
           </div>
         </div>
       </template>
