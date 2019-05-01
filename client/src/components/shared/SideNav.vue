@@ -3,7 +3,7 @@
     <div class="modal-background" @click="close"></div>
     <div :class="`modal-content ${this.shouldDismiss ? 'dismiss' : ''}`">
       <span class="title is-size-4">{{ title }}</span>
-      <button class="button is-text has-text-white is-pulled-right" @click="close">
+      <button type="button" class="button is-text has-text-white is-pulled-right" @click="close">
         <span class="fa fa-times"></span>
       </button>
       <hr />
