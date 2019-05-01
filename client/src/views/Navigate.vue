@@ -29,6 +29,9 @@
     <section class="right column is-three-quarters">
       <form>
         <div class="field" v-for="question in currentQuestions" :key="question.id">
+          <MarkComplete class="is-pulled-right" :handleToggle="toggleMark" :isEnabled="switch1"
+            >Mark as Complete</MarkComplete
+          >
           <label class="label is-size-4">{{ question.questionLabel }}</label>
           <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
           <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
@@ -44,7 +47,13 @@
             :placeholder="`Enter ${question.questionLabel}`"
           ></textarea>
           <div class="btn-container has-text-right">
-            <Button class="example" label="Example(s)" type="dark" v-if="question.hasExamples" @click.native="toggleShouldShowExample" />
+            <Button
+              class="example"
+              label="Example(s)"
+              type="dark"
+              v-if="question.hasExamples"
+              @click.native="toggleShouldShowExample"
+            />
           </div>
           <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
             <Tabs
@@ -82,14 +91,16 @@ import Locations from '@/components/app/Locations/Locations';
 import Button from '@/components/shared/Button';
 import ExampleModal from '@/components/shared/ExampleModal';
 import Tabs from '@/components/shared/Tabs';
+import MarkComplete from '@/components/shared/MarkComplete';
 
 export default {
-  components: { Locations, Tip, Button, ExampleModal, Tabs },
+  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete },
   data() {
     return {
       currentOutlineNum: '1.1',
       shouldDisplayMap: false,
       shouldShowExample: false,
+      switch1: false,
     };
   },
   computed: {
@@ -112,6 +123,9 @@ export default {
     },
     toggleShouldShowExample() {
       this.shouldShowExample = !this.shouldShowExample;
+    },
+    toggleMark() {
+      this.switch1 = !this.switch1;
     },
   },
 };
