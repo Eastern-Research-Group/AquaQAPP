@@ -22,11 +22,15 @@
       <form @submit.prevent="addLocationData">
         <div class="field">
           <label for="locationName">Location Name</label>
-          <input id="locationName" class="input" type="text" v-model="locationName" />
+          <input id="locationName" class="input" type="text" v-model="locationName" required />
         </div>
         <div class="field">
-          <label for="coords">Latitude, Longitude</label>
-          <input id="coords" class="input" type="text" v-model="selectedCoordinates" />
+          <label for="longitude">Longitude</label>
+          <input id="longitude" class="input" type="text" v-model="longitude" required />
+        </div>
+        <div class="field">
+          <label for="latitude">Latitude</label>
+          <input id="latitude" class="input" type="text" v-model="latitude" required />
         </div>
         <div class="field">
           <label for="waterType">Water Type</label>
@@ -103,7 +107,8 @@ export default {
       isAddingLocation: false,
       isEnteringLocationInfo: false,
       locationName: '',
-      selectedCoordinates: null,
+      longitude: null,
+      latitude: null,
       waterType: null,
       concerns: [],
       markers: [],
@@ -125,29 +130,22 @@ export default {
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isEnteringLocationInfo = true;
-          this.selectedCoordinates = `${e.latlng.lat}, ${e.latlng.lng}`;
+          this.longitude = e.latlng.lng;
+          this.latitude = e.latlng.lat;
         });
       } else if (this.map) {
         this.map.off('click');
       }
     },
     addLocationData() {
-      const coordsArray = this.selectedCoordinates.split(', ');
-      if (coordsArray.length === 2) {
+      if (this.latitude && this.longitude) {
         this.markers.push({
           title: this.locationName,
           waterType: this.waterType,
           concerns: this.concerns,
-          latLng: coordsArray,
-          lat: coordsArray[0],
-          lng: coordsArray[1],
-        });
-      } else {
-        this.markers.push({
-          title: this.locationName,
-          lat: coordsArray[0],
-          lng: coordsArray[1],
-          latLng: coordsArray,
+          latLng: [this.latitude, this.longitude],
+          lat: this.latitude,
+          lng: this.longitude,
         });
       }
       this.isAddingLocation = false;
@@ -157,7 +155,8 @@ export default {
     onAddLocationInfo() {
       this.isEnteringLocationInfo = true;
       this.locationName = '';
-      this.selectedCoordinates = '';
+      this.latitude = null;
+      this.longitude = null;
       this.shouldShowEdit = false;
     },
     onDeleteRowInfo() {
