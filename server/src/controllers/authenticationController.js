@@ -128,7 +128,7 @@ module.exports = {
           template: 'forgot-password-email',
           subject: 'AquaQAPP Password Reset',
           context: {
-            url: config.baseUrl + '/#/resetPassword?token=' + updatedUserJson.resetPasswordToken,
+            url: config.baseUrl + '/resetPassword?token=' + updatedUserJson.resetPasswordToken,
             name: updatedUserJson.name.split(' ')[0],
           },
         };

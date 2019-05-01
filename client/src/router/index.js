@@ -41,4 +41,5 @@ export default new Router({
       meta: { auth: true },
     },
   ],
+  mode: 'history',
 });
