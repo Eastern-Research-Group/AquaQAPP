@@ -118,6 +118,7 @@ export default {
   methods: {
     onAddLocation(map) {
       this.locationName = '';
+      this.shouldShowEdit = false;
       this.map = map;
       this.isAddingLocation = !this.isAddingLocation;
       // after clicking Add Location button, add click event to get Lat/Long of clicked area
