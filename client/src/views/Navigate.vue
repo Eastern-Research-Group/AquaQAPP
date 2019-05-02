@@ -94,7 +94,6 @@ export default {
       currentOutlineNum: '1.1',
       shouldDisplayMap: false,
       shouldShowExample: false,
-      switch1: false,
     };
   },
   computed: {
@@ -117,9 +116,6 @@ export default {
     },
     toggleShouldShowExample() {
       this.shouldShowExample = !this.shouldShowExample;
-    },
-    toggleMark() {
-      this.switch1 = !this.switch1;
     },
   },
 };
