@@ -20,6 +20,13 @@
     <section class="right column is-three-quarters">
       <form>
         <div class="field" v-for="question in currentQuestions" :key="question.id">
+          <Button
+            :label="hasSaved ? 'Saved' : 'Save'"
+            type="primary"
+            class="aq-save-btn is-pulled-right"
+            :disabled="hasSaved"
+            @click.native="() => (hasSaved = true)"
+          />
           <MarkComplete />
           <div class="field" v-if="question.questionLabel === 'Locations'">
             <Locations />
@@ -30,17 +37,23 @@
           <div v-else>
             <label class="label is-size-4">{{ question.questionLabel }}</label>
             <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
-            <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
+            <div
+              class="instructions"
+              v-if="question.dataEntryInstructions"
+              v-html="question.dataEntryInstructions"
+            ></div>
             <input
               v-if="question.dataEntryType === 'text'"
               class="input"
               type="text"
               :placeholder="`Enter ${question.questionLabel}`"
+              @input="() => (hasSaved = false)"
             />
             <textarea
               v-if="question.dataEntryType === 'largeText'"
               class="input"
               :placeholder="`Enter ${question.questionLabel}`"
+              @input="() => (hasSaved = false)"
             ></textarea>
             <div class="btn-container has-text-right">
               <Button
@@ -94,6 +107,7 @@ export default {
       currentOutlineNum: '1',
       shouldDisplayMap: false,
       shouldShowExample: false,
+      hasSaved: false,
     };
   },
   computed: {
@@ -112,6 +126,7 @@ export default {
     ...mapActions('structure', ['getProjects', 'getSections', 'getQuestions']),
     changeSection(outlineNumber) {
       this.shouldDisplayMap = false;
+      this.hasSaved = false;
       this.currentOutlineNum = outlineNumber;
     },
     toggleShouldShowExample() {
@@ -161,5 +176,9 @@ textarea {
 
 .btn-container {
   margin-bottom: 1em;
+}
+
+.aq-save-btn {
+  margin-left: 2em;
 }
 </style>

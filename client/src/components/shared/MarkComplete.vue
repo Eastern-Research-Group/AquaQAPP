@@ -1,7 +1,7 @@
 <template>
-  <div class="field is-pulled-right">
+  <div class="field is-pulled-right switch-container">
     <label for="markComplete" class="switch-label">Mark as Complete</label>
-    <label class="switch is-pulled-right">
+    <label class="switch">
       <input id="markComplete" type="checkbox" />
       <span class="slider is-success"></span>
     </label>
@@ -17,8 +17,12 @@ export default {
 <style scoped lang="scss">
 @import '../../../static/variables';
 
+.switch-container {
+  margin-bottom: 0;
+  margin-top: calc(1.125em - 12px);
+}
+
 .switch-label {
-  display: block;
   font-size: 0.8em;
 }
 
@@ -27,6 +31,7 @@ export default {
   display: inline-block;
   width: 50px;
   height: 24px;
+  margin-left: 0.5em;
 
   input {
     // hide default html checkbox
@@ -43,7 +48,7 @@ export default {
     }
 
     &:focus + .slider {
-      box-shadow: 0 0 1px $lightBlue;
+      box-shadow: 0 0 1px #ccc;
     }
 
     &:checked + .slider:before {
@@ -58,7 +63,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: $lightBlue;
+    background-color: #ccc;
     transition: .4s;
     border-radius: 4px;
 
