@@ -1,89 +1,78 @@
 <template>
-  <div class="switch-button-control">
-    <div class="switch-button-label">
-      <slot></slot>
-    </div>
-    <div
-      class="switch-button is-pulled-right"
-      :class="{ enabled: isEnabled }"
-      @click="toggle"
-      :style="{ '--color': color }"
-    >
-      <div class="button"></div>
-    </div>
+  <div class="field is-pulled-right">
+    <label for="markComplete" class="switch-label">Mark as Complete</label>
+    <label class="switch is-pulled-right">
+      <input id="markComplete" type="checkbox" />
+      <span class="slider is-success"></span>
+    </label>
   </div>
 </template>
 
 <script>
 export default {
   name: 'MarkComplete',
-  props: {
-    isEnabled: Boolean,
-    color: {
-      type: String,
-      required: false,
-      default: '#4D4D4D',
-    },
-    handleToggle: {
-      type: Function,
-      required: true,
-    },
-  },
-  methods: {
-    toggle() {
-      this.handleToggle();
-    },
-  },
 };
 </script>
 
 <style scoped lang="scss">
-.switch-button-control {
+@import '../../../static/variables';
+
+.switch-label {
   display: block;
-  flex-direction: row;
-  align-items: center;
+  font-size: 0.8em;
+}
 
-  .switch-button {
-    $switch-button-height: 1.6em;
-    $switch-button-color: var(--color);
-    $switch-button-border-thickness: 1px;
-    $switch-transition: all 0.3s ease-in-out;
-    $switch-is-rounded: true;
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
 
-    height: $switch-button-height;
-    width: calc(#{$switch-button-height} * 2);
-    border: $switch-button-border-thickness solid white;
-    box-shadow: inset 0px 0px $switch-button-border-thickness 0px rgba(0, 0, 0, 0.33);
-    border-radius: if($switch-is-rounded, 5px, 0);
+  input {
+    // hide default html checkbox
+    opacity: 0;
+    width: 0;
+    height: 0;
 
-    transition: $switch-transition;
+    &:checked + .slider {
+      background-color: $darkBlue;
 
-    $button-side-length: calc(#{$switch-button-height} - (2 * #{$switch-button-border-thickness}));
-
-    cursor: pointer;
-
-    .button {
-      height: $button-side-length;
-      width: $button-side-length;
-      border: $switch-button-border-thickness solid white;
-      border-radius: if($switch-is-rounded, 5px, 0);
-      background: $switch-button-color;
-
-      transition: $switch-transition;
-    }
-
-    &.enabled {
-      background-color: #182e51;
-      box-shadow: none;
-
-      .button {
-        background: #3aa02b;
-        transform: translateX(calc(#{$button-side-length} + (2 *#{$switch-button-border-thickness})));
+      &:before {
+        background-color: $green;
       }
     }
+
+    &:focus + .slider {
+      box-shadow: 0 0 1px $lightBlue;
+    }
+
+    &:checked + .slider:before {
+      transform: translateX(20px);
+    }
   }
-  .switch-button-label {
-    font-size: 13px;
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $lightBlue;
+    transition: .4s;
+    border-radius: 4px;
+
+    &:before {
+      position: absolute;
+      content: '';
+      height: 20px;
+      width: 26px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 4px;
+    }
   }
 }
 </style>
