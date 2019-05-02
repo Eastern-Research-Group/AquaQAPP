@@ -21,6 +21,10 @@
     >
       <form @submit.prevent="addLocationData">
         <div class="field">
+          <label for="locationId">Location ID</label>
+          <input id="locationId" class="input" type="text" v-model="locationId" required />
+        </div>
+        <div class="field">
           <label for="locationName">Location Name</label>
           <input id="locationName" class="input" type="text" v-model="locationName" required />
         </div>
@@ -106,6 +110,7 @@ export default {
     return {
       isAddingLocation: false,
       isEnteringLocationInfo: false,
+      locationId: '',
       locationName: '',
       longitude: null,
       latitude: null,
