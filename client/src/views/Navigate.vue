@@ -44,6 +44,7 @@
             ></div>
             <input
               v-if="question.dataEntryType === 'text'"
+              :v-model="`Question${question.id}Value`"
               class="input"
               type="text"
               :placeholder="`Enter ${question.questionLabel}`"
@@ -51,6 +52,7 @@
             />
             <textarea
               v-if="question.dataEntryType === 'largeText'"
+              ref="Question3Value"
               class="input"
               :placeholder="`Enter ${question.questionLabel}`"
               @input="() => (hasSaved = false)"
@@ -69,18 +71,28 @@
                 :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
               >
                 <template v-slot:example1>
-                  <p class="has-text-black">
-                    Example 1
+                  <p ref="example1" class="has-text-black">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                   </p>
                 </template>
                 <template v-slot:example2>
-                  <p class="has-text-black">
-                    Example 2
+                  <p ref="example2" class="has-text-black">
+                    Eget felis eget nunc lobortis mattis aliquam faucibus purus. Consectetur adipiscing elit pellentesque habitant morbi
+                    tristique senectus et netus. Ut aliquam purus sit amet. Bibendum enim facilisis gravida neque. Duis at consectetur
+                    lorem donec massa sapien. Duis ultricies lacus sed turpis tincidunt. Vitae turpis massa sed elementum tempus egestas
+                    sed sed. Amet risus nullam eget felis eget.
                   </p>
                 </template>
               </Tabs>
               <div class="has-text-right">
-                <Button class="addExample" label="Add Example" type="success" />
+                <Button
+                        class="addExample"
+                        label="Add Example"
+                        type="success"
+                        @click.native="addExample(question.id,1)"
+                />
               </div>
             </ExampleModal>
             <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
@@ -130,6 +142,21 @@ export default {
       this.currentOutlineNum = outlineNumber;
     },
     toggleShouldShowExample() {
+      this.shouldShowExample = !this.shouldShowExample;
+    },
+    addExample(qid,eid) {
+      let q = this.$refs.Question3Value[0].value;
+      try {
+        if (this.$refs.example1[0] === '') {
+          q += ' ' + this.$refs.example2[0].innerText;
+        } else {
+          q += ' ' + this.$refs.example1[0].innerText;
+        }
+        this.$refs.Question3Value[0].value = q;
+      }
+      catch(e) {
+        console.log('Exception: ', e);
+      }
       this.shouldShowExample = !this.shouldShowExample;
     },
   },
