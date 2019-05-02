@@ -91,7 +91,7 @@ export default {
   components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete },
   data() {
     return {
-      currentOutlineNum: '1.1',
+      currentOutlineNum: '1',
       shouldDisplayMap: false,
       shouldShowExample: false,
     };
