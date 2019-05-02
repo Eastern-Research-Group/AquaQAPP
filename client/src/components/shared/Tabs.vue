@@ -1,5 +1,5 @@
 <template>
-  <section class="is-12">
+  <section class="is-12 aq-tabs-container">
     <div class="tabs aq-tabs is-boxed">
       <ul>
         <li v-for="tab in tabs" :key="tab.id" :class="tab.id === activeTabId ? 'is-active' : ''">
@@ -30,33 +30,37 @@ export default {
 <style lang="scss" scoped>
 @import '../../../static/variables';
 
-.tabs.aq-tabs {
-  margin-bottom: 0;
+.aq-tabs-container {
+  clear: both;
 
-  ul {
-    border-bottom: 8px solid $lightBlue;
+  .tabs.aq-tabs {
+    margin-bottom: 0;
 
-    li {
-      min-width: 5em;
+    ul {
+      border-bottom: 8px solid $lightBlue;
 
-      a {
-        border: none;
-        color: #fff;
-        background-color: $darkBlue;
-        margin-right: 0.2em;
-        margin-bottom: 0;
+      li {
+        min-width: 5em;
 
-        &:hover {
-          background-color: darken($darkBlue, 10);
+        a {
+          border: none;
+          color: #fff;
+          background-color: $darkBlue;
+          margin-right: 0.2em;
+          margin-bottom: 0;
+
+          &:hover {
+            background-color: darken($darkBlue, 10);
+          }
         }
-      }
 
-      &.is-active a {
-        background-color: $lightBlue;
-        font-weight: bold;
+        &.is-active a {
+          background-color: $lightBlue;
+          font-weight: bold;
 
-        &:hover {
-          cursor: default;
+          &:hover {
+            cursor: default;
+          }
         }
       }
     }
