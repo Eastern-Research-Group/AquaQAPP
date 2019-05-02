@@ -11,6 +11,9 @@
             </tr>
           </thead>
           <tbody>
+            <tr v-if="rows.length === 0">
+              <td colspan="4">No locations have been added. Add a location to continue.</td>
+            </tr>
             <tr v-for="row in rows" :key="row.id" ref="row">
               <td>{{ row.title }}</td>
               <td>{{ row.lat }}</td>
