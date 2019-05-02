@@ -21,7 +21,13 @@
                     <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click.native="onEditRow" />
                   </div>
                   <div class="control">
-                    <Button label="Delete" type="danger" icon="trash-alt" :shouldShowIcon="true" @click.native="onDeleteRow" />
+                    <Button
+                      label="Delete"
+                      type="danger"
+                      icon="trash-alt"
+                      :shouldShowIcon="true"
+                      @click.native="onDeleteRow"
+                    />
                   </div>
                 </div>
               </td>

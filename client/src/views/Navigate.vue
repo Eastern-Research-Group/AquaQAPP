@@ -20,9 +20,7 @@
     <section class="right column is-three-quarters">
       <form>
         <div class="field" v-for="question in currentQuestions" :key="question.id">
-          <MarkComplete class="is-pulled-right" :handleToggle="toggleMark" :isEnabled="switch1"
-            >Mark as Complete</MarkComplete
-          >
+          <MarkComplete />
           <div class="field" v-if="question.questionLabel === 'Locations'">
             <Locations />
           </div>
