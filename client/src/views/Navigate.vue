@@ -11,17 +11,8 @@
             "
             @click="changeSection(section.outlineNumber)"
           >
-            <span class="step-number">{{ project.showOutlineNumber ? section.outlineNumber : '' }}</span>
+            <span class="step-number" v-if="project.showOutlineNumber">{{ section.outlineNumber }}</span>
             {{ section.outlineLabel }}
-          </button>
-        </li>
-        <li>
-          <button
-            :class="`button is-text has-text-white ${shouldDisplayMap ? 'has-text-weight-bold' : ''}`"
-            @click="shouldDisplayMap = true"
-          >
-            <span class="step-number">{{ project.showOutlineNumber ? '3' : '' }}</span>
-            Locations
           </button>
         </li>
       </ul>
@@ -32,52 +23,57 @@
           <MarkComplete class="is-pulled-right" :handleToggle="toggleMark" :isEnabled="switch1"
             >Mark as Complete</MarkComplete
           >
-          <label class="label is-size-4">{{ question.questionLabel }}</label>
-          <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
-          <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
-          <input
-            v-if="question.dataEntryType === 'text'"
-            class="input"
-            type="text"
-            :placeholder="`Enter ${question.questionLabel}`"
-          />
-          <textarea
-            v-if="question.dataEntryType === 'largeText'"
-            class="input"
-            :placeholder="`Enter ${question.questionLabel}`"
-          ></textarea>
-          <div class="btn-container has-text-right">
-            <Button
-              class="example"
-              label="Example(s)"
-              type="dark"
-              v-if="question.hasExamples"
-              @click.native="toggleShouldShowExample"
-            />
+          <div class="field" v-if="question.questionLabel === 'Locations'">
+            <Locations />
           </div>
-          <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
-            <Tabs
-              :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
-            >
-              <template v-slot:example1>
-                <p class="has-text-black">
-                  Example 1
-                </p>
-              </template>
-              <template v-slot:example2>
-                <p class="has-text-black">
-                  Example 2
-                </p>
-              </template>
-            </Tabs>
-            <div class="has-text-right">
-              <Button class="addExample" label="Add Example" type="success" />
+          <div class="field" v-else-if="question.questionLabel === 'Pollutants'">
+            To be developed
+          </div>
+          <div v-else>
+            <label class="label is-size-4">{{ question.questionLabel }}</label>
+            <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
+            <div class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></div>
+            <input
+              v-if="question.dataEntryType === 'text'"
+              class="input"
+              type="text"
+              :placeholder="`Enter ${question.questionLabel}`"
+            />
+            <textarea
+              v-if="question.dataEntryType === 'largeText'"
+              class="input"
+              :placeholder="`Enter ${question.questionLabel}`"
+            ></textarea>
+            <div class="btn-container has-text-right">
+              <Button
+                class="example"
+                label="Example(s)"
+                type="dark"
+                v-if="question.hasExamples"
+                @click.native="toggleShouldShowExample"
+              />
             </div>
-          </ExampleModal>
-          <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
-        </div>
-        <div class="field" v-if="shouldDisplayMap">
-          <Locations />
+            <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
+              <Tabs
+                :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
+              >
+                <template v-slot:example1>
+                  <p class="has-text-black">
+                    Example 1
+                  </p>
+                </template>
+                <template v-slot:example2>
+                  <p class="has-text-black">
+                    Example 2
+                  </p>
+                </template>
+              </Tabs>
+              <div class="has-text-right">
+                <Button class="addExample" label="Add Example" type="success" />
+              </div>
+            </ExampleModal>
+            <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
+          </div>
         </div>
       </form>
     </section>
