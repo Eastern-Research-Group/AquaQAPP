@@ -28,6 +28,10 @@ jobs:
           command: |
             npm install
       - run:
+          name: Run eslint
+          command: |
+            npm run lint -- --max-warnings=0
+      - run:
           name: Run automated tests
           command: |
             npm test
