@@ -26,8 +26,8 @@
 
         <div class="navbar-menu">
           <div class="navbar-start">
-            <div class="navbar-item" v-if="currentQapp">
-              {{ currentQapp.title }}
+            <div class="navbar-item" v-if="title">
+              {{ title }}
             </div>
           </div>
           <div class="navbar-end">
@@ -68,7 +68,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('qapp', ['currentQapp']),
+    ...mapState('qapp', ['title']),
   },
 };
 </script>

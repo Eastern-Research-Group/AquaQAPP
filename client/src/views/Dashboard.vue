@@ -26,6 +26,9 @@
             </tr>
           </thead>
           <tbody>
+            <tr v-if="qapps.length === 0">
+              <td colspan="5">No data available. Please add a QAPP to continue.</td>
+            </tr>
             <tr v-for="qapp in qapps" :key="qapp.id">
               <td>{{ qapp.title }}</td>
               <td>{{ qapp.description }}</td>
@@ -90,7 +93,7 @@
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete QAPP" :handleClose="() => (this.shouldShowDelete = false)">
       <template #default="props">
-        <Alert :message="`Are you sure you want to delete ${currentQapp.title}?`" type="warning" />
+        <Alert :message="`Are you sure you want to delete ${selectedQapp.title}?`" type="warning" />
         <hr />
         <div class="field is-grouped">
           <div class="control">
@@ -114,7 +117,7 @@ import Button from '@/components/shared/Button';
 export default {
   components: { Alert, SideNav, Button },
   async mounted() {
-    this.currentQapp = null;
+    this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
   },
   methods: {
@@ -122,27 +125,29 @@ export default {
     async onDeleteQapp(qapp) {
       this.shouldShowAdd = false;
       this.shouldShowDelete = true;
-      this.currentQapp = qapp;
+      this.selectedQapp = qapp;
     },
     clearName() {
       this.title = '';
       this.description = '';
     },
     async handleSubmit() {
-      await this.$store.dispatch('qapp/add', {
+      await this.$store.dispatch('qapps/add', {
         userId: this.$auth.user().id,
         projectId: this.$projectId,
+        title: this.title,
+        description: this.description,
       });
-      this.$router.push('navigate');
+      this.$router.push({name: 'navigate', params: { id: this.$store.state.qapp.id }});
     },
     editQapp(qapp) {
-      this.currentQapp = qapp;
-      this.$router.push('navigate');
+      this.$store.commit('qapp/SET_CURRENT_QAPP', qapp);
+      this.$router.push({name: 'navigate', params: { id: qapp.id }});
     },
     async handleDeleteQapp() {
-      await this.$store.dispatch('qapp/delete');
+      await this.$store.dispatch('qapps/delete', this.selectedQapp.id);
       this.shouldShowDelete = false;
-      this.currentQapp = null;
+      this.selectedQapp = null;
     },
   },
   data() {
@@ -171,35 +176,14 @@ export default {
           label: 'Actions',
         },
       ],
+      title: '',
+      description: '',
+      selectedQapp: null,
     };
   },
   computed: {
     qapps() {
       return this.$store.state.qapps.data;
-    },
-    currentQapp: {
-      get() {
-        return this.$store.state.qapp.currentQapp;
-      },
-      set(value) {
-        this.$store.commit('qapp/SET_CURRENT_QAPP', value);
-      },
-    },
-    title: {
-      get() {
-        return this.$store.state.qapp.title;
-      },
-      set(value) {
-        this.$store.commit('qapp/SET_TITLE', value);
-      },
-    },
-    description: {
-      get() {
-        return this.$store.state.qapp.description;
-      },
-      set(value) {
-        this.$store.commit('qapp/SET_DESCRIPTION', value);
-      },
     },
   },
 };
