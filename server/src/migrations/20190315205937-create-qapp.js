@@ -2,10 +2,9 @@ module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('Qapps', {
       id: {
-        allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV1,
       },
       projectId: {
         allowNull: false,

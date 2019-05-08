@@ -1,3 +1,4 @@
+const uuidv4 = require('uuid/v4');
 const { Qapp } = require('../models');
 
 module.exports = {
@@ -6,6 +7,7 @@ module.exports = {
     Qapp.findOrCreate({
       where: { title: 'Test QAPP' },
       defaults: {
+        id: uuidv4(),
         title: 'Test QAPP',
         projectId: 1,
         userId: 1,

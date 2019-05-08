@@ -8,7 +8,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       qappId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       questionId: {
         type: Sequelize.INTEGER

@@ -130,6 +130,10 @@ export default {
     },
   },
   mounted() {
+    // If coming directly to this URL, need to fetch the current QAPP data
+    if (this.$route.params.id !== this.$store.state.qapp.id) {
+      this.$store.dispatch('qapp/get', this.$route.params.id);
+    }
     this.getProjects();
     this.getSections();
     this.getQuestions();
