@@ -63,7 +63,7 @@ module.exports = {
           break;
         default:
           res.status(400).send({
-            error: 'There was an error with your request. Please try again. ' + error,
+            error: `There was an error with your request. Please try again. ${error}`,
           });
       }
     } else {

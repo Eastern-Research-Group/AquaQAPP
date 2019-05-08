@@ -21,11 +21,11 @@ const mutations = {
   CLEAR_CURRENT_QAPP(state) {
     Object.keys(state).forEach((prop) => {
       state[prop] = null;
-    })
+    });
   },
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
-  }
+  },
 };
 
 const actions = {

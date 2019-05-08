@@ -1,8 +1,6 @@
-'use strict';
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    var records = [];
+  up: (queryInterface) => {
+    const records = [];
     records.push({
       projectId: 1,
       outlineNumber: '1',
@@ -33,8 +31,10 @@ module.exports = {
       projectId: 1,
       outlineNumber: '4',
       questionLabel: 'Problem Definition',
-      dataEntryInstructions: 'State the specific envrionmental problem to be investigated. Include sufficient background information to provide an historical and scientific perspective for the current project.',
-      dataEntryTip: '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>Itep has assembled a website of resources including example SPSs technical reports spreadsheets datbases epa laws and commrenations programs and links.</p>',
+      dataEntryInstructions:
+        'State the specific envrionmental problem to be investigated. Include sufficient background information to provide an historical and scientific perspective for the current project.',
+      dataEntryTip:
+        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>Itep has assembled a website of resources including example SPSs technical reports spreadsheets datbases epa laws and commrenations programs and links.</p>',
       dataEntryType: 'largeText',
       maxLength: '4000',
       hasExamples: true,
@@ -82,5 +82,5 @@ module.exports = {
       updatedAt: new Date(),
     });
     return queryInterface.bulkInsert('ProjectOutlineQuestions', records);
-  }
+  },
 };

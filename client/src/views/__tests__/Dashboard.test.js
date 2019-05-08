@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
-import { mockStore } from '@/testUtils/mockStore';
+import mockStore from '@/testUtils/mockStore';
 import Dashboard from '../Dashboard';
 
 const localVue = createLocalVue();

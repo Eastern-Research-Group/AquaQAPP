@@ -10,7 +10,7 @@ module.exports = {
       res.send(sections);
     } catch (err) {
       res.status(400).send({
-        err: 'Projects data unavailable. ' + err,
+        err: `Projects data unavailable. ${err}`,
       });
     }
   },
@@ -22,7 +22,7 @@ module.exports = {
       res.send(sections);
     } catch (err) {
       res.status(400).send({
-        err: 'Sections data unavailable. ' + err,
+        err: `Sections data unavailable. ${err}`,
       });
     }
   },

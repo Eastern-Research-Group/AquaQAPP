@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.dropTable('QappData');
   },
   down: (queryInterface) => queryInterface.dropTable('QappData'),

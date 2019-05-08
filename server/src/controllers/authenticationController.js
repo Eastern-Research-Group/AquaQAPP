@@ -2,16 +2,16 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
+const { Op } = require('sequelize');
 const { User } = require('../models');
 const config = require('../config/config');
-const { Op } = require('sequelize');
 
 function jwtSignUser(user) {
   const ONE_WEEK = 60 * 60 * 24 * 7;
   return jwt.sign({ id: user.id, email: user.email }, config.authentication.jwtSecret, { expiresIn: ONE_WEEK });
 }
 
-let transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   service: config.service,
   auth: {
@@ -20,7 +20,7 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-let handlebarsOptions = {
+const handlebarsOptions = {
   viewEngine: {
     extName: '.hbs',
     partialsDir: path.resolve('./server/src/templates/'),
@@ -98,47 +98,46 @@ module.exports = {
         return res.status(422).send({
           error: 'User not found.',
         });
-      } else {
-        const userJson = user.toJSON();
-        const token = jwtSignUser(userJson);
+      }
+      const userJson = user.toJSON();
+      const token = jwtSignUser(userJson);
 
-        await User.update(
-          {
-            resetPasswordToken: token,
-            resetPasswordExpires: Date.now() + 1000 * 60 * 60 * 24,
-          },
-          {
-            where: {
-              id: user.id,
-            },
-          }
-        );
-
-        const updatedUser = await User.findOne({
+      await User.update(
+        {
+          resetPasswordToken: token,
+          resetPasswordExpires: Date.now() + 1000 * 60 * 60 * 24,
+        },
+        {
           where: {
             id: user.id,
           },
-        });
+        }
+      );
 
-        const updatedUserJson = updatedUser.toJSON();
+      const updatedUser = await User.findOne({
+        where: {
+          id: user.id,
+        },
+      });
 
-        let data = {
-          to: updatedUserJson.email,
-          from: 'aqua.qapp@gmail.com',
-          template: 'forgot-password-email',
-          subject: 'AquaQAPP Password Reset',
-          context: {
-            url: config.baseUrl + '/resetPassword?token=' + updatedUserJson.resetPasswordToken,
-            name: updatedUserJson.name.split(' ')[0],
-          },
-        };
+      const updatedUserJson = updatedUser.toJSON();
 
-        transporter.sendMail(data, function() {
-          return res.json({ message: 'Success' });
-        });
-      }
+      const data = {
+        to: updatedUserJson.email,
+        from: 'aqua.qapp@gmail.com',
+        template: 'forgot-password-email',
+        subject: 'AquaQAPP Password Reset',
+        context: {
+          url: `${config.baseUrl}/resetPassword?token=${updatedUserJson.resetPasswordToken}`,
+          name: updatedUserJson.name.split(' ')[0],
+        },
+      };
+
+      return transporter.sendMail(data, () => {
+        return res.json({ message: 'Success' });
+      });
     } catch (error) {
-      console.log(error);
+      return console.error(error);
     }
   },
 
@@ -151,10 +150,10 @@ module.exports = {
       const { resetPasswordToken } = req.body;
       const user = await User.findOne({
         where: {
-          resetPasswordToken: resetPasswordToken,
+          resetPasswordToken,
           resetPasswordExpires: {
             [Op.gt]: Date.now(),
-          }
+          },
         },
       });
 
@@ -162,56 +161,53 @@ module.exports = {
         return res.status(422).send({
           error: 'The password reset token has expired. Please follow steps to reset again.',
         });
-      } else {
-        const { newPassword, confirmNewPassword } = req.body;
-        if (newPassword === confirmNewPassword) {
-          user.password = newPassword;
-          await user.hashPassword(user);
-          await User.update(
-            {
-              resetPasswordToken: null,
-              resetPasswordExpires: null,
-              password: user.password,
-            },
-            {
-              where: {
-                resetPasswordToken: resetPasswordToken,
-              },
-            }
-          );
-
-          const updatedUser = await User.findOne({
-            where: {
-              id: user.id,
-            },
-          });
-
-          let data = {
-            to: updatedUser.email,
-            from: 'aqua.qapp@gmail.com',
-            template: 'reset-password-email',
-            subject: 'Password Reset Confirmation',
-            context: {
-              name: updatedUser.name.split(' ')[0],
-              url: config.baseUrl,
-            },
-          };
-
-          transporter.sendMail(data, function(err) {
-            if (!err) {
-              return res.json({ message: 'Password reset' });
-            } else {
-              return done(err);
-            }
-          });
-        } else {
-          return res.status(422).send({
-            error: 'Passwords do not match.',
-          });
-        }
       }
+      const { newPassword, confirmNewPassword } = req.body;
+      if (newPassword === confirmNewPassword) {
+        user.password = newPassword;
+        await user.hashPassword(user);
+        await User.update(
+          {
+            resetPasswordToken: null,
+            resetPasswordExpires: null,
+            password: user.password,
+          },
+          {
+            where: {
+              resetPasswordToken,
+            },
+          }
+        );
+
+        const updatedUser = await User.findOne({
+          where: {
+            id: user.id,
+          },
+        });
+
+        const data = {
+          to: updatedUser.email,
+          from: 'aqua.qapp@gmail.com',
+          template: 'reset-password-email',
+          subject: 'Password Reset Confirmation',
+          context: {
+            name: updatedUser.name.split(' ')[0],
+            url: config.baseUrl,
+          },
+        };
+
+        return transporter.sendMail(data, (err) => {
+          if (!err) {
+            return res.json({ message: 'Password reset' });
+          }
+          return console.error(err);
+        });
+      }
+      return res.status(422).send({
+        error: 'Passwords do not match.',
+      });
     } catch (err) {
-      console.log(err);
+      return console.error(err);
     }
   },
 

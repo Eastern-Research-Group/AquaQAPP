@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
-import { mockStore } from '@/testUtils/mockStore';
+import mockStore from '@/testUtils/mockStore';
 import Login from '../Login';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
@@ -43,7 +43,10 @@ describe('Login', () => {
     const wrapper = mount(Login, { store, localVue });
     wrapper.vm.resetPassword = jest.fn();
     wrapper.find('.button.is-link').trigger('click');
-    wrapper.find(SideNav).find('form').trigger('submit.prevent');
+    wrapper
+      .find(SideNav)
+      .find('form')
+      .trigger('submit.prevent');
     expect(wrapper.vm.resetPassword).toBeCalled();
   });
 

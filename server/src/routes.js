@@ -29,5 +29,4 @@ module.exports = (app) => {
   app.get('/api/projects', isAuthenticated, structureController.projects);
   app.get('/api/sections', isAuthenticated, structureController.sections);
   app.get('/api/questions', isAuthenticated, structureController.questions);
-
 };

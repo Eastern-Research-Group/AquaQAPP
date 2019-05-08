@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     return bcrypt.compareAsync(password, this.password);
   };
 
-  User.prototype.hashPassword = function hashPassword(user) {
+  User.prototype.hashPassword = function hashUserPassword(user) {
     const SALT_FACTOR = 8;
     return bcrypt
       .genSaltAsync(SALT_FACTOR)

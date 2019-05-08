@@ -5,34 +5,34 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       projectId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       outlineNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       outlineLevel: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       outlineLabel: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       outlineSort: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('ProjectOutlines');
-  }
+  },
 };
