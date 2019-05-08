@@ -3,7 +3,7 @@
   "scripts": {
     "build": "npm run migrate && npm run seed && vue-cli-service build",
     "prod": "node server/src/server.js",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js,.vue",
     "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "seed": "sequelize db:seed:all",
     "server": "npm run migrate && npm run seed && nodemon --ignore 'client/*' --inspect server/src/server.js",

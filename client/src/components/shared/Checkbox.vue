@@ -1,6 +1,7 @@
 <template>
-  <label class="container">{{label}}
-    <input type="checkbox">
+  <label class="container"
+    >{{ label }}
+    <input type="checkbox" />
     <span class="checkmark"></span>
   </label>
 </template>
@@ -12,8 +13,8 @@ export default {
     label: {
       type: String,
       required: false,
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -51,11 +52,11 @@ input {
 }
 
 .container input:checked ~ .checkmark {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .checkmark:after {
-  content: "";
+  content: '';
   position: absolute;
   display: none;
 }

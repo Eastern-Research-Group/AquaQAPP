@@ -50,7 +50,8 @@ export default {
   data() {
     return {
       error: null,
-      successMessage: 'Your password was successfully reset. Please <router-link to="/">log in</router-link> with your new password to continue.',
+      successMessage:
+        'Your password was successfully reset. Please <router-link to="/">log in</router-link> with your new password to continue.',
       showSuccessMessage: false,
     };
   },

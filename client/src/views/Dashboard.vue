@@ -138,11 +138,11 @@ export default {
         title: this.title,
         description: this.description,
       });
-      this.$router.push({name: 'navigate', params: { id: this.$store.state.qapp.id }});
+      this.$router.push({ name: 'navigate', params: { id: this.$store.state.qapp.id } });
     },
     editQapp(qapp) {
       this.$store.commit('qapp/SET_CURRENT_QAPP', qapp);
-      this.$router.push({name: 'navigate', params: { id: qapp.id }});
+      this.$router.push({ name: 'navigate', params: { id: qapp.id } });
     },
     async handleDeleteQapp() {
       await this.$store.dispatch('qapps/delete', this.selectedQapp.id);

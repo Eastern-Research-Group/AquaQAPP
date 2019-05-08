@@ -25,12 +25,12 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
   computed: {
-    contentComp () {
-      return { template: `<p>${this.message}</p>` }
-    }
+    contentComp() {
+      return { template: `<p>${this.message}</p>` };
+    },
   },
   methods: {
     getIcon() {
@@ -39,6 +39,7 @@ export default {
           return 'fa-exclamation-circle';
         case 'warning':
           return 'fa-exclamation-triangle';
+        default:
         case 'success':
           return 'fa-check-circle';
       }
@@ -49,10 +50,11 @@ export default {
           return 'is-danger';
         case 'warning':
           return 'is-warning';
+        default:
         case 'success':
           return 'is-success';
       }
-    }
+    },
   },
 };
 </script>

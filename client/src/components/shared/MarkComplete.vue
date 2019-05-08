@@ -64,7 +64,7 @@ export default {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 4px;
 
     &:before {
@@ -75,7 +75,7 @@ export default {
       left: 2px;
       bottom: 2px;
       background-color: white;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 4px;
     }
   }
