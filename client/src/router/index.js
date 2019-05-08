@@ -35,7 +35,7 @@ export default new Router({
       meta: { auth: true },
     },
     {
-      path: '/navigate',
+      path: '/navigate/:id',
       name: 'navigate',
       component: Navigate,
       meta: { auth: true },

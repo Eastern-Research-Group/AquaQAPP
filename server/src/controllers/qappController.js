@@ -1,3 +1,4 @@
+const uuidv4 = require('uuid/v4');
 const { Qapp } = require('../models');
 const config = require('../config/config');
 
@@ -17,7 +18,7 @@ module.exports = {
   async show(req, res) {
     try {
       const qapp = await Qapp.findOne({
-        where: { userId: req.user.id, projectId: config.projectId, id: req.id },
+        where: { userId: req.user.id, projectId: config.projectId, id: req.params.id },
       });
       res.send(qapp);
     } catch (err) {
@@ -28,15 +29,12 @@ module.exports = {
   },
   async store(req, res) {
     try {
-      const qapp = await Qapp.create(req.body);
-      const qappJson = qapp.toJSON();
-      res.send({
-        userId: qappJson.userId,
-        projectId: config.projectId,
-        title: qappJson.title,
-        description: qappJson.description,
-        updatedAt: qappJson.updatedAt,
+      const qapp = await Qapp.create({
+        ...req.body,
+        id: uuidv4(),
       });
+      const qappJson = qapp.toJSON();
+      res.send(qappJson);
     } catch (err) {
       res.status(400).send({
         error: err,
