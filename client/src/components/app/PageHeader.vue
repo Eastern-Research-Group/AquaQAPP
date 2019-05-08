@@ -64,9 +64,6 @@ export default {
     logout() {
       this.$auth.logout();
     },
-    setCurrentQapp() {
-      this.$store.commit('qapp/SET_CURRENT_QAPP', null);
-    },
   },
 };
 </script>

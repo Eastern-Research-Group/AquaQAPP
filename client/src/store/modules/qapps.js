@@ -23,6 +23,16 @@ const actions = {
     commit('SET_DATA', qapps.data);
     commit('SET_IS_FETCHING', false);
   },
+  async add({ commit, state }, payload) {
+    const newQapp = await axios.post('api/qapps', payload);
+    await commit('qapp/SET_CURRENT_QAPP', newQapp.data, { root: true });
+  },
+  async delete({ state, dispatch, rootState }, id) {
+    await axios.delete('api/qapps', {
+      data: { id },
+    });
+    await dispatch('getQapps', null);
+  },
 };
 
 export default {
