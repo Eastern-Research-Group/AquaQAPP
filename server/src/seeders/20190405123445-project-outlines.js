@@ -1,9 +1,6 @@
-'use strict';
-
 module.exports = {
-  up: function (queryInterface, Sequelize) {
-
-    var records = [];
+  up(queryInterface) {
+    const records = [];
     records.push({
       projectId: '1',
       outlineNumber: '1',
@@ -95,5 +92,5 @@ module.exports = {
       updatedAt: new Date(),
     });
     return queryInterface.bulkInsert('ProjectOutlines', records);
-  }
+  },
 };

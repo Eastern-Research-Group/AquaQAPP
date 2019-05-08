@@ -1,4 +1,4 @@
-export const mockStore = {
+const mockStore = {
   modules: {
     qapps: {
       state: {
@@ -69,3 +69,4 @@ export const mockStore = {
     },
   },
 };
+export default mockStore;

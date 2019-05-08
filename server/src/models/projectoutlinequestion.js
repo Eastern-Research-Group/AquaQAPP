@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
       dataEntryType: DataTypes.STRING,
       maxLength: DataTypes.INTEGER,
       hasExamples: DataTypes.BOOLEAN,
-      outlineQuestionSort: DataTypes.INTEGER
+      outlineQuestionSort: DataTypes.INTEGER,
     },
     {}
   );
-  ProjectOutlineQuestion.associate = function(models) {
+  /* ProjectOutlineQuestion.associate = function(models) {
     // associations can be defined here
-  };
+  }; */
   return ProjectOutlineQuestion;
 };

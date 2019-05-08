@@ -5,46 +5,46 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       projectId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       outlineNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       questionLabel: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       dataEntryInstructions: {
-        type: Sequelize.STRING(1000)
+        type: Sequelize.STRING(1000),
       },
       dataEntryTip: {
-        type: Sequelize.STRING(2000)
+        type: Sequelize.STRING(2000),
       },
       dataEntryType: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       maxLength: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       hasExamples: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       outlineQuestionSort: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('ProjectOutlineQuestions');
-  }
+  },
 };

@@ -8,10 +8,10 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       qappId: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       questionId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       value: {
         type: Sequelize.TEXT,

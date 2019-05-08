@@ -1,4 +1,3 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ProjectOutline = sequelize.define(
     'ProjectOutline',
@@ -7,12 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       outlineNumber: DataTypes.STRING,
       outlineLevel: DataTypes.STRING,
       outlineLabel: DataTypes.STRING,
-      outlineSort: DataTypes.INTEGER
+      outlineSort: DataTypes.INTEGER,
     },
     {}
   );
-  ProjectOutline.associate = function(models) {
+  /* ProjectOutline.associate = function(models) {
     // associations can be defined here
-  };
+  }; */
   return ProjectOutline;
 };

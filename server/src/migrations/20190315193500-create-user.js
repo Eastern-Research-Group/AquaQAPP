@@ -35,7 +35,7 @@ module.exports = {
       resetPasswordExpires: {
         allowNull: true,
         type: Sequelize.BIGINT,
-      }
+      },
     }),
   down: (queryInterface) => queryInterface.dropTable('Users'),
 };

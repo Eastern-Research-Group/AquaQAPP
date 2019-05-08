@@ -23,7 +23,7 @@ const mutations = {
 };
 
 const actions = {
-  async forgotPassword({ state }, payload) {
+  async forgotPassword(context, payload) {
     const postData = {
       email: payload.data.email,
     };
