@@ -76,8 +76,8 @@ module.exports = {
       res.send(qappJson);
     } catch (err) {
       res.status(400).send({
-        error: "err",
+        error: err,
       });
     }
-  }
+  },
 };
