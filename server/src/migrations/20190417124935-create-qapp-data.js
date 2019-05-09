@@ -13,8 +13,8 @@ module.exports = {
       questionId: {
         type: Sequelize.INTEGER,
       },
-      dataEntryValue: {
-        type: Sequelize.STRING(4000),
+      value: {
+        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,

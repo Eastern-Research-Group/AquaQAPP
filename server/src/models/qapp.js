@@ -10,10 +10,5 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
 
-  /* associations defined here
-  Qapp.associate = (models) => {
-
-  }; */
-
   return Qapp;
 };
