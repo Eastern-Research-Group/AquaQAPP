@@ -54,6 +54,9 @@ const actions = {
     const qappRes = await axios.post('api/qapps/data', payload);
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
+  async generate() {
+    await axios.post('api/generate');
+  },
 };
 
 export default {

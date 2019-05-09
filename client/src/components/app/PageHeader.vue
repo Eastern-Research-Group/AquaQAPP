@@ -37,7 +37,7 @@
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <Button label="Generate" type="success" v-if="$route.name === 'navigate'" />
+              <Button label="Generate" type="success" v-if="$route.name === 'navigate'" @click.native="generateQapp" />
             </div>
           </div>
         </div>
@@ -63,6 +63,9 @@ export default {
     },
     logout() {
       this.$auth.logout();
+    },
+    generateQapp() {
+      this.$router.push({ name: 'generate', params: { id: this.$store.state.qapp.id } });
     },
   },
 };

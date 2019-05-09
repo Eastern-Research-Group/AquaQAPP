@@ -5,6 +5,7 @@ import Login from '@/views/Login';
 import Dashboard from '@/views/Dashboard';
 import Navigate from '@/views/Navigate';
 import Reset from '@/views/Reset';
+import Generate from '@/views/Generate';
 
 Vue.use(Router);
 
@@ -38,6 +39,12 @@ export default new Router({
       path: '/navigate/:id',
       name: 'navigate',
       component: Navigate,
+      meta: { auth: true },
+    },
+    {
+      path: '/generate/:id',
+      name: 'generate',
+      component: Generate,
       meta: { auth: true },
     },
   ],
