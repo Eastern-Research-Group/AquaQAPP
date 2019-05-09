@@ -2,7 +2,7 @@
   <div class="field is-pulled-right switch-container">
     <label for="markComplete" class="switch-label">Mark as Complete</label>
     <label class="switch">
-      <input id="markComplete" type="checkbox" />
+      <input id="markComplete" type="checkbox" @change="toggle($event)" />
       <span class="slider is-success"></span>
     </label>
   </div>
@@ -11,6 +11,14 @@
 <script>
 export default {
   name: 'MarkComplete',
+  methods: {
+    toggle(e) {
+      console.log(e.target.checked);
+      if (e.target.checked) {
+        this.$emit('markComplete');
+      }
+    },
+  },
 };
 </script>
 

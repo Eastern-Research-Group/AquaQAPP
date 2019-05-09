@@ -5,6 +5,17 @@ const state = {
   title: '',
   description: '',
   isFetching: false,
+  data: [],
+};
+
+const getters = {
+  qappData(state) {
+    const data = {};
+    state.data.forEach((datum) => {
+      data[datum.questionId] = datum.value;
+    });
+    return data;
+  },
 };
 
 const mutations = {
@@ -22,6 +33,7 @@ const mutations = {
     Object.keys(state).forEach((prop) => {
       state[prop] = null;
     });
+    state.data = [];
   },
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
@@ -37,11 +49,17 @@ const actions = {
     commit('SET_CURRENT_QAPP', qappRes.data);
     commit('SET_IS_FETCHING', false);
   },
+  async save({ commit }, payload) {
+    // TODO: implement error handling on each save
+    const qappRes = await axios.post('api/qapps/data', payload);
+    commit('SET_CURRENT_QAPP', qappRes.data);
+  },
 };
 
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions,
 };
