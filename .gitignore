@@ -16,3 +16,6 @@ docker-compose.yml
 
 # phpStorm
 .idea
+
+#vsCode
+.vscode
