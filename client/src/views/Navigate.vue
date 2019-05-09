@@ -13,6 +13,7 @@
           >
             <span class="step-number" v-if="project.showOutlineNumber">{{ section.outlineNumber }}</span>
             {{ section.outlineLabel }}
+            <span class="fa fa-check has-text-success" v-if="markedComplete.indexOf(section.outlineNumber) > -1"></span>
           </button>
         </li>
       </ul>
@@ -27,7 +28,10 @@
             :disabled="hasSaved"
             @click.native="saveData"
           />
-          <MarkComplete @markComplete="saveData" />
+          <MarkComplete
+            @markComplete="markComplete(question.outlineNumber)"
+            :complete="markedComplete.indexOf(question.outlineNumber) > -1"
+          />
           <div class="field" v-if="question.questionLabel === 'Locations'">
             <Locations />
           </div>
@@ -118,6 +122,7 @@ export default {
       shouldShowExample: false,
       hasSaved: false,
       qappData: {},
+      markedComplete: [],
     };
   },
   computed: {
@@ -166,6 +171,10 @@ export default {
     updateQappData(e, questionId) {
       this.hasSaved = false;
       this.qappData[questionId] = e.target.value;
+    },
+    markComplete(outlineNumber) {
+      this.markedComplete.push(outlineNumber);
+      this.saveData();
     },
     saveData() {
       Object.keys(this.qappData).forEach((qId) => {
@@ -225,5 +234,10 @@ textarea {
 
 .aq-save-btn {
   margin-left: 2em;
+}
+
+.fa-check {
+  font-size: 1.2em;
+  margin-left: 0.5em;
 }
 </style>

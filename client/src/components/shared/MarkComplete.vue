@@ -2,7 +2,7 @@
   <div class="field is-pulled-right switch-container">
     <label for="markComplete" class="switch-label">Mark as Complete</label>
     <label class="switch">
-      <input id="markComplete" type="checkbox" @change="toggle($event)" />
+      <input id="markComplete" type="checkbox" @change="toggle($event)" :checked="complete" />
       <span class="slider is-success"></span>
     </label>
   </div>
@@ -11,6 +11,16 @@
 <script>
 export default {
   name: 'MarkComplete',
+  props: {
+    markComplete: {
+      type: Function,
+      required: false,
+    },
+    complete: {
+      type: Boolean,
+      required: false,
+    },
+  },
   methods: {
     toggle(e) {
       console.log(e.target.checked);
