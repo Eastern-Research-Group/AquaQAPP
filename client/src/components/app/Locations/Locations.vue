@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Tabs :tabs="[{ id: 'list', name: 'List' }, { id: 'map', name: 'Map', isActive: true }]">
+    <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
         <LocationsTable
           :onAddLocationInfo="onAddLocationInfo"
@@ -20,62 +20,39 @@
       :title="this.shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
       <form @submit.prevent="addLocationData">
-        <div class="field">
-          <label for="locationId">Location ID</label>
-          <input id="locationId" class="input" type="text" v-model="locationId" required />
-        </div>
-        <div class="field">
-          <label for="locationName">Location Name</label>
-          <input id="locationName" class="input" type="text" v-model="locationName" required />
-        </div>
-        <div class="field">
-          <label for="longitude">Longitude</label>
-          <input id="longitude" class="input" type="text" v-model="longitude" required />
-        </div>
-        <div class="field">
-          <label for="latitude">Latitude</label>
-          <input id="latitude" class="input" type="text" v-model="latitude" required />
-        </div>
-        <div class="field">
-          <label for="waterType">Water Type</label>
-          <div class="control">
-            <label class="radio">
-              <input type="radio" name="waterType" value="fresh" v-model="waterType" />
-              Fresh
-            </label>
-            <label class="radio">
-              <input type="radio" name="waterType" value="brackish" v-model="waterType" />
-              Brackish
-            </label>
-            <label class="radio">
-              <input type="radio" name="waterType" value="salt" v-model="waterType" />
-              Salt
-            </label>
+        <div class="field" v-for="question in questions" :key="question.id">
+          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
+          <input
+            v-if="question.dataEntryType === 'text'"
+            :id="`question${question.id}`"
+            :value="pendingData[question.id]"
+            class="input"
+            type="text"
+            :placeholder="`Enter ${question.questionLabel}`"
+            required
+            @input="updateData($event, question.id)"
+          />
+          <div v-if="question.dataEntryType === 'select'" :class="`select ${!qappData[question.id] ? '' : ''}`">
+            <select
+              :id="`question${question.id}`"
+              class="select"
+              type="text"
+              :placeholder="`Enter ${question.questionLabel}`"
+              @change="updateData($event, question.id)"
+              required
+            >
+              <option value="" disabled selected hidden>Select {{ question.questionLabel }}...</option>
+              <option value="test1">Test 1</option>
+              <option value="test2">Test 2</option>
+            </select>
           </div>
         </div>
-        <div class="field">
-          <label for="concerns">Concerns</label>
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox" name="concerns" value="quality" v-model="concerns" />
-              Physical/Chemical Water Quality
-            </label>
-            <label class="checkbox">
-              <input type="checkbox" name="concerns" value="benthic" v-model="concerns" />
-              Benthic
-            </label>
-            <label class="checkbox">
-              <input type="checkbox" name="concerns" value="recreation" v-model="concerns" />
-              Recreation
-            </label>
-            <label class="checkbox">
-              <input type="checkbox" name="concerns" value="other" v-model="concerns" />
-              Other
-            </label>
-          </div>
-        </div>
-        <Button v-if="!shouldShowEdit" label="Add" type="success" submit />
-        <Button v-if="shouldShowEdit" label="Edit" type="primary" submit />
+        <Button
+          v-if="!shouldShowEdit"
+          :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
+          :type="shouldShowEdit ? 'primary' : 'success'"
+          submit
+        />
       </form>
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
@@ -105,25 +82,55 @@ import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
 
 export default {
+  props: {
+    questions: {
+      type: Array,
+      required: true,
+    },
+  },
   components: { Map, SideNav, Tabs, LocationsTable, Alert, Button },
   data() {
     return {
-      isAddingLocation: false,
-      isEnteringLocationInfo: false,
-      locationId: '',
-      locationName: '',
-      longitude: null,
-      latitude: null,
-      waterType: null,
-      concerns: [],
       markers: [],
       map: null,
+      isAddingLocation: false,
+      isEnteringLocationInfo: false,
       shouldShowDelete: false,
       shouldShowEdit: false,
       shouldDeleteAll: false,
       shouldDeleteOne: false,
-      title: '',
+      latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
+      lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
+      qappData: {},
+      pendingData: {},
     };
+  },
+  mounted() {
+    // Get latest qapp data from getter in order to pre-populate markers
+    this.qappData = this.$store.getters['qapp/qappData'];
+
+    // Add markers to map if location data already exists
+    let locations = [];
+    if (Array.isArray(this.qappData[this.latQuestionId])) {
+      locations = this.qappData[this.latQuestionId];
+    } else if (this.qappData[this.latQuestionId]) {
+      locations = [this.qappData[this.latQuestionId]];
+    }
+    locations.forEach((lat, index) => {
+      const mapData = {};
+      this.questions.forEach((q) => {
+        mapData[q.questionLabel] = this.qappData[q.id][index];
+      });
+      this.markers.push({
+        ...mapData,
+        latLng: [
+          parseFloat(this.qappData[this.latQuestionId][index]),
+          parseFloat(this.qappData[this.lngQuestionId][index]),
+        ],
+        lat: parseFloat(this.qappData[this.latQuestionId][index]),
+        lng: parseFloat(this.qappData[this.lngQuestionId][index]),
+      });
+    });
   },
   methods: {
     onAddLocation(map) {
@@ -135,24 +142,39 @@ export default {
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isEnteringLocationInfo = true;
-          this.longitude = e.latlng.lng;
-          this.latitude = e.latlng.lat;
+          this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
+          this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
         });
       } else if (this.map) {
         this.map.off('click');
       }
     },
+    updateData(e, qId) {
+      this.pendingData[qId] = e.target.value;
+    },
     addLocationData() {
-      if (this.latitude && this.longitude) {
-        this.markers.push({
-          title: this.locationName,
-          waterType: this.waterType,
-          concerns: this.concerns,
-          latLng: [this.latitude, this.longitude],
-          lat: this.latitude,
-          lng: this.longitude,
-        });
+      // Push data to markers array to display markers on map with corresponding info
+      const mapData = {};
+      this.questions.forEach((q) => {
+        mapData[q.questionLabel] = this.qappData[q.id];
+      });
+      this.markers.push({
+        ...mapData,
+        latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
+        lat: this.pendingData[this.latQuestionId],
+        lng: this.pendingData[this.lngQuestionId],
+      });
+
+      // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
+      let newValueId = 1;
+      if (Array.isArray(this.qappData[this.lngQuestionId])) {
+        newValueId = this.qappData[this.latQuestionId].length + 1;
+      } else if (this.qappData[this.latQuestionId]) {
+        newValueId = 2;
       }
+      this.$emit('saveData', null, newValueId, this.pendingData);
+
+      // Close location side nav and turn off click event for map
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
       if (this.map) this.map.off('click');

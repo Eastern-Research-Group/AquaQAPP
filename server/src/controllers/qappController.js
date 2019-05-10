@@ -7,7 +7,7 @@ module.exports = {
     try {
       const qapps = await Qapp.findAll({
         where: { userId: req.user.id, projectId: config.projectId },
-        include: [{ model: QappDatum, attributes: ['questionId', 'value'], as: 'data' }],
+        include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
       res.send(qapps);
     } catch (err) {
@@ -20,7 +20,7 @@ module.exports = {
     try {
       const qapp = await Qapp.findOne({
         where: { userId: req.user.id, projectId: config.projectId, id: req.params.id },
-        include: [{ model: QappDatum, attributes: ['questionId', 'value'], as: 'data' }],
+        include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
       res.send(qapp);
     } catch (err) {
@@ -59,7 +59,7 @@ module.exports = {
     try {
       // check if record already exists with same qapp id and question id
       let qappDatum = await QappDatum.findOne({
-        where: { qappId: req.body.qappId, questionId: req.body.questionId },
+        where: { qappId: req.body.qappId, questionId: req.body.questionId, valueId: req.body.valueId },
       });
       // if record exists, update, otherwise create
       if (qappDatum) {
@@ -70,7 +70,7 @@ module.exports = {
       // return updated QAPP with the latest saved data fields
       const qapp = await Qapp.findOne({
         where: { userId: req.user.id, projectId: config.projectId, id: req.body.qappId },
-        include: [{ model: QappDatum, attributes: ['questionId', 'value'], as: 'data' }],
+        include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
       const qappJson = qapp.toJSON();
       res.send(qappJson);

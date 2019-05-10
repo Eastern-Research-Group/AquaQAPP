@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     toggle(e) {
-      console.log(e.target.checked);
       if (e.target.checked) {
         this.$emit('markComplete');
       }

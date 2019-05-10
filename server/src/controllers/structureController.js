@@ -30,6 +30,7 @@ module.exports = {
     try {
       const questions = await ProjectOutlineQuestion.findAll({
         where: { projectId: config.projectId },
+        include: [{ model: ProjectOutline, attributes: ['outlineNumber', 'outlineLabel'], as: 'outline' }],
       });
       res.send(questions);
     } catch (err) {
