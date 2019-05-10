@@ -19,7 +19,10 @@
       <LTileLayer :url="url" />
       <template v-if="markers.length">
         <LMarker v-for="(marker, index) in markers" :key="index" :latLng="marker.latLng">
-          <LPopup> {{ marker.title }}<br /> </LPopup>
+          <LPopup>
+            {{ marker['Location ID'] }}<br />
+            {{ marker['Location Name'] }}<br />
+          </LPopup>
         </LMarker>
       </template>
     </LMap>

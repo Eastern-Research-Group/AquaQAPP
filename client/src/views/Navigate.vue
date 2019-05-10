@@ -20,22 +20,23 @@
     </aside>
     <section class="right column is-three-quarters">
       <form @submit.prevent>
-        <div class="field" v-for="question in currentQuestions" :key="question.id">
-          <Button
-            :label="hasSaved ? 'Saved' : 'Save'"
-            type="primary"
-            class="aq-save-btn is-pulled-right"
-            :disabled="hasSaved"
-            @click.native="saveData"
-          />
-          <MarkComplete
-            @markComplete="markComplete(question.outlineNumber)"
-            :complete="markedComplete.indexOf(question.outlineNumber) > -1"
-          />
-          <div class="field" v-if="question.questionLabel === 'Locations'">
-            <Locations />
-          </div>
-          <div class="field" v-else-if="question.questionLabel === 'Pollutants'">
+        <Button
+          :label="hasSaved ? 'Saved' : 'Save'"
+          type="primary"
+          class="aq-save-btn is-pulled-right"
+          :disabled="hasSaved"
+          @click.native="saveData"
+        />
+        <MarkComplete
+          @markComplete="markComplete(currentOutlineNum)"
+          :complete="markedComplete.indexOf(currentOutlineNum) > -1"
+        />
+        <div
+          class="field"
+          v-for="question in currentQuestions.filter((q) => q.outline.outlineLabel !== 'Monitoring Locations')"
+          :key="question.id"
+        >
+          <div class="field" v-if="question.questionLabel === 'Pollutants'">
             To be developed
           </div>
           <div v-else>
@@ -99,6 +100,9 @@
             <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
           </div>
         </div>
+        <div class="field" v-if="isLocationSectionSelected()">
+          <Locations :questions="currentQuestions" @updateQappData="updateQappData" @saveData="saveData" />
+        </div>
       </form>
     </section>
   </div>
@@ -129,7 +133,17 @@ export default {
     ...mapState('structure', ['projects', 'sections', 'questions']),
     currentQuestions() {
       if (this.shouldDisplayMap) return [];
-      return this.questions.filter((q) => q.outlineNumber === this.currentOutlineNum);
+      return this.questions
+        .filter((q) => q.outlineNumber === this.currentOutlineNum)
+        .sort((a, b) => {
+          if (a.outlineQuestionSort < b.outlineQuestionSort) {
+            return -1;
+          }
+          if (a.outlineQuestionSort > b.outlineQuestionSort) {
+            return 1;
+          }
+          return 0;
+        });
     },
   },
   async mounted() {
@@ -137,7 +151,7 @@ export default {
     if (this.$route.params.id !== this.$store.state.qapp.id) {
       await this.$store.dispatch('qapp/get', this.$route.params.id);
     }
-    /* Once QAPP is fetched, set this component's qappData to the saved database values, 
+    /* Once QAPP is fetched, set this component's qappData to the saved database values,
        so existing field entries are pre-filled from the database */
     this.qappData = this.$store.getters['qapp/qappData'];
     // Fetch structure data from DB to generate sections and questions on the fly
@@ -168,6 +182,13 @@ export default {
       }
       this.shouldShowExample = !this.shouldShowExample;
     },
+    isLocationSectionSelected() {
+      const currentSection = this.sections.find((s) => s.outlineNumber === this.currentOutlineNum);
+      if (currentSection) {
+        return currentSection.outlineLabel === 'Monitoring Locations';
+      }
+      return false;
+    },
     updateQappData(e, questionId) {
       this.hasSaved = false;
       this.qappData[questionId] = e.target.value;
@@ -176,12 +197,14 @@ export default {
       this.markedComplete.push(outlineNumber);
       this.saveData();
     },
-    saveData() {
-      Object.keys(this.qappData).forEach((qId) => {
+    saveData(e, valueId = null, data) {
+      // TODO: do not save if user has not changed any locations data
+      this.currentQuestions.forEach((q) => {
         this.$store.dispatch('qapp/save', {
           qappId: this.$store.state.qapp.id,
-          questionId: qId,
-          value: this.qappData[qId],
+          questionId: q.id,
+          value: data ? data[q.id] : this.qappData[q.id],
+          valueId,
         });
       });
       this.hasSaved = true;
@@ -225,7 +248,7 @@ textarea {
 }
 
 .right {
-  margin-left: 3%;
+  padding-left: 3em;
 }
 
 .btn-container {
