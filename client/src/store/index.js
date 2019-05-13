@@ -7,8 +7,6 @@ import user from './modules/user';
 
 Vue.use(Vuex);
 
-Vue.prototype.$projectId = 1;
-
 export default new Vuex.Store({
   modules: {
     structure,

@@ -1,13 +1,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('ProjectOutlines', {
+    return queryInterface.createTable('Outlines', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      projectId: {
         type: Sequelize.INTEGER,
       },
       outlineNumber: {
@@ -33,6 +30,6 @@ module.exports = {
     });
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('ProjectOutlines');
+    return queryInterface.dropTable('Outlines');
   },
 };

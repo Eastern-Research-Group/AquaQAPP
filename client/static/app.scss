@@ -44,5 +44,18 @@ html {
   margin-right: 0.2em;
 }
 
+// form style overrides
+.select {
+  width: 100%;
+
+    select:invalid {
+      color: hsla(0, 0%, 48%, 0.7);
+    }
+
+    select option {
+      color: #363636;
+    }
+}
+
 // lastly, import bulma
 @import '../../node_modules/bulma/bulma';

@@ -15,7 +15,8 @@
               <td colspan="4">No locations have been added. Add a location to continue.</td>
             </tr>
             <tr v-for="row in rows" :key="row.id" ref="row">
-              <td>{{ row.title }}</td>
+              <td>{{ row['Location ID'] }}</td>
+              <td>{{ row['Location Name'] }}</td>
               <td>{{ row.lat }}</td>
               <td>{{ row.lng }}</td>
               <td>
@@ -80,7 +81,11 @@ export default {
     return {
       fields: [
         {
-          key: 'location',
+          key: 'locationId',
+          label: 'Location ID',
+        },
+        {
+          key: 'locationName',
           label: 'Location Name',
         },
         {

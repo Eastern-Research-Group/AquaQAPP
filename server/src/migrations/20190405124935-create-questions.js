@@ -1,23 +1,35 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Projects', {
+    return queryInterface.createTable('Questions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      projectName: {
+      outlineNumber: {
         type: Sequelize.STRING,
       },
-      projectTitle: {
+      questionLabel: {
         type: Sequelize.STRING,
       },
-      projectDescription: {
+      dataEntryInstructions: {
+        type: Sequelize.STRING(1000),
+      },
+      dataEntryTip: {
+        type: Sequelize.STRING(2000),
+      },
+      dataEntryType: {
         type: Sequelize.STRING,
       },
-      showOutlineNumber: {
+      maxLength: {
+        type: Sequelize.INTEGER,
+      },
+      hasExamples: {
         type: Sequelize.BOOLEAN,
+      },
+      outlineQuestionSort: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -30,6 +42,6 @@ module.exports = {
     });
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('Projects');
+    return queryInterface.dropTable('Questions');
   },
 };

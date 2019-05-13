@@ -10,9 +10,26 @@ const state = {
 
 const getters = {
   qappData(state) {
+    // make sure multiple-entry fields are sorted properly before placing in arrays
+    const sortedData = state.data.sort((a, b) => {
+      if (a.valueId < b.valueId) {
+        return -1;
+      }
+      if (a.valueId > b.valueId) {
+        return 1;
+      }
+      return 0;
+    });
     const data = {};
-    state.data.forEach((datum) => {
-      data[datum.questionId] = datum.value;
+    // use questionId: value for single-entry fields, and questionId: [array of values] for multiple-entry
+    sortedData.forEach((datum) => {
+      if (Array.isArray(data[datum.questionId])) {
+        data[datum.questionId].push(datum.value);
+      } else if (datum.valueId) {
+        data[datum.questionId] = [datum.value];
+      } else {
+        data[datum.questionId] = datum.value;
+      }
     });
     return data;
   },

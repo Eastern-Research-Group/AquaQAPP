@@ -6,7 +6,6 @@ const mockStore = {
           {
             id: 1,
             title: 'Test QAPP 1',
-            projectId: 1,
             userId: 1,
             description: 'Test QAPP 1 description',
             createdAt: new Date().toDateString(),
@@ -15,7 +14,6 @@ const mockStore = {
           {
             id: 2,
             title: 'Test QAPP 2',
-            projectId: 1,
             userId: 1,
             description: 'Test QAPP 2 description',
             createdAt: new Date().toDateString(),

@@ -13,6 +13,9 @@ module.exports = {
       questionId: {
         type: Sequelize.INTEGER,
       },
+      valueId: {
+        type: Sequelize.INTEGER,
+      },
       value: {
         type: Sequelize.TEXT,
       },
