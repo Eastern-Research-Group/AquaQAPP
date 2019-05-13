@@ -1,8 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-  const ProjectOutlineQuestion = sequelize.define(
-    'ProjectOutlineQuestion',
+  const Question = sequelize.define(
+    'Question',
     {
-      projectId: DataTypes.INTEGER,
       outlineNumber: DataTypes.STRING,
       questionLabel: DataTypes.STRING,
       dataEntryInstructions: DataTypes.STRING,
@@ -14,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  /* ProjectOutlineQuestion.associate = function(models) {
+  /* Question.associate = function(models) {
     // associations can be defined here
   }; */
-  return ProjectOutlineQuestion;
+  return Question;
 };

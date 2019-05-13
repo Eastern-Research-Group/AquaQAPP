@@ -6,7 +6,7 @@ module.exports = {
   async index(req, res) {
     try {
       const qapps = await Qapp.findAll({
-        where: { userId: req.user.id, projectId: config.projectId },
+        where: { userId: req.user.id },
         include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
       res.send(qapps);
@@ -19,7 +19,7 @@ module.exports = {
   async show(req, res) {
     try {
       const qapp = await Qapp.findOne({
-        where: { userId: req.user.id, projectId: config.projectId, id: req.params.id },
+        where: { userId: req.user.id, id: req.params.id },
         include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
       res.send(qapp);
@@ -69,7 +69,7 @@ module.exports = {
       }
       // return updated QAPP with the latest saved data fields
       const qapp = await Qapp.findOne({
-        where: { userId: req.user.id, projectId: config.projectId, id: req.body.qappId },
+        where: { userId: req.user.id, id: req.body.qappId },
         include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
       const qappJson = qapp.toJSON();

@@ -2,7 +2,6 @@ module.exports = {
   up(queryInterface) {
     const records = [];
     records.push({
-      projectId: '1',
       outlineNumber: '1',
       outlineLevel: '1',
       outlineLabel: 'Prepared By',
@@ -11,7 +10,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '2',
       outlineLevel: '1',
       outlineLabel: 'Prepared For',
@@ -20,7 +18,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '3',
       outlineLevel: '1',
       outlineLabel: 'Project Organization/Personnel',
@@ -29,7 +26,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '4',
       outlineLevel: '1',
       outlineLabel: 'Problem Definition/Background',
@@ -38,7 +34,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '5',
       outlineLevel: '1',
       outlineLabel: 'Project Tasks',
@@ -47,7 +42,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '6',
       outlineLevel: '1',
       outlineLabel: 'Project Schedule',
@@ -56,7 +50,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '7',
       outlineLevel: '1',
       outlineLabel: 'Water Quality Concerns',
@@ -65,7 +58,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '8',
       outlineLevel: '1',
       outlineLabel: 'Monitoring Locations',
@@ -74,7 +66,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '9',
       outlineLevel: '1',
       outlineLabel: 'Parameters',
@@ -83,7 +74,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: '1',
       outlineNumber: '10',
       outlineLevel: '1',
       outlineLabel: 'Sample Design',
@@ -91,6 +81,6 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    return queryInterface.bulkInsert('ProjectOutlines', records);
+    return queryInterface.bulkInsert('Outlines', records);
   },
 };

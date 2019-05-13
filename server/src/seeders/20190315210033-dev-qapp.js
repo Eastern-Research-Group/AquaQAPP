@@ -9,7 +9,6 @@ module.exports = {
       defaults: {
         id: uuidv4(),
         title: 'Test QAPP',
-        projectId: 1,
         userId: 1,
         description: 'This is a test QAPP.',
         createdAt: new Date(),
