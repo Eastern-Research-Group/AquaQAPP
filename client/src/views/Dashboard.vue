@@ -134,7 +134,6 @@ export default {
     async handleSubmit() {
       await this.$store.dispatch('qapps/add', {
         userId: this.$auth.user().id,
-        projectId: this.$projectId,
         title: this.title,
         description: this.description,
       });

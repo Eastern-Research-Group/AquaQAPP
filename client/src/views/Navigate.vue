@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
     <aside class="menu column is-one-quarter">
-      <ul class="menu-list" v-for="project in projects" :key="project.id">
+      <ul class="menu-list">
         <li v-for="section in sections" :key="section.id">
           <button
             :class="
@@ -11,7 +11,7 @@
             "
             @click="changeSection(section.outlineNumber)"
           >
-            <span class="step-number" v-if="project.showOutlineNumber">{{ section.outlineNumber }}</span>
+            <span class="step-number" v-if="false">{{ section.outlineNumber }}</span>
             {{ section.outlineLabel }}
             <span class="fa fa-check has-text-success" v-if="markedComplete.indexOf(section.outlineNumber) > -1"></span>
           </button>
@@ -26,7 +26,7 @@
           class="aq-save-btn is-pulled-right"
           :disabled="hasSaved"
           @click.native="saveData"
-        />
+        />i
         <MarkComplete
           @markComplete="markComplete(currentOutlineNum)"
           :complete="markedComplete.indexOf(currentOutlineNum) > -1"
@@ -130,7 +130,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('structure', ['projects', 'sections', 'questions']),
+    ...mapState('structure', ['sections', 'questions']),
     currentQuestions() {
       if (this.shouldDisplayMap) return [];
       return this.questions
@@ -155,12 +155,11 @@ export default {
        so existing field entries are pre-filled from the database */
     this.qappData = this.$store.getters['qapp/qappData'];
     // Fetch structure data from DB to generate sections and questions on the fly
-    this.getProjects();
     this.getSections();
     this.getQuestions();
   },
   methods: {
-    ...mapActions('structure', ['getProjects', 'getSections', 'getQuestions']),
+    ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(outlineNumber) {
       this.shouldDisplayMap = false;
       this.hasSaved = false;

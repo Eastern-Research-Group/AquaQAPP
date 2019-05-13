@@ -14,7 +14,6 @@ module.exports = {
   authentication: {
     jwtSecret: process.env.JWT_SECRET || 'secret',
   },
-  projectId: 1,
   service: process.env.SERVICE_PROVIDER || 'Gmail',
   baseUrl: process.env.BASE_URL || 'http://localhost:8080',
 };

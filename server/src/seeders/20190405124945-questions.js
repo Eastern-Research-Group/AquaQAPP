@@ -2,7 +2,6 @@ module.exports = {
   up: (queryInterface) => {
     const records = [];
     records.push({
-      projectId: 1,
       outlineNumber: '1',
       questionLabel: 'Prepared By',
       dataEntryInstructions: '',
@@ -15,7 +14,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '2',
       questionLabel: 'Prepared For',
       dataEntryInstructions: '',
@@ -28,7 +26,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '4',
       questionLabel: 'Problem Definition',
       dataEntryInstructions:
@@ -43,7 +40,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '5',
       questionLabel: 'Project Description',
       dataEntryInstructions: '',
@@ -56,7 +52,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Location ID',
       dataEntryInstructions: '',
@@ -69,7 +64,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Location Name',
       dataEntryInstructions: '',
@@ -82,7 +76,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Location Latitude',
       dataEntryInstructions: '',
@@ -95,7 +88,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Location Longitude',
       dataEntryInstructions: '',
@@ -108,7 +100,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Location Type',
       dataEntryInstructions: '',
@@ -121,7 +112,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Horizontal Collection Method',
       dataEntryInstructions: '',
@@ -134,7 +124,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '8',
       questionLabel: 'Horizontal Coordinate Reference System',
       dataEntryInstructions: '',
@@ -147,7 +136,6 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      projectId: 1,
       outlineNumber: '9',
       questionLabel: 'Pollutants',
       dataEntryInstructions: '',
@@ -159,6 +147,6 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    return queryInterface.bulkInsert('ProjectOutlineQuestions', records);
+    return queryInterface.bulkInsert('Questions', records);
   },
 };

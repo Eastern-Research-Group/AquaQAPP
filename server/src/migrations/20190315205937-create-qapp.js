@@ -6,11 +6,6 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV1,
       },
-      projectId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: { model: 'Projects', key: 'id' },
-      },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
