@@ -6,6 +6,7 @@ const state = {
   description: '',
   isFetching: false,
   data: [],
+  doc: null,
 };
 
 const getters = {
@@ -71,8 +72,14 @@ const actions = {
     const qappRes = await axios.post('api/qapps/data', payload);
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
-  async generate() {
-    await axios.post('api/generate');
+  async generate({ commit, state }) {
+    const doc = await axios({
+      method: 'post',
+      url: 'api/generate',
+      responseType: 'arraybuffer',
+      data: state,
+    });
+    commit('SET_DOC', doc.data);
   },
 };
 
