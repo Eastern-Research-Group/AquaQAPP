@@ -1,6 +1,5 @@
 const uuidv4 = require('uuid/v4');
 const { Qapp, QappDatum } = require('../models');
-const config = require('../config/config');
 
 module.exports = {
   async index(req, res) {

@@ -1,11 +1,9 @@
 const { Outline, Question } = require('../models');
-const config = require('../config/config');
 
 module.exports = {
   async sections(req, res) {
     try {
-      const sections = await Outline.findAll({
-      });
+      const sections = await Outline.findAll({});
       res.send(sections);
     } catch (err) {
       res.status(400).send({

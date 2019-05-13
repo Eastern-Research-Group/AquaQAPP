@@ -26,7 +26,7 @@
           class="aq-save-btn is-pulled-right"
           :disabled="hasSaved"
           @click.native="saveData"
-        />i
+        />
         <MarkComplete
           @markComplete="markComplete(currentOutlineNum)"
           :complete="markedComplete.indexOf(currentOutlineNum) > -1"
