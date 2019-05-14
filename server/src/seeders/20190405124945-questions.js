@@ -52,6 +52,18 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
+      outlineNumber: '7',
+      questionLabel: 'Water Quality Concerns',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: '',
+      maxLength: '0',
+      hasExamples: false,
+      outlineQuestionSort: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
       outlineNumber: '8',
       questionLabel: 'Location ID',
       dataEntryInstructions: '',
