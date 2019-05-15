@@ -36,8 +36,11 @@
           v-for="question in currentQuestions.filter((q) => q.outline.outlineLabel !== 'Monitoring Locations')"
           :key="question.id"
         >
-          <div class="field" v-if="question.questionLabel === 'Pollutants'">
-            To be developed
+          <div class="field" v-if="question.questionLabel === 'Water Quality Concerns'">
+            <Concerns />
+          </div>
+          <div class="field parameters" v-if="question.questionLabel === 'Pollutants'">
+            <Parameters />
           </div>
           <div v-else>
             <label class="label is-size-4">{{ question.questionLabel }}</label>
@@ -116,9 +119,11 @@ import Button from '@/components/shared/Button';
 import ExampleModal from '@/components/shared/ExampleModal';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
+import Concerns from '@/components/app/Concerns';
+import Parameters from '@/components/app/Parameters';
 
 export default {
-  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete },
+  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Concerns, Parameters },
   data() {
     return {
       currentOutlineNum: '1',
@@ -261,5 +266,9 @@ textarea {
 .fa-check {
   font-size: 1.2em;
   margin-left: 0.5em;
+}
+
+.parameters {
+  display: inline-flex !important;
 }
 </style>
