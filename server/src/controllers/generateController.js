@@ -9,6 +9,7 @@ module.exports = {
       const buffer = await createReport({
         template: file,
         output: 'buffer',
+        data: req.body,
       });
 
       res.type('application/octet-stream');

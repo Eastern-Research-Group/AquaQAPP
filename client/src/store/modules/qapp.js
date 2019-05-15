@@ -56,6 +56,9 @@ const mutations = {
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
   },
+  SET_DOC(state, value) {
+    state.doc = value;
+  },
 };
 
 const actions = {
@@ -73,11 +76,14 @@ const actions = {
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
   async generate({ commit, state }) {
+    const qappRes = await axios.get(`api/qapps/${state.id}`);
     const doc = await axios({
       method: 'post',
       url: 'api/generate',
       responseType: 'arraybuffer',
-      data: state,
+      data: {
+        qapp: qappRes.data,
+      },
     });
     commit('SET_DOC', doc.data);
   },
