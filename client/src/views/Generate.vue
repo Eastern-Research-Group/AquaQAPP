@@ -38,7 +38,7 @@ export default {
       link.href = data;
       link.download = 'test.docx';
       link.click();
-      setTimeout(function() {
+      setTimeout(function firefoxDelay() {
         // For Firefox it is necessary to delay revoking the ObjectURL
         window.URL.revokeObjectURL(data);
       }, 100);
