@@ -6,6 +6,7 @@ const state = {
   description: '',
   isFetching: false,
   data: [],
+  doc: null,
 };
 
 const getters = {
@@ -55,6 +56,9 @@ const mutations = {
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
   },
+  SET_DOC(state, value) {
+    state.doc = value;
+  },
 };
 
 const actions = {
@@ -70,6 +74,18 @@ const actions = {
     // TODO: implement error handling on each save
     const qappRes = await axios.post('api/qapps/data', payload);
     commit('SET_CURRENT_QAPP', qappRes.data);
+  },
+  async generate({ commit, state }) {
+    const qappRes = await axios.get(`api/qapps/${state.id}`);
+    const doc = await axios({
+      method: 'post',
+      url: 'api/generate',
+      responseType: 'arraybuffer',
+      data: {
+        qapp: qappRes.data,
+      },
+    });
+    commit('SET_DOC', doc.data);
   },
 };
 

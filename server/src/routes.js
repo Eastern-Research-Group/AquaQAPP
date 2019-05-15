@@ -4,6 +4,7 @@ const authenticationController = require('./controllers/authenticationController
 const authenticationControllerPolicy = require('./middleware/authenticationControllerPolicy');
 const qappController = require('./controllers/qappController');
 const structureController = require('./controllers/structureController');
+const generateController = require('./controllers/generateController');
 const isAuthenticated = require('./middleware/isAuthenticated');
 
 module.exports = (app) => {
@@ -29,4 +30,7 @@ module.exports = (app) => {
   // structure (projects/outlines/questions) routes
   app.get('/api/sections', isAuthenticated, structureController.sections);
   app.get('/api/questions', isAuthenticated, structureController.questions);
+
+  // generate routes
+  app.post('/api/generate', isAuthenticated, generateController.generate);
 };
