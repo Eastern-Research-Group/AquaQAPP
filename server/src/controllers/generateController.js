@@ -18,7 +18,7 @@ module.exports = {
       res.header('Content-disposition', 'inline; filename=SectionA.docx');
 
       res.write(buffer, 'binary');
-      res.status(200).end(null, 'binary');
+      return res.status(200).end(null, 'binary');
     } catch (error) {
       return res.status(500).send({
         error: `An error has occurred trying to log in: ${error}`,

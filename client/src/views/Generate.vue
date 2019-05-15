@@ -20,7 +20,7 @@ export default {
     showFile(blob) {
       // It is necessary to create a new blob object with mime-type explicitly set
       // otherwise only Chrome works like it should
-      let newBlob = new Blob([blob], {
+      const newBlob = new Blob([blob], {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
 
@@ -34,7 +34,7 @@ export default {
       // For other browsers:
       // Create a link pointing to the ObjectURL containing the blob.
       const data = window.URL.createObjectURL(newBlob);
-      let link = document.createElement('a');
+      const link = document.createElement('a');
       link.href = data;
       link.download = 'test.docx';
       link.click();
