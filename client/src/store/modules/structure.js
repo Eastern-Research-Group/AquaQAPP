@@ -3,6 +3,7 @@ import axios from 'axios';
 const state = {
   sections: [],
   questions: [],
+  concerns: [],
   isFetching: false,
 };
 
@@ -12,6 +13,9 @@ const mutations = {
   },
   SET_QUESTIONS(state, value) {
     state.questions = value;
+  },
+  SET_CONCERNS(state, value) {
+    state.concerns = value;
   },
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
@@ -33,6 +37,14 @@ const actions = {
 
     const questions = await axios.get('api/questions');
     commit('SET_QUESTIONS', questions.data);
+    commit('SET_IS_FETCHING', false);
+  },
+  async getConcerns({ commit }) {
+    commit('SET_CONCERNS', []);
+    commit('SET_IS_FETCHING', true);
+
+    const concerns = await axios.get('api/concerns');
+    commit('SET_CONCERNS', concerns.data);
     commit('SET_IS_FETCHING', false);
   },
 };
