@@ -7,7 +7,7 @@
     </div>
     <div class="columns">
       <div class="column is-two-thirds">
-        <div class="tile" v-for="concern in concerns">
+        <div class="tile" v-for="concern in concerns" :key="concern.id">
           <input
             class="is-checkradio is-block is-info"
             :id="concern.concernCode"
@@ -38,6 +38,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+
 export default {
   name: 'Concerns',
   computed: {
