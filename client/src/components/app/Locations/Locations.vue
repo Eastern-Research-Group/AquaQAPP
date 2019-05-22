@@ -6,8 +6,8 @@
           :onAddLocationInfo="onAddLocationInfo"
           :rows="markers"
           :onEditRow="onEditRowInfo"
-          :onDeleteRow="onDeleteRowInfo"
-          :onDeleteAll="onDeleteAllRows"
+          :onDeleteRow="onDeleteSingle"
+          :onDeleteAll="onDeleteAll"
         />
       </template>
       <template v-slot:map>
@@ -58,7 +58,7 @@
     <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
       <template #default="props">
         <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all locations?`" type="warning" />
-        <Alert v-if="shouldDeleteOne" :message="`Are you sure you want to delete ${locationName}?`" type="warning" />
+        <Alert v-if="shouldDeleteSingle" :message="`Are you sure you want to delete ${locationName}?`" type="warning" />
         <hr />
         <div class="field is-grouped">
           <div class="control">
@@ -98,11 +98,12 @@ export default {
       shouldShowDelete: false,
       shouldShowEdit: false,
       shouldDeleteAll: false,
-      shouldDeleteOne: false,
+      shouldDeleteSingle: false,
       latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
       lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
       qappData: {},
       pendingData: {},
+      locationName: '',
     };
   },
   mounted() {
@@ -114,7 +115,7 @@ export default {
     if (Array.isArray(this.qappData[this.latQuestionId])) {
       locations = this.qappData[this.latQuestionId];
     } else if (this.qappData[this.latQuestionId]) {
-      locations = [this.qappData[this.latQuestionId]];
+      locations = [this.qappData[this.latQuestiponId]];
     }
     locations.forEach((lat, index) => {
       const mapData = {};
@@ -158,12 +159,6 @@ export default {
       this.questions.forEach((q) => {
         mapData[q.questionLabel] = this.qappData[q.id];
       });
-      this.markers.push({
-        ...mapData,
-        latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
-        lat: this.pendingData[this.latQuestionId],
-        lng: this.pendingData[this.lngQuestionId],
-      });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
       let newValueId = 1;
@@ -172,6 +167,15 @@ export default {
       } else if (this.qappData[this.latQuestionId]) {
         newValueId = 2;
       }
+
+      this.markers.push({
+        ...mapData,
+        latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
+        lat: this.pendingData[this.latQuestionId],
+        lng: this.pendingData[this.lngQuestionId],
+        valueId: newValueId,
+      });
+
       this.$emit('saveData', null, newValueId, this.pendingData);
 
       // Close location side nav and turn off click event for map
@@ -186,19 +190,21 @@ export default {
       this.longitude = null;
       this.shouldShowEdit = false;
     },
-    onDeleteRowInfo() {
-      this.shouldShowDelete = true;
-      this.shouldDeleteOne = true;
-      this.shouldDeleteAll = false;
-    },
     onEditRowInfo() {
       this.isEnteringLocationInfo = true;
       this.shouldShowEdit = true;
     },
-    onDeleteAllRows() {
+    onDeleteSingle(location) {
+      // TODO: consider using "parentId" instead of "valueId" in database
+      this.locationName = location['Location Name'];
+      this.shouldShowDelete = true;
+      this.shouldDeleteSingle = true;
+      this.shouldDeleteAll = false;
+    },
+    onDeleteAll() {
       this.shouldShowDelete = true;
       this.shouldDeleteAll = true;
-      this.shouldDeleteOne = false;
+      this.shouldDeleteSingle = false;
     },
   },
 };
