@@ -10,6 +10,7 @@ const mockStore = {
             description: 'Test QAPP 1 description',
             createdAt: new Date().toDateString(),
             updatedAt: new Date().toDateString(),
+            completedSections: [],
           },
           {
             id: 2,
@@ -18,6 +19,7 @@ const mockStore = {
             description: 'Test QAPP 2 description',
             createdAt: new Date().toDateString(),
             updatedAt: new Date().toDateString(),
+            completedSections: [],
           },
         ],
         isFetching: false,
@@ -35,12 +37,12 @@ const mockStore = {
       state: {
         title: '',
         description: '',
-        currentQapp: null,
+        completedSections: [],
       },
       mutations: {
-        SET_TITLE: jest.fn(),
-        SET_DESCRIPTION: jest.fn(),
+        SET_FIELD: jest.fn(),
         SET_CURRENT_QAPP: jest.fn(),
+        CLEAR_CURRENT_QAPP: jest.fn(),
       },
       actions: {
         add: jest.fn(),
