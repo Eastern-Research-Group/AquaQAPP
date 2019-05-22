@@ -157,7 +157,7 @@ export default {
       // Push data to markers array to display markers on map with corresponding info
       const mapData = {};
       this.questions.forEach((q) => {
-        mapData[q.questionLabel] = this.qappData[q.id];
+        mapData[q.questionLabel] = this.pendingData[q.id];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
