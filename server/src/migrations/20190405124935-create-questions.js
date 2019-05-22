@@ -7,7 +7,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      outlineNumber: {
+      sectionNumber: {
         type: Sequelize.STRING,
       },
       questionLabel: {
@@ -28,7 +28,7 @@ module.exports = {
       hasExamples: {
         type: Sequelize.BOOLEAN,
       },
-      outlineQuestionSort: {
+      sectionQuestionSort: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

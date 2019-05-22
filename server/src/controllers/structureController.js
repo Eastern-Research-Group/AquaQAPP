@@ -1,9 +1,9 @@
-const { Outline, Question, refConcerns } = require('../models');
+const { Section, Question, refConcerns } = require('../models');
 
 module.exports = {
   async sections(req, res) {
     try {
-      const sections = await Outline.findAll({});
+      const sections = await Section.findAll({});
       res.send(sections);
     } catch (err) {
       res.status(400).send({
@@ -14,7 +14,7 @@ module.exports = {
   async questions(req, res) {
     try {
       const questions = await Question.findAll({
-        include: [{ model: Outline, attributes: ['outlineNumber', 'outlineLabel'], as: 'outline' }],
+        include: [{ model: Section, attributes: ['sectionNumber', 'sectionLabel'], as: 'section' }],
       });
       res.send(questions);
     } catch (err) {
@@ -30,20 +30,6 @@ module.exports = {
     } catch (err) {
       res.status(400).send({
         err: 'Questions data unavailable.',
-      });
-    }
-  },
-  // TODO: maybe move to qappController?
-  async completedSections(req, res) {
-    try {
-      // TODO: confirm user has access to this QAPP first?
-      const sections = await QappOutline.findAll({
-        where: { qappId: req.params.id },
-      });
-      res.send(sections);
-    } catch (err) {
-      res.status(400).send({
-        err: `Data unavailable. ${err}`,
       });
     }
   },

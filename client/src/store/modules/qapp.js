@@ -7,6 +7,7 @@ const state = {
   isFetching: false,
   data: [],
   doc: null,
+  completedSections: [],
 };
 
 const getters = {
@@ -34,6 +35,10 @@ const getters = {
     });
     return data;
   },
+  progress(state) {
+    // 10 possible sections to complete, so get number of completed sections and multiply by 10 for percentage
+    return state.completedSections.length * 10;
+  },
 };
 
 const mutations = {
@@ -51,7 +56,9 @@ const mutations = {
     Object.keys(state).forEach((prop) => {
       state[prop] = null;
     });
+    // set special fields to empty arrays to avoid logic errors
     state.data = [];
+    state.completedSections = [];
   },
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
@@ -72,7 +79,23 @@ const actions = {
   },
   async getCompletedSections({ commit }, id) {
     const response = await axios.get(`api/completed-sections/${id}`);
-    commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.outlineId) });
+    commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
+  },
+  async addCompletedSection({ commit, state }, sectionId) {
+    const response = await axios.post(`api/completed-sections`, {
+      qappId: state.id,
+      sectionId,
+    });
+    commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
+  },
+  async deleteCompletedSection({ commit, state }, sectionId) {
+    const response = await axios.delete(`api/completed-sections`, {
+      data: {
+        qappId: state.id,
+        sectionId,
+      },
+    });
+    commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
   },
   async save({ commit }, payload) {
     // TODO: implement error handling on each save

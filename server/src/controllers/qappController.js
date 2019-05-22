@@ -1,5 +1,5 @@
 const uuidv4 = require('uuid/v4');
-const { Qapp, QappDatum } = require('../models');
+const { CompletedQappSection, Qapp, QappDatum } = require('../models');
 
 module.exports = {
   async index(req, res) {
@@ -34,8 +34,7 @@ module.exports = {
         ...req.body,
         id: uuidv4(),
       });
-      const qappJson = qapp.toJSON();
-      res.send(qappJson);
+      res.send(qapp);
     } catch (err) {
       res.status(400).send({
         error: err,
@@ -47,7 +46,7 @@ module.exports = {
       const qapp = await Qapp.destroy({
         where: { id: req.body.id },
       });
-      res.json(qapp);
+      res.send(qapp);
     } catch (err) {
       res.status(400).send({
         error: err,
@@ -71,8 +70,48 @@ module.exports = {
         where: { userId: req.user.id, id: req.body.qappId },
         include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
       });
-      const qappJson = qapp.toJSON();
-      res.send(qappJson);
+      res.send(qapp);
+    } catch (err) {
+      res.status(400).send({
+        error: err,
+      });
+    }
+  },
+  async completedSections(req, res) {
+    try {
+      // TODO: confirm user has access to this QAPP first?
+      const sections = await CompletedQappSection.findAll({
+        where: { qappId: req.params.id },
+      });
+      res.send(sections);
+    } catch (err) {
+      res.status(400).send({
+        err: `Data unavailable. ${err}`,
+      });
+    }
+  },
+  async addCompletedSection(req, res) {
+    try {
+      await CompletedQappSection.create(req.body);
+      const sections = await CompletedQappSection.findAll({
+        where: { qappId: req.body.qappId },
+      });
+      res.send(sections);
+    } catch (err) {
+      res.status(400).send({
+        err: `Data unavailable. ${err}`,
+      });
+    }
+  },
+  async deleteCompletedSection(req, res) {
+    try {
+      await CompletedQappSection.destroy({
+        where: { qappId: req.body.qappId, sectionId: req.body.sectionId },
+      });
+      const sections = await CompletedQappSection.findAll({
+        where: { qappId: req.body.qappId },
+      });
+      res.send(sections);
     } catch (err) {
       res.status(400).send({
         error: err,

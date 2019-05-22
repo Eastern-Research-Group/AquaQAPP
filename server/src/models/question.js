@@ -2,14 +2,14 @@ module.exports = (sequelize, DataTypes) => {
   const Question = sequelize.define(
     'Question',
     {
-      outlineNumber: DataTypes.STRING,
+      sectionNumber: DataTypes.STRING,
       questionLabel: DataTypes.STRING,
       dataEntryInstructions: DataTypes.STRING,
       dataEntryTip: DataTypes.STRING,
       dataEntryType: DataTypes.STRING,
       maxLength: DataTypes.INTEGER,
       hasExamples: DataTypes.BOOLEAN,
-      outlineQuestionSort: DataTypes.INTEGER,
+      sectionQuestionSort: DataTypes.INTEGER,
     },
     {}
   );
