@@ -20,18 +20,19 @@ fs.readdirSync(__dirname)
 // Create sequelize associations
 db.Qapp.hasMany(db.QappDatum, { foreignKey: 'qappId', as: 'data' });
 db.QappDatum.belongsTo(db.Question, { foreignKey: 'questionId', as: 'question' });
-db.Outline.belongsTo(db.Question, {
-  foreignKey: 'outlineNumber',
-  sourceKey: 'outlineNumber',
-  targetKey: 'outlineNumber',
-  as: 'outline',
+db.Section.belongsTo(db.Question, {
+  foreignKey: 'sectionNumber',
+  sourceKey: 'sectionNumber',
+  targetKey: 'sectionNumber',
+  as: 'section',
 });
-db.Question.belongsTo(db.Outline, {
-  foreignKey: 'outlineNumber',
-  sourceKey: 'outlineNumber',
-  targetKey: 'outlineNumber',
-  as: 'outline',
+db.Question.belongsTo(db.Section, {
+  foreignKey: 'sectionNumber',
+  sourceKey: 'sectionNumber',
+  targetKey: 'sectionNumber',
+  as: 'section',
 });
+db.Qapp.hasMany(db.CompletedQappSection, { foreignKey: 'qappId', as: 'completedSections' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

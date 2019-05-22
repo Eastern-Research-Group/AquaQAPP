@@ -30,7 +30,7 @@
                       type="danger"
                       icon="trash-alt"
                       :shouldShowIcon="true"
-                      @click.native="onDeleteRow"
+                      @click.native="onDeleteRow(row)"
                     />
                   </div>
                 </div>

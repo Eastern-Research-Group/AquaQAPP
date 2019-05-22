@@ -1,22 +1,22 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Outlines', {
+    return queryInterface.createTable('Sections', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      outlineNumber: {
+      sectionNumber: {
         type: Sequelize.STRING,
       },
-      outlineLevel: {
+      sectionLevel: {
         type: Sequelize.STRING,
       },
-      outlineLabel: {
+      sectionLabel: {
         type: Sequelize.STRING,
       },
-      outlineSort: {
+      sectionSort: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
@@ -30,6 +30,6 @@ module.exports = {
     });
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('Outlines');
+    return queryInterface.dropTable('Sections');
   },
 };

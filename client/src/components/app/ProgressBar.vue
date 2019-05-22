@@ -1,14 +1,20 @@
 <template>
   <section class="progress-bar">
     <div class="container has-text-white">
-      <progress class="progress is-success is-pulled-right" value="60" max="100">60%</progress>
-      <span class="is-pulled-right">Project Progress: 60%</span>
+      <progress class="progress is-success is-pulled-right" :value="progress" max="100">{{ progress }}%</progress>
+      <span class="is-pulled-right">Project Progress: {{ progress }}%</span>
     </div>
   </section>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from 'vuex';
+
+export default {
+  computed: {
+    ...mapGetters('qapp', ['progress']),
+  },
+};
 </script>
 
 <style>

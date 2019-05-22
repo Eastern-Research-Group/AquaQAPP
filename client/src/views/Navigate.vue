@@ -6,14 +6,14 @@
           <button
             :class="
               `button is-text has-text-white ${
-                currentOutlineNum === section.outlineNumber ? 'has-text-weight-bold' : ''
+                currentSectionNum === section.sectionNumber ? 'has-text-weight-bold' : ''
               }`
             "
-            @click="changeSection(section.outlineNumber)"
+            @click="changeSection(section)"
           >
-            <span class="step-number" v-if="false">{{ section.outlineNumber }}</span>
-            {{ section.outlineLabel }}
-            <span class="fa fa-check has-text-success" v-if="markedComplete.indexOf(section.outlineNumber) > -1"></span>
+            <span class="step-number" v-if="false">{{ section.sectionNumber }}</span>
+            {{ section.sectionLabel }}
+            <span class="fa fa-check has-text-success" v-if="completedSections.indexOf(section.id) > -1"></span>
           </button>
         </li>
       </ul>
@@ -28,12 +28,12 @@
           @click.native="saveData"
         />
         <MarkComplete
-          @markComplete="markComplete(currentOutlineNum)"
-          :complete="markedComplete.indexOf(currentOutlineNum) > -1"
+          @markComplete="markComplete(currentSectionNum)"
+          :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
         />
         <div
           class="field"
-          v-for="question in currentQuestions.filter((q) => q.outline.outlineLabel !== 'Monitoring Locations')"
+          v-for="question in currentQuestions.filter((q) => q.section.sectionLabel !== 'Monitoring Locations')"
           :key="question.id"
         >
           <div class="field" v-if="question.questionLabel === 'Water Quality Concerns'">
@@ -126,25 +126,26 @@ export default {
   components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Concerns, Parameters },
   data() {
     return {
-      currentOutlineNum: '1',
+      currentSection: {},
+      currentSectionNum: '1',
       shouldDisplayMap: false,
       shouldShowExample: false,
       hasSaved: false,
       qappData: {},
-      markedComplete: [],
     };
   },
   computed: {
+    ...mapState('qapp', ['completedSections']),
     ...mapState('structure', ['sections', 'questions']),
     currentQuestions() {
       if (this.shouldDisplayMap) return [];
       return this.questions
-        .filter((q) => q.outlineNumber === this.currentOutlineNum)
+        .filter((q) => q.sectionNumber === this.currentSectionNum)
         .sort((a, b) => {
-          if (a.outlineQuestionSort < b.outlineQuestionSort) {
+          if (a.sectionQuestionSort < b.sectionQuestionSort) {
             return -1;
           }
-          if (a.outlineQuestionSort > b.outlineQuestionSort) {
+          if (a.sectionQuestionSort > b.sectionQuestionSort) {
             return 1;
           }
           return 0;
@@ -160,15 +161,17 @@ export default {
        so existing field entries are pre-filled from the database */
     this.qappData = this.$store.getters['qapp/qappData'];
     // Fetch structure data from DB to generate sections and questions on the fly
-    this.getSections();
     this.getQuestions();
+    await this.getSections();
+    this.currentSection = this.sections ? this.sections[0] : {};
   },
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
-    changeSection(outlineNumber) {
+    changeSection(section) {
       this.shouldDisplayMap = false;
       this.hasSaved = false;
-      this.currentOutlineNum = outlineNumber;
+      this.currentSection = section;
+      this.currentSectionNum = section.sectionNumber;
     },
     toggleShouldShowExample() {
       this.shouldShowExample = !this.shouldShowExample;
@@ -187,9 +190,9 @@ export default {
       this.shouldShowExample = !this.shouldShowExample;
     },
     isLocationSectionSelected() {
-      const currentSection = this.sections.find((s) => s.outlineNumber === this.currentOutlineNum);
+      const currentSection = this.sections.find((s) => s.sectionNumber === this.currentSectionNum);
       if (currentSection) {
-        return currentSection.outlineLabel === 'Monitoring Locations';
+        return currentSection.sectionLabel === 'Monitoring Locations';
       }
       return false;
     },
@@ -197,8 +200,13 @@ export default {
       this.hasSaved = false;
       this.qappData[questionId] = e.target.value;
     },
-    markComplete(outlineNumber) {
-      this.markedComplete.push(outlineNumber);
+    markComplete(sectionNumber) {
+      const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
+      if (this.completedSections.indexOf(sectionId) > -1) {
+        this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
+      } else {
+        this.$store.dispatch('qapp/addCompletedSection', sectionId);
+      }
       this.saveData();
     },
     saveData(e, valueId = null, data) {

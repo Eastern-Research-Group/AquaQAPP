@@ -33,7 +33,7 @@
               <td>{{ qapp.title }}</td>
               <td>{{ qapp.description }}</td>
               <td>{{ qapp.updatedAt.substr(0, 10) }}</td>
-              <td>Pending</td>
+              <td>{{ qapp.completedSections.length * 10 }}%</td>
               <td>
                 <div class="field is-grouped">
                   <div class="control">

@@ -27,7 +27,11 @@ module.exports = (app) => {
   app.post('/api/qapps/data', isAuthenticated, qappController.saveData);
   app.delete('/api/qapps', isAuthenticated, qappController.destroy);
 
-  // structure (projects/outlines/questions) routes
+  // qapp section routes
+  app.post('/api/completed-sections', isAuthenticated, qappController.addCompletedSection);
+  app.delete('/api/completed-sections', isAuthenticated, qappController.deleteCompletedSection);
+
+  // structure (projects/sections/questions) routes
   app.get('/api/sections', isAuthenticated, structureController.sections);
   app.get('/api/questions', isAuthenticated, structureController.questions);
   app.get('/api/concerns', isAuthenticated, structureController.concerns);
