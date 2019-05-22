@@ -13,7 +13,9 @@
           >
             <span class="step-number" v-if="false">{{ section.sectionNumber }}</span>
             {{ section.sectionLabel }}
-            <span class="fa fa-check has-text-success" v-if="completedSections.indexOf(section.id) > -1"></span>
+            <span v-if="completedSections.indexOf(section.id) > -1">
+              <span class="fa fa-check has-text-success"></span>
+            </span>
           </button>
         </li>
       </ul>
