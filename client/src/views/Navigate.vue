@@ -41,7 +41,7 @@
           <div class="field" v-if="question.questionLabel === 'Water Quality Concerns'">
             <Concerns />
           </div>
-          <div class="field parameters" v-if="question.questionLabel === 'Pollutants'">
+          <div class="field parameters" v-else-if="question.questionLabel === 'Pollutants'">
             <Parameters />
           </div>
           <div v-else>
