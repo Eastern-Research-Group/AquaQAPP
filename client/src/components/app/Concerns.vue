@@ -1,37 +1,31 @@
 <template>
-  <div class="container">
-    <div class="columns">
-      <div class="column is-full">
-        <p>1. What are your water quality concerns? Select all that apply.</p>
+  <div class="section">
+    <div class="field">
+      <p>1. What are your water quality concerns? Select all that apply.</p>
+    </div>
+    <div class="field is-one-quarter">
+      <div class="tile" v-for="concern in concerns" :key="concern.id">
+        <input
+          class="is-checkradio is-block is-info"
+          :id="concern.concernCode"
+          type="checkbox"
+          :name="concern.concernLabel"
+        />
+        <label :id="concern.concernLabel" :for="concern.concernCode">{{ concern.concernLabel }}</label>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-two-thirds">
-        <div class="tile" v-for="concern in concerns" :key="concern.id">
-          <input
-            class="is-checkradio is-block is-info"
-            :id="concern.concernCode"
-            type="checkbox"
-            :name="concern.concernLabel"
-          />
-          <label :id="concern.concernLabel" :for="concern.concernCode">{{ concern.concernLabel }}</label>
-        </div>
-      </div>
+    <div class="field">
+      <p>2. Do your water quality concerns differ by sampling location?</p>
     </div>
-    <div class="columns">
-      <div class="column is-full">
-        <p>2. Do your water quality concerns differ by sampling location?</p>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-one-quarter">
+    <div class="field is-grouped">
+      <p class="control is-one-quarter">
         <input class="is-checkradio is-block is-info" id="yes" type="checkbox" name="yes" />
         <label for="yes">Yes</label>
-      </div>
-      <div class="column is-one-quarter">
+      </p>
+      <p class="control is-one-quarter">
         <input class="is-checkradio is-block is-info" id="no" type="checkbox" name="no" />
         <label for="no">No</label>
-      </div>
+      </p>
     </div>
   </div>
 </template>
@@ -65,9 +59,9 @@ label {
 .is-two-thirds,
 .is-one-quarter {
   display: grid;
-  grid-gap: 5px;
+  grid-gap: 8px;
   grid-auto-rows: 105px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .is-checkradio[type='checkbox'].is-info.is-block:checked + label {

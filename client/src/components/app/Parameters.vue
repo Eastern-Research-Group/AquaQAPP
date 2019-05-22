@@ -1,5 +1,5 @@
 <template>
-  <div class="columns">
+  <div>
     <Tabs
       :tabs="[
         { id: 'fresh', name: 'Fresh', isActive: true },
