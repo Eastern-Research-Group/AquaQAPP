@@ -17,8 +17,8 @@
             <tr v-for="row in rows" :key="row.id" ref="row">
               <td>{{ row['Location ID'] }}</td>
               <td>{{ row['Location Name'] }}</td>
-              <td>{{ row.lat }}</td>
-              <td>{{ row.lng }}</td>
+              <td>{{ row['Location Latitude'] }}</td>
+              <td>{{ row['Location Longitude'] }}</td>
               <td>
                 <div class="field is-grouped">
                   <div class="control">

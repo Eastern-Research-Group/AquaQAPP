@@ -1,4 +1,5 @@
 const uuidv4 = require('uuid/v4');
+const { Op } = require('sequelize');
 const { CompletedQappSection, Qapp, QappDatum } = require('../models');
 
 module.exports = {
@@ -94,12 +95,24 @@ module.exports = {
       } else {
         qappDatum = await QappDatum.create(req.body);
       }
-      // return updated QAPP with the latest saved data fields
-      const qapp = await Qapp.findOne({
-        where: { userId: req.user.id, id: req.body.qappId },
-        include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
+      // redirect to return latest QAPP with data
+      res.redirect(`/api/qapps/${req.body.qappId}`);
+    } catch (err) {
+      res.status(400).send({
+        error: err,
       });
-      res.send(qapp);
+    }
+  },
+  async deleteData(req, res) {
+    try {
+      await QappDatum.destroy({
+        where: {
+          qappId: req.body.qappId,
+          valueId: { [Op.or]: req.body.valueIds },
+        },
+      });
+      // redirect to return latest QAPP with data
+      res.redirect(303, `/api/qapps/${req.body.qappId}`);
     } catch (err) {
       res.status(400).send({
         error: err,
