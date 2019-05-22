@@ -31,6 +31,7 @@ module.exports = (app) => {
   app.get('/api/sections', isAuthenticated, structureController.sections);
   app.get('/api/questions', isAuthenticated, structureController.questions);
   app.get('/api/concerns', isAuthenticated, structureController.concerns);
+  app.get('/api/completed-sections/:id', isAuthenticated, structureController.completedSections);
 
   // generate routes
   app.post('/api/generate', isAuthenticated, generateController.generate);

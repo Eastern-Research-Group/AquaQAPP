@@ -33,4 +33,18 @@ module.exports = {
       });
     }
   },
+  // TODO: maybe move to qappController?
+  async completedSections(req, res) {
+    try {
+      // TODO: confirm user has access to this QAPP first?
+      const sections = await QappOutline.findAll({
+        where: { qappId: req.params.id },
+      });
+      res.send(sections);
+    } catch (err) {
+      res.status(400).send({
+        err: `Data unavailable. ${err}`,
+      });
+    }
+  },
 };
