@@ -32,8 +32,7 @@ db.Question.belongsTo(db.Section, {
   targetKey: 'sectionNumber',
   as: 'section',
 });
-// need to specifically add this if the table/model does not have an id column
-db.CompletedQappSection.removeAttribute('id');
+db.Qapp.hasMany(db.CompletedQappSection, { foreignKey: 'qappId', as: 'completedSections' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

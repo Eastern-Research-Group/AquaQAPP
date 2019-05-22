@@ -6,9 +6,25 @@ module.exports = {
     try {
       const qapps = await Qapp.findAll({
         where: { userId: req.user.id },
-        include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
+        include: [
+          {
+            model: QappDatum,
+            attributes: ['questionId', 'value', 'valueId'],
+            as: 'data',
+          },
+          {
+            model: CompletedQappSection,
+            attributes: ['sectionId'],
+            as: 'completedSections',
+          },
+        ],
       });
-      res.send(qapps);
+      const qappsWithSectionIds = qapps.map((qapp) => {
+        const updatedQapp = JSON.parse(JSON.stringify(qapp)); // clone object to update prop
+        updatedQapp.completedSections = updatedQapp.completedSections.map((s) => s.sectionId); // update to array of ids
+        return updatedQapp;
+      });
+      res.send(qappsWithSectionIds);
     } catch (err) {
       res.status(400).send({
         err: 'Dashboard data unavailable.',
@@ -19,9 +35,22 @@ module.exports = {
     try {
       const qapp = await Qapp.findOne({
         where: { userId: req.user.id, id: req.params.id },
-        include: [{ model: QappDatum, attributes: ['questionId', 'value', 'valueId'], as: 'data' }],
+        include: [
+          {
+            model: QappDatum,
+            attributes: ['questionId', 'value', 'valueId'],
+            as: 'data',
+          },
+          {
+            model: CompletedQappSection,
+            attributes: ['sectionId'],
+            as: 'completedSections',
+          },
+        ],
       });
-      res.send(qapp);
+      const updatedQapp = JSON.parse(JSON.stringify(qapp)); // clone object to update prop
+      updatedQapp.completedSections = updatedQapp.completedSections.map((s) => s.sectionId); // update to array of ids
+      res.send(updatedQapp);
     } catch (err) {
       res.status(400).send({
         err: 'Dashboard data unavailable.',
@@ -74,19 +103,6 @@ module.exports = {
     } catch (err) {
       res.status(400).send({
         error: err,
-      });
-    }
-  },
-  async completedSections(req, res) {
-    try {
-      // TODO: confirm user has access to this QAPP first?
-      const sections = await CompletedQappSection.findAll({
-        where: { qappId: req.params.id },
-      });
-      res.send(sections);
-    } catch (err) {
-      res.status(400).send({
-        err: `Data unavailable. ${err}`,
       });
     }
   },

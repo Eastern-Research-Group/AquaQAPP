@@ -28,7 +28,6 @@ module.exports = (app) => {
   app.delete('/api/qapps', isAuthenticated, qappController.destroy);
 
   // qapp section routes
-  app.get('/api/completed-sections/:id', isAuthenticated, qappController.completedSections);
   app.post('/api/completed-sections', isAuthenticated, qappController.addCompletedSection);
   app.delete('/api/completed-sections', isAuthenticated, qappController.deleteCompletedSection);
 

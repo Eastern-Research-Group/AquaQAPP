@@ -157,8 +157,6 @@ export default {
     if (this.$route.params.id !== this.$store.state.qapp.id) {
       await this.$store.dispatch('qapp/get', this.$route.params.id);
     }
-    // Get completed sections for progress bar and Mark as Complete switch
-    await this.$store.dispatch('qapp/getCompletedSections', this.$route.params.id);
     /* Once QAPP is fetched, set this component's qappData to the saved database values,
        so existing field entries are pre-filled from the database */
     this.qappData = this.$store.getters['qapp/qappData'];

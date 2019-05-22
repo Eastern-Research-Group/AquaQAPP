@@ -77,10 +77,6 @@ const actions = {
     commit('SET_CURRENT_QAPP', qappRes.data);
     commit('SET_IS_FETCHING', false);
   },
-  async getCompletedSections({ commit }, id) {
-    const response = await axios.get(`api/completed-sections/${id}`);
-    commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
-  },
   async addCompletedSection({ commit, state }, sectionId) {
     const response = await axios.post(`api/completed-sections`, {
       qappId: state.id,

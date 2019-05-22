@@ -1,13 +1,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('CompletedQappSections', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       qappId: {
         type: Sequelize.UUID,
-        primaryKey: true,
       },
       sectionId: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
       },
       createdAt: {
         allowNull: false,
