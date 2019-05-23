@@ -103,6 +103,26 @@ module.exports = {
       });
     }
   },
+  async updateData(req, res) {
+    try {
+      Object.keys(req.body.values).forEach(async (qId) => {
+        const datumFields = { qappId: req.body.qappId, questionId: qId, valueId: req.body.valueId };
+        const qappDatum = await QappDatum.findOne({
+          where: datumFields,
+        });
+        await qappDatum.update({
+          ...datumFields,
+          value: req.body.values[qId],
+        });
+      });
+      // redirect to return latest QAPP with data
+      res.redirect(303, `/api/qapps/${req.body.qappId}`);
+    } catch (err) {
+      res.status(400).send({
+        error: err,
+      });
+    }
+  },
   async deleteData(req, res) {
     try {
       await QappDatum.destroy({

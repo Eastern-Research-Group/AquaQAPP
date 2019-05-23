@@ -98,6 +98,10 @@ const actions = {
     const qappRes = await axios.post('api/qapps/data', payload);
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
+  async updateData({ commit }, payload) {
+    const qappRes = await axios.put('api/qapps/data', payload);
+    commit('SET_CURRENT_QAPP', qappRes.data);
+  },
   async deleteData({ commit }, payload) {
     const qappRes = await axios.delete('api/qapps/data', { data: payload });
     commit('SET_CURRENT_QAPP', qappRes.data);

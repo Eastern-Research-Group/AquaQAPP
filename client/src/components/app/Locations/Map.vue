@@ -4,7 +4,7 @@
       <Button
         :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
         type="dark"
-        @click.native="onAddLocation(map)"
+        @click.native="$emit('onAddLocation', map)"
       />
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
     </div>
@@ -20,8 +20,27 @@
       <template v-if="markers.length">
         <LMarker v-for="(marker, index) in markers" :key="index" :latLng="marker.latLng">
           <LPopup>
-            {{ marker['Location ID'] }}<br />
-            {{ marker['Location Name'] }}<br />
+            <p>{{ marker['Location Name'] }} (ID: {{ marker['Location ID'] }})</p>
+            <div class="field is-grouped">
+              <div class="control">
+                <Button
+                  label="Edit"
+                  type="primary"
+                  icon="edit"
+                  :shouldShowIcon="true"
+                  @click.native="$emit('onEdit', $event, marker)"
+                />
+              </div>
+              <div class="control">
+                <Button
+                  label="Delete"
+                  type="danger"
+                  icon="trash-alt"
+                  :shouldShowIcon="true"
+                  @click.native="$emit('onDelete', $event, marker)"
+                />
+              </div>
+            </div>
           </LPopup>
         </LMarker>
       </template>
@@ -52,10 +71,6 @@ export default {
     Button,
   },
   props: {
-    onAddLocation: {
-      type: Function,
-      required: true,
-    },
     isAddingLocation: {
       type: Boolean,
       required: false,

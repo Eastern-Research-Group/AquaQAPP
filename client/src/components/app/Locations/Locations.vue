@@ -2,18 +2,24 @@
   <div>
     <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
-        <LocationsTable :onAddLocationInfo="onAddLocationInfo" :rows="markers" :onEdit="onEdit" :onDelete="onDelete" />
+        <LocationsTable :rows="markers" @onAddLocationInfo="onAddLocationInfo" @onEdit="onEdit" @onDelete="onDelete" />
       </template>
       <template v-slot:map>
-        <Map :onAddLocation="onAddLocation" :isAddingLocation="isAddingLocation" :markers="markers" />
+        <Map
+          :markers="markers"
+          :isAddingLocation="isAddingLocation"
+          @onAddLocation="onAddLocation"
+          @onEdit="onEdit"
+          @onDelete="onDelete"
+        />
       </template>
     </Tabs>
     <SideNav
       v-if="isEnteringLocationInfo"
       :handleClose="() => (this.isEnteringLocationInfo = false)"
-      :title="this.shouldShowEdit ? 'Edit Location' : 'Add Location'"
+      :title="shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
-      <form @submit.prevent="addLocationData">
+      <form @submit.prevent="submitLocationData">
         <div class="field" v-for="question in questions" :key="question.id">
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
           <input
@@ -42,7 +48,6 @@
           </div>
         </div>
         <Button
-          v-if="!shouldShowEdit"
           :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
           :type="shouldShowEdit ? 'primary' : 'success'"
           submit
@@ -196,13 +201,35 @@ export default {
       if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
+      this.pendingData = {};
       this.isEnteringLocationInfo = true;
       this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
-    onEdit() {
+    onEdit(e, location) {
+      this.selectedLocation = location;
+      // Set pending data by questionId from location by questionLabel
+      this.questions.forEach((q) => {
+        this.pendingData[q.id] = location[q.questionLabel];
+      });
       this.isEnteringLocationInfo = true;
       this.shouldShowEdit = true;
+    },
+    submitLocationData() {
+      if (this.shouldShowEdit) {
+        this.editLocationData();
+      } else {
+        this.addLocationData();
+      }
+    },
+    async editLocationData() {
+      await this.$store.dispatch('qapp/updateData', {
+        qappId: this.qappId,
+        valueId: this.selectedLocation.valueId,
+        values: this.pendingData,
+      });
+      this.refreshLocationData(); // refresh markers and table data after editing
+      this.isEnteringLocationInfo = false;
     },
     onDelete(e, location) {
       this.shouldShowDelete = true;
