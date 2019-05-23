@@ -2,13 +2,7 @@
   <div>
     <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
-        <LocationsTable
-          :onAddLocationInfo="onAddLocationInfo"
-          :rows="markers"
-          :onEditRow="onEditRowInfo"
-          :onDeleteRow="onDeleteSingle"
-          :onDeleteAll="onDeleteAll"
-        />
+        <LocationsTable :onAddLocationInfo="onAddLocationInfo" :rows="markers" :onEdit="onEdit" :onDelete="onDelete" />
       </template>
       <template v-slot:map>
         <Map :onAddLocation="onAddLocation" :isAddingLocation="isAddingLocation" :markers="markers" />
@@ -58,11 +52,15 @@
     <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
       <template #default="props">
         <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all locations?`" type="warning" />
-        <Alert v-if="shouldDeleteSingle" :message="`Are you sure you want to delete ${locationName}?`" type="warning" />
+        <Alert
+          v-if="shouldDeleteSingle"
+          :message="`Are you sure you want to delete ${selectedLocation['Location Name']}?`"
+          type="warning"
+        />
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="info" />
+            <Button label="Delete" type="info" @click.native="deleteLocation()" />
           </div>
           <div class="control">
             <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
@@ -74,6 +72,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
@@ -103,39 +102,20 @@ export default {
       lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
       qappData: {},
       pendingData: {},
-      locationName: '',
+      selectedLocation: null,
     };
   },
+  computed: {
+    ...mapState({
+      qappId: (state) => state.qapp.id,
+    }),
+  },
   mounted() {
-    // Get latest qapp data from getter in order to pre-populate markers
-    this.qappData = this.$store.getters['qapp/qappData'];
-
-    // Add markers to map if location data already exists
-    let locations = [];
-    if (Array.isArray(this.qappData[this.latQuestionId])) {
-      locations = this.qappData[this.latQuestionId];
-    } else if (this.qappData[this.latQuestionId]) {
-      locations = [this.qappData[this.latQuestiponId]];
-    }
-    locations.forEach((lat, index) => {
-      const mapData = {};
-      this.questions.forEach((q) => {
-        mapData[q.questionLabel] = this.qappData[q.id][index];
-      });
-      this.markers.push({
-        ...mapData,
-        latLng: [
-          parseFloat(this.qappData[this.latQuestionId][index]),
-          parseFloat(this.qappData[this.lngQuestionId][index]),
-        ],
-        lat: parseFloat(this.qappData[this.latQuestionId][index]),
-        lng: parseFloat(this.qappData[this.lngQuestionId][index]),
-      });
-    });
+    this.refreshLocationData();
   },
   methods: {
     onAddLocation(map) {
-      this.locationName = '';
+      this.selectedLocation = null;
       this.shouldShowEdit = false;
       this.map = map;
       this.isAddingLocation = !this.isAddingLocation;
@@ -153,11 +133,40 @@ export default {
     updateData(e, qId) {
       this.pendingData[qId] = e.target.value;
     },
+    refreshLocationData() {
+      // Get latest qapp data from getter in order to pre-populate markers
+      this.qappData = this.$store.getters['qapp/qappData'];
+      this.markers = [];
+
+      // Add markers to map if location data already exists
+      const locations = {};
+
+      // Logic to loop through existing qapp data and set up markers to be used by leaflet map
+      Object.keys(this.qappData).forEach((qId) => {
+        const datum = this.qappData[qId];
+        if (Array.isArray(datum)) {
+          const key = this.questions.find((q) => q.id === parseInt(qId, 10)).questionLabel;
+          datum.forEach((locationField) => {
+            if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
+            locations[locationField.valueId][key] = locationField.value;
+          });
+        }
+      });
+
+      Object.keys(locations).forEach((locationId) => {
+        const monLoc = locations[locationId];
+        this.markers.push({
+          ...monLoc,
+          valueId: locationId,
+          latLng: [parseFloat(monLoc['Location Latitude']), parseFloat(monLoc['Location Longitude'])],
+        });
+      });
+    },
     addLocationData() {
       // Push data to markers array to display markers on map with corresponding info
       const mapData = {};
       this.questions.forEach((q) => {
-        mapData[q.questionLabel] = this.qappData[q.id];
+        mapData[q.questionLabel] = this.pendingData[q.id];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -168,6 +177,7 @@ export default {
         newValueId = 2;
       }
 
+      // Markers array used to display pins and handle location data
       this.markers.push({
         ...mapData,
         latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
@@ -176,35 +186,47 @@ export default {
         valueId: newValueId,
       });
 
+      // Emit saveData to parent component to save to DB
       this.$emit('saveData', null, newValueId, this.pendingData);
 
-      // Close location side nav and turn off click event for map
+      // Close location side nav, clear inputs, and turn off click event for map
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
+      this.pendingData = {};
       if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
       this.isEnteringLocationInfo = true;
-      this.locationName = '';
-      this.latitude = null;
-      this.longitude = null;
+      this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
-    onEditRowInfo() {
+    onEdit() {
       this.isEnteringLocationInfo = true;
       this.shouldShowEdit = true;
     },
-    onDeleteSingle(location) {
-      // TODO: consider using "parentId" instead of "valueId" in database
-      this.locationName = location['Location Name'];
+    onDelete(e, location) {
       this.shouldShowDelete = true;
-      this.shouldDeleteSingle = true;
-      this.shouldDeleteAll = false;
+      if (location) {
+        this.selectedLocation = location;
+        this.shouldDeleteAll = false;
+        this.shouldDeleteSingle = true;
+      } else {
+        this.shouldDeleteSingle = false;
+        this.shouldDeleteAll = true;
+      }
     },
-    onDeleteAll() {
-      this.shouldShowDelete = true;
-      this.shouldDeleteAll = true;
+    async deleteLocationData() {
+      let valueIds = [];
+      if (this.shouldDeleteSingle) {
+        valueIds = [this.selectedLocation.valueId];
+      } else {
+        valueIds = this.markers.map((m) => m.valueId);
+      }
+      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds });
+      this.refreshLocationData(); // refresh markers and table data after deleting
+      this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
+      this.shouldDeleteAll = false;
     },
   },
 };
