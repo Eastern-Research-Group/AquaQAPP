@@ -4,10 +4,12 @@ import mockStore from '@/testUtils/mockStore';
 import Login from '../Login';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
+import Router from 'vue-router';
 
 const localVue = createLocalVue();
+localVue.use(Router);
 localVue.use(Vuex);
-
+const router = new Router();
 describe('Login', () => {
   let store;
 
@@ -16,12 +18,12 @@ describe('Login', () => {
   });
 
   test('is a Vue instance', () => {
-    const wrapper = mount(Login, { store, localVue });
+    const wrapper = mount(Login, { store, localVue, router });
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
   test('triggers the login method when submitted', () => {
-    const wrapper = mount(Login, { store, localVue });
+    const wrapper = mount(Login, { store, localVue, router });
     wrapper.vm.login = jest.fn();
     const email = wrapper.find('#email');
     const password = wrapper.find('#password');
@@ -32,7 +34,7 @@ describe('Login', () => {
   });
 
   test('opens reset password pane when clicked', () => {
-    const wrapper = mount(Login, { store, localVue });
+    const wrapper = mount(Login, { store, localVue, router });
     wrapper.find('.button.is-link').trigger('click');
     expect(wrapper.vm.shouldShowReset).toBe(true);
     expect(wrapper.find(SideNav).exists()).toBe(true);
@@ -40,7 +42,7 @@ describe('Login', () => {
   });
 
   test('triggers resetPassword method when reset form submitted', () => {
-    const wrapper = mount(Login, { store, localVue });
+    const wrapper = mount(Login, { store, localVue, router });
     wrapper.vm.resetPassword = jest.fn();
     wrapper.find('.button.is-link').trigger('click');
     wrapper
@@ -51,7 +53,7 @@ describe('Login', () => {
   });
 
   test('displays login error when error exists', () => {
-    const wrapper = mount(Login, { store, localVue });
+    const wrapper = mount(Login, { store, localVue, router });
     wrapper.vm.error = 'This is an error message!';
     const alert = wrapper.find(Alert);
     expect(alert.props().type).toBe('error');
@@ -60,7 +62,7 @@ describe('Login', () => {
   });
 
   test('displays reset password error when error exists', () => {
-    const wrapper = mount(Login, { store, localVue });
+    const wrapper = mount(Login, { store, localVue, router });
     wrapper.vm.resetError = 'This is an error message!';
     wrapper.find('.button.is-link').trigger('click');
     const alert = wrapper.find(SideNav).find(Alert);
