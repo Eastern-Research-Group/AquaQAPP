@@ -2,13 +2,7 @@
   <div>
     <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
-        <LocationsTable
-          :onAddLocationInfo="onAddLocationInfo"
-          :rows="markers"
-          :onEditRow="onEditRowInfo"
-          :onDeleteRow="onDeleteSingle"
-          :onDeleteAll="onDeleteAll"
-        />
+        <LocationsTable :onAddLocationInfo="onAddLocationInfo" :rows="markers" :onEdit="onEdit" :onDelete="onDelete" />
       </template>
       <template v-slot:map>
         <Map :onAddLocation="onAddLocation" :isAddingLocation="isAddingLocation" :markers="markers" />
@@ -66,7 +60,7 @@
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="info" @click.native="deleteSingle()" />
+            <Button label="Delete" type="info" @click.native="deleteLocation()" />
           </div>
           <div class="control">
             <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
@@ -183,6 +177,7 @@ export default {
         newValueId = 2;
       }
 
+      // Markers array used to display pins and handle location data
       this.markers.push({
         ...mapData,
         latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
@@ -191,11 +186,13 @@ export default {
         valueId: newValueId,
       });
 
+      // Emit saveData to parent component to save to DB
       this.$emit('saveData', null, newValueId, this.pendingData);
 
-      // Close location side nav and turn off click event for map
+      // Close location side nav, clear inputs, and turn off click event for map
       this.isAddingLocation = false;
       this.isEnteringLocationInfo = false;
+      this.pendingData = {};
       if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
@@ -203,26 +200,33 @@ export default {
       this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
-    onEditRowInfo() {
+    onEdit() {
       this.isEnteringLocationInfo = true;
       this.shouldShowEdit = true;
     },
-    onDeleteSingle(location) {
-      this.selectedLocation = location;
+    onDelete(e, location) {
       this.shouldShowDelete = true;
-      this.shouldDeleteSingle = true;
-      this.shouldDeleteAll = false;
+      if (location) {
+        this.selectedLocation = location;
+        this.shouldDeleteAll = false;
+        this.shouldDeleteSingle = true;
+      } else {
+        this.shouldDeleteSingle = false;
+        this.shouldDeleteAll = true;
+      }
     },
-    onDeleteAll() {
-      this.shouldShowDelete = true;
-      this.shouldDeleteAll = true;
-      this.shouldDeleteSingle = false;
-    },
-    async deleteSingle() {
-      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds: [this.selectedLocation.valueId] });
+    async deleteLocationData() {
+      let valueIds = [];
+      if (this.shouldDeleteSingle) {
+        valueIds = [this.selectedLocation.valueId];
+      } else {
+        valueIds = this.markers.map((m) => m.valueId);
+      }
+      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds });
       this.refreshLocationData(); // refresh markers and table data after deleting
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
+      this.shouldDeleteAll = false;
     },
   },
 };

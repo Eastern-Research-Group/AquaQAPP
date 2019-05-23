@@ -22,7 +22,7 @@
               <td>
                 <div class="field is-grouped">
                   <div class="control">
-                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click.native="onEditRow" />
+                    <Button label="Edit" type="primary" icon="edit" :shouldShowIcon="true" @click.native="onEdit" />
                   </div>
                   <div class="control">
                     <Button
@@ -30,7 +30,7 @@
                       type="danger"
                       icon="trash-alt"
                       :shouldShowIcon="true"
-                      @click.native="onDeleteRow(row)"
+                      @click.native="onDelete($event, row)"
                     />
                   </div>
                 </div>
@@ -42,7 +42,7 @@
     </div>
     <div class="has-text-right btn-container">
       <Button label="Add" type="success" @click.native="onAddLocationInfo" />
-      <Button label="Delete All" type="danger" @click.native="onDeleteAll" />
+      <Button label="Delete All" type="danger" @click.native="onDelete" />
     </div>
   </div>
 </template>
@@ -56,25 +56,19 @@ export default {
   props: {
     onAddLocationInfo: {
       type: Function,
-      required: false,
-    },
-    onDeleteAll: {
-      type: Function,
-      required: false,
+      required: true,
     },
     rows: {
       type: Array,
       required: true,
     },
-    onEditRow: {
+    onEdit: {
       type: Function,
-      required: false,
-      default: () => {},
+      required: true,
     },
-    onDeleteRow: {
+    onDelete: {
       type: Function,
-      required: false,
-      default: () => {},
+      required: true,
     },
   },
   data() {
