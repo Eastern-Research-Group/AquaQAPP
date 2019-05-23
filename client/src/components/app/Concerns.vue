@@ -51,12 +51,14 @@ export default {
 @import '../../../static/variables';
 
 label {
-  font-size: 14px !important;
-  text-align: center !important;
-  padding: 20px 10px 10px 10px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 10px !important;
+  background-color: $darkBlue !important;
+  color: white !important;
 }
 
-.is-two-thirds,
 .is-one-quarter {
   display: grid;
   grid-gap: 8px;
@@ -64,7 +66,15 @@ label {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
+.is-checkradio[type='checkbox'].is-block:hover:not([disabled]) + label {
+  background-color: $lightBlue !important;
+}
+
 .is-checkradio[type='checkbox'].is-info.is-block:checked + label {
-  background-color: $darkBlue;
+  background-color: $green !important;
+}
+
+.is-checkradio[type='checkbox'] + label {
+  margin: 0 !important;
 }
 </style>
