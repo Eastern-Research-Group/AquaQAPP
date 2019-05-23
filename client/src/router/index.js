@@ -24,16 +24,19 @@ export default new Router({
       path: '/',
       name: 'root',
       component: Login,
+      meta: { auth: false },
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
+      meta: { auth: false },
     },
     {
       path: '/resetPassword',
       name: 'resetPassword',
       component: Reset,
+      meta: { auth: false },
     },
     {
       path: '/dashboard',

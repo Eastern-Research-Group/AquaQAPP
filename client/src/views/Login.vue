@@ -87,7 +87,6 @@ export default {
             email: this.email,
             password: this.password,
           },
-          redirect: '/dashboard',
         });
       } catch (error) {
         this.error = error.response.data.error;
