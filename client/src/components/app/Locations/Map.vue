@@ -4,7 +4,7 @@
       <Button
         :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
         type="dark"
-        @click.native="onAddLocation(map)"
+        @click.native="$emit('onAddLocation', map)"
       />
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
     </div>
@@ -20,8 +20,27 @@
       <template v-if="markers.length">
         <LMarker v-for="(marker, index) in markers" :key="index" :latLng="marker.latLng">
           <LPopup>
-            {{ marker['Location ID'] }}<br />
-            {{ marker['Location Name'] }}<br />
+            <p>{{ marker['Location Name'] }} (ID: {{ marker['Location ID'] }})</p>
+            <div class="field is-grouped">
+              <div class="control">
+                <Button
+                  label="Edit"
+                  type="primary"
+                  icon="edit"
+                  :shouldShowIcon="true"
+                  @click.native="$emit('onEdit', $event, marker)"
+                />
+              </div>
+              <div class="control">
+                <Button
+                  label="Delete"
+                  type="danger"
+                  icon="trash-alt"
+                  :shouldShowIcon="true"
+                  @click.native="$emit('onDelete', $event, marker)"
+                />
+              </div>
+            </div>
           </LPopup>
         </LMarker>
       </template>
@@ -32,7 +51,7 @@
 <script>
 import Button from '@/components/shared/Button';
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet';
-import { Icon } from 'leaflet';
+import { Icon, featureGroup, marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // required by vue2-leaflet library to fix icon issue
@@ -52,10 +71,6 @@ export default {
     Button,
   },
   props: {
-    onAddLocation: {
-      type: Function,
-      required: true,
-    },
     isAddingLocation: {
       type: Boolean,
       required: false,
@@ -64,6 +79,11 @@ export default {
       type: Array,
       required: false,
       default: () => [],
+    },
+  },
+  watch: {
+    markers() {
+      this.fitMapToMarkers();
     },
   },
   data() {
@@ -86,10 +106,17 @@ export default {
     boundsUpdated(bounds) {
       this.bounds = bounds;
     },
+    fitMapToMarkers() {
+      if (!this.markers.length) return;
+      const pins = this.markers.map((m) => marker(m.latLng));
+      const toBounds = new featureGroup(pins).getBounds().pad(0.1); // eslint-disable-line
+      this.map.flyToBounds(toBounds, { duration: 0.5, maxZoom: 11 });
+    },
   },
   mounted() {
     // provide easier access to the leaflet map object
     this.map = this.$refs.map.mapObject;
+    this.fitMapToMarkers();
   },
 };
 </script>
@@ -125,5 +152,13 @@ export default {
   &:hover {
     color: #00b0e6;
   }
+}
+
+.leaflet-container {
+  font: unset;
+}
+
+.leaflet-bottom {
+  z-index: 400;
 }
 </style>
