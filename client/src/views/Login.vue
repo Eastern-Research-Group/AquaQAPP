@@ -73,6 +73,11 @@ export default {
       showSuccessMessage: false,
     };
   },
+  mounted() {
+    if (this.$route.query.redirected) {
+      this.error = 'User must be logged into the application first.';
+    }
+  },
   methods: {
     ...mapActions('user', ['forgotPassword']),
     async login() {
@@ -82,6 +87,7 @@ export default {
             email: this.email,
             password: this.password,
           },
+          redirect: '/dashboard',
         });
       } catch (error) {
         this.error = error.response.data.error;

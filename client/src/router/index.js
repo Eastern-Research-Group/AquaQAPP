@@ -6,8 +6,17 @@ import Dashboard from '@/views/Dashboard';
 import Navigate from '@/views/Navigate';
 import Reset from '@/views/Reset';
 import Generate from '@/views/Generate';
+import PageNotFound from '@/views/PageNotFound';
 
 Vue.use(Router);
+
+function guard(to, from, next) {
+  if (Vue.auth.check()) {
+    next();
+  } else {
+    next({ path: '/', query: { redirected: true } });
+  }
+}
 
 export default new Router({
   routes: [
@@ -15,37 +24,39 @@ export default new Router({
       path: '/',
       name: 'root',
       component: Login,
-      meta: { auth: false },
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
-      meta: { auth: false },
     },
     {
       path: '/resetPassword',
       name: 'resetPassword',
       component: Reset,
-      meta: { auth: false },
     },
     {
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
-      meta: { auth: true },
+      beforeEnter: guard,
     },
     {
       path: '/navigate/:id',
       name: 'navigate',
       component: Navigate,
-      meta: { auth: true },
+      beforeEnter: guard,
     },
     {
       path: '/generate/:id',
       name: 'generate',
       component: Generate,
-      meta: { auth: true },
+      beforeEnter: guard,
+    },
+    {
+      path: '*',
+      name: 'pageNotFound',
+      component: PageNotFound,
     },
   ],
   mode: 'history',
