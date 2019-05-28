@@ -24,24 +24,37 @@ export default {
 <style scoped lang="scss">
 @import '../../../static/variables';
 
-label {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  padding: 10px !important;
-  background-color: $darkBlue !important;
-  color: white !important;
-}
+.tile {
+  & > .is-checkradio[type='checkbox'].is-block:not([disabled]) + label {
+    background-color: $darkBlue;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    color: white;
+    text-align: center;
+  }
 
-.is-checkradio[type='checkbox'].is-block:hover:not([disabled]) + label {
-  background-color: $lightBlue !important;
-}
+  & > .is-checkradio[type='checkbox'].is-block:not([disabled]) + label {
+    background-color: $darkBlue;
+    color: white;
 
-.is-checkradio[type='checkbox'].is-info.is-block:checked + label {
-  background-color: $green !important;
-}
+    &:hover {
+      background-color: darken($darkBlue, 5);
+    }
+  }
 
-.is-checkradio[type='checkbox'] + label {
-  margin: 0 !important;
+  & > .is-checkradio[type='checkbox'].is-info.is-block:checked + label {
+    background-color: $green;
+
+    &:hover {
+      background-color: darken($green, 5);
+    }
+  }
+
+  & > .is-checkradio[type='checkbox'] + label {
+    margin: 0;
+  }
 }
 </style>
