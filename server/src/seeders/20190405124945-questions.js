@@ -53,14 +53,27 @@ module.exports = {
     });
     records.push({
       sectionNumber: '7',
-      questionLabel: 'Water Quality Concerns',
+      questionLabel: 'What are your water quality concerns? Select all that apply.',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: '',
-      maxLength: '0',
+      dataEntryType: 'checkboxBtn',
+      maxLength: '100',
       hasExamples: false,
       sectionQuestionSort: 1,
       refName: 'concerns',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '7',
+      questionLabel: 'Do your water quality concerns differ by sampling location?',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'checkboxBtn',
+      maxLength: '5',
+      hasExamples: false,
+      sectionQuestionSort: 2,
+      refName: 'yesNo',
       createdAt: new Date(),
       updatedAt: new Date(),
     });

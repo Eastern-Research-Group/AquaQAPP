@@ -1,9 +1,9 @@
-const { refConcerns, RefWaterType, RefHorizontalCollectionMethod, RefHorizontalCoordRefSystem } = require('../models');
+const { RefConcerns, RefWaterType, RefHorizontalCollectionMethod, RefHorizontalCoordRefSystem } = require('../models');
 
 module.exports = {
   async concerns(req, res) {
     try {
-      const concerns = await refConcerns.findAll({});
+      const concerns = await RefConcerns.findAll({});
       res.send(concerns);
     } catch (err) {
       res.status(400).send({

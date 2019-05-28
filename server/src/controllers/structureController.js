@@ -1,4 +1,4 @@
-const { Section, Question, refConcerns } = require('../models');
+const { Section, Question } = require('../models');
 
 module.exports = {
   async sections(req, res) {
@@ -17,16 +17,6 @@ module.exports = {
         include: [{ model: Section, attributes: ['sectionNumber', 'sectionLabel'], as: 'section' }],
       });
       res.send(questions);
-    } catch (err) {
-      res.status(400).send({
-        err: 'Questions data unavailable.',
-      });
-    }
-  },
-  async concerns(req, res) {
-    try {
-      const concerns = await refConcerns.findAll({});
-      res.send(concerns);
     } catch (err) {
       res.status(400).send({
         err: 'Questions data unavailable.',

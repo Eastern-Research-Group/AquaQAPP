@@ -1,14 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
-  const refConcerns = sequelize.define(
-    'refConcerns',
+  const RefConcerns = sequelize.define(
+    'RefConcerns',
     {
-      concernCode: DataTypes.STRING,
-      concernLabel: DataTypes.STRING,
+      code: DataTypes.STRING,
+      label: DataTypes.STRING,
     },
-    {}
+    {
+      timestamps: false,
+    }
   );
-  /* refConcerns.associate = function(models) {
-    // associations can be defined here
-  }; */
-  return refConcerns;
+  return RefConcerns;
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="tile">
+  <div class="column is-one-third">
     <input class="is-checkradio is-block is-info" :id="id" type="checkbox" :name="name" />
     <label :id="id" :for="id">{{ name }}</label>
   </div>
@@ -24,21 +24,20 @@ export default {
 <style scoped lang="scss">
 @import '../../../static/variables';
 
-.tile {
-  & > .is-checkradio[type='checkbox'].is-block:not([disabled]) + label {
+.column {
+  min-height: 90px;
+  display: flex;
+
+  & > .is-checkradio[type='checkbox'].is-block + label {
+    min-height: 90px;
     background-color: $darkBlue;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 20px 10px;
     color: white;
     text-align: center;
-  }
-
-  & > .is-checkradio[type='checkbox'].is-block:not([disabled]) + label {
-    background-color: $darkBlue;
-    color: white;
 
     &:hover {
       background-color: darken($darkBlue, 5);
