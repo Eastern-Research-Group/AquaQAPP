@@ -60,6 +60,7 @@ module.exports = {
       maxLength: '0',
       hasExamples: false,
       sectionQuestionSort: 1,
+      refName: 'concerns',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -120,6 +121,7 @@ module.exports = {
       maxLength: '45',
       hasExamples: false,
       sectionQuestionSort: 5,
+      refName: 'waterTypes',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -132,6 +134,7 @@ module.exports = {
       maxLength: '150',
       hasExamples: false,
       sectionQuestionSort: 6,
+      refName: 'collectionMethods',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -144,6 +147,7 @@ module.exports = {
       maxLength: '6',
       hasExamples: false,
       sectionQuestionSort: 7,
+      refName: 'coordRefSystems',
       createdAt: new Date(),
       updatedAt: new Date(),
     });

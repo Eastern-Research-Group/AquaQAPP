@@ -25,26 +25,21 @@
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
-            :value="pendingData[question.id]"
+            v-model="pendingData[question.id]"
             class="input"
             type="text"
             :placeholder="`Enter ${question.questionLabel}`"
             required
-            @input="updateData($event, question.id)"
           />
-          <div v-if="question.dataEntryType === 'select'" :class="`select ${!qappData[question.id] ? '' : ''}`">
-            <select
-              :id="`question${question.id}`"
-              class="select"
-              type="text"
-              :placeholder="`Enter ${question.questionLabel}`"
-              @change="updateData($event, question.id)"
-              required
-            >
-              <option value="" disabled selected hidden>Select {{ question.questionLabel }}...</option>
-              <option value="test1">Test 1</option>
-              <option value="test2">Test 2</option>
-            </select>
+          <div v-if="question.dataEntryType === 'select'">
+            <multiselect
+              v-model="pendingData[question.id]"
+              :options="getOptions(question.refName)"
+              :placeholder="`Select ${question.questionLabel}`"
+              :custom-label="question.refName === 'coordRefSystems' ? nameWithDesc : undefined"
+              label="name"
+              track-by="name"
+            ></multiselect>
           </div>
         </div>
         <Button
@@ -65,7 +60,7 @@
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="info" @click.native="deleteLocation()" />
+            <Button label="Delete" type="info" @click.native="deleteLocationData()" />
           </div>
           <div class="control">
             <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
@@ -77,6 +72,7 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect';
 import { mapState } from 'vuex';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
@@ -84,6 +80,7 @@ import Tabs from '@/components/shared/Tabs';
 import LocationsTable from '@/components/app/Locations/LocationsTable';
 import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
+import '../../../../static/bulma-multiselect.css';
 
 export default {
   props: {
@@ -92,7 +89,7 @@ export default {
       required: true,
     },
   },
-  components: { Map, SideNav, Tabs, LocationsTable, Alert, Button },
+  components: { Map, SideNav, Tabs, LocationsTable, Alert, Button, Multiselect },
   data() {
     return {
       markers: [],
@@ -114,13 +111,23 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
+    ...mapState('ref', ['waterTypes', 'collectionMethods', 'coordRefSystems']),
   },
   mounted() {
     this.refreshLocationData();
   },
   methods: {
+    getOptions(refName) {
+      // get reference data array based on refName field in questions table
+      return this[refName];
+    },
+    nameWithDesc(option) {
+      // set custom label for coordRefSystems, since name is a code
+      return `${option.name} - ${option.description}`;
+    },
     onAddLocation(map) {
       this.selectedLocation = null;
+      this.pendingData = {};
       this.shouldShowEdit = false;
       this.map = map;
       this.isAddingLocation = !this.isAddingLocation;
@@ -135,9 +142,6 @@ export default {
         this.map.off('click');
       }
     },
-    updateData(e, qId) {
-      this.pendingData[qId] = e.target.value;
-    },
     refreshLocationData() {
       // Get latest qapp data from getter in order to pre-populate markers
       this.qappData = this.$store.getters['qapp/qappData'];
@@ -150,10 +154,17 @@ export default {
       Object.keys(this.qappData).forEach((qId) => {
         const datum = this.qappData[qId];
         if (Array.isArray(datum)) {
-          const key = this.questions.find((q) => q.id === parseInt(qId, 10)).questionLabel;
+          const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+          const key = question.questionLabel;
           datum.forEach((locationField) => {
             if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
-            locations[locationField.valueId][key] = locationField.value;
+            if (question.refName) {
+              locations[locationField.valueId][key] = this[question.refName].find(
+                (r) => r.id === parseInt(locationField.value, 10)
+              );
+            } else {
+              locations[locationField.valueId][key] = locationField.value;
+            }
           });
         }
       });
@@ -192,7 +203,7 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.pendingData);
+      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       // Close location side nav, clear inputs, and turn off click event for map
       this.isAddingLocation = false;
@@ -210,7 +221,7 @@ export default {
       this.selectedLocation = location;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.pendingData[q.id] = location[q.questionLabel];
+        this.$set(this.pendingData, q.id, location[q.questionLabel]);
       });
       this.isEnteringLocationInfo = true;
       this.shouldShowEdit = true;
@@ -226,7 +237,7 @@ export default {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedLocation.valueId,
-        values: this.pendingData,
+        values: this.cleanData(this.pendingData),
       });
       this.refreshLocationData(); // refresh markers and table data after editing
       this.isEnteringLocationInfo = false;
@@ -254,6 +265,18 @@ export default {
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;
+    },
+    cleanData() {
+      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
+      const cleanedData = {};
+      Object.keys(this.pendingData).forEach((qId) => {
+        if (typeof this.pendingData[qId] === 'object') {
+          cleanedData[qId] = this.pendingData[qId].id;
+        } else {
+          cleanedData[qId] = this.pendingData[qId];
+        }
+      });
+      return cleanedData;
     },
   },
 };

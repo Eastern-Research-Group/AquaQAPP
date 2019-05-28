@@ -31,18 +31,12 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Concerns',
   computed: {
-    ...mapState('structure', ['concerns']),
-  },
-  mounted() {
-    this.getConcerns();
-  },
-  methods: {
-    ...mapActions('structure', ['getConcerns']),
+    ...mapState('ref', ['concerns']),
   },
 };
 </script>

@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       maxLength: DataTypes.INTEGER,
       hasExamples: DataTypes.BOOLEAN,
       sectionQuestionSort: DataTypes.INTEGER,
+      refName: DataTypes.STRING,
     },
     {}
   );

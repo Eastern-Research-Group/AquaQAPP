@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://cdx.epa.gov/WQXWeb/download/Common/DomainValuesStylesheet.xsl"?>
+<WQXDomainValueList xmlns="http://www.exchangenetwork.net/schema/wqx/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exchangenetwork.net/schema/wqx/2 http://www.exchangenetwork.net/schema/wqx/2/index.xsd">
+  <WQXElement>
+    <WQXElementName rowCount="40" maxLastChangeDate="2018-01-10T02:24:30-05:00">
+      HorizontalCollectionMethod
+    </WQXElementName>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="2"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-Block Face"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-block face"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="6"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-Digitized"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-digitized"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="1"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-House Number"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-house number"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="4"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-Nearest Intersection"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-nearest intersection"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="7"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-Other"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-other"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="5"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-Primary Name"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-primary name"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="3"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Address Matching-Street Centerline"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on address matching-street centerline"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="8"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Census Block-1990-Centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on census block-1990-centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="9"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Census Block/Group-1990-Centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on census/group-1990-centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="10"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Census Block/Tract-1990-Centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on census/tract-1990-centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="11"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Census-Other"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on census-other"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="25"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Classical Surveying Techniques"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on classical surveying techniques"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="13"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS Carrier Phase Kinematic Relative Position"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on GPS carrier phase kinematic relative positioning technique"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="12"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS Carrier Phase Static Relative Position"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on GPS carrier phase static relative positioning technique"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="14"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS Code (Pseudo Range) Differential"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on GPS code measurements (pseudo range) differential (DGPS)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="15"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS Code (Pseudo Range) Precise Position"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on GPS code measurements (pseudo range) precise positioning service"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="16"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS Code (Pseudo Range) Standard Position (SA Off)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on GPS code measurements (pseudo range) standard positioning service (SA Off)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="17"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS Code (Pseudo Range) Standard Position (SA On)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on GPS code measurements (pseudo range) standard positioning service (SA On)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="104"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS with Wide Area Augmentation System"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="An air navigation aid developed by the Federal Aviation Administration to augment the Global Positioning System (GPS),"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2018-01-10T02:24:30-05:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="29"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS, With Canadian Active Control System"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="GPS Code Measurements (pseudo  range) Standard Positioning Service Corrected using Canadian Active Control System"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="28"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="GPS-Unspecified"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="Global Positioning Method, with unspecified parameters"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="39"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Digital Map Source"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on interpolation-Digital Map Source"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2015-08-27T12:00:00-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="30"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Digital Map Source (Tiger)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method is based on a digital map source (TIGER)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2016-08-08T12:00:00-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="18"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Map"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on interpolation-map"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="32"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-MSS"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method is based on the use of a Multi-Spectral Scanner (MSS)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="21"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Other"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on interpolation-other"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="19"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Photo"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on interpolation-photo"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="20"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Satellite"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on interpolation-satellite"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="31"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-Spot"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method uses SPOT (Systeme Probatoire d&apos;Observation de la Terre), a French-owned satellite launched in 1984"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="33"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Interpolation-TM"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method is based on the use of a Thematic Mapper (TM)"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="22"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Loran C"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on Loran C"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="34"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Public Land Survey-Eighth Section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method is based on a public land survey, an eighth of a section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="36"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Public Land Survey-Footing"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method is based on a public land survey footing"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="23"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Public Land Survey-Quarter Section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on public land survey quarter of a section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="24"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Public Land Survey-Section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on public land survey section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="35"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Public Land Survey-Sixteenth Section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method is based on a public land survey, a sixteenth of a section"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="27"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Unknown"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The information is not known"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="26"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Zip Code-Centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The geographic coordinate determination method based on zipcode-centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="38"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Zip+2 Centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The center of an area defined by the 5-digit ZIP code and its 2-digit geographic segment extension"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+    <WQXElementRow>
+      <WQXElementRowColumn colname="UniqueIdentifier" value="37"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Name" value="Zip+4 Centroid"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="Description" value="The center of an area defined by the 5-digit  ZIP code and its 4-digit geographic segment extension"></WQXElementRowColumn>
+      <WQXElementRowColumn colname="LastChangeDate" value="2006-08-12T12:29:23-04:00"></WQXElementRowColumn>
+    </WQXElementRow>
+  </WQXElement>
+</WQXDomainValueList>
