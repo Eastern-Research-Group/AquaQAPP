@@ -31,6 +31,9 @@ module.exports = {
       sectionQuestionSort: {
         type: Sequelize.INTEGER,
       },
+      refName: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

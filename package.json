@@ -43,9 +43,11 @@
     "uuid": "^3.3.2",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
+    "vue-multiselect": "^2.1.6",
     "vue-router": "^3.0.2",
     "vue2-leaflet": "^2.0.3",
-    "vuex": "^3.1.0"
+    "vuex": "^3.1.0",
+    "xml2json": "^0.11.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.4.3",

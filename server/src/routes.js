@@ -5,6 +5,7 @@ const authenticationControllerPolicy = require('./middleware/authenticationContr
 const qappController = require('./controllers/qappController');
 const structureController = require('./controllers/structureController');
 const generateController = require('./controllers/generateController');
+const refController = require('./controllers/refController');
 const isAuthenticated = require('./middleware/isAuthenticated');
 
 module.exports = (app) => {
@@ -36,8 +37,13 @@ module.exports = (app) => {
   // structure (projects/sections/questions) routes
   app.get('/api/sections', isAuthenticated, structureController.sections);
   app.get('/api/questions', isAuthenticated, structureController.questions);
-  app.get('/api/concerns', isAuthenticated, structureController.concerns);
 
   // generate routes
   app.post('/api/generate', isAuthenticated, generateController.generate);
+
+  // referencce routes
+  app.get('/api/concerns', isAuthenticated, refController.concerns);
+  app.get('/api/water-types', isAuthenticated, refController.waterTypes);
+  app.get('/api/collection-methods', isAuthenticated, refController.collectionMethods);
+  app.get('/api/coord-ref-systems', isAuthenticated, refController.coordRefSystems);
 };

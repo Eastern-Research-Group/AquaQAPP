@@ -6,7 +6,7 @@
           <button
             :class="
               `button is-text has-text-white ${
-                currentSectionNum === section.sectionNumber ? 'has-text-weight-bold' : ''
+                currentSection.sectionNumber === section.sectionNumber ? 'has-text-weight-bold' : ''
               }`
             "
             @click="changeSection(section)"
@@ -30,7 +30,7 @@
           @click.native="saveData"
         />
         <MarkComplete
-          @markComplete="markComplete(currentSectionNum)"
+          @markComplete="markComplete(currentSection.sectionNumber)"
           :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
         />
         <div
@@ -126,7 +126,7 @@
             <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
           </div>
         </div>
-        <div class="field" v-if="isLocationSectionSelected()">
+        <div class="field" v-if="currentSection.sectionLabel === 'Monitoring Locations'">
           <Locations :questions="currentQuestions" @updateQappData="updateQappData" @saveData="saveData" />
         </div>
       </form>
@@ -150,7 +150,6 @@ export default {
   data() {
     return {
       currentSection: {},
-      currentSectionNum: '1',
       shouldDisplayMap: false,
       shouldShowExample: false,
       hasSaved: false,
@@ -159,11 +158,12 @@ export default {
   },
   computed: {
     ...mapState('qapp', ['completedSections']),
-    ...mapState('structure', ['sections', 'questions', 'concerns']),
+    ...mapState('structure', ['sections', 'questions']),
+    ...mapState('ref', ['concerns']),
     currentQuestions() {
       if (this.shouldDisplayMap) return [];
       return this.questions
-        .filter((q) => q.sectionNumber === this.currentSectionNum)
+        .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
         .sort((a, b) => {
           if (a.sectionQuestionSort < b.sectionQuestionSort) {
             return -1;
@@ -184,18 +184,18 @@ export default {
        so existing field entries are pre-filled from the database */
     this.qappData = this.$store.getters['qapp/qappData'];
     // Fetch structure data from DB to generate sections and questions on the fly
-    this.getConcerns();
     this.getQuestions();
     await this.getSections();
     this.currentSection = this.sections ? this.sections[0] : {};
+    // Fetch lookup reference data
+    this.$store.dispatch('ref/getData');
   },
   methods: {
-    ...mapActions('structure', ['getSections', 'getQuestions', 'getConcerns']),
+    ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(section) {
       this.shouldDisplayMap = false;
       this.hasSaved = false;
       this.currentSection = section;
-      this.currentSectionNum = section.sectionNumber;
     },
     toggleShouldShowExample() {
       this.shouldShowExample = !this.shouldShowExample;
@@ -213,13 +213,6 @@ export default {
       }
       this.shouldShowExample = !this.shouldShowExample;
     },
-    isLocationSectionSelected() {
-      const currentSection = this.sections.find((s) => s.sectionNumber === this.currentSectionNum);
-      if (currentSection) {
-        return currentSection.sectionLabel === 'Monitoring Locations';
-      }
-      return false;
-    },
     updateQappData(e, questionId) {
       this.hasSaved = false;
       this.qappData[questionId] = e.target.value;
@@ -230,8 +223,9 @@ export default {
         this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
       } else {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
+        // Locations are automatically saved upon add/edit, so don't saveData on markComplete
+        if (this.currentSection.sectionLabel !== 'Monitoring Locations') this.saveData();
       }
-      this.saveData();
     },
     saveData(e, valueId = null, data) {
       // TODO: do not save if user has not changed any locations data
