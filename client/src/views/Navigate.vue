@@ -70,6 +70,8 @@
                 :key="option.id"
                 :id="option.code"
                 :name="option.label"
+                :isSingleSelect="question.refName === 'yesNo'"
+                :singleSelectId="question.questionLabel"
               />
             </div>
             <div class="btn-container has-text-right">

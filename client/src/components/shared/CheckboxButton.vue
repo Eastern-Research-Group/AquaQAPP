@@ -1,6 +1,11 @@
 <template>
   <div class="column is-one-third">
-    <input class="is-checkradio is-block is-info" :id="id" type="checkbox" :name="name" />
+    <input
+      class="is-checkradio is-block is-info"
+      :id="id"
+      :type="isSingleSelect ? 'radio' : 'checkbox'"
+      :name="isSingleSelect ? singleSelectId : name"
+    />
     <label :id="id" :for="id">{{ name }}</label>
   </div>
 </template>
@@ -17,6 +22,15 @@ export default {
       type: String,
       required: true,
     },
+    isSingleSelect: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    singleSelectId: {
+      type: String,
+      required: false,
+    },
   },
 };
 </script>
@@ -28,7 +42,7 @@ export default {
   min-height: 90px;
   display: flex;
 
-  & > .is-checkradio[type='checkbox'].is-block + label {
+  & > .is-checkradio.is-block + label {
     min-height: 90px;
     background-color: $darkBlue;
     color: white;
@@ -44,7 +58,15 @@ export default {
     }
   }
 
-  & > .is-checkradio[type='checkbox'].is-info.is-block:checked + label {
+  & > .is-checkradio.is-block[type='radio'] + label {
+    &::before,
+    &::after {
+      top: 0.2em;
+      left: 0.2em;
+    }
+  }
+
+  & > .is-checkradio.is-info.is-block:checked + label {
     background-color: $green;
 
     &:hover {
@@ -52,7 +74,7 @@ export default {
     }
   }
 
-  & > .is-checkradio[type='checkbox'] + label {
+  & > .is-checkradio + label {
     margin: 0;
   }
 }
