@@ -38,31 +38,7 @@
           v-for="question in currentQuestions.filter((q) => q.section.sectionLabel !== 'Monitoring Locations')"
           :key="question.id"
         >
-          <div class="field" v-if="question.questionLabel === 'Water Quality Concerns'">
-            <div class="field">
-              <p>1. What are your water quality concerns? Select all that apply.</p>
-            </div>
-            <div class="field is-one-quarter checkbox-btn-container">
-              <CheckboxButton
-                v-for="concern in concerns"
-                :key="concern.id"
-                :id="concern.concernCode"
-                :name="concern.concernLabel"
-              />
-            </div>
-            <div class="field">
-              <p>2. Do your water quality concerns differ by sampling location?</p>
-            </div>
-            <div class="field is-grouped">
-              <p class="control is-one-quarter checkbox-btn-container">
-                <CheckboxButton id="Yes" name="Yes" />
-              </p>
-              <p class="control is-one-quarter checkbox-btn-container">
-                <CheckboxButton id="No" name="No" />
-              </p>
-            </div>
-          </div>
-          <div class="field parameters" v-else-if="question.questionLabel === 'Pollutants'">
+          <div class="field parameters" v-if="question.questionLabel === 'Pollutants'">
             <Parameters />
           </div>
           <div v-else>
@@ -88,6 +64,16 @@
               :placeholder="`Enter ${question.questionLabel}`"
               @input="updateQappData($event, question.id)"
             ></textarea>
+            <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
+              <CheckboxButton
+                v-for="option in getOptions(question.refName)"
+                :key="option.id"
+                :id="option.code"
+                :name="option.label"
+                :isSingleSelect="question.refName === 'yesNo'"
+                :singleSelectId="question.questionLabel"
+              />
+            </div>
             <div class="btn-container has-text-right">
               <Button
                 class="example"
@@ -197,6 +183,13 @@ export default {
       this.hasSaved = false;
       this.currentSection = section;
     },
+    getOptions(refName) {
+      // get reference data array based on refName field in questions table
+      if (refName === 'yesNo') {
+        return [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }];
+      }
+      return this[refName];
+    },
     toggleShouldShowExample() {
       this.shouldShowExample = !this.shouldShowExample;
     },
@@ -298,10 +291,7 @@ textarea {
   display: inline-flex !important;
 }
 
-.checkbox-btn-container {
-  display: grid;
-  grid-gap: 8px;
-  grid-auto-rows: 105px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+.columns.is-multiline {
+  margin-top: 0.5em;
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
-  <div class="tile">
-    <input class="is-checkradio is-block is-info" :id="id" type="checkbox" :name="name" />
+  <div class="column is-one-third">
+    <input
+      class="is-checkradio is-block is-info"
+      :id="id"
+      :type="isSingleSelect ? 'radio' : 'checkbox'"
+      :name="isSingleSelect ? singleSelectId : name"
+    />
     <label :id="id" :for="id">{{ name }}</label>
   </div>
 </template>
@@ -17,6 +22,15 @@ export default {
       type: String,
       required: true,
     },
+    isSingleSelect: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    singleSelectId: {
+      type: String,
+      required: false,
+    },
   },
 };
 </script>
@@ -24,24 +38,44 @@ export default {
 <style scoped lang="scss">
 @import '../../../static/variables';
 
-label {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  padding: 10px !important;
-  background-color: $darkBlue !important;
-  color: white !important;
-}
+.column {
+  min-height: 90px;
+  display: flex;
 
-.is-checkradio[type='checkbox'].is-block:hover:not([disabled]) + label {
-  background-color: $lightBlue !important;
-}
+  & > .is-checkradio.is-block + label {
+    min-height: 90px;
+    background-color: $darkBlue;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    color: white;
+    text-align: center;
 
-.is-checkradio[type='checkbox'].is-info.is-block:checked + label {
-  background-color: $green !important;
-}
+    &:hover {
+      background-color: darken($darkBlue, 5);
+    }
+  }
 
-.is-checkradio[type='checkbox'] + label {
-  margin: 0 !important;
+  & > .is-checkradio.is-block[type='radio'] + label {
+    &::before,
+    &::after {
+      top: 0.2em;
+      left: 0.2em;
+    }
+  }
+
+  & > .is-checkradio.is-info.is-block:checked + label {
+    background-color: $green;
+
+    &:hover {
+      background-color: darken($green, 5);
+    }
+  }
+
+  & > .is-checkradio + label {
+    margin: 0;
+  }
 }
 </style>

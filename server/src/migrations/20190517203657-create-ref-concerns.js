@@ -1,29 +1,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('refConcerns', {
+    return queryInterface.createTable('RefConcerns', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      concernCode: {
+      code: {
         type: Sequelize.STRING,
       },
-      concernLabel: {
+      label: {
         type: Sequelize.STRING,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
       },
     });
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('refConcerns');
+    return queryInterface.dropTable('RefConcerns');
   },
 };
