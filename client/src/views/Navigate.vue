@@ -39,7 +39,28 @@
           :key="question.id"
         >
           <div class="field" v-if="question.questionLabel === 'Water Quality Concerns'">
-            <Concerns />
+            <div class="field">
+              <p>1. What are your water quality concerns? Select all that apply.</p>
+            </div>
+            <div class="field is-one-quarter checkbox-btn-container">
+              <CheckboxButton
+                v-for="concern in concerns"
+                :key="concern.id"
+                :id="concern.concernCode"
+                :name="concern.concernLabel"
+              />
+            </div>
+            <div class="field">
+              <p>2. Do your water quality concerns differ by sampling location?</p>
+            </div>
+            <div class="field is-grouped">
+              <p class="control is-one-quarter checkbox-btn-container">
+                <CheckboxButton id="Yes" name="Yes" />
+              </p>
+              <p class="control is-one-quarter checkbox-btn-container">
+                <CheckboxButton id="No" name="No" />
+              </p>
+            </div>
           </div>
           <div class="field parameters" v-else-if="question.questionLabel === 'Pollutants'">
             <Parameters />
@@ -121,11 +142,11 @@ import Button from '@/components/shared/Button';
 import ExampleModal from '@/components/shared/ExampleModal';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
-import Concerns from '@/components/app/Concerns';
 import Parameters from '@/components/app/Parameters';
+import CheckboxButton from '@/components/shared/CheckboxButton';
 
 export default {
-  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Concerns, Parameters },
+  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton },
   data() {
     return {
       currentSection: {},
@@ -138,6 +159,7 @@ export default {
   computed: {
     ...mapState('qapp', ['completedSections']),
     ...mapState('structure', ['sections', 'questions']),
+    ...mapState('ref', ['concerns']),
     currentQuestions() {
       if (this.shouldDisplayMap) return [];
       return this.questions
@@ -274,5 +296,12 @@ textarea {
 
 .parameters {
   display: inline-flex !important;
+}
+
+.checkbox-btn-container {
+  display: grid;
+  grid-gap: 8px;
+  grid-auto-rows: 105px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 </style>

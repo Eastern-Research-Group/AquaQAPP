@@ -70,7 +70,6 @@ export default {
             password: this.password,
             confirmPassword: this.confirmPassword,
           },
-          redirect: '/dashboard',
           success: () => {
             // auto-login after registration
             this.$auth.login({
