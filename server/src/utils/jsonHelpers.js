@@ -1,16 +1,23 @@
 const fs = require('fs');
-const parser = require('xml2json');
+const xml2js = require('xml2js');
+
+const parseStringSync = (str) => {
+  let result;
+  new xml2js.Parser({ explicitArray: false }).parseString(str, (e, r) => {
+    result = r;
+  });
+  return result;
+};
 
 const wqxXmlToJson = (filePath) => {
   const xml = fs.readFileSync(filePath);
-  const json = parser.toJson(xml, { object: true });
-
+  const json = parseStringSync(xml);
   const refArray = json.WQXDomainValueList.WQXElement.WQXElementRow;
   const newJson = [];
   refArray.forEach((col) => {
     const val = {};
     col.WQXElementRowColumn.forEach((field) => {
-      if (field.colname !== 'LastChangeDate') val[field.colname] = field.value;
+      if (field.$.colname !== 'LastChangeDate') val[field.$.colname] = field.$.value;
     });
     newJson.push(val);
   });
