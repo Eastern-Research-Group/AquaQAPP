@@ -302,10 +302,6 @@ textarea {
   margin-left: 0.5em;
 }
 
-.parameters {
-  display: inline-flex !important;
-}
-
 .columns.is-multiline {
   margin-top: 0.5em;
 }
