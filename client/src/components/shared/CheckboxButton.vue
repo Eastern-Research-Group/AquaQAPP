@@ -5,6 +5,9 @@
       :id="id"
       :type="isSingleSelect ? 'radio' : 'checkbox'"
       :name="isSingleSelect ? singleSelectId : name"
+      @change="$emit('check', $event)"
+      :value="value"
+      :checked="checked"
     />
     <label :id="id" :for="id">{{ name }}</label>
   </div>
@@ -29,6 +32,18 @@ export default {
     },
     singleSelectId: {
       type: String,
+      required: false,
+    },
+    check: {
+      type: Function,
+      required: false,
+    },
+    value: {
+      type: String,
+      required: false,
+    },
+    checked: {
+      type: Boolean,
       required: false,
     },
   },
