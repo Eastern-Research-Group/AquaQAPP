@@ -73,7 +73,7 @@
                 :isSingleSelect="question.refName === 'yesNo'"
                 :singleSelectId="question.questionLabel"
                 :value="option.code"
-                :checked="qappData[question.id].indexOf(option.code) > -1"
+                :checked="qappData[question.id] && qappData[question.id].indexOf(option.code) > -1"
                 @check="updateQappData($event, question)"
               />
             </div>
@@ -214,7 +214,7 @@ export default {
     updateQappData(e, question) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
-        let dataArray = this.qappData[question.id].split(',');
+        let dataArray = this.qappData[question.id] ? this.qappData[question.id].split(',') : [];
         if (dataArray.indexOf(e.target.value) > -1) {
           dataArray = dataArray.filter((val) => val !== e.target.value);
         } else {
