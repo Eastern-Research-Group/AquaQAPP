@@ -55,14 +55,14 @@
               class="input"
               type="text"
               :placeholder="`Enter ${question.questionLabel}`"
-              @input="updateQappData($event, question.id)"
+              @input="updateQappData($event, question)"
             />
             <textarea
               v-if="question.dataEntryType === 'largeText'"
               :value="qappData[question.id]"
               class="input"
               :placeholder="`Enter ${question.questionLabel}`"
-              @input="updateQappData($event, question.id)"
+              @input="updateQappData($event, question)"
             ></textarea>
             <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
               <CheckboxButton
@@ -72,6 +72,9 @@
                 :name="option.label"
                 :isSingleSelect="question.refName === 'yesNo'"
                 :singleSelectId="question.questionLabel"
+                :value="option.code"
+                :checked="qappData[question.id].indexOf(option.code) > -1"
+                @check="updateQappData($event, question)"
               />
             </div>
             <div class="btn-container has-text-right">
@@ -140,6 +143,8 @@ export default {
       shouldShowExample: false,
       hasSaved: false,
       qappData: {},
+      concernArray: [],
+      removedArray: [],
     };
   },
   computed: {
@@ -206,9 +211,19 @@ export default {
       }
       this.shouldShowExample = !this.shouldShowExample;
     },
-    updateQappData(e, questionId) {
+    updateQappData(e, question) {
       this.hasSaved = false;
-      this.qappData[questionId] = e.target.value;
+      if (question.refName && question.refName !== 'yesNo') {
+        let dataArray = this.qappData[question.id].split(',');
+        if (dataArray.indexOf(e.target.value) > -1) {
+          dataArray = dataArray.filter((val) => val !== e.target.value);
+        } else {
+          dataArray.push(e.target.value);
+        }
+        this.qappData[question.id] = dataArray.join(',');
+      } else {
+        this.qappData[question.id] = e.target.value;
+      }
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
