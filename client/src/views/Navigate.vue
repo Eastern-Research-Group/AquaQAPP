@@ -21,7 +21,12 @@
       </ul>
     </aside>
     <section class="right column is-three-quarters">
-      <form @submit.prevent>
+      <Alert
+        v-if="isSectionNotAvailable()"
+        :message="`You must complete the Water Quality Concerns section before completing this section`"
+        type="error"
+      />
+      <form v-else @submit.prevent>
         <Button
           :label="hasSaved ? 'Saved' : 'Save'"
           type="primary"
@@ -125,6 +130,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
 import Locations from '@/components/app/Locations/Locations';
 import Button from '@/components/shared/Button';
@@ -135,7 +141,7 @@ import Parameters from '@/components/app/Parameters';
 import CheckboxButton from '@/components/shared/CheckboxButton';
 
 export default {
-  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton },
+  components: { Alert, Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton },
   data() {
     return {
       currentSection: {},
@@ -245,6 +251,12 @@ export default {
       });
       this.hasSaved = true;
     },
+    isSectionNotAvailable() {
+      return (
+        ['Monitoring Locations', 'Parameters'].indexOf(this.currentSection.sectionLabel) > -1 &&
+        this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Water Quality Concerns').id) === -1
+      );
+    },
   },
 };
 </script>
@@ -261,9 +273,6 @@ export default {
 
 .button.is-text {
   text-decoration: none;
-  white-space: normal;
-  text-align: left;
-  height: 100%;
 
   &:active,
   &:focus {
