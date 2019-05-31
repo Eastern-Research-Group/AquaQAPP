@@ -11,7 +11,6 @@ module.exports = {
         title: 'Test QAPP',
         userId: 1,
         description: 'This is a test QAPP.',
-        archived: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

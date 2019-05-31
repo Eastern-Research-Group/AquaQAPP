@@ -25,7 +25,7 @@ module.exports = (app) => {
   app.get('/api/qapps', isAuthenticated, qappController.index);
   app.get('/api/qapps/:id', isAuthenticated, qappController.show);
   app.post('/api/qapps', isAuthenticated, qappController.store);
-  app.delete('/api/qapps', isAuthenticated, qappController.archive);
+  app.delete('/api/qapps', isAuthenticated, qappController.destroy);
   app.post('/api/qapps/data', isAuthenticated, qappController.saveData);
   app.put('/api/qapps/data', isAuthenticated, qappController.updateData);
   app.delete('/api/qapps/data', isAuthenticated, qappController.deleteData);

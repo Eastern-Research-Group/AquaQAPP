@@ -83,32 +83,6 @@ module.exports = {
       });
     }
   },
-  async archive(req, res) {
-    try {
-      // confirm record exists with same qapp id
-      let qapp = await Qapp.findOne({
-        where: { id: req.body.id },
-      });
-      // if record exists, update, otherwise skip
-      if (qapp) {
-        await Qapp.update(
-          {
-            archived: true,
-          },
-          {
-            where: {
-              id: req.body.id,
-            },
-          }
-        );
-      }
-      res.redirect(303, `/api/qapps/`);
-    } catch (err) {
-      res.status(400).send({
-        error: err,
-      });
-    }
-  },
   async saveData(req, res) {
     try {
       // check if record already exists with same qapp id and question id
