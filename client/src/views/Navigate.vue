@@ -73,7 +73,7 @@
                 :isSingleSelect="question.refName === 'yesNo'"
                 :singleSelectId="question.questionLabel"
                 :value="option.code"
-                :checked="qappData[question.id] && qappData[question.id].indexOf(option.code) > -1"
+                :checked="!!(qappData[question.id] && qappData[question.id].indexOf(option.code) > -1)"
                 @check="updateQappData($event, question)"
               />
             </div>
@@ -143,8 +143,6 @@ export default {
       shouldShowExample: false,
       hasSaved: false,
       qappData: {},
-      concernArray: [],
-      removedArray: [],
     };
   },
   computed: {
