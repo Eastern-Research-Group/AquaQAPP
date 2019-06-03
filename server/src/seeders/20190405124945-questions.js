@@ -165,6 +165,19 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
+      sectionNumber: '8',
+      questionLabel: 'Water Quality Concerns',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'select',
+      maxLength: '255',
+      hasExamples: false,
+      sectionQuestionSort: 8,
+      refName: 'concerns',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
       sectionNumber: '9',
       questionLabel: 'Pollutants',
       dataEntryInstructions: '',
