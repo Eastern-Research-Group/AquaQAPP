@@ -6,7 +6,7 @@ module.exports = {
   async index(req, res) {
     try {
       const qapps = await Qapp.findAll({
-        where: { userId: req.user.id },
+        where: { userId: req.user.id, archived: false },
         include: [
           {
             model: QappDatum,
@@ -77,6 +77,32 @@ module.exports = {
         where: { id: req.body.id },
       });
       res.send(qapp);
+    } catch (err) {
+      res.status(400).send({
+        error: err,
+      });
+    }
+  },
+  async archive(req, res) {
+    try {
+      // confirm record exists with same qapp id
+      const qapp = await Qapp.findOne({
+        where: { id: req.body.id },
+      });
+      // if record exists, update, otherwise skip
+      if (qapp) {
+        await Qapp.update(
+          {
+            archived: true,
+          },
+          {
+            where: {
+              id: req.body.id,
+            },
+          }
+        );
+      }
+      res.redirect(303, `/api/qapps/`);
     } catch (err) {
       res.status(400).send({
         error: err,

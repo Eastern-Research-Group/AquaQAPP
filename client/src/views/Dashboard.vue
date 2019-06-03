@@ -91,13 +91,13 @@
         </form>
       </template>
     </SideNav>
-    <SideNav v-if="shouldShowDelete" title="Delete QAPP" :handleClose="() => (this.shouldShowDelete = false)">
+    <SideNav v-if="shouldShowDelete" :handleClose="() => (shouldShowDelete = false)" title="Delete QAPP">
       <template #default="props">
         <Alert :message="`Are you sure you want to delete ${selectedQapp.title}?`" type="warning" />
         <hr />
         <div class="field is-grouped">
           <div class="control">
-            <Button label="Delete" type="info" @click.native="handleDeleteQapp" />
+            <Button label="Delete" type="info" :preventEvent="true" @click.native="handleDeleteQapp" />
           </div>
           <div class="control">
             <Button label="Cancel" type="cancel" @click.native="props.close" />
@@ -136,6 +136,7 @@ export default {
         userId: this.$auth.user().id,
         title: this.title,
         description: this.description,
+        archived: false,
       });
       this.$router.push({ name: 'navigate', params: { id: this.$store.state.qapp.id } });
     },
@@ -145,8 +146,8 @@ export default {
     },
     async handleDeleteQapp() {
       await this.$store.dispatch('qapps/delete', this.selectedQapp.id);
+      this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
       this.shouldShowDelete = false;
-      this.selectedQapp = null;
     },
   },
   data() {
