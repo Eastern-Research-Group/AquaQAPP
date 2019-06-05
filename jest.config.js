@@ -8,6 +8,7 @@ module.exports = {
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/client/src/$1',
+    '\\.(css|less)$': '<rootDir>/client/src/testUtils/styleMock.js',
   },
   snapshotSerializers: ['jest-serializer-vue'],
   testMatch: ['**/*.test.js'],
