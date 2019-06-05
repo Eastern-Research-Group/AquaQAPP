@@ -287,6 +287,7 @@ export default {
       }
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds });
       this.refreshLocationData(); // refresh markers and table data after deleting
+      this.$emit('refreshData'); // refresh global qappData for mark complete/saving checks
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;

@@ -31,12 +31,14 @@
           :label="hasSaved ? 'Saved' : 'Save'"
           type="primary"
           class="aq-save-btn is-pulled-right"
-          :disabled="hasSaved"
+          :disabled="hasSaved || checkRequiredFields()"
+          :title="getSaveBtnHoverText()"
           @click.native="saveData"
         />
         <MarkComplete
           @markComplete="markComplete(currentSection.sectionNumber)"
           :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
+          :disabled="checkRequiredFields()"
         />
         <div
           class="field"
@@ -59,6 +61,7 @@
               :value="qappData[question.id]"
               class="input"
               type="text"
+              required
               :placeholder="`Enter ${question.questionLabel}`"
               @input="updateQappData($event, question)"
             />
@@ -66,6 +69,7 @@
               v-if="question.dataEntryType === 'largeText'"
               :value="qappData[question.id]"
               class="input"
+              required
               :placeholder="`Enter ${question.questionLabel}`"
               @input="updateQappData($event, question)"
             ></textarea>
@@ -121,7 +125,12 @@
           </div>
         </div>
         <div class="field" v-if="currentSection.sectionLabel === 'Monitoring Locations'">
-          <Locations :questions="currentQuestions" @updateQappData="updateQappData" @saveData="saveData" />
+          <Locations
+            :questions="currentQuestions"
+            @updateQappData="updateQappData"
+            @saveData="saveData"
+            @refreshData="refreshQappData"
+          />
         </div>
       </form>
     </section>
@@ -145,7 +154,6 @@ export default {
   data() {
     return {
       currentSection: {},
-      shouldDisplayMap: false,
       shouldShowExample: false,
       hasSaved: false,
       qappData: {},
@@ -156,7 +164,6 @@ export default {
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns']),
     currentQuestions() {
-      if (this.shouldDisplayMap) return [];
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
         .sort((a, b) => {
@@ -181,7 +188,6 @@ export default {
     // Fetch structure data from DB to generate sections and questions on the fly
     this.getQuestions();
     await this.getSections();
-    console.log('completed sections are: ' + this.completedSections);
     this.currentSection = this.sections ? this.sections[this.getFirstUncompletedSectionIndex()] : {};
     // Fetch lookup reference data
     this.$store.dispatch('ref/getData');
@@ -189,8 +195,9 @@ export default {
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(section) {
-      this.shouldDisplayMap = false;
       this.hasSaved = false;
+      // Locations are automatically saved upon adding or editing, so hasSaved will always be true
+      if (section.sectionLabel === 'Monitoring Locations') this.hasSaved = true;
       this.currentSection = section;
     },
     getOptions(refName) {
@@ -225,10 +232,22 @@ export default {
         } else {
           dataArray.push(e.target.value);
         }
-        this.qappData[question.id] = dataArray.join(',');
+        this.$set(this.qappData, question.id, dataArray.join(','));
       } else {
-        this.qappData[question.id] = e.target.value;
+        this.$set(this.qappData, question.id, e.target.value);
       }
+    },
+    checkRequiredFields() {
+      let hasEmptyFields = false;
+      this.currentQuestions.forEach((q) => {
+        if (
+          !this.qappData[q.id] ||
+          (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim())
+        ) {
+          hasEmptyFields = true;
+        }
+      });
+      return hasEmptyFields;
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
@@ -240,23 +259,41 @@ export default {
         if (this.currentSection.sectionLabel !== 'Monitoring Locations') this.saveData();
       }
     },
-    saveData(e, valueId = null, data) {
+    async saveData(e, valueId = null, data) {
       // TODO: do not save if user has not changed any locations data
-      this.currentQuestions.forEach((q) => {
-        this.$store.dispatch('qapp/save', {
-          qappId: this.$store.state.qapp.id,
-          questionId: q.id,
-          value: data ? data[q.id] : this.qappData[q.id],
-          valueId,
-        });
-      });
+      // Wait for all data to be saved before setting hasSaved and refreshing qappData
+      await Promise.all(
+        this.currentQuestions.map(async (q) => {
+          await this.$store.dispatch('qapp/save', {
+            qappId: this.$store.state.qapp.id,
+            questionId: q.id,
+            value: data ? data[q.id] : this.qappData[q.id],
+            valueId,
+          });
+        })
+      );
       this.hasSaved = true;
+
+      // Refresh global qappData to update validation on mark complete/saving
+      this.refreshQappData();
     },
     isSectionNotAvailable() {
       return (
         ['Monitoring Locations', 'Parameters'].indexOf(this.currentSection.sectionLabel) > -1 &&
         this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Water Quality Concerns').id) === -1
       );
+    },
+    getSaveBtnHoverText() {
+      if (this.currentSection.sectionLabel === 'Monitoring Locations') {
+        return 'Location data are automatically saved upon adding, editing, or deleting.';
+      }
+      if (this.checkRequiredFields()) {
+        return 'You must complete all required fields before saving.';
+      }
+      return null;
+    },
+    refreshQappData() {
+      this.qappData = this.$store.getters['qapp/qappData'];
     },
     getFirstUncompletedSectionIndex() {
       /*
@@ -270,13 +307,11 @@ export default {
        */
       let firstSection = 0;
       this.completedSections.forEach((i) => {
-        if (i !== firstSection && i === firstSection + 1)
-          firstSection = i;
+        if (i !== firstSection && i === firstSection + 1) firstSection = i;
       });
 
       // all are complete, just use the last one
-      if (firstSection === this.sections.length)
-        firstSection -= 1;
+      if (firstSection === this.sections.length) firstSection -= 1;
       return firstSection;
     },
   },
