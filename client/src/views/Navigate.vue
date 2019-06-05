@@ -188,7 +188,6 @@ export default {
     // Fetch structure data from DB to generate sections and questions on the fly
     this.getQuestions();
     await this.getSections();
-    console.log('completed sections are: ' + this.completedSections);
     this.currentSection = this.sections ? this.sections[this.getFirstUncompletedSectionIndex()] : {};
     // Fetch lookup reference data
     this.$store.dispatch('ref/getData');

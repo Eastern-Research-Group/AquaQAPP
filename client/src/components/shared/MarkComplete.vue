@@ -9,7 +9,10 @@
         :checked="complete"
         :disabled="disabled"
       />
-      <span class="slider is-success" :title="disabled ? 'You must complete all required fields before marking complete.' : ''"></span>
+      <span
+        class="slider is-success"
+        :title="disabled ? 'You must complete all required fields before marking complete.' : ''"
+      ></span>
     </label>
   </div>
 </template>
@@ -30,7 +33,7 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
 };
 </script>
