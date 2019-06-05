@@ -1,9 +1,15 @@
 <template>
   <div class="field is-pulled-right switch-container">
     <label for="markComplete" class="switch-label">Mark as Complete</label>
-    <label class="switch">
-      <input id="markComplete" type="checkbox" @change="$emit('markComplete')" :checked="complete" />
-      <span class="slider is-success"></span>
+    <label :class="`switch ${disabled ? 'disabled' : ''}`">
+      <input
+        id="markComplete"
+        type="checkbox"
+        @change="$emit('markComplete')"
+        :checked="complete"
+        :disabled="disabled"
+      />
+      <span class="slider is-success" :title="disabled ? 'You must complete all required fields before marking complete.' : ''"></span>
     </label>
   </div>
 </template>
@@ -20,6 +26,11 @@ export default {
       type: Boolean,
       required: false,
     },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    }
   },
 };
 </script>
@@ -42,6 +53,10 @@ export default {
   width: 50px;
   height: 24px;
   margin-left: 0.5em;
+
+  &.disabled .slider {
+    cursor: not-allowed;
+  }
 
   input {
     // hide default html checkbox

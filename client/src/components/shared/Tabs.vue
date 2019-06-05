@@ -41,7 +41,6 @@ export default {
 
       li {
         min-width: 5em;
-        margin-bottom: -1px;
 
         a {
           border: none;
