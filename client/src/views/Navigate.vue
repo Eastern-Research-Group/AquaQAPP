@@ -188,7 +188,8 @@ export default {
     // Fetch structure data from DB to generate sections and questions on the fly
     this.getQuestions();
     await this.getSections();
-    this.currentSection = this.sections ? this.sections[0] : {};
+    console.log('completed sections are: ' + this.completedSections);
+    this.currentSection = this.sections ? this.sections[this.getFirstUncompletedSectionIndex()] : {};
     // Fetch lookup reference data
     this.$store.dispatch('ref/getData');
   },
@@ -294,6 +295,25 @@ export default {
     },
     refreshQappData() {
       this.qappData = this.$store.getters['qapp/qappData'];
+    },
+    getFirstUncompletedSectionIndex() {
+      /*
+       * get the first section that is NOT completed.
+       * If no sections are completed, return a section index of zero (0).
+       * If the completedSections looks like: [1,2,5] (note: 1 based)
+       *   then return 2 (as section 3, but section[2]) is the first section NOT completed
+       * If the completedSections looks like: [2,4,5] (note: 1 based)
+       *   then return 0 (as section 1, but section[0]) is the first section NOT completed
+       * If all the sections are complete, then return the index of the last section
+       */
+      let firstSection = 0;
+      this.completedSections.forEach((i) => {
+        if (i !== firstSection && i === firstSection + 1) firstSection = i;
+      });
+
+      // all are complete, just use the last one
+      if (firstSection === this.sections.length) firstSection -= 1;
+      return firstSection;
     },
   },
 };
