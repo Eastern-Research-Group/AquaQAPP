@@ -57,6 +57,18 @@ html {
     }
 }
 
-// lastly, import bulma
+// Import bulma and plugins
 @import '../../node_modules/bulma/bulma';
 @import '../../node_modules/bulma-checkradio/dist/css/bulma-checkradio.min.css';
+
+// Override bulma checkradio plugin styles
+.is-checkradio[type="radio"].is-info:checked + label::after {
+  border-color: $lightBlue !important;
+  background-color: $lightBlue !important;
+}
+
+.is-checkradio[type="checkbox"].is-info:checked + label::after {
+  border-width: 3px;
+  top: 0.45rem;
+  left: 0.6rem;
+}

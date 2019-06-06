@@ -162,7 +162,7 @@ export default {
   computed: {
     ...mapState('qapp', ['completedSections']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns']),
+    ...mapState('ref', ['concerns', 'yesNo']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)

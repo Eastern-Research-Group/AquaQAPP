@@ -130,7 +130,7 @@ module.exports = {
       questionLabel: 'Water Type',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'select',
+      dataEntryType: 'radio',
       maxLength: '255',
       hasExamples: false,
       sectionQuestionSort: 5,
@@ -153,10 +153,10 @@ module.exports = {
     });
     records.push({
       sectionNumber: '8',
-      questionLabel: 'Water Type',
+      questionLabel: 'Location Type',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'radio',
+      dataEntryType: 'select',
       maxLength: '45',
       hasExamples: false,
       sectionQuestionSort: 7,
