@@ -1,0 +1,103 @@
+﻿order,description,dynamic,waterType,concern,samplingMethodology,parameter,analyticalMethod,filePath
+1,A7 - Quality Objectives and Criteria,FALSE,Salt,GENBENTHIC,*,*,*,A7/sw_benthic.docx
+2,A7.1 - Field Activities,FALSE,Salt,GENBENTHIC,*,*,*,A7.1/sw_benthic.docx
+3,A9.1 - Documentation,FALSE,Salt,GENBENTHIC,*,*,*,A9.1/sw_benthic.docx
+4,A9.2 - Field Records,FALSE,Salt,GENBENTHIC,*,*,*,A9.2/sw_benthic.docx
+5,A9.4 - Statistical Analyses,FALSE,Salt,GENBENTHIC,*,*,*,A9.4/sw_benthic.docx
+6,B1 - Sampling Design,FALSE,Salt,GENBENTHIC,*,*,*,B1/sw_benthic.docx
+7,B2 - Sampling,TRUE,Salt,GENBENTHIC,*,*,*,B2/sw_benthic.docx
+8,B4 - Analytical Methods,TRUE,Salt,GENBENTHIC,*,*,*,B4/sw_benthic.docx
+9,B8 - Inspection/Acceptance of Supplies and Consumables,TRUE,Salt,GENBENTHIC,*,*,*,B8/sw_benthic.docx
+10,B9 - Non-Direct Measurements,FALSE,Salt,GENBENTHIC,*,*,*,B9/sw_benthic.docx
+11,B10.1 - Data Custody,FALSE,Salt,GENBENTHIC,*,*,*,B10.1/sw_benthic.docx
+12,B10.2 - Laboratory Data and Data Reduction,FALSE,Salt,GENBENTHIC,*,*,*,B10.2/sw_benthic.docx
+13,B10.3 - Data Set Structure,FALSE,Salt,GENBENTHIC,*,*,*,B10.3/sw_benthic.docx
+14,B10.4 - Project Database Codes,FALSE,Salt,GENBENTHIC,*,*,*,B10.4/sw_benthic.docx
+15,A7.1 - Benthic Grab Sampling - Data Quality Objectives,TRUE,Salt,GENBENTHIC,*,*,*,A7.1/sw_benthic/all.docx
+19,A7.2 - Infaunal Analysis Data Quality Goals,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,A7.2/sw_benthic/sed_grab/all.docx
+20,A9.4 - Infaunal Data Analysis,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,A9.4/sw_benthic/sed_grab/all.docx
+21,"B2 - Benthic Sample Collection, Processing, and Storage",TRUE,Salt,EUTRO,Sediment grab,*,*,B2/sw_benthic/sed_grab/all.docx
+22,B2.2 - Soft-Bottom Grab Sample Collection,TRUE,Salt,EUTRO,Sediment grab,*,*,B2.2/sw_benthic/sed_grab/all.docx
+23,B3 - Sample Handling,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B3/sw_benthic/sed_grab/all.docx
+24,B4.1 - Soft-Bottom Infaunal Analysis,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B4.1/sw_benthic/sed_grab/all.docx
+25,B5.1 - Soft-Bottom Grab Sampling Quality Control,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B5.1/sw_benthic/sed_grab/all.docx
+26,B5.2 - Benthic Infauna Analysis Laboratory Quality Control,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B5.2/sw_benthic/sed_grab/all.docx
+27,B6/B7 - Instruments,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B6-B7/sw_benthic/sed_grab/all.docx
+28,B10.1 - Macrofaunal Analysis,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B10.1/sw_benthic/sed_grab/all.docx
+29,B10.2 - Sediment Analysis,TRUE,Salt,GENBENTHIC,Sediment grab,*,*,B10.2/sw_benthic/sed_grab/all.docx
+30,A7.1 - Benthic Grab Sampling - Data Quality Objectives,TRUE,Salt,GENBENTHIC,Sediment grab,Infauna,*,A7.1/sw_benthic/sed_grab/infauna.docx
+31,A7.2 - Infaunal Analysis Data Quality Goals,TRUE,Salt,GENBENTHIC,Sediment grab,Infauna,*,A7.2/sw_benthic/sed_grab/infauna.docx
+32,A9.4 - Infaunal Data Analysis,TRUE,Salt,GENBENTHIC,Sediment grab,Infauna,*,A9.4/sw_benthic/sed_grab/infauna.docx
+33,"B2 - Benthic Sample Collection, Processing, and Storage",TRUE,Salt,GENBENTHIC,Sediment grab,Infauna,*,B2/sw_benthic/sed_grab/infauna.docx
+34,B2.1 - Soft-Bottom Grab Sample Collection,TRUE,Salt,GENBENTHIC,Sediment grab,Infauna,*,B2.1/sw_benthic/sed_grab/infauna.docx
+35,B3.1 - Sample Tracking,TRUE,Salt,GENBENTHIC,Sediment grab,Infauna,*,B3.1/sw_benthic/sed_grab/infauna.docx
+36,B3.2 - Sample Custody,TRUE,Fresh,GENBENTHIC,Sediment grab,Infauna,*,B3.2/sw_benthic/sed_grab/infauna.docx
+37,B4 - Soft-Bottom Infaunal Analysis,TRUE,Fresh,GENBENTHIC,Sediment grab,Infauna,*,B4/sw_benthic/sed_grab/infauna.docx
+38,B5.1 - Soft-Bottom Grab Sampling Quality Control,TRUE,Fresh,ALGAL,Sediment grab,Infauna,*,B5.1/sw_benthic/sed_grab/infauna.docx
+39,B5.2 - Benthic Infauna Analysis Laboratory Quality Control,TRUE,Fresh,ALGAL,Sediment grab,Infauna,*,B5.2/sw_benthic/sed_grab/infauna.docx
+40,B6/B7 - Instruments,TRUE,Fresh,ALGAL,Sediment grab,Infauna,*,B6-B7/sw_benthic/sed_grab/infauna.docx
+41,B10 - Macrofaunal Analysis,TRUE,Fresh,ALGAL,Sediment grab,Infauna,*,B10/sw_benthic/sed_grab/infauna.docx
+42,A7.1 - Benthic Grab Sampling - Data Quality Objectives,TRUE,Salt,GENBENTHIC,Sediment grab,Grain size & TOC,*,A7.1/sw_benthic/sed_grab/grain-size-TOC.docx
+43,"B2 - Benthic Sample Collection, Processing, and Storage",TRUE,Salt,GENBENTHIC,Sediment grab,Grain size & TOC,*,B2/sw_benthic/sed_grab/grain-size-TOC.docx
+44,B2.2 - Soft-Bottom Grab Sample Collection,TRUE,Salt,STORMWTR,Sediment grab,Grain size & TOC,*,B2.2/sw_benthic/sed_grab/grain-size-TOC.docx
+45,B3 - Sample Handling,TRUE,Salt,STORMWTR,Sediment grab,Grain size & TOC,*,B3/sw_benthic/sed_grab/grain-size-TOC.docx
+46,B3.1 - Sample Tracking,TRUE,Salt,STORMWTR,Sediment grab,Grain size & TOC,*,B3.1/sw_benthic/sed_grab/grain-size-TOC.docx
+47,B3.2 - Sample Custody,TRUE,Fresh,ALGAL,Sediment grab,Grain size & TOC,*,B3.2/sw_benthic/sed_grab/grain-size-TOC.docx
+48,B5.1 - Sediment Samples Quality Control,TRUE,Fresh,GENBENTHIC,Sediment grab,Grain size & TOC,*,B5.1/sw_benthic/sed_grab/grain-size-TOC.docx
+49,B6/B7 - Instruments,TRUE,Fresh,GENBENTHIC,Sediment grab,Grain size & TOC,*,B6-B7/sw_benthic/sed_grab/grain-size-TOC.docx
+50,B10 - Sediment Analysis,TRUE,Fresh,GENBENTHIC,Sediment grab,Grain size & TOC,*,B10/sw_benthic/sed_grab/grain-size-TOC.docx
+51,A7.1 - Benthic Grab Sampling - Data Quality Objectives,TRUE,Salt,GENPHYS,Sediment grab,Grain size,*,A7.1/sw_benthic/sed_grab/grain-size.docx
+52,"B2 - Benthic Sample Collection, Processing, and Storage",TRUE,Salt,GENPHYS,Sediment grab,Grain size,*,B2/sw_benthic/sed_grab/grain-size.docx
+53,B2.2 - Soft-Bottom Grab Sample Collection,TRUE,Salt,GENPHYS,Sediment grab,Grain size,*,B2.2/sw_benthic/sed_grab/grain-size.docx
+54,B3 - Sample Handling,TRUE,Salt,GENBENTHIC,Sediment grab,Grain size,*,B3/sw_benthic/sed_grab/grain-size.docx
+55,B3.1 - Sample Tracking,TRUE,Brackish,GENBENTHIC,Sediment grab,Grain size,*,B3.1/sw_benthic/sed_grab/grain-size.docx
+56,B3.2 - Sample Custody,TRUE,Brackish,GENBENTHIC,Sediment grab,Grain size,*,B3.2/sw_benthic/sed_grab/grain-size.docx
+57,B5.1 - Sediment Samples Quality Control,TRUE,Brackish,GENBENTHIC,Sediment grab,Grain size,*,B5.1/sw_benthic/sed_grab/grain-size.docx
+58,B5.2 - Soft-Bottom Grab Sampling Quality Control,TRUE,Fresh,ACID,Sediment grab,Grain size,*,B5.2/sw_benthic/sed_grab/grain-size.docx
+59,B6/B7 - Instruments,TRUE,Fresh,ACID,Sediment grab,Grain size,*,B6-B7/sw_benthic/sed_grab/grain-size.docx
+60,B10 - Sediment Analysis,TRUE,Fresh,ACID,Sediment grab,Grain size,*,B10/sw_benthic/sed_grab/grain-size.docx
+61,A7.1 - Benthic Grab Sampling - Data Quality Objectives,TRUE,Salt,GENBENTHIC,Sediment grab,TOC,*,A7.1/sw_benthic/sed_grab/TOC.docx
+62,"B2 - Benthic Sample Collection, Processing, and Storage",TRUE,Salt,GENBENTHIC,Sediment grab,TOC,*,B2/sw_benthic/sed_grab/TOC.docx
+63,B2.2 - Soft-Bottom Grab Sample Collection,TRUE,Salt,GENBENTHIC,Sediment grab,TOC,*,B2.2/sw_benthic/sed_grab/TOC.docx
+64,B3 - Sample Handling,TRUE,Salt,GENBENTHIC,Sediment grab,TOC,*,B3/sw_benthic/sed_grab/TOC.docx
+65,B3.1 - Sample Tracking,TRUE,Brackish,GENBENTHIC,Sediment grab,TOC,*,B3.1/sw_benthic/sed_grab/TOC.docx
+66,B3.2 - Sample Custody,TRUE,Brackish,GENPHYS,Sediment grab,TOC,*,B3.2/sw_benthic/sed_grab/TOC.docx
+67,B5.1 - Sediment Samples Quality Control,TRUE,Brackish,GENPHYS,Sediment grab,TOC,*,B5.1/sw_benthic/sed_grab/TOC.docx
+68,B5.2 - Soft-Bottom Grab Sampling Quality Control,TRUE,Fresh,ALGAL,Sediment grab,TOC,*,B5.2/sw_benthic/sed_grab/TOC.docx
+69,B6/B7 - Instruments,TRUE,Fresh,ALGAL,Sediment grab,TOC,*,B6-B7/sw_benthic/sed_grab/TOC.docx
+70,B10 - Sediment Analysis,TRUE,Fresh,GENBENTHIC,Sediment grab,TOC,*,B10/sw_benthic/sed_grab/TOC.docx
+71,A7.1 - Sediment Profile Image Collection - Data Quality Goals,TRUE,Salt,GENBENTHIC,SPI,pH,*,A7.1/sw_benthic/SPI.docx
+72,A7.2 - Sediment Profile Image Analysis Data Quality Goals,TRUE,Salt,GENBENTHIC,SPI,pH,*,A7.2/sw_benthic/SPI.docx
+73,A9.4 - SPI Data Analyses,TRUE,Salt,GENBENTHIC,SPI,pH,*,A9.4/sw_benthic/SPI.docx
+74,B2.2 - Sediment Profile Image (SPI) Collection,TRUE,Salt,GENBENTHIC,SPI,pH,*,B2.2/sw_benthic/SPI.docx
+75,B3 - Sample Custody,TRUE,Salt,GENBENTHIC,SPI,Temperature,*,B3/sw_benthic/SPI.docx
+76,B4.3 - Sediment Profile Image Analysis,TRUE,Brackish,GENBENTHIC,SPI,Temperature,*,B4.3/sw_benthic/SPI.docx
+77,B5.1 - SPI Collection Quality Control,TRUE,Brackish,GENBENTHIC,SPI,Temperature,*,B5.1/sw_benthic/SPI.docx
+78,B5.2 - Sediment Profile Image Analysis Quality Control,TRUE,Brackish,GENBENTHIC,SPI,Temperature,*,B5.2/sw_benthic/SPI.docx
+79,B6 - Sediment Profile Image Analysis System,TRUE,Fresh,GENBENTHIC,SPI,Penetration depth,*,B6/sw_benthic/SPI.docx
+80,B7 - Instrument Calibration,TRUE,Fresh,ACID,SPI,Sediment volume,*,B7/sw_benthic/SPI.docx
+81,B10 - SPI Analysis,TRUE,Fresh,ACID,SPI,Sediment texture,*,B10/sw_benthic/SPI.docx
+82,A7.1 - Underwater Digital Still Images or Video,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,aRPD depth,*,A7.1/sw_benthic/UDI.docx
+83,A7.2 - Underwater Digital Still Image or Video Analysis,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,A7.2/sw_benthic/UDI.docx
+84,A9.4 - Digital Still and Video Data Analyses,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,A9.4/sw_benthic/UDI.docx
+85,B2.1 - Underwater Digital Still Image Collection,TRUE,Salt,STORMWTR,Underwater Digital Imaging,,*,B2.1/sw_benthic/UDI.docx
+86,B2.2 - Underwater Digital Video Collection,TRUE,Salt,STORMWTR,Underwater Digital Imaging,,*,B2.2/sw_benthic/UDI.docx
+87,B3 - Sample Custody,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B3/sw_benthic/UDI.docx
+88,B4.1 - Underwater Digital Still Image Analysis,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B4.1/sw_benthic/UDI.docx
+89,B4.2 - Underwater Digital Video Analysis,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B4.2/sw_benthic/UDI.docx
+90,B5.1 - Underwater Digital Images Collection,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B5.1/sw_benthic/UDI.docx
+91,B5.2 - Underwater Digital Image Analysis Quality Control,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B5.2/sw_benthic/UDI.docx
+92,B6 - Underwater Digital Images,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B6/sw_benthic/UDI.docx
+93,B7 - Equipment Calibration,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B7/sw_benthic/UDI.docx
+94,B10 - Underwater Digital Image Analysis,TRUE,Salt,GENBENTHIC,Underwater Digital Imaging,,*,B10/sw_benthic/UDI.docx
+95,A7 - Hard-Bottom/Riprap Destructive Samples Data Quality Goals,TRUE,Salt,ACID,Hard Bottom Riprap,,*,A7/sw_benthic/hard-bottom.docx
+96,A9 - Hard-Bottom/Riprap Destructive Samples Data Analyses,TRUE,Salt,ACID,Hard Bottom Riprap,,*,A9/sw_benthic/hard-bottom.docx
+97,B2 - Hard-Bottom/Riprap Destructive Sample Collection,TRUE,Salt,GENBENTHIC,Hard Bottom Riprap,,*,B2/sw_benthic/hard-bottom.docx
+98,B3 - Sample Handling,TRUE,Salt,GENBENTHIC,Hard Bottom Riprap,,*,B3/sw_benthic/hard-bottom.docx
+99,B3.1 - Sample Custody,TRUE,Salt,GENBENTHIC,Hard Bottom Riprap,,*,B3.1/sw_benthic/hard-bottom.docx
+100,B3.2 - Sample Archival Policies,TRUE,Brackish,GENBENTHIC,Hard Bottom Riprap,,*,B3.2/sw_benthic/hard-bottom.docx
+101,B4 - Hard-Bottom/Riprap - Destructive Sample Analysis,TRUE,Brackish,STORMWTR,Hard Bottom Riprap,,*,B4/sw_benthic/hard-bottom.docx
+102,B5 - Hard-Bottom/Riprap Destructive Sample Quality Objectives,TRUE,Brackish,STORMWTR,Hard Bottom Riprap,,*,B5/sw_benthic/hard-bottom.docx
+103,B5.1 - Hard-Bottom/Riprap Destructive Sample Quality Control,TRUE,Fresh,GENBENTHIC,Hard Bottom Riprap,,*,B5/sw_benthic/hard-bottom.docx
+104,B6 - Hard-Bottom/Riprap Destructive Sampling,TRUE,Fresh,GENBENTHIC,Hard Bottom Riprap,,*,B6/sw_benthic/hard-bottom.docx
+105,B10 - Macrofaunal Analysis,TRUE,Fresh,GENBENTHIC,Hard Bottom Riprap,,*,B10/sw_benthic/hard-bottom.docx

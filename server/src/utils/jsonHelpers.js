@@ -1,5 +1,6 @@
 const fs = require('fs');
 const xml2js = require('xml2js');
+const csv = require('csvtojson');
 
 const parseStringSync = (str) => {
   let result;
@@ -31,4 +32,9 @@ const wqxXmlToJson = (filePath) => {
   return data;
 };
 
-module.exports = { wqxXmlToJson };
+const csvToJson = async (filePath) => {
+  const json = await csv({ checkType: true }).fromFile(filePath);
+  return json;
+};
+
+module.exports = { wqxXmlToJson, csvToJson };
