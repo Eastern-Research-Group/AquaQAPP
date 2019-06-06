@@ -10,6 +10,7 @@ module.exports = {
     entry: {
       app: './client/src/main.js',
     },
+    devtool: 'source-map',
   },
   devServer: {
     host: 'localhost',
