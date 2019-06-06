@@ -34,10 +34,6 @@ export default {
       type: String,
       required: false,
     },
-    check: {
-      type: Function,
-      required: false,
-    },
     value: {
       type: String,
       required: false,

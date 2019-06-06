@@ -21,17 +21,24 @@
       </ul>
     </aside>
     <section class="right column is-three-quarters">
-      <form @submit.prevent>
+      <Alert
+        v-if="isSectionNotAvailable()"
+        :message="`You must complete the Water Quality Concerns section before completing this section`"
+        type="error"
+      />
+      <form v-else @submit.prevent>
         <Button
           :label="hasSaved ? 'Saved' : 'Save'"
           type="primary"
           class="aq-save-btn is-pulled-right"
-          :disabled="hasSaved"
+          :disabled="hasSaved || checkRequiredFields()"
+          :title="getSaveBtnHoverText()"
           @click.native="saveData"
         />
         <MarkComplete
           @markComplete="markComplete(currentSection.sectionNumber)"
           :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
+          :disabled="checkRequiredFields()"
         />
         <div
           class="field"
@@ -58,6 +65,7 @@
               :value="qappData[question.id]"
               class="input"
               type="text"
+              required
               :placeholder="`Enter ${question.questionLabel}`"
               @input="updateQappData($event, question)"
             />
@@ -65,6 +73,7 @@
               v-if="question.dataEntryType === 'largeText'"
               :value="qappData[question.id]"
               class="input"
+              required
               :placeholder="`Enter ${question.questionLabel}`"
               @input="updateQappData($event, question)"
             ></textarea>
@@ -77,7 +86,7 @@
                 :isSingleSelect="question.refName === 'yesNo'"
                 :singleSelectId="question.questionLabel"
                 :value="option.code"
-                :checked="qappData[question.id].indexOf(option.code) > -1"
+                :checked="!!(qappData[question.id] && qappData[question.id].indexOf(option.code) > -1)"
                 @check="updateQappData($event, question)"
               />
             </div>
@@ -120,7 +129,12 @@
           </div>
         </div>
         <div class="field" v-if="currentSection.sectionLabel === 'Monitoring Locations'">
-          <Locations :questions="currentQuestions" @updateQappData="updateQappData" @saveData="saveData" />
+          <Locations
+            :questions="currentQuestions"
+            @updateQappData="updateQappData"
+            @saveData="saveData"
+            @refreshData="refreshQappData"
+          />
         </div>
         <div class="field" v-else-if="currentSection.sectionLabel === 'Project Organization/Personnel'">
           <PersonnelTable :questions="currentQuestions" @saveData="saveData" />
@@ -132,6 +146,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
 import Locations from '@/components/app/Locations/Locations';
 import Button from '@/components/shared/Button';
@@ -143,16 +158,13 @@ import CheckboxButton from '@/components/shared/CheckboxButton';
 import PersonnelTable from '@/components/app/PersonnelTable';
 
 export default {
-  components: { Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton, PersonnelTable },
+  components: { Alert, Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton, PersonnelTable },
   data() {
     return {
       currentSection: {},
-      shouldDisplayMap: false,
       shouldShowExample: false,
       hasSaved: false,
       qappData: {},
-      concernArray: [],
-      removedArray: [],
     };
   },
   computed: {
@@ -160,7 +172,6 @@ export default {
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns']),
     currentQuestions() {
-      if (this.shouldDisplayMap) return [];
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
         .sort((a, b) => {
@@ -185,15 +196,16 @@ export default {
     // Fetch structure data from DB to generate sections and questions on the fly
     this.getQuestions();
     await this.getSections();
-    this.currentSection = this.sections ? this.sections[0] : {};
+    this.currentSection = this.sections ? this.sections[this.getFirstUncompletedSectionIndex()] : {};
     // Fetch lookup reference data
     this.$store.dispatch('ref/getData');
   },
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(section) {
-      this.shouldDisplayMap = false;
       this.hasSaved = false;
+      // Locations are automatically saved upon adding or editing, so hasSaved will always be true
+      if (section.sectionLabel === 'Monitoring Locations') this.hasSaved = true;
       this.currentSection = section;
     },
     getOptions(refName) {
@@ -222,16 +234,28 @@ export default {
     updateQappData(e, question) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
-        let dataArray = this.qappData[question.id].split(',');
+        let dataArray = this.qappData[question.id] ? this.qappData[question.id].split(',') : [];
         if (dataArray.indexOf(e.target.value) > -1) {
           dataArray = dataArray.filter((val) => val !== e.target.value);
         } else {
           dataArray.push(e.target.value);
         }
-        this.qappData[question.id] = dataArray.join(',');
+        this.$set(this.qappData, question.id, dataArray.join(','));
       } else {
-        this.qappData[question.id] = e.target.value;
+        this.$set(this.qappData, question.id, e.target.value);
       }
+    },
+    checkRequiredFields() {
+      let hasEmptyFields = false;
+      this.currentQuestions.forEach((q) => {
+        if (
+          !this.qappData[q.id] ||
+          (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim())
+        ) {
+          hasEmptyFields = true;
+        }
+      });
+      return hasEmptyFields;
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
@@ -243,17 +267,60 @@ export default {
         if (this.currentSection.sectionLabel !== 'Monitoring Locations') this.saveData();
       }
     },
-    saveData(e, valueId = null, data) {
+    async saveData(e, valueId = null, data) {
       // TODO: do not save if user has not changed any locations data
-      this.currentQuestions.forEach((q) => {
-        this.$store.dispatch('qapp/save', {
-          qappId: this.$store.state.qapp.id,
-          questionId: q.id,
-          value: data ? data[q.id] : this.qappData[q.id],
-          valueId,
-        });
-      });
+      // Wait for all data to be saved before setting hasSaved and refreshing qappData
+      await Promise.all(
+        this.currentQuestions.map(async (q) => {
+          await this.$store.dispatch('qapp/save', {
+            qappId: this.$store.state.qapp.id,
+            questionId: q.id,
+            value: data ? data[q.id] : this.qappData[q.id],
+            valueId,
+          });
+        })
+      );
       this.hasSaved = true;
+
+      // Refresh global qappData to update validation on mark complete/saving
+      this.refreshQappData();
+    },
+    isSectionNotAvailable() {
+      return (
+        ['Monitoring Locations', 'Parameters'].indexOf(this.currentSection.sectionLabel) > -1 &&
+        this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Water Quality Concerns').id) === -1
+      );
+    },
+    getSaveBtnHoverText() {
+      if (this.currentSection.sectionLabel === 'Monitoring Locations') {
+        return 'Location data are automatically saved upon adding, editing, or deleting.';
+      }
+      if (this.checkRequiredFields()) {
+        return 'You must complete all required fields before saving.';
+      }
+      return null;
+    },
+    refreshQappData() {
+      this.qappData = this.$store.getters['qapp/qappData'];
+    },
+    getFirstUncompletedSectionIndex() {
+      /*
+       * get the first section that is NOT completed.
+       * If no sections are completed, return a section index of zero (0).
+       * If the completedSections looks like: [1,2,5] (note: 1 based)
+       *   then return 2 (as section 3, but section[2]) is the first section NOT completed
+       * If the completedSections looks like: [2,4,5] (note: 1 based)
+       *   then return 0 (as section 1, but section[0]) is the first section NOT completed
+       * If all the sections are complete, then return the index of the last section
+       */
+      let firstSection = 0;
+      this.completedSections.forEach((i) => {
+        if (i !== firstSection && i === firstSection + 1) firstSection = i;
+      });
+
+      // all are complete, just use the last one
+      if (firstSection === this.sections.length) firstSection -= 1;
+      return firstSection;
     },
   },
 };
@@ -308,10 +375,6 @@ textarea {
 .fa-check {
   font-size: 1.2em;
   margin-left: 0.5em;
-}
-
-.parameters {
-  display: inline-flex !important;
 }
 
 .columns.is-multiline {

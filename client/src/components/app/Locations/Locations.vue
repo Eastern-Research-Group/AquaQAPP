@@ -21,7 +21,12 @@
     >
       <form @submit.prevent="submitLocationData">
         <div class="field" v-for="question in questions" :key="question.id">
-          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
+          <label
+            v-if="question.questionLabel !== 'Water Quality Concerns' || shouldShowConcerns()"
+            class="label"
+            :for="`question${question.id}`"
+            >{{ question.questionLabel }}</label
+          >
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
@@ -33,6 +38,17 @@
           />
           <div v-if="question.dataEntryType === 'select'">
             <multiselect
+              v-if="question.questionLabel === 'Water Quality Concerns' && shouldShowConcerns()"
+              v-model="pendingData[question.id]"
+              :options="getConcerns()"
+              :placeholder="`Select ${question.questionLabel}`"
+              :custom-label="question.refName === 'coordRefSystems' ? nameWithDesc : undefined"
+              label="label"
+              track-by="code"
+              :multiple="true"
+            ></multiselect>
+            <multiselect
+              v-else-if="question.questionLabel !== 'Water Quality Concerns'"
               v-model="pendingData[question.id]"
               :options="getOptions(question.refName)"
               :placeholder="`Select ${question.questionLabel}`"
@@ -102,6 +118,7 @@ export default {
       shouldDeleteSingle: false,
       latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
       lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
+      concernQuestionId: null,
       qappData: {},
       pendingData: {},
       selectedLocation: null,
@@ -111,9 +128,13 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
-    ...mapState('ref', ['waterTypes', 'collectionMethods', 'coordRefSystems']),
+    ...mapState('ref', ['waterTypes', 'collectionMethods', 'coordRefSystems', 'concerns']),
+    ...mapState({
+      allQuestions: (state) => state.structure.questions,
+    }),
   },
   mounted() {
+    this.concernQuestionId = this.allQuestions.find((q) => q.refName === 'concerns').id;
     this.refreshLocationData();
   },
   methods: {
@@ -158,7 +179,11 @@ export default {
           const key = question.questionLabel;
           datum.forEach((locationField) => {
             if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
-            if (question.refName) {
+            if (question.refName === 'concerns') {
+              locations[locationField.valueId][key] = this.concerns.filter(
+                (r) => locationField.value.indexOf(r.code) > -1
+              );
+            } else if (question.refName) {
               locations[locationField.valueId][key] = this[question.refName].find(
                 (r) => r.id === parseInt(locationField.value, 10)
               );
@@ -262,6 +287,7 @@ export default {
       }
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds });
       this.refreshLocationData(); // refresh markers and table data after deleting
+      this.$emit('refreshData'); // refresh global qappData for mark complete/saving checks
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;
@@ -271,12 +297,41 @@ export default {
       const cleanedData = {};
       Object.keys(this.pendingData).forEach((qId) => {
         if (typeof this.pendingData[qId] === 'object') {
-          cleanedData[qId] = this.pendingData[qId].id;
+          // if array, store comma separate list of codes
+          if (Array.isArray(this.pendingData[qId])) {
+            const codesArray = this.pendingData[qId].map((datum) => {
+              return datum.code;
+            });
+            cleanedData[qId] = codesArray.join(',');
+          } else {
+            cleanedData[qId] = this.pendingData[qId].id;
+          }
         } else {
           cleanedData[qId] = this.pendingData[qId];
         }
       });
       return cleanedData;
+    },
+    shouldShowConcerns() {
+      const differByLocationQuestionId = this.allQuestions.find(
+        (q) => q.questionLabel === 'Do your water quality concerns differ by sampling location?'
+      ).id;
+      if (this.qappData[differByLocationQuestionId] === 'Y') {
+        return true;
+      }
+      return false;
+    },
+    getConcerns() {
+      const concerns = [];
+      const selectedConcerns = this.qappData[this.concernQuestionId];
+      if (selectedConcerns) {
+        this.concerns.forEach((concern) => {
+          if (selectedConcerns.indexOf(concern.code) > -1) {
+            concerns.push(concern);
+          }
+        });
+      }
+      return concerns;
     },
   },
 };
