@@ -1,4 +1,5 @@
 const {
+  Crosswalk,
   RefConcern,
   RefLocationType,
   RefHorizontalCollectionMethod,
@@ -39,6 +40,16 @@ module.exports = {
   async coordRefSystems(req, res) {
     try {
       const refs = await RefHorizontalCoordRefSystem.findAll({});
+      res.send(refs);
+    } catch (err) {
+      res.status(400).send({
+        err: 'Data unavailable.',
+      });
+    }
+  },
+  async crosswalks(req, res) {
+    try {
+      const refs = await Crosswalk.findAll({});
       res.send(refs);
     } catch (err) {
       res.status(400).send({

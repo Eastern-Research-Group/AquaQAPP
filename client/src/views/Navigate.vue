@@ -345,6 +345,9 @@ export default {
 
 .button.is-text {
   text-decoration: none;
+  white-space: normal;
+  text-align: left;
+  height: 100%;
 
   &:active,
   &:focus {
