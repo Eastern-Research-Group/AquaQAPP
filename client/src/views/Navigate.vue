@@ -42,7 +42,11 @@
         />
         <div
           class="field"
-          v-for="question in currentQuestions.filter((q) => q.section.sectionLabel !== 'Monitoring Locations')"
+          v-for="question in currentQuestions.filter(
+            (q) =>
+              q.section.sectionLabel !== 'Monitoring Locations' &&
+              q.section.sectionLabel !== 'Project Organization/Personnel'
+          )"
           :key="question.id"
         >
           <div class="field parameters" v-if="question.questionLabel === 'Pollutants'">
@@ -132,6 +136,9 @@
             @refreshData="refreshQappData"
           />
         </div>
+        <div class="field" v-else-if="currentSection.sectionLabel === 'Project Organization/Personnel'">
+          <PersonnelTable :questions="currentQuestions" @saveData="saveData" />
+        </div>
       </form>
     </section>
   </div>
@@ -148,9 +155,10 @@ import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
 import Parameters from '@/components/app/Parameters';
 import CheckboxButton from '@/components/shared/CheckboxButton';
+import PersonnelTable from '@/components/app/PersonnelTable';
 
 export default {
-  components: { Alert, Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton },
+  components: { Alert, Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton, PersonnelTable },
   data() {
     return {
       currentSection: {},
