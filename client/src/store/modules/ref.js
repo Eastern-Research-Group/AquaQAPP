@@ -7,6 +7,7 @@ const state = {
   coordRefSystems: [],
   waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Salt' }, { id: 'Brackish', name: 'Brackish' }],
   yesNo: [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }],
+  crosswalks: [],
 };
 
 const mutations = {
@@ -28,6 +29,9 @@ const actions = {
 
     const coordRefSystems = await axios.get('api/coord-ref-systems');
     commit('SET_REF', { ref: 'coordRefSystems', data: coordRefSystems.data });
+
+    const crosswalks = await axios.get('api/crosswalks');
+    commit('SET_REF', { ref: 'crosswalks', data: crosswalks.data });
   },
 };
 

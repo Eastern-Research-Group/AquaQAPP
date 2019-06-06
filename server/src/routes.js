@@ -46,4 +46,5 @@ module.exports = (app) => {
   app.get('/api/location-types', isAuthenticated, refController.locationTypes);
   app.get('/api/collection-methods', isAuthenticated, refController.collectionMethods);
   app.get('/api/coord-ref-systems', isAuthenticated, refController.coordRefSystems);
+  app.get('/api/crosswalks', isAuthenticated, refController.crosswalks);
 };
