@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const RefConcerns = sequelize.define(
-    'RefConcerns',
+  const RefConcern = sequelize.define(
+    'RefConcern',
     {
       code: DataTypes.STRING,
       label: DataTypes.STRING,
@@ -9,5 +9,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  return RefConcerns;
+  return RefConcern;
 };

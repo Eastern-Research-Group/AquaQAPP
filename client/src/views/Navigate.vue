@@ -181,7 +181,7 @@ export default {
   computed: {
     ...mapState('qapp', ['completedSections']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns']),
+    ...mapState('ref', ['concerns', 'yesNo']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -220,10 +220,6 @@ export default {
       this.currentSection = section;
     },
     getOptions(refName) {
-      // get reference data array based on refName field in questions table
-      if (refName === 'yesNo') {
-        return [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }];
-      }
       return this[refName];
     },
     toggleShouldShowExample() {

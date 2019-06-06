@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const RefWaterType = sequelize.define(
-    'RefWaterType',
+  const RefLocationType = sequelize.define(
+    'RefLocationType',
     {
       name: DataTypes.STRING,
       description: DataTypes.TEXT,
@@ -9,5 +9,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  return RefWaterType;
+  return RefLocationType;
 };

@@ -43,7 +43,7 @@ module.exports = (app) => {
 
   // referencce routes
   app.get('/api/concerns', isAuthenticated, refController.concerns);
-  app.get('/api/water-types', isAuthenticated, refController.waterTypes);
+  app.get('/api/location-types', isAuthenticated, refController.locationTypes);
   app.get('/api/collection-methods', isAuthenticated, refController.collectionMethods);
   app.get('/api/coord-ref-systems', isAuthenticated, refController.coordRefSystems);
 };

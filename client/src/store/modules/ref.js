@@ -2,9 +2,11 @@ import axios from 'axios';
 
 const state = {
   concerns: [],
-  waterTypes: [],
+  locationTypes: [],
   collectionMethods: [],
   coordRefSystems: [],
+  waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Salt' }, { id: 'Brackish', name: 'Brackish' }],
+  yesNo: [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }],
 };
 
 const mutations = {
@@ -18,8 +20,8 @@ const actions = {
     const concerns = await axios.get('api/concerns');
     commit('SET_REF', { ref: 'concerns', data: concerns.data });
 
-    const waterTypes = await axios.get('api/water-types');
-    commit('SET_REF', { ref: 'waterTypes', data: waterTypes.data });
+    const locationTypes = await axios.get('api/location-types');
+    commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data });
 
     const collectionMethods = await axios.get('api/collection-methods');
     commit('SET_REF', { ref: 'collectionMethods', data: collectionMethods.data });

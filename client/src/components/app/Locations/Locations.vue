@@ -36,6 +36,19 @@
             :placeholder="`Enter ${question.questionLabel}`"
             required
           />
+          <template v-if="question.dataEntryType === 'radio'">
+            <template v-for="(option, index) in getOptions(question.refName)">
+              <input
+                :key="index"
+                :id="option.id"
+                class="is-checkradio is-info"
+                type="radio"
+                :value="option.id"
+                v-model="pendingData[question.id]"
+              />
+              <label :key="option.name" :for="option.id">{{ option.name }}</label>
+            </template>
+          </template>
           <div v-if="question.dataEntryType === 'select'">
             <multiselect
               v-if="question.questionLabel === 'Water Quality Concerns' && shouldShowConcerns()"
@@ -128,7 +141,7 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
-    ...mapState('ref', ['waterTypes', 'collectionMethods', 'coordRefSystems', 'concerns']),
+    ...mapState('ref', ['locationTypes', 'collectionMethods', 'coordRefSystems', 'concerns', 'waterTypes']),
     ...mapState({
       allQuestions: (state) => state.structure.questions,
     }),
@@ -183,7 +196,7 @@ export default {
               locations[locationField.valueId][key] = this.concerns.filter(
                 (r) => locationField.value.indexOf(r.code) > -1
               );
-            } else if (question.refName) {
+            } else if (question.dataEntryType === 'select') {
               locations[locationField.valueId][key] = this[question.refName].find(
                 (r) => r.id === parseInt(locationField.value, 10)
               );
