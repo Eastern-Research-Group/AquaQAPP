@@ -26,6 +26,66 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
+      sectionNumber: '3',
+      questionLabel: 'Personnel Name',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Personnel Position',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 2,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Distribution List',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 3,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Approval Sheet',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 4,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Organization',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 5,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
       sectionNumber: '4',
       questionLabel: 'Problem Definition',
       dataEntryInstructions:
