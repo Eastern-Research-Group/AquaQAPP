@@ -158,7 +158,18 @@ import CheckboxButton from '@/components/shared/CheckboxButton';
 import PersonnelTable from '@/components/app/PersonnelTable';
 
 export default {
-  components: { Alert, Locations, Tip, Button, ExampleModal, Tabs, MarkComplete, Parameters, CheckboxButton, PersonnelTable },
+  components: {
+    Alert,
+    Locations,
+    Tip,
+    Button,
+    ExampleModal,
+    Tabs,
+    MarkComplete,
+    Parameters,
+    CheckboxButton,
+    PersonnelTable,
+  },
   data() {
     return {
       currentSection: {},
