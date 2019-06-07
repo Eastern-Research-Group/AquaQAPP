@@ -15,10 +15,10 @@
               <td colspan="4">No personnel has been added. Add personnel to continue.</td>
             </tr>
             <tr v-for="row in rows" :key="row.id" ref="row">
-              <td>{{ row['Personnel Name'] }}</td>
-              <td>{{ row['Personnel Position'] }}</td>
-              <td>{{ row['Distribution List'] }}</td>
-              <td>{{ row['Approval Sheet'] }}</td>
+              <td>{{ row['Full Name'] }}</td>
+              <td>{{ row['Title/Position'] }}</td>
+              <td>{{ row['Include in distribution list?'] }}</td>
+              <td>{{ row['Include in the approval list?'] }}</td>
               <td>{{ row['Organization'] }}</td>
               <td>
                 <div class="field is-grouped">
@@ -54,11 +54,16 @@
     <SideNav
       v-if="isEnteringInfo"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Personnel' : 'Add Personnel'"
+      :title="shouldShowEdit ? 'Edit Org/Personnel' : 'Add Org/Personnel'"
     >
       <form @submit.prevent="submitPersonnelData">
         <div class="field" v-for="question in questions" :key="question.id">
-          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
+          <label
+            v-if="question.dataEntryType === 'text' || question.dataEntryType === 'largeText'"
+            class="label"
+            :for="`question${question.id}`"
+            >{{ question.questionLabel }}</label
+          >
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
@@ -68,6 +73,25 @@
             :placeholder="`Enter ${question.questionLabel}`"
             required
           />
+          <textarea
+            v-if="question.dataEntryType === 'largeText'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.id]"
+            class="input"
+            :placeholder="`Enter ${question.questionLabel}`"
+            required
+          ></textarea>
+          <div class="field" v-if="question.dataEntryType === 'checkbox'">
+            <input
+              class="is-checkradio"
+              :id="question.id"
+              type="checkbox"
+              true-value="Yes"
+              false-value="No"
+              v-model="pendingData[question.id]"
+            />
+            <label :for="question.id">{{ question.questionLabel }}</label>
+          </div>
         </div>
         <Button
           :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
@@ -78,10 +102,10 @@
     </SideNav>
     <SideNav v-if="shouldShowDelete" title="Delete Personnel" :handleClose="() => (this.shouldShowDelete = false)">
       <template #default="props">
-        <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all personnel?`" type="warning" />
+        <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all org/personnel?`" type="warning" />
         <Alert
           v-if="shouldDeleteSingle"
-          :message="`Are you sure you want to delete ${selectedPersonnel['Personnel Name']}?`"
+          :message="`Are you sure you want to delete ${selectedPersonnel['Full Name']}?`"
           type="warning"
         />
         <hr />
@@ -121,7 +145,7 @@ export default {
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
       selectedPersonnel: null,
-      personnelId: this.questions.find((q) => q.questionLabel === 'Personnel Name').id,
+      personnelId: this.questions.find((q) => q.questionLabel === 'Full Name').id,
       qappData: {},
       pendingData: {},
       rows: [],
