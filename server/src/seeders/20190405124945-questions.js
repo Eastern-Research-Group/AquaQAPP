@@ -27,7 +27,7 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionLabel: 'Personnel Name',
+      questionLabel: 'Full Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -39,7 +39,7 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionLabel: 'Personnel Position',
+      questionLabel: 'Title/Position',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -51,10 +51,10 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionLabel: 'Distribution List',
+      questionLabel: 'Include in distribution list?',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'text',
+      dataEntryType: 'checkbox',
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 3,
@@ -63,10 +63,10 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionLabel: 'Approval Sheet',
+      questionLabel: 'Include in the approval list?',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'text',
+      dataEntryType: 'checkbox',
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 4,
@@ -79,9 +79,105 @@ module.exports = {
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
-      maxLength: '75',
+      maxLength: '512',
       hasExamples: false,
       sectionQuestionSort: 5,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Address',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '4000',
+      hasExamples: false,
+      sectionQuestionSort: 6,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'City',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '1000',
+      hasExamples: false,
+      sectionQuestionSort: 7,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'State',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '1000',
+      hasExamples: false,
+      sectionQuestionSort: 8,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Zip',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '1000',
+      hasExamples: false,
+      sectionQuestionSort: 9,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Telephone',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '1000',
+      hasExamples: false,
+      sectionQuestionSort: 10,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Email',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '1000',
+      hasExamples: false,
+      sectionQuestionSort: 11,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Fax',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '1000',
+      hasExamples: false,
+      sectionQuestionSort: 12,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
+      questionLabel: 'Responsibilities',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '4096',
+      hasExamples: false,
+      sectionQuestionSort: 13,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
