@@ -62,20 +62,20 @@
             ></div>
             <input
               v-if="question.dataEntryType === 'text'"
-              :value="qappData[question.id]"
               class="input"
               type="text"
               required
               :placeholder="`Enter ${question.questionLabel}`"
-              @input="updateQappData($event, question)"
+              v-model="pendingData[question.id]"
+              @input="hasSaved = false"
             />
             <textarea
               v-if="question.dataEntryType === 'largeText'"
-              :value="qappData[question.id]"
               class="input"
               required
               :placeholder="`Enter ${question.questionLabel}`"
-              @input="updateQappData($event, question)"
+              v-model="pendingData[question.id]"
+              @input="hasSaved = false"
             ></textarea>
             <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
               <CheckboxButton
@@ -86,8 +86,8 @@
                 :isSingleSelect="question.refName === 'yesNo'"
                 :singleSelectId="question.questionLabel"
                 :value="option.code"
-                :checked="!!(qappData[question.id] && qappData[question.id].indexOf(option.code) > -1)"
-                @check="updateQappData($event, question)"
+                :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
+                @check="updatePendingData($event, question)"
               />
             </div>
             <div class="btn-container has-text-right">
@@ -129,23 +129,33 @@
           </div>
         </div>
         <div class="field" v-if="currentSection.sectionLabel === 'Monitoring Locations'">
-          <Locations
-            :questions="currentQuestions"
-            @updateQappData="updateQappData"
-            @saveData="saveData"
-            @refreshData="refreshQappData"
-          />
+          <Locations :questions="currentQuestions" @saveData="saveData" />
         </div>
         <div class="field" v-else-if="currentSection.sectionLabel === 'Project Organization/Personnel'">
           <PersonnelTable :questions="currentQuestions" @saveData="saveData" />
         </div>
       </form>
     </section>
+    <div class="modal is-active" v-if="shouldDisplayUnsavedWarning">
+      <div class="modal-background" @click="shouldDisplayUnsavedWarning = false"></div>
+      <div class="modal-content">
+        <div class="box">
+          <button type="button" class="button is-text modal-close" @click="shouldDisplayUnsavedWarning = false">
+            <span class="fa fa-times"></span>
+          </button>
+          <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
+          <div class="btn-container">
+            <Button label="Save Changes" type="success" @click.native="saveData" />
+            <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
 import Locations from '@/components/app/Locations/Locations';
@@ -175,13 +185,16 @@ export default {
       currentSection: {},
       shouldShowExample: false,
       hasSaved: false,
-      qappData: {},
+      pendingData: {},
+      shouldDisplayUnsavedWarning: false,
+      pendingSection: null,
     };
   },
   computed: {
     ...mapState('qapp', ['completedSections']),
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns', 'yesNo']),
+    ...mapGetters('qapp', ['qappData']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -201,23 +214,43 @@ export default {
     if (this.$route.params.id !== this.$store.state.qapp.id) {
       await this.$store.dispatch('qapp/get', this.$route.params.id);
     }
-    /* Once QAPP is fetched, set this component's qappData to the saved database values,
-       so existing field entries are pre-filled from the database */
-    this.qappData = this.$store.getters['qapp/qappData'];
     // Fetch structure data from DB to generate sections and questions on the fly
     this.getQuestions();
     await this.getSections();
-    this.currentSection = this.sections ? this.sections[this.getFirstUncompletedSectionIndex()] : {};
+    if (this.sections) {
+      this.getFirstUncompletedSectionIndex();
+    }
     // Fetch lookup reference data
     this.$store.dispatch('ref/getData');
   },
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(section) {
-      this.hasSaved = false;
-      // Locations are automatically saved upon adding or editing, so hasSaved will always be true
-      if (section.sectionLabel === 'Monitoring Locations') this.hasSaved = true;
-      this.currentSection = section;
+      if (this.hasUnsavedData()) {
+        this.shouldDisplayUnsavedWarning = true;
+        this.pendingSection = section;
+      } else {
+        this.hasSaved = false;
+        this.currentSection = section;
+        // Set initial pending data based on existing qapp data
+        this.pendingData = Object.assign({}, this.qappData);
+        /*
+         * Locations are automatically saved upon adding or editing, so hasSaved will always be true
+         * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
+         */
+        if (
+          section.sectionLabel === 'Monitoring Locations' ||
+          this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length === this.currentQuestions.length
+        ) {
+          this.hasSaved = true;
+        }
+      }
+    },
+    discardChanges() {
+      this.pendingData = {};
+      this.shouldDisplayUnsavedWarning = false;
+      this.changeSection(this.pendingSection);
+      this.pendingSection = null;
     },
     getOptions(refName) {
       return this[refName];
@@ -226,43 +259,47 @@ export default {
       this.shouldShowExample = !this.shouldShowExample;
     },
     addExample(qId) {
-      this.qappData[qId] = this.qappData[qId] || ''; // if undefined, set as empty string
+      this.pendingData[qId] = this.pendingData[qId] || ''; // if undefined, set as empty string
       try {
         if (document.querySelector('#example1')) {
-          this.qappData[qId] += ` ${document.querySelector('#example1').innerText}`;
+          this.pendingData[qId] += ` ${document.querySelector('#example1').innerText}`;
         } else {
-          this.qappData[qId] += ` ${document.querySelector('#example2').innerText}`;
+          this.pendingData[qId] += ` ${document.querySelector('#example2').innerText}`;
         }
       } catch (e) {
         console.log('Exception: ', e);
       }
       this.shouldShowExample = !this.shouldShowExample;
     },
-    updateQappData(e, question) {
+    updatePendingData(e, question) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
-        let dataArray = this.qappData[question.id] ? this.qappData[question.id].split(',') : [];
+        let dataArray = this.pendingData[question.id] ? this.pendingData[question.id].split(',') : [];
         if (dataArray.indexOf(e.target.value) > -1) {
           dataArray = dataArray.filter((val) => val !== e.target.value);
         } else {
           dataArray.push(e.target.value);
         }
-        this.$set(this.qappData, question.id, dataArray.join(','));
+        this.$set(this.pendingData, question.id, dataArray.join(','));
       } else {
-        this.$set(this.qappData, question.id, e.target.value);
+        this.$set(this.pendingData, question.id, e.target.value);
       }
     },
     checkRequiredFields() {
       let hasEmptyFields = false;
       this.currentQuestions.forEach((q) => {
         if (
-          !this.qappData[q.id] ||
-          (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim())
+          !this.pendingData[q.id] ||
+          (this.pendingData[q.id] && typeof this.pendingData[q.id] === 'string' && !this.pendingData[q.id].trim())
         ) {
           hasEmptyFields = true;
         }
       });
       return hasEmptyFields;
+    },
+    hasUnsavedData() {
+      if (this.hasSaved) return false;
+      return this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length;
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
@@ -275,22 +312,23 @@ export default {
       }
     },
     async saveData(e, valueId = null, data) {
-      // TODO: do not save if user has not changed any locations data
-      // Wait for all data to be saved before setting hasSaved and refreshing qappData
+      // Wait for all data to be saved before setting hasSaved
       await Promise.all(
         this.currentQuestions.map(async (q) => {
           await this.$store.dispatch('qapp/save', {
             qappId: this.$store.state.qapp.id,
             questionId: q.id,
-            value: data ? data[q.id] : this.qappData[q.id],
+            value: data ? data[q.id] : this.pendingData[q.id],
             valueId,
           });
         })
       );
       this.hasSaved = true;
-
-      // Refresh global qappData to update validation on mark complete/saving
-      this.refreshQappData();
+      this.shouldDisplayUnsavedWarning = false;
+      if (this.pendingSection) {
+        this.changeSection(this.pendingSection);
+        this.pendingSection = null;
+      }
     },
     isSectionNotAvailable() {
       return (
@@ -306,9 +344,6 @@ export default {
         return 'You must complete all required fields before saving.';
       }
       return null;
-    },
-    refreshQappData() {
-      this.qappData = this.$store.getters['qapp/qappData'];
     },
     getFirstUncompletedSectionIndex() {
       /*
@@ -327,7 +362,7 @@ export default {
 
       // all are complete, just use the last one
       if (firstSection === this.sections.length) firstSection -= 1;
-      return firstSection;
+      this.changeSection(this.sections[firstSection]);
     },
   },
 };
@@ -374,8 +409,8 @@ textarea {
   padding-left: 3em;
 }
 
-.btn-container {
-  margin-bottom: 1em;
+.btn-container .button {
+  margin-right: 1em;
 }
 
 .aq-save-btn {
@@ -389,5 +424,12 @@ textarea {
 
 .columns.is-multiline {
   margin-top: 0.5em;
+}
+
+.modal-close {
+  display: block;
+  margin-left: auto;
+  padding-top: 0;
+  padding-right: 0;
 }
 </style>
