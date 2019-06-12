@@ -37,7 +37,15 @@
               </a>
 
               <div class="navbar-dropdown">
-                <a class="navbar-item">
+                <a
+                  class="navbar-item"
+                  @click="
+                    () => {
+                      shouldShowProfile = true;
+                      error = null;
+                    }
+                  "
+                >
                   Profile
                 </a>
                 <a class="navbar-item" @click="logout">
@@ -48,27 +56,213 @@
           </div>
         </div>
       </nav>
+      <SideNav
+        v-if="shouldShowProfile"
+        :handleClose="() => (shouldShowProfile = false)"
+        title="Profile"
+        class="profile-title"
+      >
+        <template #default="props">
+          <form id="editProfile" @submit.prevent="handleProfileSubmit">
+            <div class="field">
+              <label class="label has-text-white">Full Name</label>
+              <input class="input" type="text" required placeholder="Enter Full Name" v-model="name" />
+            </div>
+            <div class="field">
+              <label class="label has-text-white">Email</label>
+              <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+            </div>
+            <hr />
+            <div class="field is-grouped">
+              <div class="control">
+                <Button label="Edit and Save" type="info" submit />
+              </div>
+              <div class="control">
+                <Button label="Change Password" type="info" @click.native="changePasswordModal" />
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
+              </div>
+            </div>
+          </form>
+          <br />
+          <Alert v-if="showSuccessProfileMessage" :message="successProfileMessage" type="success" />
+          <Alert v-if="error" :message="error" type="error" />
+        </template>
+      </SideNav>
+      <ExampleModal
+        v-if="shouldShowChangePassword"
+        :handleClose="
+          () => {
+            shouldShowChangePassword = false;
+          }
+        "
+        class="changePassword"
+      >
+        <span class="title is-size-4">Change Password</span>
+        <hr />
+        <form id="changePassword" @submit.prevent="handleChangePassword">
+          <div class="field">
+            <label class="label has-text-white">Current Password</label>
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Enter Current Password"
+              v-model="currentPassword"
+            />
+          </div>
+          <div class="field">
+            <label class="label has-text-white">New Password</label>
+            <input class="input" type="password" required placeholder="Enter New Password" v-model="newPassword" />
+          </div>
+          <div class="field">
+            <label class="label has-text-white">Confirm New Password</label>
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Confirm New Password"
+              v-model="confirmNewPassword"
+            />
+          </div>
+          <hr />
+          <div class="field is-grouped">
+            <div class="control">
+              <Button label="Change" type="success" submit />
+            </div>
+            <div class="control">
+              <Button
+                label="Cancel"
+                type="cancel"
+                :preventEvent="true"
+                @click.native="
+                  () => {
+                    shouldShowChangePassword = false;
+                  }
+                "
+              />
+            </div>
+            <div class="control">
+              <Alert v-if="showSuccessPasswordMessage" :message="successPasswordMessage" type="success" />
+              <Alert v-if="error" :message="error" type="error" />
+            </div>
+          </div>
+        </form>
+      </ExampleModal>
     </div>
   </section>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import Button from '@/components/shared/Button';
+import SideNav from '@/components/shared/SideNav';
+import Alert from '@/components/shared/Alert';
+import ExampleModal from '@/components/shared/ExampleModal';
 
 export default {
   props: ['userName'],
+  components: { Button, SideNav, Alert, ExampleModal },
   data() {
     return {
       isActive: false,
+      error: null,
+      shouldShowProfile: false,
+      showSuccessProfileMessage: false,
+      shouldShowChangePassword: false,
+      showSuccessPasswordMessage: false,
+      successProfileMessage: 'Your profile was successfully updated.',
+      successPasswordMessage: 'Your password was successfully updated.',
     };
   },
   methods: {
+    ...mapActions('user', ['saveProfile', 'changePassword']),
     logout() {
       this.$auth.logout();
+    },
+    async handleProfileSubmit() {
+      try {
+        await this.saveProfile({
+          data: {
+            name: this.name,
+            email: this.email,
+          },
+        });
+        this.showSuccessProfileMessage = true;
+        this.name = null;
+        this.email = null;
+      } catch (error) {
+        this.error = error.response.data.error;
+      }
+    },
+    changePasswordModal() {
+      this.shouldShowChangePassword = !this.shouldShowChangePassword;
+      this.showSuccessPasswordMessage = false;
+    },
+    async handleChangePassword() {
+      try {
+        await this.changePassword({
+          data: {
+            currentPassword: this.currentPassword,
+            newPassword: this.newPassword,
+            confirmNewPassword: this.confirmNewPassword,
+          },
+        });
+        this.showSuccessPasswordMessage = true;
+        this.currentPassword = null;
+        this.newPassword = null;
+        this.confirmNewPassword = null;
+        this.error = null;
+      } catch (error) {
+        this.error = error.response.data.error;
+      }
     },
   },
   computed: {
     ...mapState('qapp', ['title']),
+    name: {
+      get() {
+        return this.$store.state.user.newName;
+      },
+      set(value) {
+        this.$store.commit('user/SET_NEW_NAME', value);
+      },
+    },
+    email: {
+      get() {
+        return this.$store.state.user.newEmail;
+      },
+      set(value) {
+        this.$store.commit('user/SET_NEW_EMAIL', value);
+      },
+    },
+    currentPassword: {
+      get() {
+        return this.$store.state.user.currentPassword;
+      },
+      set(value) {
+        this.$store.commit('user/SET_CURRENT_PASSWORD', value);
+      },
+    },
+    newPassword: {
+      get() {
+        return this.$store.state.user.newPassword;
+      },
+      set(value) {
+        this.$store.commit('user/SET_NEW_PASSWORD', value);
+      },
+    },
+    confirmNewPassword: {
+      get() {
+        return this.$store.state.user.confirmNewPassword;
+      },
+      set(value) {
+        this.$store.commit('user/SET_PASSWORD_CONFIRMATION', value);
+      },
+    },
   },
 };
 </script>
@@ -92,5 +286,15 @@ export default {
   .navbar-burger {
     padding: 0.5em;
   }
+}
+</style>
+
+<style lang="scss">
+@import '../../../static/variables';
+.title {
+  color: white;
+}
+.changePassword .modal-content {
+  background: $darkBlue;
 }
 </style>
