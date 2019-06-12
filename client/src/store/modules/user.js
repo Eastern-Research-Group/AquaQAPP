@@ -1,15 +1,27 @@
 import axios from 'axios';
 
 const state = {
+  newName: null,
   email: null,
+  newEmail: null,
   resetPasswordToken: null,
+  currentPassword: null,
   newPassword: null,
   confirmNewPassword: null,
 };
 
 const mutations = {
+  SET_NEW_NAME(state, value) {
+    state.newName = value;
+  },
   SET_EMAIL(state, value) {
     state.email = value;
+  },
+  SET_NEW_EMAIL(state, value) {
+    state.newEmail = value;
+  },
+  SET_CURRENT_PASSWORD(state, value) {
+    state.currentPassword = value;
   },
   SET_NEW_PASSWORD(state, value) {
     state.newPassword = value;
@@ -39,6 +51,28 @@ const actions = {
       resetPasswordToken: state.resetPasswordToken,
     };
     await axios.post('auth/resetPassword', postData);
+  },
+  async saveProfile({ state }) {
+    if (!state.newName || !state.newEmail) {
+      return;
+    }
+    const postData = {
+      newName: state.newName,
+      newEmail: state.newEmail,
+    };
+    await axios.post('auth/user', postData);
+  },
+  async changePassword() {
+    if (!state.newPassword || !state.confirmNewPassword || !state.currentPassword) {
+      return;
+    }
+    const postData = {
+      currentPassword: state.currentPassword,
+      newPassword: state.newPassword,
+      confirmNewPassword: state.confirmNewPassword,
+    };
+
+    await axios.post('auth/changePassword', postData);
   },
 };
 

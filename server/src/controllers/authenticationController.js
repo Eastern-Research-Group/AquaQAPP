@@ -211,15 +211,102 @@ module.exports = {
     }
   },
 
+  async changePassword(req, res) {
+    try {
+      const { currentPassword, newPassword, confirmNewPassword } = req.body;
+      const email = req.user.email;
+      const user = await User.findOne({
+        where: {
+          email,
+        },
+      });
+
+      const isPasswordValid = await user.comparePassword(currentPassword);
+
+      if (!isPasswordValid || !user) {
+        return res.status(422).send({
+          error: 'The credentials do not match our records.',
+        });
+      }
+
+      if (newPassword === confirmNewPassword) {
+        user.password = newPassword;
+        await user.hashPassword(user);
+
+        await User.update(
+          {
+            password: user.password,
+          },
+          {
+            where: {
+              id: user.id,
+            },
+          }
+        );
+
+        const userJson = user.toJSON();
+        delete userJson.password;
+        return res.send({
+          data: userJson,
+        });
+      }
+      return res.status(422).send({
+        error: 'Passwords do not match.',
+      });
+    } catch (error) {
+      return console.error(error);
+    }
+  },
+
   async user(req, res) {
-    const userJson = req.user.toJSON();
-    const token = jwtSignUser(userJson);
-    delete userJson.password;
-    res.header('Access-Control-Expose-Headers', 'Authorization');
-    res.header('Authorization', `Bearer ${token}`);
-    return res.send({
-      data: userJson,
-    });
+    try {
+      const { newName, newEmail } = req.body;
+      if (!newEmail || !newName) {
+        const userJson = req.user.toJSON();
+        const token = jwtSignUser(userJson);
+        delete userJson.password;
+        res.header('Access-Control-Expose-Headers', 'Authorization');
+        res.header('Authorization', `Bearer ${token}`);
+        return res.send({
+          data: userJson,
+        });
+      } else {
+        const email = req.user.email;
+        const user = await User.findOne({
+          where: {
+            email,
+          },
+        });
+
+        if (!user) {
+          return res.status(422).send({
+            error: 'User not found.',
+          });
+        }
+
+        await User.update(
+          {
+            name: newName,
+            email: newEmail,
+          },
+          {
+            where: {
+              id: user.id,
+            },
+          }
+        );
+
+        const userJson = user.toJSON();
+        delete userJson.password;
+        return res.send({
+          data: userJson,
+        });
+      }
+    } catch (error) {
+      res.status(500).send({
+        error: `An error has occurred trying to update your information: ${error}`,
+      });
+    }
   },
 
   async logout(req) {
