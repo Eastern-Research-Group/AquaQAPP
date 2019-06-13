@@ -11,13 +11,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Users', key: 'id' },
       },
-      title: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      description: {
-        type: Sequelize.STRING,
-      },
       archived: {
         type: Sequelize.BOOLEAN,
       },
