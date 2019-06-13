@@ -270,40 +270,39 @@ module.exports = {
         return res.send({
           data: userJson,
         });
-      } else {
-        const { email } = req.user;
-        const user = await User.findOne({
-          where: {
-            email,
-          },
-        });
+      }
+      const { email } = req.user;
+      const user = await User.findOne({
+        where: {
+          email,
+        },
+      });
 
-        if (!user) {
-          return res.status(422).send({
-            error: 'User not found.',
-          });
-        }
-
-        await User.update(
-          {
-            name: newName,
-            email: newEmail,
-          },
-          {
-            where: {
-              id: user.id,
-            },
-          }
-        );
-
-        const userJson = user.toJSON();
-        delete userJson.password;
-        return res.send({
-          data: userJson,
+      if (!user) {
+        return res.status(422).send({
+          error: 'User not found.',
         });
       }
+
+      await User.update(
+        {
+          name: newName,
+          email: newEmail,
+        },
+        {
+          where: {
+            id: user.id,
+          },
+        }
+      );
+
+      const userJson = user.toJSON();
+      delete userJson.password;
+      return res.send({
+        data: userJson,
+      });
     } catch (error) {
-      res.status(500).send({
+      return res.status(500).send({
         error: `An error has occurred trying to update your information: ${error}`,
       });
     }
