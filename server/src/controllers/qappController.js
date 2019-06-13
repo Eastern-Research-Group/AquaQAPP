@@ -64,11 +64,27 @@ module.exports = {
   },
   async store(req, res) {
     try {
-      const qapp = await Qapp.create({
+      const qappId = uuidv4();
+      await Qapp.create({
         ...req.body,
-        id: uuidv4(),
+        id: qappId,
       });
-      res.send(qapp);
+      await QappDatum.create({
+        qappId,
+        questionId: 1,
+        value: req.body.title,
+      });
+      const qappWithData = await Qapp.findOne({
+        where: { userId: req.user.id, id: qappId },
+        include: [
+          {
+            model: QappDatum,
+            attributes: ['questionId', 'value', 'valueId'],
+            as: 'data',
+          },
+        ],
+      });
+      res.send(qappWithData);
     } catch (err) {
       res.status(400).send({
         error: err,

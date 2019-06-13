@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
       sectionLabel: DataTypes.STRING,
       sectionSort: DataTypes.INTEGER,
     },
-    {}
+    {
+      timestamps: false,
+    }
   );
   /* section.associate = function(models) {
     // associations can be defined here
