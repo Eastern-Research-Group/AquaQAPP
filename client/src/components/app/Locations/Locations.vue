@@ -102,7 +102,7 @@
 
 <script>
 import Multiselect from 'vue-multiselect';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
@@ -132,7 +132,6 @@ export default {
       latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
       lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
       concernQuestionId: null,
-      qappData: {},
       pendingData: {},
       selectedLocation: null,
     };
@@ -145,6 +144,7 @@ export default {
     ...mapState({
       allQuestions: (state) => state.structure.questions,
     }),
+    ...mapGetters('qapp', ['qappData']),
   },
   mounted() {
     this.concernQuestionId = this.allQuestions.find((q) => q.refName === 'concerns').id;
@@ -177,8 +177,6 @@ export default {
       }
     },
     refreshLocationData() {
-      // Get latest qapp data from getter in order to pre-populate markers
-      this.qappData = this.$store.getters['qapp/qappData'];
       this.markers = [];
 
       // Add markers to map if location data already exists

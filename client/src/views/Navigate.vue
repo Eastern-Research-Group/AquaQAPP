@@ -289,8 +289,10 @@ export default {
       let hasEmptyFields = false;
       this.currentQuestions.forEach((q) => {
         if (
-          !this.pendingData[q.id] ||
-          (this.pendingData[q.id] && typeof this.pendingData[q.id] === 'string' && !this.pendingData[q.id].trim())
+          (!this.pendingData[q.id] ||
+          (this.pendingData[q.id] && typeof this.pendingData[q.id] === 'string' && !this.pendingData[q.id].trim())) &&
+          (!this.qappData[q.id] ||
+          (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
         ) {
           hasEmptyFields = true;
         }

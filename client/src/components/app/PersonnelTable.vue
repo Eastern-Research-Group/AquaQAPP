@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
@@ -146,7 +146,6 @@ export default {
       shouldDeleteSingle: false,
       selectedPersonnel: null,
       personnelId: this.questions.find((q) => q.questionLabel === 'Full Name').id,
-      qappData: {},
       pendingData: {},
       rows: [],
       fields: [
@@ -181,6 +180,7 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
+    ...mapGetters('qapp', ['qappData']),
   },
   mounted() {
     this.refreshPersonnelData();
@@ -263,7 +263,6 @@ export default {
       this.shouldDeleteAll = false;
     },
     refreshPersonnelData() {
-      this.qappData = this.$store.getters['qapp/qappData'];
       this.rows = [];
 
       // Add rows to table if personnel data already exists
