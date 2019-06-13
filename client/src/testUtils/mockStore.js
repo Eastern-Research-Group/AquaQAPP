@@ -5,21 +5,31 @@ const mockStore = {
         data: [
           {
             id: 1,
-            title: 'Test QAPP 1',
             userId: 1,
-            description: 'Test QAPP 1 description',
             createdAt: new Date().toDateString(),
             updatedAt: new Date().toDateString(),
             completedSections: [],
+            data: [
+              {
+                qappId: 1,
+                questionId: 1,
+                value: 'Test QAPP 1',
+              },
+            ],
           },
           {
             id: 2,
-            title: 'Test QAPP 2',
             userId: 1,
-            description: 'Test QAPP 2 description',
             createdAt: new Date().toDateString(),
             updatedAt: new Date().toDateString(),
             completedSections: [],
+            data: [
+              {
+                qappId: 1,
+                questionId: 1,
+                value: 'Test QAPP 2',
+              },
+            ],
           },
         ],
         isFetching: false,
@@ -36,7 +46,6 @@ const mockStore = {
     qapp: {
       state: {
         title: '',
-        description: '',
         completedSections: [],
       },
       mutations: {
