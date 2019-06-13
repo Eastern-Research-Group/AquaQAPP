@@ -115,7 +115,13 @@
             />
           </div>
           <div class="field">
-            <label class="label has-text-white">New Password</label>
+            <label class="label has-text-white"
+              >New Password
+              <HoverText :icon="true" hoverId="passwordInfo">
+                Must be at least 8 characters in length and contain at least one lower-case and upper-case character and
+                one number.
+              </HoverText>
+            </label>
             <input class="input" type="password" required placeholder="Enter New Password" v-model="newPassword" />
           </div>
           <div class="field">
@@ -127,6 +133,9 @@
               placeholder="Confirm New Password"
               v-model="confirmNewPassword"
             />
+          </div>
+          <div class="field">
+            <Alert v-if="error" :message="error" type="error" />
           </div>
           <hr />
           <div class="field is-grouped">
@@ -147,7 +156,6 @@
             </div>
             <div class="control">
               <Alert v-if="showSuccessPasswordMessage" :message="successPasswordMessage" type="success" />
-              <Alert v-if="error" :message="error" type="error" />
             </div>
           </div>
         </form>
@@ -162,10 +170,11 @@ import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
 import ExampleModal from '@/components/shared/ExampleModal';
+import HoverText from '@/components/shared/HoverText';
 
 export default {
   props: ['userName'],
-  components: { Button, SideNav, Alert, ExampleModal },
+  components: { Button, SideNav, Alert, ExampleModal, HoverText },
   data() {
     return {
       isActive: false,
@@ -201,6 +210,9 @@ export default {
     changePasswordModal() {
       this.shouldShowChangePassword = !this.shouldShowChangePassword;
       this.showSuccessPasswordMessage = false;
+      this.currentPassword = null;
+      this.newPassword = null;
+      this.confirmNewPassword = null;
     },
     async handleChangePassword() {
       try {

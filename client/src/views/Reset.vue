@@ -7,7 +7,7 @@
         <div class="field">
           <label class="label">
             New Password
-            <HoverText icon="true" hoverId="passwordInfo">
+            <HoverText :icon="true" hoverId="passwordInfo">
               Must be at least 8 characters in length and contain at least one lower-case and upper-case character and
               one number.
             </HoverText>
