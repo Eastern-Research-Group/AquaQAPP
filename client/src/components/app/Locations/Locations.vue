@@ -185,8 +185,8 @@ export default {
       // Logic to loop through existing qapp data and set up markers to be used by leaflet map
       Object.keys(this.qappData).forEach((qId) => {
         const datum = this.qappData[qId];
-        if (Array.isArray(datum)) {
-          const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+        if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((locationField) => {
             if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
@@ -223,18 +223,14 @@ export default {
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
       let newValueId = 1;
-      if (Array.isArray(this.qappData[this.lngQuestionId])) {
-        newValueId = this.qappData[this.latQuestionId].length + 1;
-      } else if (this.qappData[this.latQuestionId]) {
-        newValueId = 2;
+      if (this.markers.length) {
+        newValueId = Math.max(...this.markers.map((marker) => marker.valueId)) + 1;
       }
 
       // Markers array used to display pins and handle location data
       this.markers.push({
         ...mapData,
         latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
-        lat: this.pendingData[this.latQuestionId],
-        lng: this.pendingData[this.lngQuestionId],
         valueId: newValueId,
       });
 
