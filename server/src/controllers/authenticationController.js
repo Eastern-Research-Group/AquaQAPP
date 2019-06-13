@@ -225,7 +225,7 @@ module.exports = {
 
       if (!isPasswordValid || !user) {
         return res.status(422).send({
-          error: 'The credentials do not match our records.',
+          error: 'The credentials do not match our records. Please try again.',
         });
       }
 
