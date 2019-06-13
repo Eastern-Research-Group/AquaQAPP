@@ -35,9 +35,8 @@ const getters = {
     });
     return data;
   },
-  progress(state) {
-    // 10 possible sections to complete, so get number of completed sections and multiply by 10 for percentage
-    return state.completedSections.length * 10;
+  progress(state, getters, rootState) {
+    return Math.round((state.completedSections.length / rootState.structure.sections.length) * 100);
   },
 };
 

@@ -209,6 +209,30 @@ module.exports = {
     });
     records.push({
       sectionNumber: '6',
+      questionLabel: 'Organizational History and Mission',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '4000',
+      hasExamples: false,
+      sectionQuestionSort: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '7',
+      questionLabel: 'Monitoring History and Status',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '4000',
+      hasExamples: false,
+      sectionQuestionSort: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '8',
       questionLabel: 'Project Description',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -220,7 +244,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '8',
+      sectionNumber: '9',
       questionLabel: 'What are your water quality concerns? Select all that apply.',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -233,7 +257,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '8',
+      sectionNumber: '9',
       questionLabel: 'Do your water quality concerns differ by sampling location?',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -246,7 +270,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Location ID',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -258,7 +282,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Location Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -270,7 +294,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Location Latitude',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -282,7 +306,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Location Longitude',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -294,7 +318,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Water Type',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -307,7 +331,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Water Quality Concerns',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -320,7 +344,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Location Type',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -333,7 +357,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Horizontal Collection Method',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -346,7 +370,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '10',
       questionLabel: 'Horizontal Coordinate Reference System',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -359,7 +383,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '10',
+      sectionNumber: '11',
       questionLabel: 'Pollutants',
       dataEntryInstructions: '',
       dataEntryTip: '',
