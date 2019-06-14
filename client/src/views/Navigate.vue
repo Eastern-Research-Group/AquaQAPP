@@ -42,7 +42,9 @@
         />
         <div
           class="field"
-          v-for="question in currentQuestions.filter((q) => customSections.indexOf(q.section.sectionLabel) === -1)"
+          v-for="question in currentQuestions.filter(
+            (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
+          )"
           :key="question.id"
         >
           <div>
@@ -121,14 +123,13 @@
             <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
           </div>
         </div>
-        <div class="field" v-if="currentSection.sectionLabel === 'Project Organization/Personnel'">
-          <PersonnelTable :questions="currentQuestions" @saveData="saveData" />
-        </div>
-        <div class="field" v-if="currentSection.sectionLabel === 'Monitoring Locations'">
-          <Locations :questions="currentQuestions" @saveData="saveData" />
-        </div>
-        <div class="field" v-if="currentSection.sectionLabel === 'Parameters'">
-          <Parameters />
+        <div v-for="customSection in customSections" :key="customSection.component">
+          <component
+            v-if="customSection.label === currentSection.sectionLabel"
+            :is="customSection.component"
+            :questions="currentQuestions"
+            @saveData="saveData"
+          />
         </div>
       </form>
     </section>
@@ -154,14 +155,16 @@
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
-import Locations from '@/components/app/Locations/Locations';
 import Button from '@/components/shared/Button';
 import ExampleModal from '@/components/shared/ExampleModal';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
-import Parameters from '@/components/app/Parameters';
 import CheckboxButton from '@/components/shared/CheckboxButton';
+
+// Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
+import Locations from '@/components/app/Locations/Locations';
+import Parameters from '@/components/app/Parameters';
 
 export default {
   components: {
