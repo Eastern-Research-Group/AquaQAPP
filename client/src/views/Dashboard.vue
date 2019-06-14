@@ -32,7 +32,7 @@
             <tr v-for="qapp in qapps" :key="qapp.id">
               <td>{{ qapp.data.find((d) => d.questionId === 1).value }}</td>
               <td>{{ qapp.updatedAt.substr(0, 10) }}</td>
-              <td>{{ qapp.completedSections.length * 10 }}%</td>
+              <td>{{ Math.round((qapp.completedSections.length / sections.length) * 100) }}%</td>
               <td>
                 <div class="field is-grouped">
                   <div class="control">
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
 import Button from '@/components/shared/Button';
@@ -114,9 +114,11 @@ export default {
   async mounted() {
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
+    this.getSections();
   },
   methods: {
     ...mapActions('qapps', ['getQapps']),
+    ...mapActions('structure', ['getSections']),
     async onDeleteQapp(qapp) {
       this.shouldShowAdd = false;
       this.shouldShowDelete = true;
@@ -170,6 +172,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('structure', ['sections']),
     qapps() {
       return this.$store.state.qapps.data;
     },
