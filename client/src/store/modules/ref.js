@@ -12,7 +12,7 @@ const state = {
   parameters: [],
   samplingMethodologies: [],
   // todo: make this an array of objects with keys for label and component name, then display custom component dynamically
-  customSections: ['Project Organization/Personnel', 'Monitoring Locations', 'Parameters']
+  customSections: ['Project Organization/Personnel', 'Monitoring Locations', 'Parameters'],
 };
 
 const mutations = {
