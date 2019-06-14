@@ -34,5 +34,5 @@ export default {
     },
   },
   components: { Alert, Button, SideNav },
-}
+};
 </script>

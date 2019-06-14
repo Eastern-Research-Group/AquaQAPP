@@ -60,14 +60,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
 import Button from '@/components/shared/Button';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
-  components: { Alert, SideNav, Button, Table, DeleteWarning },
+  components: { SideNav, Button, Table, DeleteWarning },
   async mounted() {
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
