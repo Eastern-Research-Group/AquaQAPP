@@ -1,24 +1,18 @@
 <template>
-  <SideNav :handleClose="() => $emit('close')" :title="title">
-    <template #default="props">
-      <Alert :message="`Are you sure you want to delete ${itemLabel}?`" type="warning" />
-      <hr />
-      <div class="field is-grouped">
-        <div class="control">
-          <Button label="Delete" type="info" :preventEvent="true" @click.native="$emit('onDelete')" />
-        </div>
-        <div class="control">
-          <Button label="Cancel" type="cancel" @click.native="props.close" />
-        </div>
+  <Modal @close="$emit('close')">
+    <Alert :message="`Are you sure you want to delete ${itemLabel}?`" type="warning" />
+    <div class="field is-grouped">
+      <div class="control">
+        <Button :label="`Delete ${itemLabel}`" type="danger" icon="trash-alt" @click.native="$emit('onDelete')" />
       </div>
-    </template>
-  </SideNav>
+    </div>
+  </Modal>
 </template>
 
 <script>
 import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
-import SideNav from '@/components/shared/SideNav';
+import Modal from '@/components/shared/Modal';
 
 export default {
   props: {
@@ -33,6 +27,6 @@ export default {
       default: 'this item',
     },
   },
-  components: { Alert, Button, SideNav },
+  components: { Alert, Button, Modal },
 };
 </script>
