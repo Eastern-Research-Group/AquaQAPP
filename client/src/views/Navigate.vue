@@ -133,21 +133,13 @@
         </div>
       </form>
     </section>
-    <div class="modal is-active" v-if="shouldDisplayUnsavedWarning">
-      <div class="modal-background" @click="shouldDisplayUnsavedWarning = false"></div>
-      <div class="modal-content">
-        <div class="box">
-          <button type="button" class="button is-text modal-close" @click="shouldDisplayUnsavedWarning = false">
-            <span class="fa fa-times"></span>
-          </button>
-          <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
-          <div class="btn-container">
-            <Button label="Save Changes" type="success" @click.native="saveData" />
-            <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
-          </div>
-        </div>
+    <Modal v-if="shouldDisplayUnsavedWarning" @close="() => (shouldDisplayUnsavedWarning = false)">
+      <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
+      <div class="btn-container">
+        <Button label="Save Changes" type="success" @click.native="saveData" />
+        <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
       </div>
-    </div>
+    </Modal>
   </div>
 </template>
 
@@ -160,6 +152,7 @@ import ExampleModal from '@/components/shared/ExampleModal';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
 import CheckboxButton from '@/components/shared/CheckboxButton';
+import Modal from '@/components/shared/Modal';
 
 // Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
@@ -178,6 +171,7 @@ export default {
     Parameters,
     CheckboxButton,
     PersonnelTable,
+    Modal,
   },
   data() {
     return {
