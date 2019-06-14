@@ -47,7 +47,7 @@ export default {
 <style scoped lang="scss">
 .svg-inline--fa {
   height: 0.5em;
-  margin: 0;
+  margin: 0 0.1em 0;
   width: 0.6em;
 }
 </style>
