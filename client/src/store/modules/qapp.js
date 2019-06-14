@@ -38,6 +38,12 @@ const getters = {
   progress(state, getters, rootState) {
     return Math.round((state.completedSections.length / rootState.structure.sections.length) * 100);
   },
+  title(state) {
+    if (state.data.length) {
+      return state.data.find((d) => d.questionId === 1).value;
+    }
+    return '';
+  },
 };
 
 const mutations = {
