@@ -42,17 +42,10 @@
         />
         <div
           class="field"
-          v-for="question in currentQuestions.filter(
-            (q) =>
-              q.section.sectionLabel !== 'Monitoring Locations' &&
-              q.section.sectionLabel !== 'Project Organization/Personnel'
-          )"
+          v-for="question in currentQuestions.filter((q) => customSections.indexOf(q.section.sectionLabel) === -1)"
           :key="question.id"
         >
-          <div class="field parameters" v-if="question.questionLabel === 'Pollutants'">
-            <Parameters />
-          </div>
-          <div v-else>
+          <div>
             <label class="label is-size-4">{{ question.questionLabel }}</label>
             <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
             <div
@@ -128,11 +121,14 @@
             <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
           </div>
         </div>
+        <div class="field" v-if="currentSection.sectionLabel === 'Project Organization/Personnel'">
+          <PersonnelTable :questions="currentQuestions" @saveData="saveData" />
+        </div>
         <div class="field" v-if="currentSection.sectionLabel === 'Monitoring Locations'">
           <Locations :questions="currentQuestions" @saveData="saveData" />
         </div>
-        <div class="field" v-else-if="currentSection.sectionLabel === 'Project Organization/Personnel'">
-          <PersonnelTable :questions="currentQuestions" @saveData="saveData" />
+        <div class="field" v-if="currentSection.sectionLabel === 'Parameters'">
+          <Parameters />
         </div>
       </form>
     </section>
@@ -193,7 +189,7 @@ export default {
   computed: {
     ...mapState('qapp', ['completedSections']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns', 'yesNo']),
+    ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData']),
     currentQuestions() {
       return this.questions
