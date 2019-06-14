@@ -59,25 +59,13 @@
         />
       </form>
     </SideNav>
-    <SideNav v-if="shouldShowDelete" title="Delete Personnel" :handleClose="() => (this.shouldShowDelete = false)">
-      <template #default="props">
-        <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all personnel?`" type="warning" />
-        <Alert
-          v-if="shouldDeleteSingle"
-          :message="`Are you sure you want to delete ${selectedPersonnel['Full Name']}?`"
-          type="warning"
-        />
-        <hr />
-        <div class="field is-grouped">
-          <div class="control">
-            <Button label="Delete" type="info" @click.native="deletePersonnelData" />
-          </div>
-          <div class="control">
-            <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
-          </div>
-        </div>
-      </template>
-    </SideNav>
+    <DeleteWarning
+      v-if="shouldShowDelete"
+      title="Delete Personnel"
+      :itemLabel="shouldDeleteAll ? 'all personnel' : selectedPersonnel['Full Name']"
+      @close="() => (shouldShowDelete = false)"
+      @onDelete="deletePersonnelData"
+    />
   </div>
 </template>
 
@@ -85,8 +73,8 @@
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
-import Alert from '@/components/shared/Alert';
 import Table from '@/components/shared/Table';
+import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
   name: 'PersonnelTable',
@@ -96,7 +84,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Alert, Table },
+  components: { Button, SideNav, Table, DeleteWarning },
   data() {
     return {
       isEnteringInfo: false,

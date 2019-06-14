@@ -48,20 +48,13 @@
         </form>
       </template>
     </SideNav>
-    <SideNav v-if="shouldShowDelete" :handleClose="() => (shouldShowDelete = false)" title="Delete QAPP">
-      <template #default="props">
-        <Alert :message="`Are you sure you want to delete ${selectedQapp.title}?`" type="warning" />
-        <hr />
-        <div class="field is-grouped">
-          <div class="control">
-            <Button label="Delete" type="info" :preventEvent="true" @click.native="handleDeleteQapp" />
-          </div>
-          <div class="control">
-            <Button label="Cancel" type="cancel" @click.native="props.close" />
-          </div>
-        </div>
-      </template>
-    </SideNav>
+    <DeleteWarning
+      v-if="shouldShowDelete"
+      title="Delete QAPP"
+      :itemLabel="selectedQapp.title"
+      @close="() => (shouldShowDelete = false)"
+      @onDelete="handleDeleteQapp"
+    />
   </div>
 </template>
 
@@ -71,9 +64,10 @@ import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
 import Button from '@/components/shared/Button';
 import Table from '@/components/shared/Table';
+import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
-  components: { Alert, SideNav, Button, Table },
+  components: { Alert, SideNav, Button, Table, DeleteWarning },
   async mounted() {
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
