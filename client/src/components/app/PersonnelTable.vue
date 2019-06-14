@@ -231,7 +231,7 @@ export default {
 
       if (this.qappData) {
         Object.keys(this.qappData).forEach(() => {
-          const datum = this.qappData[7];
+          const datum = this.qappData[8];
           if (Array.isArray(datum)) {
             this.isPrimaryContactDisabled = datum.some((d) => d.value === 'Yes');
           } else {
