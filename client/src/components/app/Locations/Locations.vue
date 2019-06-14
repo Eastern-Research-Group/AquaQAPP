@@ -2,7 +2,16 @@
   <div>
     <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
-        <LocationsTable :rows="markers" @onAddLocationInfo="onAddLocationInfo" @onEdit="onEdit" @onDelete="onDelete" />
+        <Table
+          :columns="columns"
+          :rows="markers"
+          :shouldHaveActionsCol="true"
+          :shouldHaveGlobalActions="true"
+          noDataMessage="No locations have been added. Add a location to continue."
+          @onEdit="onEdit"
+          @onDelete="onDelete"
+          @onAdd="onAddLocationInfo"
+        />
       </template>
       <template v-slot:map>
         <Map
@@ -106,9 +115,9 @@ import { mapState, mapGetters } from 'vuex';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
-import LocationsTable from '@/components/app/Locations/LocationsTable';
 import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
+import Table from '@/components/shared/Table';
 import '../../../../static/bulma-multiselect.css';
 
 export default {
@@ -118,7 +127,7 @@ export default {
       required: true,
     },
   },
-  components: { Map, SideNav, Tabs, LocationsTable, Alert, Button, Multiselect },
+  components: { Map, SideNav, Tabs, Alert, Button, Multiselect, Table },
   data() {
     return {
       markers: [],
@@ -134,6 +143,12 @@ export default {
       concernQuestionId: null,
       pendingData: {},
       selectedLocation: null,
+      columns: [
+        { key: 'Location ID', label: 'Location ID' },
+        { key: 'Location Name', label: 'Location Name' },
+        { key: 'Location Latitude', label: 'Latitude' },
+        { key: 'Location Longitude', label: 'Longitude' },
+      ],
     };
   },
   computed: {
@@ -249,7 +264,7 @@ export default {
       this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
-    onEdit(e, location) {
+    onEdit(location) {
       this.selectedLocation = location;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
@@ -274,7 +289,7 @@ export default {
       this.refreshLocationData(); // refresh markers and table data after editing
       this.isEnteringLocationInfo = false;
     },
-    onDelete(e, location) {
+    onDelete(location) {
       this.shouldShowDelete = true;
       if (location) {
         this.selectedLocation = location;
