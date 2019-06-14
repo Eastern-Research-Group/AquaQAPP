@@ -72,6 +72,14 @@
               v-model="pendingData[question.id]"
               @input="hasSaved = false"
             ></textarea>
+            <HoverText
+              v-if="question.refName === 'concerns' && locationConcerns.length"
+              hoverId="concernsInfo"
+              linkText="Why are some concerns disabled?"
+            >
+              There are monitoring locations associated with these concerns. You must delete these locations before the
+              concerns can be removed.
+            </HoverText>
             <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
               <CheckboxButton
                 v-for="option in getOptions(question.refName)"
@@ -82,6 +90,7 @@
                 :singleSelectId="question.questionLabel"
                 :value="option.code"
                 :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
+                :disabled="locationConcerns.indexOf(option.code) > -1"
                 @check="updatePendingData($event, question)"
               />
             </div>
@@ -153,6 +162,7 @@ import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
 import CheckboxButton from '@/components/shared/CheckboxButton';
 import Modal from '@/components/shared/Modal';
+import HoverText from '@/components/shared/HoverText';
 
 // Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
@@ -172,6 +182,7 @@ export default {
     CheckboxButton,
     PersonnelTable,
     Modal,
+    HoverText,
   },
   data() {
     return {
@@ -200,6 +211,16 @@ export default {
           }
           return 0;
         });
+    },
+    locationConcerns() {
+      let concerns = [];
+      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');
+      if (locationConcernQuestion && this.qappData[locationConcernQuestion.id]) {
+        this.qappData[locationConcernQuestion.id].forEach((location) => {
+          concerns = concerns.concat(location.value.split(','));
+        });
+      }
+      return concerns;
     },
   },
   async mounted() {
@@ -301,8 +322,13 @@ export default {
         this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
       } else {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
-        // Locations are automatically saved upon add/edit, so don't saveData on markComplete
-        if (this.currentSection.sectionLabel !== 'Monitoring Locations') this.saveData();
+        // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
+        if (
+          this.currentSection.sectionLabel !== 'Monitoring Locations' &&
+          this.currentSection.sectionLabel !== 'Project Organization/Personnel'
+        ) {
+          this.saveData();
+        }
       }
     },
     async saveData(e, valueId = null, data) {
