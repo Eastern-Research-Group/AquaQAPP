@@ -206,10 +206,9 @@ export default {
     },
   },
   async mounted() {
-    // If coming directly to this URL, need to fetch the current QAPP data
-    if (this.$route.params.id !== this.$store.state.qapp.id) {
-      await this.$store.dispatch('qapp/get', this.$route.params.id);
-    }
+    // Fetch latest qapp data
+    await this.$store.dispatch('qapp/get', this.$route.params.id);
+
     // Fetch structure data from DB to generate sections and questions on the fly
     this.getQuestions();
     await this.getSections();
