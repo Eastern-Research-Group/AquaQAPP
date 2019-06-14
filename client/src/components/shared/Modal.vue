@@ -13,6 +13,10 @@
 </template>
 
 <style scoped>
+.modal {
+  z-index: 9999;
+}
+
 .button.is-text {
   display: block;
   margin-left: auto;
