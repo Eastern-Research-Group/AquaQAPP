@@ -192,7 +192,7 @@ export default {
             if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
             if (question.refName === 'concerns') {
               locations[locationField.valueId][key] = this.concerns.filter(
-                (r) => locationField.value.indexOf(r.code) > -1
+                (r) => locationField.value && locationField.value.indexOf(r.code) > -1
               );
             } else if (question.dataEntryType === 'select') {
               locations[locationField.valueId][key] = this[question.refName].find(
