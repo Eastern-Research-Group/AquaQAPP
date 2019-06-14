@@ -15,52 +15,14 @@
         />
       </div>
     </div>
-    <div class="columns">
-      <div class="column table-container">
-        <table class="table is-fullwidth is-striped">
-          <thead>
-            <tr>
-              <th v-for="field in fields" :key="field.key">
-                {{ field.label }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="qapps.length === 0">
-              <td colspan="5">No data available. Please add a QAPP to continue.</td>
-            </tr>
-            <tr v-for="qapp in qapps" :key="qapp.id">
-              <td>{{ qapp.data.find((d) => d.questionId === 1).value }}</td>
-              <td>{{ qapp.updatedAt.substr(0, 10) }}</td>
-              <td>{{ Math.round((qapp.completedSections.length / sections.length) * 100) }}%</td>
-              <td>
-                <div class="field is-grouped">
-                  <div class="control">
-                    <Button
-                      label="Edit"
-                      type="primary"
-                      icon="edit"
-                      :shouldShowIcon="true"
-                      @click.native="editQapp(qapp)"
-                    />
-                  </div>
-                  <div class="control">
-                    <Button
-                      label="Delete"
-                      type="danger"
-                      icon="trash-alt"
-                      :shouldShowIcon="true"
-                      @click.native="onDeleteQapp(qapp)"
-                    />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
+    <Table
+      :columns="columns"
+      :rows="rows"
+      :shouldHaveActionsCol="true"
+      noDataMessage="No QAPPs available. Add a QAPP to continue."
+      @onEdit="editQapp"
+      @onDelete="onDeleteQapp"
+    />
     <SideNav
       v-if="shouldShowAdd"
       :handleShown="clearName"
@@ -108,9 +70,10 @@ import { mapActions, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
 import Button from '@/components/shared/Button';
+import Table from '@/components/shared/Table';
 
 export default {
-  components: { Alert, SideNav, Button },
+  components: { Alert, SideNav, Button, Table },
   async mounted() {
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
@@ -149,7 +112,7 @@ export default {
     return {
       shouldShowAdd: false,
       shouldShowDelete: false,
-      fields: [
+      columns: [
         {
           key: 'title',
           label: 'Title',
@@ -162,10 +125,6 @@ export default {
           key: 'progress',
           label: 'Progress',
         },
-        {
-          key: 'actions',
-          label: 'Actions',
-        },
       ],
       title: '',
       selectedQapp: null,
@@ -175,6 +134,16 @@ export default {
     ...mapState('structure', ['sections']),
     qapps() {
       return this.$store.state.qapps.data;
+    },
+    rows() {
+      return this.qapps.map((qapp) => {
+        return {
+          id: qapp.id,
+          title: qapp.data.find((d) => d.questionId === 1).value,
+          updatedAt: qapp.updatedAt.substring(0, 10),
+          progress: `${Math.round((qapp.completedSections.length / this.sections.length) * 100)}%`,
+        };
+      });
     },
   },
 };
