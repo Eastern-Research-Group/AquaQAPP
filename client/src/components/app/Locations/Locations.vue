@@ -87,25 +87,13 @@
         />
       </form>
     </SideNav>
-    <SideNav v-if="shouldShowDelete" title="Delete Location" :handleClose="() => (this.shouldShowDelete = false)">
-      <template #default="props">
-        <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all locations?`" type="warning" />
-        <Alert
-          v-if="shouldDeleteSingle"
-          :message="`Are you sure you want to delete ${selectedLocation['Location Name']}?`"
-          type="warning"
-        />
-        <hr />
-        <div class="field is-grouped">
-          <div class="control">
-            <Button label="Delete" type="info" @click.native="deleteLocationData()" />
-          </div>
-          <div class="control">
-            <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
-          </div>
-        </div>
-      </template>
-    </SideNav>
+    <DeleteWarning
+      v-if="shouldShowDelete"
+      title="Delete Location"
+      :itemLabel="shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']"
+      @close="() => (shouldShowDelete = false)"
+      @onDelete="deleteLocationData"
+    />
   </div>
 </template>
 
@@ -115,9 +103,9 @@ import { mapState, mapGetters } from 'vuex';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
-import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
 import Table from '@/components/shared/Table';
+import DeleteWarning from '@/components/shared/DeleteWarning';
 import '../../../../static/bulma-multiselect.css';
 
 export default {
@@ -127,7 +115,7 @@ export default {
       required: true,
     },
   },
-  components: { Map, SideNav, Tabs, Alert, Button, Multiselect, Table },
+  components: { Map, SideNav, Tabs, Button, Multiselect, Table, DeleteWarning },
   data() {
     return {
       markers: [],
