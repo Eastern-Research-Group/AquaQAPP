@@ -17,8 +17,8 @@
             <tr v-for="row in rows" :key="row.id" ref="row">
               <td>{{ row['Full Name'] }}</td>
               <td>{{ row['Title/Position'] }}</td>
-              <td>{{ row['Include in distribution list?'] }}</td>
-              <td>{{ row['Include in the approval list?'] }}</td>
+              <td>{{ row['Include in distribution list?'] === 'Yes' ? 'X' : '' }}</td>
+              <td>{{ row['Include in the approval list?'] === 'Yes' ? 'X' : '' }}</td>
               <td>{{ row['Organization'] }}</td>
               <td>
                 <div class="field is-grouped">
@@ -87,8 +87,20 @@
               :id="question.id"
               type="checkbox"
               true-value="Yes"
+              false-value=""
+              v-model="pendingData[question.id]"
+            />
+            <label :for="question.id">{{ question.questionLabel }}</label>
+          </div>
+          <div class="field" v-if="question.dataEntryType === 'singleCheckbox'">
+            <input
+              class="is-checkradio"
+              :id="question.id"
+              type="checkbox"
+              true-value="Yes"
               false-value="No"
               v-model="pendingData[question.id]"
+              :disabled="isPrimaryContactDisabled"
             />
             <label :for="question.id">{{ question.questionLabel }}</label>
           </div>
@@ -145,6 +157,7 @@ export default {
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
       selectedPersonnel: null,
+      isPrimaryContactDisabled: false,
       personnelId: this.questions.find((q) => q.questionLabel === 'Full Name').id,
       qappData: {},
       pendingData: {},
@@ -193,6 +206,12 @@ export default {
       });
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
+
+      if (row['Primary Contact'] === 'Yes') {
+        this.isPrimaryContactDisabled = false;
+      } else if (row['Primary Contact'] === 'No' || !row['Primary Contact']) {
+        this.isPrimaryContactDisabled = true;
+      }
     },
     onDelete(row) {
       this.shouldShowDelete = true;
@@ -205,11 +224,25 @@ export default {
         this.shouldDeleteAll = true;
       }
     },
-    onAddInfo() {
+    async onAddInfo() {
       this.pendingData = {};
       this.isEnteringInfo = true;
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
+      this.qappData = await this.$store.getters['qapp/qappData'];
+
+      if (this.qappData) {
+        Object.keys(this.qappData).forEach(() => {
+          const datum = this.qappData[7];
+          if (Array.isArray(datum)) {
+            this.isPrimaryContactDisabled = datum.some((d) => d.value === 'Yes');
+          } else {
+            this.isPrimaryContactDisabled = false;
+          }
+        });
+      } else {
+        this.isPrimaryContactDisabled = false;
+      }
     },
     submitPersonnelData() {
       if (this.shouldShowEdit) {
@@ -268,8 +301,7 @@ export default {
 
       // Add rows to table if personnel data already exists
       const personnel = {};
-
-      // Logic to loop through existing qapp data and set up markers to be used by leaflet map
+      // Logic to loop through existing qapp data and set up rows to be used by the table
       Object.keys(this.qappData).forEach((qId) => {
         const datum = this.qappData[qId];
         if (Array.isArray(datum)) {
@@ -304,5 +336,9 @@ export default {
 .btn-container .button {
   margin-left: 1em;
   width: 6em;
+}
+
+textarea {
+  height: 6em;
 }
 </style>
