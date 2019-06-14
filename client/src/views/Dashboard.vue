@@ -30,10 +30,9 @@
               <td colspan="5">No data available. Please add a QAPP to continue.</td>
             </tr>
             <tr v-for="qapp in qapps" :key="qapp.id">
-              <td>{{ qapp.title }}</td>
-              <td>{{ qapp.description }}</td>
+              <td>{{ qapp.data.find((d) => d.questionId === 1).value }}</td>
               <td>{{ qapp.updatedAt.substr(0, 10) }}</td>
-              <td>{{ qapp.completedSections.length * 10 }}%</td>
+              <td>{{ Math.round((qapp.completedSections.length / sections.length) * 100) }}%</td>
               <td>
                 <div class="field is-grouped">
                   <div class="control">
@@ -75,10 +74,6 @@
             <label class="label">Title</label>
             <input class="input" type="text" required placeholder="Enter a title" v-model="title" />
           </div>
-          <div class="field">
-            <label class="label">Description</label>
-            <input class="input" type="text" required placeholder="Enter a description" v-model="description" />
-          </div>
           <hr />
           <div class="field is-grouped">
             <div class="control">
@@ -109,7 +104,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import SideNav from '@/components/shared/SideNav';
 import Button from '@/components/shared/Button';
@@ -119,9 +114,11 @@ export default {
   async mounted() {
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
+    this.getSections();
   },
   methods: {
     ...mapActions('qapps', ['getQapps']),
+    ...mapActions('structure', ['getSections']),
     async onDeleteQapp(qapp) {
       this.shouldShowAdd = false;
       this.shouldShowDelete = true;
@@ -129,13 +126,11 @@ export default {
     },
     clearName() {
       this.title = '';
-      this.description = '';
     },
     async handleSubmit() {
       await this.$store.dispatch('qapps/add', {
         userId: this.$auth.user().id,
         title: this.title,
-        description: this.description,
         archived: false,
       });
       this.$router.push({ name: 'navigate', params: { id: this.$store.state.qapp.id } });
@@ -160,10 +155,6 @@ export default {
           label: 'Title',
         },
         {
-          key: 'description',
-          label: 'Description',
-        },
-        {
           key: 'updatedAt',
           label: 'Date Updated',
         },
@@ -177,11 +168,11 @@ export default {
         },
       ],
       title: '',
-      description: '',
       selectedQapp: null,
     };
   },
   computed: {
+    ...mapState('structure', ['sections']),
     qapps() {
       return this.$store.state.qapps.data;
     },

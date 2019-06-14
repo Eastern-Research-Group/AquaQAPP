@@ -19,7 +19,7 @@ module.exports = {
     'no-shadow': [
       'error',
       {
-        allow: ['state'],
+        allow: ['state', 'getters'],
       },
     ],
   },

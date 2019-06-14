@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
@@ -158,8 +158,6 @@ export default {
       shouldDeleteSingle: false,
       selectedPersonnel: null,
       isPrimaryContactDisabled: false,
-      personnelId: this.questions.find((q) => q.questionLabel === 'Full Name').id,
-      qappData: {},
       pendingData: {},
       rows: [],
       fields: [
@@ -194,6 +192,7 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
+    ...mapGetters('qapp', ['qappData']),
   },
   mounted() {
     this.refreshPersonnelData();
@@ -229,7 +228,6 @@ export default {
       this.isEnteringInfo = true;
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
-      this.qappData = await this.$store.getters['qapp/qappData'];
 
       if (this.qappData) {
         Object.keys(this.qappData).forEach(() => {
@@ -265,11 +263,11 @@ export default {
       this.questions.forEach((q) => {
         personnelData[q.questionLabel] = this.pendingData[q.id];
       });
+
+      // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
       let newValueId = 1;
-      if (Array.isArray(this.qappData[this.personnelId])) {
-        newValueId = this.qappData[this.personnelId].length + 1;
-      } else if (this.qappData[this.personnelId]) {
-        newValueId = 2;
+      if (this.rows.length) {
+        newValueId = Math.max(...this.rows.map((row) => row.valueId)) + 1;
       }
 
       this.rows.push({
@@ -296,16 +294,16 @@ export default {
       this.shouldDeleteAll = false;
     },
     refreshPersonnelData() {
-      this.qappData = this.$store.getters['qapp/qappData'];
       this.rows = [];
 
       // Add rows to table if personnel data already exists
       const personnel = {};
-      // Logic to loop through existing qapp data and set up rows to be used by the table
+
+      // Logic to loop through existing qapp data and set up rows for table
       Object.keys(this.qappData).forEach((qId) => {
         const datum = this.qappData[qId];
-        if (Array.isArray(datum)) {
-          const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+        if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((personnelField) => {
             if (typeof personnel[personnelField.valueId] === 'undefined') personnel[personnelField.valueId] = {};

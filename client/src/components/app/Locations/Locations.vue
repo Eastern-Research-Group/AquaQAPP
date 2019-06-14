@@ -102,7 +102,7 @@
 
 <script>
 import Multiselect from 'vue-multiselect';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
@@ -132,7 +132,6 @@ export default {
       latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
       lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
       concernQuestionId: null,
-      qappData: {},
       pendingData: {},
       selectedLocation: null,
     };
@@ -145,6 +144,7 @@ export default {
     ...mapState({
       allQuestions: (state) => state.structure.questions,
     }),
+    ...mapGetters('qapp', ['qappData']),
   },
   mounted() {
     this.concernQuestionId = this.allQuestions.find((q) => q.refName === 'concerns').id;
@@ -177,8 +177,6 @@ export default {
       }
     },
     refreshLocationData() {
-      // Get latest qapp data from getter in order to pre-populate markers
-      this.qappData = this.$store.getters['qapp/qappData'];
       this.markers = [];
 
       // Add markers to map if location data already exists
@@ -187,14 +185,14 @@ export default {
       // Logic to loop through existing qapp data and set up markers to be used by leaflet map
       Object.keys(this.qappData).forEach((qId) => {
         const datum = this.qappData[qId];
-        if (Array.isArray(datum)) {
-          const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+        if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((locationField) => {
             if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
             if (question.refName === 'concerns') {
               locations[locationField.valueId][key] = this.concerns.filter(
-                (r) => locationField.value.indexOf(r.code) > -1
+                (r) => locationField.value && locationField.value.indexOf(r.code) > -1
               );
             } else if (question.dataEntryType === 'select') {
               locations[locationField.valueId][key] = this[question.refName].find(
@@ -225,18 +223,14 @@ export default {
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
       let newValueId = 1;
-      if (Array.isArray(this.qappData[this.lngQuestionId])) {
-        newValueId = this.qappData[this.latQuestionId].length + 1;
-      } else if (this.qappData[this.latQuestionId]) {
-        newValueId = 2;
+      if (this.markers.length) {
+        newValueId = Math.max(...this.markers.map((marker) => marker.valueId)) + 1;
       }
 
       // Markers array used to display pins and handle location data
       this.markers.push({
         ...mapData,
         latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
-        lat: this.pendingData[this.latQuestionId],
-        lng: this.pendingData[this.lngQuestionId],
         valueId: newValueId,
       });
 
