@@ -1,4 +1,4 @@
-const { Section, Question } = require('../models');
+const { Section, Question, Example } = require('../models');
 
 module.exports = {
   async sections(req, res) {
@@ -14,7 +14,10 @@ module.exports = {
   async questions(req, res) {
     try {
       const questions = await Question.findAll({
-        include: [{ model: Section, attributes: ['sectionNumber', 'sectionLabel'], as: 'section' }],
+        include: [
+          { model: Section, attributes: ['sectionNumber', 'sectionLabel'], as: 'section' },
+          { model: Example, attributes: ['text'], as: 'examples' },
+        ],
       });
       res.send(questions);
     } catch (err) {
