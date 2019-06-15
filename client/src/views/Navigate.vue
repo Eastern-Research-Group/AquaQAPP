@@ -99,36 +99,34 @@
                 class="example"
                 label="Example(s)"
                 type="dark"
-                v-if="question.hasExamples"
-                @click.native="toggleShouldShowExample"
+                v-if="question.examples.length"
+                @click.native="() => (shouldShowExample = true)"
               />
             </div>
-            <ExampleModal v-if="shouldShowExample" :handleClose="toggleShouldShowExample">
+            <Modal v-if="shouldShowExample" @close="() => (shouldShowExample = false)">
               <Tabs
-                :tabs="[{ id: 'example1', name: 'Example 1', isActive: true }, { id: 'example2', name: 'Example 2' }]"
+                v-if="question.examples.length > 1"
+                :tabs="
+                  question.examples.map((example, index) => ({
+                    id: `example${index}`,
+                    name: `Example ${index + 1}`,
+                    isActive: index === 0,
+                  }))
+                "
               >
-                <template v-slot:example1>
-                  <p id="example1" class="has-text-black">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur.
-                  </p>
-                </template>
-                <template v-slot:example2>
-                  <p id="example2" class="has-text-black">
-                    Eget felis eget nunc lobortis mattis aliquam faucibus purus. Consectetur adipiscing elit
-                    pellentesque habitant morbi tristique senectus et netus. Ut aliquam purus sit amet. Bibendum enim
-                    facilisis gravida neque. Duis at consectetur lorem donec massa sapien. Duis ultricies lacus sed
-                    turpis tincidunt. Vitae turpis massa sed elementum tempus egestas sed sed. Amet risus nullam eget
-                    felis eget.
+                <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
+                  <p :key="index" class="has-text-black example-text" ref="exampleText">
+                    {{ example.text }}
                   </p>
                 </template>
               </Tabs>
+              <p v-else class="has-text-black example-text" ref="exampleText">
+                {{ question.examples[0].text }}
+              </p>
               <div class="has-text-right">
-                <Button class="addExample" label="Add Example" type="success" @click.native="addExample(question.id)" />
+                <Button label="Add Example" type="success" @click.native="addExample(question.id)" />
               </div>
-            </ExampleModal>
+            </Modal>
             <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
           </div>
         </div>
@@ -157,7 +155,6 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
 import Button from '@/components/shared/Button';
-import ExampleModal from '@/components/shared/ExampleModal';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
 import CheckboxButton from '@/components/shared/CheckboxButton';
@@ -175,7 +172,6 @@ export default {
     Locations,
     Tip,
     Button,
-    ExampleModal,
     Tabs,
     MarkComplete,
     Parameters,
@@ -268,21 +264,10 @@ export default {
     getOptions(refName) {
       return this[refName];
     },
-    toggleShouldShowExample() {
-      this.shouldShowExample = !this.shouldShowExample;
-    },
     addExample(qId) {
       this.pendingData[qId] = this.pendingData[qId] || ''; // if undefined, set as empty string
-      try {
-        if (document.querySelector('#example1')) {
-          this.pendingData[qId] += ` ${document.querySelector('#example1').innerText}`;
-        } else {
-          this.pendingData[qId] += ` ${document.querySelector('#example2').innerText}`;
-        }
-      } catch (e) {
-        console.log('Exception: ', e);
-      }
-      this.shouldShowExample = !this.shouldShowExample;
+      this.$set(this.pendingData, qId, this.pendingData[qId] + this.$refs.exampleText[0].innerText);
+      this.shouldShowExample = false;
     },
     updatePendingData(e, question) {
       this.hasSaved = false;
@@ -429,8 +414,18 @@ textarea {
   padding-left: 3em;
 }
 
-.btn-container .button {
-  margin-right: 1em;
+.btn-container {
+  .button {
+    margin-right: 1em;
+  }
+
+  &.has-text-right {
+    margin-bottom: 1em;
+
+    .button {
+      margin-right: 0;
+    }
+  }
 }
 
 .aq-save-btn {
@@ -446,10 +441,7 @@ textarea {
   margin-top: 0.5em;
 }
 
-.modal-close {
-  display: block;
-  margin-left: auto;
-  padding-top: 0;
-  padding-right: 0;
+.example-text {
+  margin: 0.5em 0.5em 1em 0.5em;
 }
 </style>
