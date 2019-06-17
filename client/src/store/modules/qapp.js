@@ -39,8 +39,9 @@ const getters = {
     return Math.round((state.completedSections.length / rootState.structure.sections.length) * 100);
   },
   title(state) {
-    if (state.data.length) {
-      return state.data.find((d) => d.questionId === 1).value;
+    const titleDatum = state.data.find((d) => d.questionId === 1);
+    if (state.data.length && titleDatum) {
+      return titleDatum.value;
     }
     return '';
   },

@@ -33,6 +33,7 @@ db.Question.belongsTo(db.Section, {
   as: 'section',
 });
 db.Qapp.hasMany(db.CompletedQappSection, { foreignKey: 'qappId', as: 'completedSections' });
+db.Question.hasMany(db.Example, { foreignKey: 'questionId', as: 'examples' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

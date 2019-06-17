@@ -8,6 +8,7 @@
       @change="$emit('check', $event)"
       :value="value"
       :checked="checked"
+      :disabled="disabled"
     />
     <label :id="id" :for="id">{{ name }}</label>
   </div>
@@ -39,6 +40,10 @@ export default {
       required: false,
     },
     checked: {
+      type: Boolean,
+      required: false,
+    },
+    disabled: {
       type: Boolean,
       required: false,
     },

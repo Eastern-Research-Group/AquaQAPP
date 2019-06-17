@@ -1,56 +1,15 @@
 <template>
-  <div class="section">
-    <div class="columns">
-      <div class="column table-container">
-        <table class="table is-fullwidth">
-          <thead>
-            <tr>
-              <th v-for="field in fields" :key="field.key">
-                {{ field.label }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="rows.length === 0">
-              <td colspan="4">No personnel has been added. Add personnel to continue.</td>
-            </tr>
-            <tr v-for="row in rows" :key="row.id" ref="row">
-              <td>{{ row['Full Name'] }}</td>
-              <td>{{ row['Title/Position'] }}</td>
-              <td>{{ row['Include in distribution list?'] === 'Yes' ? 'X' : '' }}</td>
-              <td>{{ row['Include in the approval list?'] === 'Yes' ? 'X' : '' }}</td>
-              <td>{{ row['Organization'] }}</td>
-              <td>
-                <div class="field is-grouped">
-                  <div class="control">
-                    <Button
-                      label="Edit"
-                      type="primary"
-                      icon="edit"
-                      :shouldShowIcon="true"
-                      @click.native="onEdit(row)"
-                    />
-                  </div>
-                  <div class="control">
-                    <Button
-                      label="Delete"
-                      type="danger"
-                      icon="trash-alt"
-                      :shouldShowIcon="true"
-                      @click.native="onDelete(row)"
-                    />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="has-text-right btn-container">
-      <Button label="Add" type="success" @click.native="onAddInfo" />
-      <Button label="Delete All" type="danger" @click.native="onDelete()" />
-    </div>
+  <div class="clear">
+    <Table
+      :columns="columns"
+      :rows="rows"
+      :shouldHaveActionsCol="true"
+      :shouldHaveGlobalActions="true"
+      noDataMessage="No personnel have been added. Add personnel to continue."
+      @onEdit="onEdit"
+      @onDelete="onDelete"
+      @onAdd="onAddInfo"
+    />
     <SideNav
       v-if="isEnteringInfo"
       :handleClose="() => (this.isEnteringInfo = false)"
@@ -112,25 +71,13 @@
         />
       </form>
     </SideNav>
-    <SideNav v-if="shouldShowDelete" title="Delete Personnel" :handleClose="() => (this.shouldShowDelete = false)">
-      <template #default="props">
-        <Alert v-if="shouldDeleteAll" :message="`Are you sure you want to delete all org/personnel?`" type="warning" />
-        <Alert
-          v-if="shouldDeleteSingle"
-          :message="`Are you sure you want to delete ${selectedPersonnel['Full Name']}?`"
-          type="warning"
-        />
-        <hr />
-        <div class="field is-grouped">
-          <div class="control">
-            <Button label="Delete" type="info" @click.native="deletePersonnelData" />
-          </div>
-          <div class="control">
-            <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />
-          </div>
-        </div>
-      </template>
-    </SideNav>
+    <DeleteWarning
+      v-if="shouldShowDelete"
+      title="Delete Personnel"
+      :itemLabel="shouldDeleteAll ? 'all personnel' : selectedPersonnel['Full Name']"
+      @close="() => (shouldShowDelete = false)"
+      @onDelete="deletePersonnelData"
+    />
   </div>
 </template>
 
@@ -138,7 +85,8 @@
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
-import Alert from '@/components/shared/Alert';
+import Table from '@/components/shared/Table';
+import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
   name: 'PersonnelTable',
@@ -148,7 +96,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Alert },
+  components: { Button, SideNav, Table, DeleteWarning },
   data() {
     return {
       isEnteringInfo: false,
@@ -160,30 +108,26 @@ export default {
       isPrimaryContactDisabled: false,
       pendingData: {},
       rows: [],
-      fields: [
+      columns: [
         {
-          key: 'personnelName',
+          key: 'Full Name',
           label: 'Name',
         },
         {
-          key: 'personnelPosition',
+          key: 'Title/Position',
           label: 'Title/Position',
         },
         {
-          key: 'distributionList',
+          key: 'Include in distribution list?',
           label: 'Distribution List',
         },
         {
-          key: 'approvalSheet',
+          key: 'Include in the approval list?',
           label: 'Approval Sheet',
         },
         {
-          key: 'organization',
+          key: 'Organization',
           label: 'Organization',
-        },
-        {
-          key: 'actions',
-          label: 'Actions',
         },
       ],
     };
@@ -331,9 +275,8 @@ export default {
 </script>
 
 <style scoped>
-.btn-container .button {
-  margin-left: 1em;
-  width: 6em;
+.clear {
+  clear: both;
 }
 
 textarea {
