@@ -150,7 +150,7 @@ export default {
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
 
-      if (this.rows.find((r) => r['Primary Contact'] === 'X') && r['Primary Contact'] !== 'X') {
+      if (this.rows.find(() => row['Primary Contact'] === 'X') && row['Primary Contact'] !== 'X') {
         this.isPrimaryContactDisabled = true;
       } else {
         this.isPrimaryContactDisabled = false;
