@@ -45,7 +45,7 @@
               class="is-checkradio"
               :id="question.id"
               type="checkbox"
-              true-value="Yes"
+              true-value="X"
               false-value=""
               v-model="pendingData[question.id]"
             />
@@ -56,8 +56,8 @@
               class="is-checkradio"
               :id="question.id"
               type="checkbox"
-              true-value="Yes"
-              false-value="No"
+              true-value="X"
+              false-value=""
               v-model="pendingData[question.id]"
               :disabled="isPrimaryContactDisabled"
             />
@@ -150,10 +150,10 @@ export default {
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
 
-      if (row['Primary Contact'] === 'Yes') {
-        this.isPrimaryContactDisabled = false;
-      } else if (row['Primary Contact'] === 'No' || !row['Primary Contact']) {
+      if (this.rows.find((row) => row['Primary Contact'] === 'X') && row['Primary Contact'] !== 'X') {
         this.isPrimaryContactDisabled = true;
+      } else {
+        this.isPrimaryContactDisabled = false;
       }
     },
     onDelete(row) {
@@ -173,15 +173,8 @@ export default {
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
 
-      if (this.qappData) {
-        Object.keys(this.qappData).forEach(() => {
-          const datum = this.qappData[8];
-          if (Array.isArray(datum)) {
-            this.isPrimaryContactDisabled = datum.some((d) => d.value === 'Yes');
-          } else {
-            this.isPrimaryContactDisabled = false;
-          }
-        });
+      if (this.rows.find((row) => row['Primary Contact'] === 'X')) {
+        this.isPrimaryContactDisabled = true;
       } else {
         this.isPrimaryContactDisabled = false;
       }
@@ -267,6 +260,8 @@ export default {
         this.rows.push({
           ...row,
           valueId: personnelId,
+          // ['Include in distribution list?']: row['Include in distribution list?'] === 'Yes' ? 'X' : '',
+          // ['Include in the approval list?']: row['Include in the approval list?'] === 'Yes' ? 'X' : '',
         });
       });
     },
