@@ -6,7 +6,7 @@
 
 <script>
 import Button from '@/components/shared/Button';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Generate',
@@ -43,6 +43,9 @@ export default {
         window.URL.revokeObjectURL(data);
       }, 100);
     },
+  },
+  computed: {
+    ...mapGetters('qapp', ['wordDocData']),
   },
 };
 </script>

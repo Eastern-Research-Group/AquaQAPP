@@ -35,6 +35,13 @@ const getters = {
     });
     return data;
   },
+  wordDocData(state, getters, rootState) {
+    const dataObj = {};
+    state.data.forEach((datum) => {
+      const key = rootState.structure.questions.find((q) => q.id === datum.questionId).questionName;
+      dataObj[key] = datum;
+    });
+  },
   progress(state, getters, rootState) {
     return Math.round((state.completedSections.length / rootState.structure.sections.length) * 100);
   },
