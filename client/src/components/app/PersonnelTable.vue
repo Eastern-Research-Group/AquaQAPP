@@ -76,9 +76,21 @@
               class="is-checkradio"
               :id="question.id"
               type="checkbox"
-              true-value="Yes"
-              false-value="No"
+              true-value="X"
+              false-value=""
               v-model="pendingData[question.id]"
+            />
+            <label :for="question.id">{{ question.questionLabel }}</label>
+          </div>
+          <div class="field" v-if="question.dataEntryType === 'singleCheckbox'">
+            <input
+              class="is-checkradio"
+              :id="question.id"
+              type="checkbox"
+              true-value="X"
+              false-value=""
+              v-model="pendingData[question.id]"
+              :disabled="isPrimaryContactDisabled"
             />
             <label :for="question.id">{{ question.questionLabel }}</label>
           </div>
@@ -124,6 +136,7 @@ export default {
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
       selectedPersonnel: null,
+      isPrimaryContactDisabled: false,
       pendingData: {},
       rows: [],
       columns: [
@@ -167,6 +180,12 @@ export default {
       });
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
+
+      if (this.rows.find(() => row['Primary Contact'] === 'X') && row['Primary Contact'] !== 'X') {
+        this.isPrimaryContactDisabled = true;
+      } else {
+        this.isPrimaryContactDisabled = false;
+      }
     },
     onDelete(row) {
       this.shouldShowDelete = true;
@@ -179,11 +198,17 @@ export default {
         this.shouldDeleteAll = true;
       }
     },
-    onAddInfo() {
+    async onAddInfo() {
       this.pendingData = {};
       this.isEnteringInfo = true;
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
+
+      if (this.rows.find((row) => row['Primary Contact'] === 'X')) {
+        this.isPrimaryContactDisabled = true;
+      } else {
+        this.isPrimaryContactDisabled = false;
+      }
     },
     submitPersonnelData() {
       if (this.shouldShowEdit) {
@@ -266,6 +291,8 @@ export default {
         this.rows.push({
           ...row,
           valueId: personnelId,
+          // ['Include in distribution list?']: row['Include in distribution list?'] === 'Yes' ? 'X' : '',
+          // ['Include in the approval list?']: row['Include in the approval list?'] === 'Yes' ? 'X' : '',
         });
       });
     },
@@ -276,5 +303,9 @@ export default {
 <style scoped>
 .clear {
   clear: both;
+}
+
+textarea {
+  height: 6em;
 }
 </style>

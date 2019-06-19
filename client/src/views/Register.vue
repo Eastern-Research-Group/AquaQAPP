@@ -21,11 +21,25 @@
                 one number.
               </HoverText>
             </label>
-            <input class="input" type="password" required placeholder="Enter password" v-model="password" maxlength="255" />
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Enter password"
+              v-model="password"
+              maxlength="255"
+            />
           </div>
           <div class="field">
             <label class="label is-size-5">Confirm Password</label>
-            <input class="input" type="password" required placeholder="Confirm password" v-model="confirmPassword" maxlength="255" />
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Confirm password"
+              v-model="confirmPassword"
+              maxlength="255"
+            />
           </div>
           <Alert v-if="error" :message="error" type="error" />
           <div class="field">

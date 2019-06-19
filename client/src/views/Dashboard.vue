@@ -8,7 +8,7 @@
       <div class="column has-text-right">
         <Button
           class="is-size-5"
-          label="Add"
+          label="Add QAPP"
           type="success"
           @click.native="() => (shouldShowAdd = true)"
           :shouldShowIcon="true"
@@ -34,13 +34,21 @@
       <template #default="props">
         <form id="addQappForm" @submit.prevent="handleSubmit">
           <div class="field">
-            <label class="label">Title</label>
-            <input class="input" type="text" required placeholder="Enter a title" v-model="title" maxlength="255" />
+            <label class="label" for="title">QAPP Title</label>
+            <input
+              id="title"
+              class="input"
+              type="text"
+              required
+              placeholder="Enter a title"
+              v-model="title"
+              maxlength="255"
+            />
           </div>
           <hr />
           <div class="field is-grouped">
             <div class="control">
-              <Button label="Submit" type="info" submit />
+              <Button label="Add" type="info" submit />
             </div>
             <div class="control">
               <Button label="Cancel" type="cancel" :preventEvent="true" @click.native="props.close" />

@@ -3,7 +3,7 @@ module.exports = {
     const records = [];
     records.push({
       sectionNumber: '1',
-      questionLabel: 'Title',
+      questionLabel: 'QAPP Title',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -27,18 +27,6 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionLabel: 'Prepared For',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '4000',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    records.push({
-      sectionNumber: '4',
       questionLabel: 'Full Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -50,7 +38,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Title/Position',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -62,7 +50,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Include in distribution list?',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -74,7 +62,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Include in the approval list?',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -86,44 +74,44 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Organization',
+      sectionNumber: '3',
+      questionLabel: 'Primary Contact',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '512',
+      dataEntryType: 'singleCheckbox',
+      maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 5,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Address',
+      sectionNumber: '3',
+      questionLabel: 'Organization',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
-      maxLength: '4000',
+      maxLength: '512',
       hasExamples: false,
       sectionQuestionSort: 6,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'City',
+      sectionNumber: '3',
+      questionLabel: 'Address',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
-      maxLength: '1000',
+      maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 7,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'State',
+      sectionNumber: '3',
+      questionLabel: 'City',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -134,8 +122,8 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Zip',
+      sectionNumber: '3',
+      questionLabel: 'State',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -146,8 +134,8 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Telephone',
+      sectionNumber: '3',
+      questionLabel: 'Zip',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'tel',
@@ -158,8 +146,8 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Email',
+      sectionNumber: '3',
+      questionLabel: 'Telephone',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'email',
@@ -170,8 +158,8 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Fax',
+      sectionNumber: '3',
+      questionLabel: 'Email',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'tel',
@@ -182,27 +170,39 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Responsibilities',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'largeText',
       maxLength: '4096',
       hasExamples: false,
-      sectionQuestionSort: 13,
+      sectionQuestionSort: 14,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '4',
+      questionLabel: 'Problem Definition',
+      dataEntryInstructions:
+        'State the specific environmental problem to be investigated. Include sufficient background information to provide a historical and scientific perspective for the current project.',
+      dataEntryTip:
+        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>ITEP has assembled a website of resources including example SPSs technical reports, spreadsheets, databases, EPA laws, programs and links.</p>',
+      dataEntryType: 'largeText',
+      maxLength: '4000',
+      hasExamples: true,
+      sectionQuestionSort: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '5',
-      questionLabel: 'Problem Definition',
-      dataEntryInstructions:
-        'State the specific envrionmental problem to be investigated. Include sufficient background information to provide an historical and scientific perspective for the current project.',
-      dataEntryTip:
-        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>Itep has assembled a website of resources including example SPSs technical reports spreadsheets datbases epa laws and commrenations programs and links.</p>',
+      questionLabel: 'Problem Background',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
       dataEntryType: 'largeText',
       maxLength: '4000',
-      hasExamples: true,
+      hasExamples: false,
       sectionQuestionSort: 1,
       createdAt: new Date(),
       updatedAt: new Date(),

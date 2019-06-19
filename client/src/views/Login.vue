@@ -6,11 +6,27 @@
       <form @submit.prevent="login">
         <div class="field">
           <label for="email" class="label is-size-5">Email</label>
-          <input id="email" class="input" type="email" required placeholder="Enter email" v-model="email" maxlength="255" />
+          <input
+            id="email"
+            class="input"
+            type="email"
+            required
+            placeholder="Enter email"
+            v-model="email"
+            maxlength="255"
+          />
         </div>
         <div class="field">
           <label for="password" class="label is-size-5">Password</label>
-          <input id="password" class="input" type="password" required placeholder="Enter password" v-model="password" maxlength="255" />
+          <input
+            id="password"
+            class="input"
+            type="password"
+            required
+            placeholder="Enter password"
+            v-model="password"
+            maxlength="255"
+          />
         </div>
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
