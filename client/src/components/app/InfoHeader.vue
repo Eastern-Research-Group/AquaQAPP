@@ -66,11 +66,11 @@
           <form id="editProfile" @submit.prevent="handleProfileSubmit">
             <div class="field">
               <label class="label has-text-white">Full Name</label>
-              <input class="input" type="text" required placeholder="Enter Full Name" v-model="name" />
+              <input class="input" type="text" required placeholder="Enter Full Name" v-model="name" maxlength="255" />
             </div>
             <div class="field">
               <label class="label has-text-white">Email</label>
-              <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+              <input class="input" type="email" required placeholder="Enter email" v-model="email" maxlength="255" />
             </div>
             <hr />
             <div class="field is-grouped">
@@ -112,6 +112,7 @@
               required
               placeholder="Enter Current Password"
               v-model="currentPassword"
+              maxlength="255"
             />
           </div>
           <div class="field">
@@ -122,7 +123,14 @@
                 one number.
               </HoverText>
             </label>
-            <input class="input" type="password" required placeholder="Enter New Password" v-model="newPassword" />
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Enter New Password"
+              v-model="newPassword"
+              maxlength="255"
+            />
           </div>
           <div class="field">
             <label class="label has-text-white">Confirm New Password</label>
@@ -132,6 +140,7 @@
               required
               placeholder="Confirm New Password"
               v-model="confirmNewPassword"
+              maxlength="255"
             />
           </div>
           <div class="field">

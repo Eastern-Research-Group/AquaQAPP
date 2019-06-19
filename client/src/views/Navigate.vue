@@ -1,152 +1,177 @@
 <template>
-  <div class="columns">
-    <aside class="menu column is-one-quarter">
-      <ul class="menu-list">
-        <li v-for="section in sections" :key="section.id">
-          <button
-            :class="
-              `button is-text has-text-white ${
-                currentSection.sectionNumber === section.sectionNumber ? 'has-text-weight-bold' : ''
-              }`
-            "
-            @click="changeSection(section)"
-          >
-            <span class="step-number" v-if="false">{{ section.sectionNumber }}</span>
-            {{ section.sectionLabel }}
-            <span v-if="completedSections.indexOf(section.id) > -1">
-              <span class="fa fa-check has-text-success"></span>
-            </span>
-          </button>
-        </li>
-      </ul>
-    </aside>
-    <section class="right column is-three-quarters">
-      <Alert
-        v-if="isSectionNotAvailable()"
-        :message="`You must complete the Water Quality Concerns section before completing this section`"
-        type="error"
-      />
-      <form v-else @submit.prevent>
-        <Button
-          :label="hasSaved ? 'Saved' : 'Save'"
-          type="primary"
-          class="aq-save-btn is-pulled-right"
-          :disabled="hasSaved || checkRequiredFields()"
-          :title="getSaveBtnHoverText()"
-          @click.native="saveData"
-        />
-        <MarkComplete
-          @markComplete="markComplete(currentSection.sectionNumber)"
-          :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
-          :disabled="checkRequiredFields()"
-        />
-        <div
-          class="field"
-          v-for="question in currentQuestions.filter(
-            (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
-          )"
-          :key="question.id"
-        >
-          <div>
-            <label class="label is-size-4">{{ question.questionLabel }}</label>
-            <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
-            <div
-              class="instructions"
-              v-if="question.dataEntryInstructions"
-              v-html="question.dataEntryInstructions"
-            ></div>
-            <input
-              v-if="question.dataEntryType === 'text'"
-              class="input"
-              type="text"
-              required
-              :placeholder="`Enter ${question.questionLabel}`"
-              v-model="pendingData[question.id]"
-              @input="hasSaved = false"
-            />
-            <textarea
-              v-if="question.dataEntryType === 'largeText'"
-              class="input"
-              required
-              :placeholder="`Enter ${question.questionLabel}`"
-              v-model="pendingData[question.id]"
-              @input="hasSaved = false"
-            ></textarea>
-            <HoverText
-              v-if="question.refName === 'concerns' && locationConcerns.length"
-              hoverId="concernsInfo"
-              linkText="Why are some concerns disabled?"
+  <div>
+    <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
+    <div class="columns">
+      <aside class="menu column is-one-quarter">
+        <ul class="menu-list">
+          <li v-for="section in sections" :key="section.id">
+            <button
+              :class="
+                `button is-text has-text-white ${
+                  currentSection.sectionNumber === section.sectionNumber ? 'has-text-weight-bold' : ''
+                }`
+              "
+              @click="changeSection(section)"
             >
-              There are monitoring locations associated with these concerns. You must delete these locations before the
-              concerns can be removed.
-            </HoverText>
-            <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
-              <CheckboxButton
-                v-for="option in getOptions(question.refName)"
-                :key="option.id"
-                :id="option.code"
-                :name="option.label"
-                :isSingleSelect="question.refName === 'yesNo'"
-                :singleSelectId="question.questionLabel"
-                :value="option.code"
-                :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
-                :disabled="locationConcerns.indexOf(option.code) > -1"
-                @check="updatePendingData($event, question)"
-              />
-            </div>
-            <div class="btn-container has-text-right">
-              <Button
-                class="example"
-                label="Example(s)"
-                type="dark"
-                v-if="question.examples.length"
-                @click.native="() => (shouldShowExample = true)"
-              />
-            </div>
-            <Modal v-if="shouldShowExample" @close="() => (shouldShowExample = false)">
-              <Tabs
-                v-if="question.examples.length > 1"
-                :tabs="
-                  question.examples.map((example, index) => ({
-                    id: `example${index}`,
-                    name: `Example ${index + 1}`,
-                    isActive: index === 0,
-                  }))
-                "
-              >
-                <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
-                  <p :key="index" class="has-text-black example-text" ref="exampleText">
-                    {{ example.text }}
-                  </p>
-                </template>
-              </Tabs>
-              <p v-else class="has-text-black example-text" ref="exampleText">
-                {{ question.examples[0].text }}
-              </p>
-              <div class="has-text-right">
-                <Button label="Add Example" type="success" @click.native="addExample(question.id)" />
-              </div>
-            </Modal>
-            <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
-          </div>
-        </div>
-        <div v-for="customSection in customSections" :key="customSection.component">
-          <component
-            v-if="customSection.label === currentSection.sectionLabel"
-            :is="customSection.component"
-            :questions="currentQuestions"
-            @saveData="saveData"
+              <span class="step-number" v-if="false">{{ section.sectionNumber }}</span>
+              {{ section.sectionLabel }}
+              <span v-if="completedSections.indexOf(section.id) > -1">
+                <span class="fa fa-check has-text-success"></span>
+              </span>
+            </button>
+          </li>
+        </ul>
+      </aside>
+      <section class="right column is-three-quarters">
+        <Alert
+          v-if="isSectionNotAvailable()"
+          :message="`You must complete the Water Quality Concerns section before completing this section`"
+          type="error"
+        />
+        <form v-else @submit.prevent>
+          <Button
+            :label="hasSaved ? 'Saved' : 'Save'"
+            type="primary"
+            class="aq-save-btn is-pulled-right"
+            :disabled="hasSaved || checkRequiredFields()"
+            :title="getSaveBtnHoverText()"
+            @click.native="saveData"
           />
+          <MarkComplete
+            @markComplete="markComplete(currentSection.sectionNumber)"
+            :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
+            :disabled="checkRequiredFields()"
+          />
+          <div
+            class="field"
+            v-for="question in currentQuestions.filter(
+              (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
+            )"
+            :key="question.id"
+          >
+            <div>
+              <label class="label is-size-4">{{ question.questionLabel }}</label>
+              <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
+              <div
+                class="instructions"
+                v-if="question.dataEntryInstructions"
+                v-html="question.dataEntryInstructions"
+              ></div>
+              <input
+                v-if="question.dataEntryType === 'text'"
+                class="input"
+                type="text"
+                required
+                :placeholder="`Enter ${question.questionLabel}`"
+                v-model="pendingData[question.id]"
+                @input="hasSaved = false"
+                :maxlength="question.maxLength"
+              />
+              <input
+                v-if="question.dataEntryType === 'phone'"
+                class="input"
+                type="tel"
+                required
+                :placeholder="`Enter ${question.questionLabel}`"
+                v-model="pendingData[question.id]"
+                @input="hasSaved = false"
+                :maxlength="question.maxLength"
+              />
+              <input
+                v-if="question.dataEntryType === 'email'"
+                class="input"
+                type="email"
+                required
+                :placeholder="`Enter ${question.questionLabel}`"
+                v-model="pendingData[question.id]"
+                @input="hasSaved = false"
+                :maxlength="question.maxLength"
+              />
+              <textarea
+                v-if="question.dataEntryType === 'largeText'"
+                class="input"
+                required
+                :placeholder="`Enter ${question.questionLabel}`"
+                v-model="pendingData[question.id]"
+                @input="hasSaved = false"
+                :maxlength="question.maxLength"
+              ></textarea>
+              <HoverText
+                v-if="question.refName === 'concerns' && locationConcerns.length"
+                hoverId="concernsInfo"
+                linkText="Why are some concerns disabled?"
+              >
+                There are monitoring locations associated with these concerns. You must delete these locations before
+                the concerns can be removed.
+              </HoverText>
+              <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
+                <CheckboxButton
+                  v-for="option in getOptions(question.refName)"
+                  :key="option.id"
+                  :id="option.code"
+                  :name="option.label"
+                  :isSingleSelect="question.refName === 'yesNo'"
+                  :singleSelectId="question.questionLabel"
+                  :value="option.code"
+                  :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
+                  :disabled="locationConcerns.indexOf(option.code) > -1"
+                  @check="updatePendingData($event, question)"
+                />
+              </div>
+              <div class="btn-container has-text-right">
+                <Button
+                  class="example"
+                  label="Example(s)"
+                  type="dark"
+                  v-if="question.examples.length"
+                  @click.native="() => (shouldShowExample = true)"
+                />
+              </div>
+              <Modal v-if="shouldShowExample" @close="() => (shouldShowExample = false)">
+                <Tabs
+                  v-if="question.examples.length > 1"
+                  :tabs="
+                    question.examples.map((example, index) => ({
+                      id: `example${index}`,
+                      name: `Example ${index + 1}`,
+                      isActive: index === 0,
+                    }))
+                  "
+                >
+                  <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
+                    <p :key="index" class="has-text-black example-text" ref="exampleText">
+                      {{ example.text }}
+                    </p>
+                  </template>
+                </Tabs>
+                <p v-else class="has-text-black example-text" ref="exampleText">
+                  {{ question.examples[0].text }}
+                </p>
+                <div class="has-text-right">
+                  <Button label="Add Example" type="success" @click.native="addExample(question.id)" />
+                </div>
+              </Modal>
+              <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
+            </div>
+          </div>
+          <div v-for="customSection in customSections" :key="customSection.component">
+            <component
+              v-if="customSection.label === currentSection.sectionLabel"
+              :is="customSection.component"
+              :questions="currentQuestions"
+              @saveData="saveData"
+            />
+          </div>
+        </form>
+      </section>
+      <Modal v-if="shouldDisplayUnsavedWarning" @close="() => (shouldDisplayUnsavedWarning = false)">
+        <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
+        <div class="btn-container">
+          <Button label="Save Changes" type="success" @click.native="saveData" />
+          <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
         </div>
-      </form>
-    </section>
-    <Modal v-if="shouldDisplayUnsavedWarning" @close="() => (shouldDisplayUnsavedWarning = false)">
-      <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
-      <div class="btn-container">
-        <Button label="Save Changes" type="success" @click.native="saveData" />
-        <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
-      </div>
-    </Modal>
+      </Modal>
+    </div>
   </div>
 </template>
 
@@ -188,6 +213,7 @@ export default {
       pendingData: {},
       shouldDisplayUnsavedWarning: false,
       pendingSection: null,
+      dataError: null,
     };
   },
   computed: {
@@ -235,6 +261,7 @@ export default {
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(section) {
+      this.dataError = null;
       if (this.hasUnsavedData()) {
         this.shouldDisplayUnsavedWarning = true;
         this.pendingSection = section;
@@ -318,17 +345,23 @@ export default {
     },
     async saveData(e, valueId = null, data) {
       // Wait for all data to be saved before setting hasSaved
+      this.dataError = null;
       await Promise.all(
         this.currentQuestions.map(async (q) => {
-          await this.$store.dispatch('qapp/save', {
-            qappId: this.$store.state.qapp.id,
-            questionId: q.id,
-            value: data ? data[q.id] : this.pendingData[q.id],
-            valueId,
-          });
+          await this.$store
+            .dispatch('qapp/save', {
+              qappId: this.$store.state.qapp.id,
+              questionId: q.id,
+              value: data ? data[q.id] : this.pendingData[q.id],
+              valueId,
+            })
+            .catch((error) => {
+              if (this.dataError === null) this.dataError = error.response.data.error;
+              else this.dataError += `<br/>${error.response.data.error}`;
+            });
         })
       );
-      this.hasSaved = true;
+      this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
       if (this.pendingSection) {
         this.changeSection(this.pendingSection);
