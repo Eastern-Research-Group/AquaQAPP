@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Alert v-if="addError !== null" :message="addError" type="error"></Alert>
     <div class="columns">
       <div class="column">
         <h1 class="title is-size-2">Dashboard</h1>
@@ -33,8 +34,16 @@
       <template #default="props">
         <form id="addQappForm" @submit.prevent="handleSubmit">
           <div class="field">
-            <label for="title" class="label">QAPP Title</label>
-            <input id="title" class="input" type="text" required placeholder="Enter QAPP Title" v-model="title" />
+            <label class="label" for="title">QAPP Title</label>
+            <input
+              id="title"
+              class="input"
+              type="text"
+              required
+              placeholder="Enter a title"
+              v-model="title"
+              maxlength="255"
+            />
           </div>
           <hr />
           <div class="field is-grouped">
@@ -64,9 +73,10 @@ import SideNav from '@/components/shared/SideNav';
 import Button from '@/components/shared/Button';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
+import Alert from '@/components/shared/Alert';
 
 export default {
-  components: { SideNav, Button, Table, DeleteWarning },
+  components: { SideNav, Button, Table, DeleteWarning, Alert },
   async mounted() {
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
@@ -84,12 +94,18 @@ export default {
       this.title = '';
     },
     async handleSubmit() {
-      await this.$store.dispatch('qapps/add', {
-        userId: this.$auth.user().id,
-        title: this.title,
-        archived: false,
-      });
-      this.$router.push({ name: 'navigate', params: { id: this.$store.state.qapp.id } });
+      this.addError = null;
+      await this.$store
+        .dispatch('qapps/add', {
+          userId: this.$auth.user().id,
+          questionId: 1,
+          value: this.title,
+          archived: false,
+        })
+        .catch((error) => {
+          this.addError = error.response.data.error;
+        });
+      if (this.addError === null) this.$router.push({ name: 'navigate', params: { id: this.$store.state.qapp.id } });
     },
     editQapp(qapp) {
       this.$store.commit('qapp/SET_CURRENT_QAPP', qapp);
@@ -121,6 +137,7 @@ export default {
       ],
       title: '',
       selectedQapp: null,
+      addError: null,
     };
   },
   computed: {

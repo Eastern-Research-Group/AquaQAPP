@@ -53,7 +53,7 @@
               <div class="column is-10">
                 <div class="field">
                   <p>Other</p>
-                  <input class="input" type="text" @keyup.enter="$emit('updateData', $event, paramQuestion)" />
+                  <input ref="otherInput" class="input" type="text" @keyup.enter="updateParams($event)" />
                 </div>
               </div>
               <div class="column arrows is-hidden-mobile">
@@ -65,11 +65,7 @@
             <p class="has-text-centered">Selected</p>
             <div class="box selected-parameters">
               <ul>
-                <li
-                  v-for="param in pendingData[paramQuestion.id].split(',')"
-                  :key="param"
-                  class="param-label has-text-weight-semibold"
-                >
+                <li v-for="param in selectedParams" :key="param" class="param-label has-text-weight-semibold">
                   {{ getParamLabel(param) }}
                   <span
                     class="fa fa-times"
@@ -104,7 +100,6 @@ export default {
   components: { Tabs },
   data() {
     return {
-      selectedParams: [],
       paramQuestion: this.questions[0],
     };
   },
@@ -112,12 +107,11 @@ export default {
     ...mapState('ref', ['parameters', 'waterTypes']),
     ...mapGetters('qapp', ['qappData']),
     ...mapGetters('structure', ['concernsQuestionId', 'locationWaterTypeQuestionId']),
+    selectedParams() {
+      return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
+    },
   },
   methods: {
-    addOther(e) {
-      this.selectedParams.push(e.target.value);
-      e.target.value = ''; // clear other textbox after adding
-    },
     getFilteredParams(waterType) {
       const selectedConcerns = this.qappData[this.concernsQuestionId].split(',');
       /* Check if any one concern from parameters ref matches any one concern from selected concerns (using Array.some())
@@ -138,11 +132,15 @@ export default {
       }));
     },
     isChecked(paramId) {
-      return this.pendingData[this.paramQuestion.id].split(',').indexOf(paramId.toString()) > -1;
+      return this.selectedParams.indexOf(paramId.toString()) > -1;
     },
     getParamLabel(param) {
       const pId = parseInt(param, 10);
       return this.parameters.find((p) => p.id === pId) ? this.parameters.find((p) => p.id === pId).name : param;
+    },
+    updateParams(e) {
+      this.$emit('updateData', e, this.paramQuestion);
+      this.$refs.otherInput[0].value = '';
     },
   },
 };
