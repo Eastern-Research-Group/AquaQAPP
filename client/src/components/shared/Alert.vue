@@ -60,7 +60,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.svg-inline--fa {
+.fa {
   margin: auto 0.5em auto 0;
 }
 
