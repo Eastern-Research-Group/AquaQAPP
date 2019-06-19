@@ -192,6 +192,7 @@ export default {
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locationQuestionId']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -210,7 +211,9 @@ export default {
       const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');
       if (locationConcernQuestion && this.qappData[locationConcernQuestion.id]) {
         this.qappData[locationConcernQuestion.id].forEach((location) => {
-          concerns = concerns.concat(location.value.split(','));
+          if (location.value) {
+            concerns = concerns.concat(location.value.split(','));
+          }
         });
       }
       return concerns;
@@ -333,21 +336,18 @@ export default {
       }
     },
     isSectionNotAvailable() {
+      /* User must have saved data for concerns before viewing locations section,
+       * and must have saved data for locations before viewing parameters section
+       */
       let sectionNotAvailable = false;
       if (
         this.currentSection.sectionLabel === 'Monitoring Locations' &&
-        this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Water Quality Concerns').id) === -1
+        (!this.qappData[this.concernsQuestionId] || !this.qappData[this.concernsDifferByLocQuestionId])
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns section before completing this section';
-      } else if (
-        this.currentSection.sectionLabel === 'Parameters' &&
-        (this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Water Quality Concerns').id) ===
-          -1 ||
-          this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Monitoring Locations').id) ===
-            -1)
-      ) {
+      } else if (this.currentSection.sectionLabel === 'Parameters' && !this.qappData[this.locationQuestionId]) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
