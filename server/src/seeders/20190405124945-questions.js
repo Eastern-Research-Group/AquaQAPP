@@ -27,18 +27,6 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionLabel: 'Prepared For',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '4000',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    records.push({
-      sectionNumber: '4',
       questionLabel: 'Full Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -50,7 +38,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Title/Position',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -62,7 +50,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Include in distribution list?',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -74,7 +62,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Include in the approval list?',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -86,7 +74,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Primary Contact',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -98,7 +86,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Organization',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -110,7 +98,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Address',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -122,7 +110,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'City',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -134,7 +122,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'State',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -146,7 +134,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Zip',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -158,7 +146,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Telephone',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -170,7 +158,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Email',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -182,19 +170,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionLabel: 'Fax',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '1000',
-      hasExamples: false,
-      sectionQuestionSort: 13,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionLabel: 'Responsibilities',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -206,15 +182,27 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '5',
+      sectionNumber: '4',
       questionLabel: 'Problem Definition',
       dataEntryInstructions:
-        'State the specific envrionmental problem to be investigated. Include sufficient background information to provide an historical and scientific perspective for the current project.',
+        'State the specific environmental problem to be investigated. Include sufficient background information to provide a historical and scientific perspective for the current project.',
       dataEntryTip:
-        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>Itep has assembled a website of resources including example SPSs technical reports spreadsheets datbases epa laws and commrenations programs and links.</p>',
+        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>ITEP has assembled a website of resources including example SPSs technical reports, spreadsheets, databases, EPA laws, programs and links.</p>',
       dataEntryType: 'largeText',
       maxLength: '4000',
       hasExamples: true,
+      sectionQuestionSort: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '5',
+      questionLabel: 'Problem Background',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '4000',
+      hasExamples: false,
       sectionQuestionSort: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
