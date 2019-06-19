@@ -66,16 +66,16 @@
           <form id="editProfile" @submit.prevent="handleProfileSubmit">
             <div class="field">
               <label class="label has-text-white">Full Name</label>
-              <input class="input" type="text" required placeholder="Enter Full Name" v-model="name" />
+              <input class="input" type="text" required placeholder="Enter Full Name" v-model="$auth.user().name" />
             </div>
             <div class="field">
               <label class="label has-text-white">Email</label>
-              <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+              <input class="input" type="email" required placeholder="Enter email" v-model="$auth.user().email" />
             </div>
             <hr />
             <div class="field is-grouped">
               <div class="control">
-                <Button label="Edit and Save" type="info" submit />
+                <Button label="Save" type="info" submit />
               </div>
               <div class="control">
                 <Button label="Change Password" type="info" @click.native="changePasswordModal" />
