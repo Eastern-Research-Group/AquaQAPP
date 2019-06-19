@@ -16,19 +16,19 @@ module.exports = {
     records.push({
       sectionNumber: '3',
       sectionLevel: '1',
-      sectionLabel: 'Prepared For',
+      sectionLabel: 'Project Organization/Personnel',
       sectionSort: 3,
     });
     records.push({
       sectionNumber: '4',
       sectionLevel: '1',
-      sectionLabel: 'Project Organization/Personnel',
+      sectionLabel: 'Problem Definition',
       sectionSort: 4,
     });
     records.push({
       sectionNumber: '5',
       sectionLevel: '1',
-      sectionLabel: 'Problem Definition/Background',
+      sectionLabel: 'Problem Background',
       sectionSort: 5,
     });
     records.push({
