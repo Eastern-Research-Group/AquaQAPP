@@ -284,6 +284,12 @@ module.exports = {
         });
       }
 
+      if (newName.length > 255) {
+        return res.status(500).send({ error: 'Full Name should be 255 characters or less.' });
+      }
+      if (newEmail.length > 255) {
+        return res.status(500).send({ error: 'Email should be 255 characters or less.' });
+      }
       await User.update(
         {
           name: newName,
