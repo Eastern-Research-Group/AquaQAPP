@@ -131,7 +131,9 @@
             v-if="customSection.label === currentSection.sectionLabel"
             :is="customSection.component"
             :questions="currentQuestions"
+            :pendingData="pendingData"
             @saveData="saveData"
+            @updateData="updatePendingData"
           />
         </div>
       </form>

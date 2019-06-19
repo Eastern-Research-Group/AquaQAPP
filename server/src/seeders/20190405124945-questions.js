@@ -384,13 +384,14 @@ module.exports = {
     });
     records.push({
       sectionNumber: '12',
-      questionLabel: 'Pollutants',
+      questionLabel: 'Parameters',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: '',
       maxLength: '0',
       hasExamples: false,
       sectionQuestionSort: 1,
+      refName: 'parameters',
       createdAt: new Date(),
       updatedAt: new Date(),
     });

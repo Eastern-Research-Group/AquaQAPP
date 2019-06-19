@@ -14,7 +14,8 @@
                       :id="param.id"
                       type="checkbox"
                       :value="param.id"
-                      v-model="selectedParams"
+                      :checked="isChecked(param.id)"
+                      @change="$emit('updateData', $event, paramQuestion)"
                     />
                     <label :for="param.id">{{ param.name }}</label>
                   </div>
@@ -52,7 +53,7 @@
               <div class="column is-10">
                 <div class="field">
                   <p>Other</p>
-                  <input class="input" type="text" @keyup.enter="addOther($event)" />
+                  <input class="input" type="text" @keyup.enter="$emit('updateData', $event, paramQuestion)" />
                 </div>
               </div>
               <div class="column arrows is-hidden-mobile">
@@ -64,8 +65,12 @@
             <p class="has-text-centered">Selected</p>
             <div class="box selected-parameters">
               <ul>
-                <li v-for="param in selectedParams" :key="param" class="has-text-weight-semibold">
-                  {{ parameters.find((p) => p.id === param).name }}
+                <li
+                  v-for="param in pendingData[paramQuestion.id].split(',')"
+                  :key="param"
+                  class="has-text-weight-semibold"
+                >
+                  {{ getParamLabel(param) }}
                 </li>
               </ul>
             </div>
@@ -82,17 +87,27 @@ import Tabs from '@/components/shared/Tabs';
 
 export default {
   name: 'Parameters',
+  props: {
+    pendingData: {
+      type: Object,
+      required: true,
+    },
+    questions: {
+      type: Array,
+      required: true,
+    },
+  },
   components: { Tabs },
   data() {
     return {
       selectedParams: [],
+      paramQuestion: this.questions[0],
     };
   },
   computed: {
     ...mapState('ref', ['parameters', 'waterTypes']),
-    ...mapState('structure', ['questions']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['locationWaterTypeQuestionId']),
+    ...mapGetters('structure', ['concernsQuestionId', 'locationWaterTypeQuestionId']),
   },
   methods: {
     addOther(e) {
@@ -100,8 +115,7 @@ export default {
       e.target.value = ''; // clear other textbox after adding
     },
     getFilteredParams(waterType) {
-      const concernsQuestionId = this.questions.find((q) => q.refName === 'concerns').id;
-      const selectedConcerns = this.qappData[concernsQuestionId].split(',');
+      const selectedConcerns = this.qappData[this.concernsQuestionId].split(',');
       /* Check if any one concern from parameters ref matches any one concern from selected concerns (using Array.some())
        * Then, check if parameter's water type matches the current tab's water type (or if param's water type is "All")
        */
@@ -118,6 +132,13 @@ export default {
         id: v,
         name: v,
       }));
+    },
+    isChecked(paramId) {
+      return this.pendingData[this.paramQuestion.id].split(',').indexOf(paramId.toString()) > -1;
+    },
+    getParamLabel(param) {
+      const pId = parseInt(param, 10);
+      return this.parameters.find((p) => p.id === pId) ? this.parameters.find((p) => p.id === pId).name : param;
     },
   },
 };
