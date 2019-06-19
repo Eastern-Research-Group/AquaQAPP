@@ -1,28 +1,22 @@
 <template>
   <div>
-    <Tabs
-      :tabs="[
-        { id: 'Fresh', name: 'Fresh', isActive: true },
-        { id: 'Salt', name: 'Salt' },
-        { id: 'Brackish', name: 'Brackish' },
-      ]"
-    >
-      <template v-for="waterType in waterTypes" v-slot:[waterType.id]>
+    <Tabs :tabs="getWaterTypes()">
+      <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
         <div :key="waterType.id" class="columns tab-content">
-          <div class="column is-three-quarters">
+          <div class="column is-two-thirds">
             <div class="columns">
               <div class="column is-10">
-                <p>Suggested Parameters for {{ waterType.name }} based on selected concerns</p>
+                <p>Parameters for {{ waterType.name }} based on selected concerns</p>
                 <div class="field checkboxes-container">
-                  <div v-for="param in parameters" class="field" :key="param">
+                  <div v-for="param in getFilteredParams(waterType.name)" class="field" :key="param.id">
                     <input
                       class="is-checkradio is-info"
-                      :id="param"
+                      :id="param.id"
                       type="checkbox"
-                      :value="param"
+                      :value="param.id"
                       v-model="selectedParams"
                     />
-                    <label :for="param">{{ param }}</label>
+                    <label :for="param.id">{{ param.name }}</label>
                   </div>
                 </div>
               </div>
@@ -30,6 +24,7 @@
                 <span class="fas fa-angle-double-right is-size-3 "></span>
               </div>
             </div>
+            <!-- Removed until "Suggested parameters" logic is determined
             <div class="columns">
               <div class="column is-10">
                 <p>
@@ -37,22 +32,22 @@
                   concerns)
                 </p>
                 <div class="field checkboxes-container">
-                  <div v-for="param in parameters" class="field" :key="param">
+                  <div v-for="param in getFilteredParams(waterType.name)" class="field" :key="param.id">
                     <input
                       class="is-checkradio is-info"
-                      :id="param"
+                      :id="param.id"
                       type="checkbox"
-                      :value="param"
+                      :value="param.id"
                       v-model="selectedParams"
                     />
-                    <label :for="param">{{ param }}</label>
+                    <label :for="param.id">{{ param.name }}</label>
                   </div>
                 </div>
               </div>
               <div class="column arrows is-hidden-mobile">
                 <span class="fas fa-angle-double-right is-size-3"></span>
               </div>
-            </div>
+            </div> -->
             <div class="columns">
               <div class="column is-10">
                 <div class="field">
@@ -65,12 +60,12 @@
               </div>
             </div>
           </div>
-          <div class="column is-one-quarter">
+          <div class="column is-one-third">
             <p class="has-text-centered">Selected</p>
             <div class="box selected-parameters">
               <ul>
                 <li v-for="param in selectedParams" :key="param" class="has-text-weight-semibold">
-                  {{ param }}
+                  {{ parameters.find((p) => p.id === param).name }}
                 </li>
               </ul>
             </div>
@@ -82,7 +77,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Tabs from '@/components/shared/Tabs';
 
 export default {
@@ -95,11 +90,34 @@ export default {
   },
   computed: {
     ...mapState('ref', ['parameters', 'waterTypes']),
+    ...mapState('structure', ['questions']),
+    ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['locationWaterTypeQuestionId']),
   },
   methods: {
     addOther(e) {
       this.selectedParams.push(e.target.value);
       e.target.value = ''; // clear other textbox after adding
+    },
+    getFilteredParams(waterType) {
+      const concernsQuestionId = this.questions.find((q) => q.refName === 'concerns').id;
+      const selectedConcerns = this.qappData[concernsQuestionId].split(',');
+      /* Check if any one concern from parameters ref matches any one concern from selected concerns (using Array.some())
+       * Then, check if parameter's water type matches the current tab's water type (or if param's water type is "All")
+       */
+      return this.parameters.filter(
+        (v) =>
+          v.concern.split(',').some((c) => selectedConcerns.indexOf(c) > -1) &&
+          (v.waterType.split(',').indexOf(waterType) > -1 || v.waterType === 'All')
+      );
+    },
+    getWaterTypes() {
+      let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
+      waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
+      return waterTypes.map((v) => ({
+        id: v,
+        name: v,
+      }));
     },
   },
 };
@@ -124,7 +142,7 @@ export default {
   background-color: $darkBlue;
   padding: 15px;
   margin-top: 10px;
-  max-height: 180px;
+  max-height: 300px;
   overflow: auto;
   border-radius: 4px;
 }

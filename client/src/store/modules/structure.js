@@ -24,6 +24,9 @@ const getters = {
   locationQuestionId(state) {
     return getQuestionIdByLabel(state.questions, 'Location ID');
   },
+  locationWaterTypeQuestionId(state) {
+    return getQuestionIdByLabel(state.questions, 'Water Type');
+  },
 };
 
 const mutations = {
