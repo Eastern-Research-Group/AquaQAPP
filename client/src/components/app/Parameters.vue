@@ -68,9 +68,13 @@
                 <li
                   v-for="param in pendingData[paramQuestion.id].split(',')"
                   :key="param"
-                  class="has-text-weight-semibold"
+                  class="param-label has-text-weight-semibold"
                 >
                   {{ getParamLabel(param) }}
+                  <span
+                    class="fa fa-times"
+                    @click="$emit('updateData', { target: { value: param.id || param } }, paramQuestion)"
+                  ></span>
                 </li>
               </ul>
             </div>
@@ -174,5 +178,16 @@ export default {
 
 .box {
   margin: 0.5rem 0;
+}
+
+.param-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fa-times {
+  color: $danger;
+  cursor: pointer;
 }
 </style>
