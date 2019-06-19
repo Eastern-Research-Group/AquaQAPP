@@ -28,7 +28,7 @@
                   type="primary"
                   icon="edit"
                   :shouldShowIcon="true"
-                  @click.native="$emit('onEdit', $event, marker)"
+                  @click.native="$emit('onEdit', marker)"
                 />
               </div>
               <div class="control">
@@ -37,7 +37,7 @@
                   type="danger"
                   icon="trash-alt"
                   :shouldShowIcon="true"
-                  @click.native="$emit('onDelete', $event, marker)"
+                  @click.native="$emit('onDelete', marker)"
                 />
               </div>
             </div>
