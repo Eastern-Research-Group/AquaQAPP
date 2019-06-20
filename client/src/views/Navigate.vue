@@ -428,7 +428,7 @@ export default {
     closeUnsavedWarningModal() {
       this.shouldDisplayUnsavedWarning = false;
       this.pendingSection = null;
-    }
+    },
   },
 };
 </script>
