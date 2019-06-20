@@ -23,11 +23,7 @@
         </ul>
       </aside>
       <section class="right column is-three-quarters">
-        <Alert
-          v-if="isSectionNotAvailable()"
-          :message="`You must complete the Water Quality Concerns section before completing this section`"
-          type="error"
-        />
+        <Alert v-if="isSectionNotAvailable()" :message="this.sectionNotAvailableMessage" type="error" />
         <form v-else @submit.prevent>
           <Button
             :label="hasSaved ? 'Saved' : 'Save'"
@@ -159,12 +155,14 @@
               v-if="customSection.label === currentSection.sectionLabel"
               :is="customSection.component"
               :questions="currentQuestions"
+              :pendingData="pendingData"
               @saveData="saveData"
+              @updateData="updatePendingData"
             />
           </div>
         </form>
       </section>
-      <Modal v-if="shouldDisplayUnsavedWarning" @close="() => (shouldDisplayUnsavedWarning = false)">
+      <Modal v-if="shouldDisplayUnsavedWarning" @close="closeUnsavedWarningModal">
         <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
         <div class="btn-container">
           <Button label="Save Changes" type="success" @click.native="saveData" />
@@ -213,6 +211,7 @@ export default {
       pendingData: {},
       shouldDisplayUnsavedWarning: false,
       pendingSection: null,
+      sectionNotAvailableMessage: '',
       dataError: null,
     };
   },
@@ -221,6 +220,7 @@ export default {
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locationQuestionId']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -243,7 +243,9 @@ export default {
         this.qappData[locationConcernQuestion.id]
       ) {
         this.qappData[locationConcernQuestion.id].forEach((location) => {
-          concerns = concerns.concat(location.value.split(','));
+          if (location.value) {
+            concerns = concerns.concat(location.value.split(','));
+          }
         });
       }
       return concerns;
@@ -284,6 +286,10 @@ export default {
         ) {
           this.hasSaved = true;
         }
+
+        // Set Google Analytics event for changing sections (mark each section as a page view)
+        gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
+        gtag('event', 'page_view');
       }
     },
     discardChanges() {
@@ -373,10 +379,23 @@ export default {
       }
     },
     isSectionNotAvailable() {
-      return (
-        ['Monitoring Locations', 'Parameters'].indexOf(this.currentSection.sectionLabel) > -1 &&
-        this.completedSections.indexOf(this.sections.find((s) => s.sectionLabel === 'Water Quality Concerns').id) === -1
-      );
+      /* User must have saved data for concerns before viewing locations section,
+       * and must have saved data for locations before viewing parameters section
+       */
+      let sectionNotAvailable = false;
+      if (
+        this.currentSection.sectionLabel === 'Monitoring Locations' &&
+        (!this.qappData[this.concernsQuestionId] || !this.qappData[this.concernsDifferByLocQuestionId])
+      ) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage =
+          'You must complete the Water Quality Concerns section before completing this section';
+      } else if (this.currentSection.sectionLabel === 'Parameters' && !this.qappData[this.locationQuestionId]) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage =
+          'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
+      }
+      return sectionNotAvailable;
     },
     getSaveBtnHoverText() {
       if (this.currentSection.sectionLabel === 'Monitoring Locations') {
@@ -406,6 +425,10 @@ export default {
       if (firstSection === this.sections.length) firstSection -= 1;
       this.changeSection(this.sections[firstSection]);
     },
+    closeUnsavedWarningModal() {
+      this.shouldDisplayUnsavedWarning = false;
+      this.pendingSection = null;
+    }
   },
 };
 </script>

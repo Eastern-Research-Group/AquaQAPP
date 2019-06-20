@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.svg-inline--fa {
+.fa {
   font-size: 22px;
 }
 
