@@ -4,6 +4,7 @@ const {
   RefLocationType,
   RefHorizontalCollectionMethod,
   RefHorizontalCoordRefSystem,
+  RefParameter,
 } = require('../models');
 
 module.exports = {
@@ -41,6 +42,16 @@ module.exports = {
     try {
       const refs = await RefHorizontalCoordRefSystem.findAll({});
       res.send(refs);
+    } catch (err) {
+      res.status(400).send({
+        err: 'Data unavailable.',
+      });
+    }
+  },
+  async parameters(req, res) {
+    try {
+      const params = await RefParameter.findAll({});
+      res.send(params);
     } catch (err) {
       res.status(400).send({
         err: 'Data unavailable.',

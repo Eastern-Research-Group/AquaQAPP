@@ -42,7 +42,9 @@ const actions = {
     const crosswalks = await axios.get('api/crosswalks');
     commit('SET_REF', { ref: 'crosswalks', data: crosswalks.data });
 
-    commit('SET_REF', { ref: 'parameters', data: reduceCrosswalk(crosswalks.data, 'parameter') });
+    const parameters = await axios.get('api/parameters');
+    commit('SET_REF', { ref: 'parameters', data: parameters.data });
+
     commit('SET_REF', { ref: 'samplingMethodologies', data: reduceCrosswalk(crosswalks.data, 'samplingMethodology') });
   },
 };

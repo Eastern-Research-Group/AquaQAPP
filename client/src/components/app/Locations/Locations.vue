@@ -129,7 +129,6 @@ export default {
       shouldDeleteSingle: false,
       latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
       lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
-      concernQuestionId: null,
       pendingData: {},
       selectedLocation: null,
       columns: [
@@ -149,9 +148,9 @@ export default {
       allQuestions: (state) => state.structure.questions,
     }),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId']),
   },
   mounted() {
-    this.concernQuestionId = this.allQuestions.find((q) => q.refName === 'concerns').id;
     this.refreshLocationData();
   },
   methods: {
@@ -323,17 +322,11 @@ export default {
       return cleanedData;
     },
     shouldShowConcerns() {
-      const differByLocationQuestionId = this.allQuestions.find(
-        (q) => q.questionLabel === 'Do your water quality concerns differ by sampling location?'
-      ).id;
-      if (this.qappData[differByLocationQuestionId] === 'Y') {
-        return true;
-      }
-      return false;
+      return this.qappData[this.concernsDifferByLocQuestionId] === 'Y';
     },
     getConcerns() {
       const concerns = [];
-      const selectedConcerns = this.qappData[this.concernQuestionId];
+      const selectedConcerns = this.qappData[this.concernsQuestionId];
       if (selectedConcerns) {
         this.concerns.forEach((concern) => {
           if (selectedConcerns.indexOf(concern.code) > -1) {

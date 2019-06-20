@@ -299,7 +299,7 @@ module.exports = {
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
-      maxLength: '8',
+      maxLength: '12',
       hasExamples: false,
       sectionQuestionSort: 3,
       createdAt: new Date(),
@@ -311,7 +311,7 @@ module.exports = {
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
-      maxLength: '9',
+      maxLength: '12',
       hasExamples: false,
       sectionQuestionSort: 4,
       createdAt: new Date(),
@@ -384,13 +384,14 @@ module.exports = {
     });
     records.push({
       sectionNumber: '12',
-      questionLabel: 'Pollutants',
+      questionLabel: 'Parameters',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: '',
       maxLength: '0',
       hasExamples: false,
       sectionQuestionSort: 1,
+      refName: 'parameters',
       createdAt: new Date(),
       updatedAt: new Date(),
     });

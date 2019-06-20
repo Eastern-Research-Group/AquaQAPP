@@ -1,0 +1,40 @@
+﻿name,concern,waterType
+Depth,GENPHYS,All
+Temperature,GENPHYS,All
+Dissolved oxygen (DO),GENPHYS,All
+Secchi depth,GENPHYS,All
+pH,GENPHYS,All
+Turbidity,GENPHYS,All
+Photosynthetically active radiation (PAR) - SM 2540 D,GENPHYS,All
+Photosynthetically active radiation (PAR) - EPA 160.2,GENPHYS,All
+Total suspended solids (TSS) - SM 9230,GENPHYS,All
+Total suspended solids (TSS) - EPA 1600,GENPHYS,All
+Enterococci - SM 9230,"GENPHYS,REC","Salt,Brackish"
+Enterococci - EPA 1600,"GENPHYS,REC","Salt,Brackish"
+E. coli - SM 9213-D,REC,Fresh
+E. coli - SM 9223-B,REC,Fresh
+E. coli - EPA 1603,REC,Fresh
+Chlorophyll a - SM 10200-H,EUTRO,All
+Chlorophyll a - EPA 445.0,EUTRO,All
+Total Kjeldahl nitrogen (TKN) - SM 4500-NonorgB,EUTRO,All
+Total Kjeldahl nitrogen (TKN) - SM 4500-NonorgC,EUTRO,All
+Total Kjeldahl nitrogen (TKN) - EPA 351.1,EUTRO,All
+Total Kjeldahl nitrogen (TKN) - EPA 351.2,EUTRO,All
+Total Kjeldahl nitrogen (TKN) - EPA 351.3,EUTRO,All
+Total Kjeldahl nitrogen (TKN) - EPA 351.4,EUTRO,All
+Total nitrogen - SM 4500-NB,EUTRO,All
+Total nitrogen - SM 4500-NC,EUTRO,All
+Total nitrogen - WRIR 03-4174,EUTRO,All
+Ammonia-N - SM 4500-NH3,EUTRO,All
+Ammonia-N - EPA 350.1,EUTRO,All
+Ammonia-N - EPA 350.2,EUTRO,All
+Ammonia-N - EPA 350.3,EUTRO,All
+Nitrate-nitrite-N - SM 4500-NO3 E-1,EUTRO,All
+Nitrate-nitrite-N - EPA 353.1,EUTRO,All
+Nitrate-nitrite-N - EPA 353.2,EUTRO,All
+Nitrate-nitrite-N - EPA 353.3,EUTRO,All
+Total phosphorus - SM 4500-P,EUTRO,All
+Total phosphorus - EPA 365.1,EUTRO,All
+Total phosphorus - EPA 365.2,EUTRO,All
+Total phosphorus - EPA 365.3,EUTRO,All
+Secchi depth,EUTRO,All

@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      activeTabId: this.tabs.find((t) => t.isActive) ? this.tabs.find((t) => t.isActive).id : '',
+      activeTabId: this.tabs.find((t) => t.isActive) ? this.tabs.find((t) => t.isActive).id : this.tabs[0].id,
     };
   },
 };
