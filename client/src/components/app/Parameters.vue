@@ -1,5 +1,6 @@
 <template>
   <div>
+    <label class="label is-size-4">Parameters</label>
     <Tabs
       :tabs="[
         { id: 'Fresh', name: 'Fresh', isActive: true },

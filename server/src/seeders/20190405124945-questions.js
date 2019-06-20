@@ -245,8 +245,8 @@ module.exports = {
     });
     records.push({
       sectionNumber: '10',
-      questionLabel: 'What are your water quality concerns? Select all that apply.',
-      dataEntryInstructions: '',
+      questionLabel: 'Water Quality Concerns',
+      dataEntryInstructions: 'What are your water quality concerns? Select all that apply.',
       dataEntryTip: '',
       dataEntryType: 'checkboxBtn',
       maxLength: '100',

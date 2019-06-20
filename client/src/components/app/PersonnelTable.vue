@@ -1,5 +1,6 @@
 <template>
   <div class="clear">
+    <label class="label is-size-4">Project Organization/Personnel</label>
     <Table
       :columns="columns"
       :rows="rows"
