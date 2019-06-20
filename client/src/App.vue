@@ -28,10 +28,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-$theme-colors: (
-  'primary': #1650ac,
-  'secondary': #182e51,
-  'success': #40a132,
-);
+<style lang="scss" scoped>
+.main-section {
+  overflow: hidden;
+}
 </style>
