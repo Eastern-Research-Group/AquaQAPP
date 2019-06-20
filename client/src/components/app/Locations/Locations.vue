@@ -1,5 +1,6 @@
 <template>
   <div>
+    <label class="label is-size-4">Monitoring Locations</label>
     <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
         <Table

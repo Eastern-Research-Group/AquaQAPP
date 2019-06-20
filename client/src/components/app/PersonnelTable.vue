@@ -1,5 +1,6 @@
 <template>
   <div class="clear">
+    <label class="label is-size-4">Project Organization/Personnel</label>
     <Table
       :columns="columns"
       :rows="rows"
@@ -18,7 +19,12 @@
       <form @submit.prevent="submitPersonnelData">
         <div class="field" v-for="question in questions" :key="question.id">
           <label
-            v-if="question.dataEntryType === 'text' || question.dataEntryType === 'largeText'"
+            v-if="
+              question.dataEntryType === 'text' ||
+                question.dataEntryType === 'largeText' ||
+                question.dataEntryType === 'email' ||
+                question.dataEntryType === 'phone'
+            "
             class="label"
             :for="`question${question.id}`"
             >{{ question.questionLabel }}</label
@@ -30,14 +36,40 @@
             class="input"
             type="text"
             :placeholder="`Enter ${question.questionLabel}`"
+            :maxlength="question.maxLength"
             required
           />
+          <input
+            v-if="question.dataEntryType === 'email'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.id]"
+            class="input"
+            type="email"
+            :placeholder="`Enter ${question.questionLabel}`"
+            :maxlength="question.maxLength"
+            required
+          />
+          <input
+            v-if="question.dataEntryType === 'phone'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.id]"
+            class="input"
+            type="tel"
+            :placeholder="`Enter ${question.questionLabel}`"
+            :maxlength="question.maxLength"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            required
+            oninvalid="this.setCustomValidity('Enter phone number in the following format: 123-456-7890')"
+            oninput="this.setCustomValidity('')"
+          />
+          <small v-if="question.dataEntryType === 'phone'">Format: 123-456-7890</small>
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
             v-model="pendingData[question.id]"
             class="input"
             :placeholder="`Enter ${question.questionLabel}`"
+            :maxlength="question.maxLength"
             required
           ></textarea>
           <div class="field" v-if="question.dataEntryType === 'checkbox'">

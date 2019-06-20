@@ -4,7 +4,7 @@ module.exports = {
     records.push({
       sectionNumber: '1',
       questionName: 'title',
-      questionLabel: 'Title',
+      questionLabel: 'QAPP Title',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -29,20 +29,6 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
-      questionName: 'preparedFor',
-      questionLabel: 'Prepared For',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '4000',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    records.push({
-      sectionNumber: '4',
-      questionName: 'fullName',
       questionLabel: 'Full Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -54,7 +40,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'titlePosition',
       questionLabel: 'Title/Position',
       dataEntryInstructions: '',
@@ -67,7 +53,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'distributionList',
       questionLabel: 'Include in distribution list?',
       dataEntryInstructions: '',
@@ -80,7 +66,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'approvalList',
       questionLabel: 'Include in the approval list?',
       dataEntryInstructions: '',
@@ -93,7 +79,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'primaryContact',
       questionLabel: 'Primary Contact',
       dataEntryInstructions: '',
@@ -106,7 +92,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'organization',
       questionLabel: 'Organization',
       dataEntryInstructions: '',
@@ -119,7 +105,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'address',
       questionLabel: 'Address',
       dataEntryInstructions: '',
@@ -132,7 +118,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'city',
       questionLabel: 'City',
       dataEntryInstructions: '',
@@ -145,7 +131,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'state',
       questionLabel: 'State',
       dataEntryInstructions: '',
@@ -158,12 +144,12 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'zip',
       questionLabel: 'Zip',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'text',
+      dataEntryType: 'tel',
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 10,
@@ -171,12 +157,12 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'telephone',
       questionLabel: 'Telephone',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'text',
+      dataEntryType: 'email',
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 11,
@@ -184,12 +170,12 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
+      sectionNumber: '3',
       questionName: 'email',
       questionLabel: 'Email',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'text',
+      dataEntryType: 'tel',
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 12,
@@ -197,21 +183,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '4',
-      questionName: 'fax',
-      questionLabel: 'Fax',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '1000',
-      hasExamples: false,
-      sectionQuestionSort: 13,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    records.push({
-      sectionNumber: '4',
-      questionName: 'responsibilities',
+      sectionNumber: '3',
       questionLabel: 'Responsibilities',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -223,16 +195,28 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '5',
+      sectionNumber: '4',
       questionName: 'problemDefinition',
       questionLabel: 'Problem Definition',
       dataEntryInstructions:
-        'State the specific envrionmental problem to be investigated. Include sufficient background information to provide an historical and scientific perspective for the current project.',
+        'State the specific environmental problem to be investigated. Include sufficient background information to provide a historical and scientific perspective for the current project.',
       dataEntryTip:
-        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>Itep has assembled a website of resources including example SPSs technical reports spreadsheets datbases epa laws and commrenations programs and links.</p>',
+        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>ITEP has assembled a website of resources including example SPSs technical reports, spreadsheets, databases, EPA laws, programs and links.</p>',
       dataEntryType: 'largeText',
       maxLength: '4000',
       hasExamples: true,
+      sectionQuestionSort: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '5',
+      questionLabel: 'Problem Background',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '4000',
+      hasExamples: false,
       sectionQuestionSort: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -279,8 +263,8 @@ module.exports = {
     records.push({
       sectionNumber: '10',
       questionName: 'waterConcerns',
-      questionLabel: 'What are your water quality concerns? Select all that apply.',
-      dataEntryInstructions: '',
+      questionLabel: 'Water Quality Concerns',
+      dataEntryInstructions: 'What are your water quality concerns? Select all that apply.',
       dataEntryTip: '',
       dataEntryType: 'checkboxBtn',
       maxLength: '100',

@@ -1,6 +1,21 @@
 const uuidv4 = require('uuid/v4');
 const { Op } = require('sequelize');
-const { CompletedQappSection, Qapp, QappDatum } = require('../models');
+const { CompletedQappSection, Qapp, QappDatum, Question } = require('../models');
+
+function checkFieldLength(question, body) {
+  if (question.id !== body.questionId) return `Weird data condition - ${question.id} !== ${body.questionId}`;
+
+  if (['text', 'email', 'tel', 'largeText'].indexOf(question.dataEntryType) !== -1) {
+    if (body.value !== undefined) {
+      const size = body.value.length;
+      if (size === 0) return `${question.questionLabel} is required.`;
+      if (size > question.maxLength)
+        return `${question.questionLabel} is too long. Maximum length is ${question.maxLength}.`;
+    }
+  }
+
+  return null;
+}
 
 module.exports = {
   async index(req, res) {
@@ -64,6 +79,13 @@ module.exports = {
   },
   async store(req, res) {
     try {
+      const question = await Question.findOne({ where: { id: 1 } });
+      const error = checkFieldLength(question, req.body);
+      if (error !== null) {
+        res.status(400).send({ error });
+        return;
+      }
+
       const qappId = uuidv4();
       await Qapp.create({
         ...req.body,
@@ -71,8 +93,8 @@ module.exports = {
       });
       await QappDatum.create({
         qappId,
-        questionId: 1,
-        value: req.body.title,
+        questionId: req.body.questionId,
+        value: req.body.value,
       });
       const qappWithData = await Qapp.findOne({
         where: { userId: req.user.id, id: qappId },
@@ -87,7 +109,8 @@ module.exports = {
       res.send(qappWithData);
     } catch (err) {
       res.status(400).send({
-        error: err,
+        // this should be a string so it displays on the form
+        error: err.toString(),
       });
     }
   },
@@ -125,16 +148,23 @@ module.exports = {
       res.redirect(303, `/api/qapps/`);
     } catch (err) {
       res.status(400).send({
-        error: err,
+        error: err.toString(),
       });
     }
   },
   async saveData(req, res) {
     try {
+      const question = await Question.findOne({ where: { id: req.body.questionId } });
+      const error = checkFieldLength(question, req.body);
+      if (error !== null) {
+        res.status(400).send({ error });
+        return;
+      }
       // check if record already exists with same qapp id and question id
       let qappDatum = await QappDatum.findOne({
         where: { qappId: req.body.qappId, questionId: req.body.questionId, valueId: req.body.valueId },
       });
+
       // if record exists, update, otherwise create
       if (qappDatum) {
         qappDatum = await qappDatum.update(req.body);
@@ -145,7 +175,7 @@ module.exports = {
       res.redirect(`/api/qapps/${req.body.qappId}`);
     } catch (err) {
       res.status(400).send({
-        error: err,
+        error: err.toString(),
       });
     }
   },
@@ -165,7 +195,7 @@ module.exports = {
       res.redirect(303, `/api/qapps/${req.body.qappId}`);
     } catch (err) {
       res.status(400).send({
-        error: err,
+        error: err.toString(),
       });
     }
   },
@@ -181,7 +211,7 @@ module.exports = {
       res.redirect(303, `/api/qapps/${req.body.qappId}`);
     } catch (err) {
       res.status(400).send({
-        error: err,
+        error: err.toString(),
       });
     }
   },
@@ -209,7 +239,7 @@ module.exports = {
       res.send(sections);
     } catch (err) {
       res.status(400).send({
-        error: err,
+        error: err.toString(),
       });
     }
   },

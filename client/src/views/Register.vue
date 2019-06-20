@@ -7,11 +7,11 @@
         <form @submit.prevent="register">
           <div class="field">
             <label class="label is-size-5">Name</label>
-            <input class="input" type="text" required placeholder="Enter name" v-model="name" />
+            <input class="input" type="text" required placeholder="Enter name" v-model="name" maxlength="255" />
           </div>
           <div class="field">
             <label class="label is-size-5">Email</label>
-            <input class="input" type="email" required placeholder="Enter email" v-model="email" />
+            <input class="input" type="email" required placeholder="Enter email" v-model="email" maxlength="255" />
           </div>
           <div class="field">
             <label class="label is-size-5">
@@ -21,11 +21,25 @@
                 one number.
               </HoverText>
             </label>
-            <input class="input" type="password" required placeholder="Enter password" v-model="password" />
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Enter password"
+              v-model="password"
+              maxlength="255"
+            />
           </div>
           <div class="field">
             <label class="label is-size-5">Confirm Password</label>
-            <input class="input" type="password" required placeholder="Confirm password" v-model="confirmPassword" />
+            <input
+              class="input"
+              type="password"
+              required
+              placeholder="Confirm password"
+              v-model="confirmPassword"
+              maxlength="255"
+            />
           </div>
           <Alert v-if="error" :message="error" type="error" />
           <div class="field">
