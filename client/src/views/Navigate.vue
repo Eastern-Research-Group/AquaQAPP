@@ -162,7 +162,7 @@
           </div>
         </form>
       </section>
-      <Modal v-if="shouldDisplayUnsavedWarning" @close="() => (shouldDisplayUnsavedWarning = false)">
+      <Modal v-if="shouldDisplayUnsavedWarning" @close="closeUnsavedWarningModal">
         <Alert message="You have unsaved changes. Please save or discard before continuing." type="warning" />
         <div class="btn-container">
           <Button label="Save Changes" type="success" @click.native="saveData" />
@@ -286,6 +286,10 @@ export default {
         ) {
           this.hasSaved = true;
         }
+
+        // Set Google Analytics event for changing sections (mark each section as a page view)
+        gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
+        gtag('event', 'page_view');
       }
     },
     discardChanges() {
@@ -421,6 +425,10 @@ export default {
       if (firstSection === this.sections.length) firstSection -= 1;
       this.changeSection(this.sections[firstSection]);
     },
+    closeUnsavedWarningModal() {
+      this.shouldDisplayUnsavedWarning = false;
+      this.pendingSection = null;
+    }
   },
 };
 </script>
