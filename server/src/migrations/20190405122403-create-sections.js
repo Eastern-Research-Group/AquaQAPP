@@ -16,6 +16,9 @@ module.exports = {
       sectionLabel: {
         type: Sequelize.STRING,
       },
+      sectionName: {
+        type: Sequelize.STRING,
+      },
       sectionSort: {
         type: Sequelize.INTEGER,
       },

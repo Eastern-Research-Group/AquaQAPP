@@ -29,6 +29,7 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
+      questionName: 'fullName',
       questionLabel: 'Full Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -162,7 +163,7 @@ module.exports = {
       questionLabel: 'Telephone',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'email',
+      dataEntryType: 'tel',
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 11,
@@ -175,7 +176,7 @@ module.exports = {
       questionLabel: 'Email',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'tel',
+      dataEntryType: 'email',
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 12,
@@ -184,6 +185,7 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
+      questionName: 'responsibilities',
       questionLabel: 'Responsibilities',
       dataEntryInstructions: '',
       dataEntryTip: '',
@@ -211,6 +213,7 @@ module.exports = {
     });
     records.push({
       sectionNumber: '5',
+      questionName: 'problemBackground',
       questionLabel: 'Problem Background',
       dataEntryInstructions: '',
       dataEntryTip: '',

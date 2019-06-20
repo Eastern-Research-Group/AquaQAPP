@@ -48,16 +48,16 @@ const getters = {
     const dataObj = {};
     sortedData.forEach((datum) => {
       const key = rootState.structure.questions.find((q) => q.id === datum.questionId).questionName;
-      const sectionLabel = rootState.structure.questions.find((q) => q.id === datum.questionId).section.sectionLabel;
+      const { sectionName } = rootState.structure.questions.find((q) => q.id === datum.questionId).section;
       if (datum.valueId) {
         // if valueId exists, further format data into an array of objects split out by each valueId
-        if (!dataObj[sectionLabel]) {
-          dataObj[sectionLabel] = [];
+        if (!dataObj[sectionName]) {
+          dataObj[sectionName] = [];
         }
-        if (!dataObj[sectionLabel][datum.valueId]) {
-          dataObj[sectionLabel][datum.valueId] = {};
+        if (!dataObj[sectionName][datum.valueId]) {
+          dataObj[sectionName][datum.valueId] = {};
         }
-        dataObj[sectionLabel][datum.valueId][key] = datum.value;
+        dataObj[sectionName][datum.valueId][key] = datum.value;
       } else if (key) {
         dataObj[key] = datum.value;
       }
