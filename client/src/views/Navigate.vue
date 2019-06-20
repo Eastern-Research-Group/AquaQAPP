@@ -284,6 +284,10 @@ export default {
         ) {
           this.hasSaved = true;
         }
+
+        // Set Google Analytics event for changing sections (mark each section as a page view)
+        gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
+        gtag('event', 'page_view');
       }
     },
     discardChanges() {

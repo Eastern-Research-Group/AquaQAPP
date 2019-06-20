@@ -18,7 +18,7 @@ function guard(to, from, next) {
   }
 }
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -64,3 +64,11 @@ export default new Router({
   ],
   mode: 'history',
 });
+
+router.afterEach((to) => {
+  // Set Google Analytics event for navigating pages without browser reload
+  gtag('config', 'UA-37504877-5', { page_path: to.path });
+  gtag('event', 'page_view');
+});
+
+export default router;
