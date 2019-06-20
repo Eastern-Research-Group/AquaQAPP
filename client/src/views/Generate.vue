@@ -6,12 +6,18 @@
 
 <script>
 import Button from '@/components/shared/Button';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Generate',
   components: { Button },
+  mounted() {
+    // Fetch latest qapp data
+    this.$store.dispatch('qapp/get', this.$route.params.id);
+    this.getQuestions();
+  },
   methods: {
+    ...mapActions('structure', ['getSections', 'getQuestions']),
     ...mapActions('qapp', ['generate']),
     async generateQapp() {
       await this.generate();
@@ -43,9 +49,6 @@ export default {
         window.URL.revokeObjectURL(data);
       }, 100);
     },
-  },
-  computed: {
-    ...mapGetters('qapp', ['wordDocData']),
   },
 };
 </script>

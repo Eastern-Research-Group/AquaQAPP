@@ -10,6 +10,9 @@ module.exports = {
       sectionNumber: {
         type: Sequelize.STRING,
       },
+      questionName: {
+        type: Sequelize.STRING,
+      },
       questionLabel: {
         type: Sequelize.STRING,
       },

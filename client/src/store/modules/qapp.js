@@ -36,11 +36,42 @@ const getters = {
     return data;
   },
   wordDocData(state, getters, rootState) {
-    const dataObj = {};
-    state.data.forEach((datum) => {
-      const key = rootState.structure.questions.find((q) => q.id === datum.questionId).questionName;
-      dataObj[key] = datum;
+    const sortedData = state.data.sort((a, b) => {
+      if (a.valueId < b.valueId) {
+        return -1;
+      }
+      if (a.valueId > b.valueId) {
+        return 1;
+      }
+      return 0;
     });
+    const dataObj = {};
+    sortedData.forEach((datum) => {
+      const key = rootState.structure.questions.find((q) => q.id === datum.questionId).questionName;
+      const sectionLabel = rootState.structure.questions.find((q) => q.id === datum.questionId).section.sectionLabel;
+      if (datum.valueId) {
+        // if valueId exists, further format data into an array of objects split out by each valueId
+        if (!dataObj[sectionLabel]) {
+          dataObj[sectionLabel] = [];
+        }
+        if (!dataObj[sectionLabel][datum.valueId]) {
+          dataObj[sectionLabel][datum.valueId] = {};
+        }
+        dataObj[sectionLabel][datum.valueId][key] = datum.value;
+      } else if (key) {
+        dataObj[key] = datum.value;
+      }
+    });
+
+    Object.keys(dataObj).forEach((key) => {
+      if (Array.isArray(dataObj[key])) {
+        /* If property value is an array, filter out all empty/null array items
+         * Since valueIds are not 0-based, there will be empty items from our logic in the loop above
+         */
+        dataObj[key] = dataObj[key].filter((arrItem) => arrItem);
+      }
+    });
+    return dataObj;
   },
   progress(state, getters, rootState) {
     return Math.round((state.completedSections.length / rootState.structure.sections.length) * 100);
@@ -119,16 +150,15 @@ const actions = {
     const qappRes = await axios.delete('api/qapps/data', { data: payload });
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
-  async generate({ commit, state }) {
-    const qappRes = await axios.get(`api/qapps/${state.id}`);
+  async generate({ commit, getters }) {
+    console.log(getters.wordDocData);
     const doc = await axios({
       method: 'post',
       url: 'api/generate',
       responseType: 'arraybuffer',
-      data: {
-        qapp: qappRes.data,
-      },
+      data: getters.wordDocData,
     });
+
     commit('SET_DOC', doc.data);
   },
 };

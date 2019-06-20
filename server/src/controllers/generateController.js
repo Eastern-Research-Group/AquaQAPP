@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
   async generate(req, res) {
     try {
-      const file = await fs.readFileSync(path.resolve('server/src/templates/SectionA.docx'));
+      const file = await fs.readFileSync(path.resolve('server/src/templates/massbays-sap-template.docx'));
       const buffer = await createReport({
         template: file,
         output: 'buffer',
