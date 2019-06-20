@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const getQuestionIdByLabel = (questions, label) => {
+const getQuestionIdByName = (questions, name) => {
   if (questions.length) {
-    return questions.find((q) => q.questionLabel === label).id;
+    return questions.find((q) => q.questionName === name).id;
   }
   return null;
 };
@@ -16,16 +16,16 @@ const state = {
 
 const getters = {
   concernsQuestionId(state) {
-    return getQuestionIdByLabel(state.questions, 'Water Quality Concerns');
+    return getQuestionIdByName(state.questions, 'waterConcerns');
   },
   concernsDifferByLocQuestionId(state) {
-    return getQuestionIdByLabel(state.questions, 'Do your water quality concerns differ by sampling location?');
+    return getQuestionIdByName(state.questions, 'differByLocation');
   },
   locationQuestionId(state) {
-    return getQuestionIdByLabel(state.questions, 'Location ID');
+    return getQuestionIdByName(state.questions, 'locationId');
   },
   locationWaterTypeQuestionId(state) {
-    return getQuestionIdByLabel(state.questions, 'Water Type');
+    return getQuestionIdByName(state.questions, 'waterType');
   },
 };
 
