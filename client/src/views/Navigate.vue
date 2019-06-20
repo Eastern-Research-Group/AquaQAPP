@@ -236,7 +236,8 @@ export default {
     },
     locationConcerns() {
       let concerns = [];
-      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');if (
+      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');
+      if (
         locationConcernQuestion &&
         locationConcernQuestion.section.sectionLabel === 'Monitoring Locations' &&
         this.qappData[locationConcernQuestion.id]
