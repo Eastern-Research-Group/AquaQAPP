@@ -236,8 +236,11 @@ export default {
     },
     locationConcerns() {
       let concerns = [];
-      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');
-      if (locationConcernQuestion && this.qappData[locationConcernQuestion.id]) {
+      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');if (
+        locationConcernQuestion &&
+        locationConcernQuestion.section.sectionLabel === 'Monitoring Locations' &&
+        this.qappData[locationConcernQuestion.id]
+      ) {
         this.qappData[locationConcernQuestion.id].forEach((location) => {
           concerns = concerns.concat(location.value.split(','));
         });
