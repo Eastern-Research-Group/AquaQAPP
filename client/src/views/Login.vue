@@ -85,7 +85,8 @@ export default {
       resetEmail: '',
       resetError: null,
       shouldShowReset: false,
-      successMessage: 'Check your email!',
+      successMessage:
+        'If there is an account associated with this email, instructions for resetting your password have been sent.',
       showSuccessMessage: false,
     };
   },
@@ -119,7 +120,13 @@ export default {
         });
         this.showSuccessMessage = true;
       } catch (error) {
-        this.resetError = error.response.data.error;
+        if (error.response.status === 422) {
+          // ticket 214 - show same message when user not found as when they are found
+          this.showSuccessMessage = true;
+        } else {
+          // general error
+          this.resetError = error.response.data.error;
+        }
       }
     },
   },

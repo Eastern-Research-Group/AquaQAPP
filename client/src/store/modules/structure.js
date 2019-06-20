@@ -1,10 +1,32 @@
 import axios from 'axios';
 
+const getQuestionIdByLabel = (questions, label) => {
+  if (questions.length) {
+    return questions.find((q) => q.questionLabel === label).id;
+  }
+  return null;
+};
+
 const state = {
   sections: [],
   questions: [],
   concerns: [],
   isFetching: false,
+};
+
+const getters = {
+  concernsQuestionId(state) {
+    return getQuestionIdByLabel(state.questions, 'What are your water quality concerns? Select all that apply.');
+  },
+  concernsDifferByLocQuestionId(state) {
+    return getQuestionIdByLabel(state.questions, 'Do your water quality concerns differ by sampling location?');
+  },
+  locationQuestionId(state) {
+    return getQuestionIdByLabel(state.questions, 'Location ID');
+  },
+  locationWaterTypeQuestionId(state) {
+    return getQuestionIdByLabel(state.questions, 'Water Type');
+  },
 };
 
 const mutations = {
@@ -52,6 +74,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions,
 };

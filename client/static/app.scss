@@ -40,8 +40,12 @@ html {
   }
 }
 
-.svg-inline--fa {
+.fa {
   margin-right: 0.2em;
+}
+
+.button.is-text {
+  text-decoration: none !important;
 }
 
 // form style overrides
@@ -72,3 +76,6 @@ html {
   top: 0.45rem;
   left: 0.6rem;
 }
+
+// Import font-awesome
+@import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';

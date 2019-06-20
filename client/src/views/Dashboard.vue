@@ -149,7 +149,7 @@ export default {
       return this.qapps.map((qapp) => {
         return {
           id: qapp.id,
-          title: qapp.data.find((d) => d.questionId === 1).value,
+          title: qapp.data.find((d) => d.questionId === 1) ? qapp.data.find((d) => d.questionId === 1).value : '',
           updatedAt: qapp.updatedAt.substring(0, 10),
           progress: `${Math.round((qapp.completedSections.length / this.sections.length) * 100)}%`,
         };

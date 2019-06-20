@@ -1,6 +1,6 @@
 <template>
   <button :type="submit ? 'submit' : 'button'" :class="'button ' + getClass()">
-    <span v-if="icon" :class="'fa is-size-3 fa-' + icon"></span>
+    <span v-if="icon" :class="'fa fa-' + icon"></span>
     {{ label }}
   </button>
 </template>
@@ -43,11 +43,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.svg-inline--fa {
-  height: 0.5em;
-  margin: 0 0.1em 0;
-  width: 0.6em;
-}
-</style>
