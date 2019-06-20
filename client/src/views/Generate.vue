@@ -11,7 +11,13 @@ import { mapActions } from 'vuex';
 export default {
   name: 'Generate',
   components: { Button },
+  mounted() {
+    // Fetch latest qapp data
+    this.$store.dispatch('qapp/get', this.$route.params.id);
+    this.getQuestions();
+  },
   methods: {
+    ...mapActions('structure', ['getSections', 'getQuestions']),
     ...mapActions('qapp', ['generate']),
     async generateQapp() {
       await this.generate();

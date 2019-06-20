@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       sectionNumber: DataTypes.STRING,
       sectionLevel: DataTypes.STRING,
       sectionLabel: DataTypes.STRING,
+      sectionName: DataTypes.STRING,
       sectionSort: DataTypes.INTEGER,
     },
     {

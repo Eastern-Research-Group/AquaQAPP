@@ -15,7 +15,7 @@ module.exports = {
     try {
       const questions = await Question.findAll({
         include: [
-          { model: Section, attributes: ['sectionNumber', 'sectionLabel'], as: 'section' },
+          { model: Section, attributes: ['sectionNumber', 'sectionLabel', 'sectionName'], as: 'section' },
           { model: Example, attributes: ['text'], as: 'examples' },
         ],
       });

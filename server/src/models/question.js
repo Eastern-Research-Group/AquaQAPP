@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'Question',
     {
       sectionNumber: DataTypes.STRING,
+      questionName: DataTypes.STRING,
       questionLabel: DataTypes.STRING,
       dataEntryInstructions: DataTypes.STRING,
       dataEntryTip: DataTypes.STRING,
