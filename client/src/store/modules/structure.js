@@ -16,7 +16,7 @@ const state = {
 
 const getters = {
   concernsQuestionId(state) {
-    return getQuestionIdByLabel(state.questions, 'What are your water quality concerns? Select all that apply.');
+    return getQuestionIdByLabel(state.questions, 'Water Quality Concerns');
   },
   concernsDifferByLocQuestionId(state) {
     return getQuestionIdByLabel(state.questions, 'Do your water quality concerns differ by sampling location?');
