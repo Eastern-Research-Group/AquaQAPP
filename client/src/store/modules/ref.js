@@ -16,6 +16,7 @@ const state = {
     { component: 'PersonnelTable', label: 'Project Organization/Personnel' },
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
+    { component: 'ProjectActivities', label: 'Project Activities' },
   ],
 };
 
