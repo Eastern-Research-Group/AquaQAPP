@@ -4,7 +4,11 @@ module.exports = {
   register(req, res, next) {
     const schema = {
       email: Joi.string().email(),
-      password: Joi.string().regex(new RegExp('^[a-zA-Z0-9]{8,32}$')),
+      password: Joi.string().regex(
+        new RegExp(
+          '^(?=(?:.*[A-Z]){1,})(?=(?:.*[a-z]){1,})(?=(?:.*\\d){1,})([A-Za-z0-9!@#$%^&*()\\-_=+{};:,<.>]{8,32})$'
+        )
+      ),
       name: Joi.string()
         .min(3)
         .max(30)
@@ -42,7 +46,11 @@ module.exports = {
   },
   reset(req, res, next) {
     const schema = {
-      newPassword: Joi.string().regex(new RegExp('^[a-zA-Z0-9]{8,32}$')),
+      newPassword: Joi.string().regex(
+        new RegExp(
+          '^(?=(?:.*[A-Z]){1,})(?=(?:.*[a-z]){1,})(?=(?:.*\\d){1,})([A-Za-z0-9!@#$%^&*()\\-_=+{};:,<.>]{8,32})$'
+        )
+      ),
       confirmNewPassword: Joi.any().valid(Joi.ref('newPassword')),
       resetPasswordToken: Joi.any(),
     };
@@ -73,7 +81,11 @@ module.exports = {
   changePassword(req, res, next) {
     const schema = {
       currentPassword: Joi.any(),
-      newPassword: Joi.string().regex(new RegExp('^[a-zA-Z0-9]{8,32}$')),
+      newPassword: Joi.string().regex(
+        new RegExp(
+          '^(?=(?:.*[A-Z]){1,})(?=(?:.*[a-z]){1,})(?=(?:.*\\d){1,})([A-Za-z0-9!@#$%^&*()\\-_=+{};:,<.>]{8,32})$'
+        )
+      ),
       confirmNewPassword: Joi.any().valid(Joi.ref('newPassword')),
     };
 
