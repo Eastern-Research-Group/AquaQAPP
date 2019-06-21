@@ -292,8 +292,6 @@ export default {
         this.rows.push({
           ...row,
           valueId: personnelId,
-          // ['Include in distribution list?']: row['Include in distribution list?'] === 'Yes' ? 'X' : '',
-          // ['Include in the approval list?']: row['Include in the approval list?'] === 'Yes' ? 'X' : '',
         });
       });
     },
