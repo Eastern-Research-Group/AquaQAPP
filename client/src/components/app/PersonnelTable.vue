@@ -23,7 +23,7 @@
               question.dataEntryType === 'text' ||
                 question.dataEntryType === 'largeText' ||
                 question.dataEntryType === 'email' ||
-                question.dataEntryType === 'phone'
+                question.dataEntryType === 'tel'
             "
             class="label"
             :for="`question${question.id}`"
@@ -50,7 +50,7 @@
             required
           />
           <input
-            v-if="question.dataEntryType === 'phone'"
+            v-if="question.dataEntryType === 'tel'"
             :id="`question${question.id}`"
             v-model="pendingData[question.id]"
             class="input"
@@ -62,7 +62,7 @@
             oninvalid="this.setCustomValidity('Enter phone number in the following format: 123-456-7890')"
             oninput="this.setCustomValidity('')"
           />
-          <small v-if="question.dataEntryType === 'phone'">Format: 123-456-7890</small>
+          <small v-if="question.dataEntryType === 'tel'">Format: 123-456-7890</small>
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
