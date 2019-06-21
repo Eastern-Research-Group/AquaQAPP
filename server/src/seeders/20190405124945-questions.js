@@ -150,7 +150,7 @@ module.exports = {
       questionLabel: 'Zip',
       dataEntryInstructions: '',
       dataEntryTip: '',
-      dataEntryType: 'tel',
+      dataEntryType: 'text',
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 10,
