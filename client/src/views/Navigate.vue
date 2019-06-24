@@ -188,6 +188,7 @@ import HoverText from '@/components/shared/HoverText';
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
+import ProjectActivities from '@/components/app/ProjectActivities';
 
 export default {
   components: {
@@ -202,6 +203,7 @@ export default {
     PersonnelTable,
     Modal,
     HoverText,
+    ProjectActivities,
   },
   data() {
     return {
@@ -347,7 +349,8 @@ export default {
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
           this.currentSection.sectionLabel !== 'Monitoring Locations' &&
-          this.currentSection.sectionLabel !== 'Project Organization/Personnel'
+          this.currentSection.sectionLabel !== 'Project Organization/Personnel' &&
+          this.currentSection.sectionLabel !== 'Project Activities'
         ) {
           this.saveData();
         }
