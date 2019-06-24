@@ -53,40 +53,33 @@ module.exports = {
     records.push({
       sectionNumber: '8',
       sectionLevel: '1',
-      sectionLabel: 'Project Tasks',
-      sectionName: 'projectTasks',
+      sectionLabel: 'Project Activities',
+      sectionName: 'projectActivities',
       sectionSort: 8,
     });
     records.push({
       sectionNumber: '9',
-      sectionLevel: '1',
-      sectionLabel: 'Project Schedule',
-      sectionName: 'projectSchedule',
-      sectionSort: 9,
-    });
-    records.push({
-      sectionNumber: '10',
       sectionLevel: '1',
       sectionLabel: 'Water Quality Concerns',
       sectionName: 'waterQualityConcerns',
       sectionSort: 10,
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       sectionLevel: '1',
       sectionLabel: 'Monitoring Locations',
       sectionName: 'monitoringLocations',
       sectionSort: 11,
     });
     records.push({
-      sectionNumber: '12',
+      sectionNumber: '11',
       sectionLevel: '1',
       sectionLabel: 'Parameters',
       sectionName: 'parameters',
       sectionSort: 12,
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '12',
       sectionLevel: '1',
       sectionLabel: 'Sample Design',
       sectionName: 'sampleDesign',
