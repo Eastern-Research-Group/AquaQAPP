@@ -4,6 +4,7 @@ module.exports = {
   register(req, res, next) {
     const schema = {
       email: Joi.string().email(),
+      confirmEmail: Joi.any().valid(Joi.ref('email')),
       password: Joi.string().regex(new RegExp('^[a-zA-Z0-9]{8,32}$')),
       name: Joi.string()
         .min(3)
@@ -18,6 +19,11 @@ module.exports = {
         case 'email':
           res.status(400).send({
             error: 'You must provide a valid email address',
+          });
+          break;
+        case 'confirmEmail':
+          res.status(400).send({
+            error: 'Your email and confirmation email do not match.',
           });
           break;
         case 'password':

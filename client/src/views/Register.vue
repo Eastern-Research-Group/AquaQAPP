@@ -14,6 +14,17 @@
             <input class="input" type="email" required placeholder="Enter email" v-model="email" maxlength="255" />
           </div>
           <div class="field">
+            <label class="label is-size-5">Confirm Email</label>
+            <input
+              class="input"
+              type="email"
+              required
+              placeholder="Confirm email"
+              v-model="confirmEmail"
+              maxlength="255"
+            />
+          </div>
+          <div class="field">
             <label class="label is-size-5">
               Password
               <HoverText :icon="true" hoverId="passwordInfo">
@@ -69,6 +80,7 @@ export default {
     return {
       name: '',
       email: '',
+      confirmEmail: '',
       password: '',
       error: null,
       confirmPassword: '',
@@ -81,6 +93,7 @@ export default {
           data: {
             name: this.name,
             email: this.email,
+            confirmEmail: this.confirmEmail,
             password: this.password,
             confirmPassword: this.confirmPassword,
           },
