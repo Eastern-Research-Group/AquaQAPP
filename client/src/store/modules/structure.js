@@ -1,11 +1,5 @@
 import axios from 'axios';
-
-const getQuestionIdByName = (questions, name) => {
-  if (questions.length) {
-    return questions.find((q) => q.questionName === name).id;
-  }
-  return null;
-};
+import getQuestionIdByName from '@/utils/getQuestionIdByName';
 
 const state = {
   sections: [],

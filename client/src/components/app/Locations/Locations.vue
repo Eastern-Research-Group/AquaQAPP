@@ -101,6 +101,7 @@
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
+import getQuestionIdByName from '@/utils/getQuestionIdByName';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
@@ -127,8 +128,8 @@ export default {
       shouldShowEdit: false,
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
-      latQuestionId: this.questions.find((q) => q.questionLabel === 'Location Latitude').id,
-      lngQuestionId: this.questions.find((q) => q.questionLabel === 'Location Longitude').id,
+      latQuestionId: getQuestionIdByName(this.questions, 'locationLat'),
+      lngQuestionId: getQuestionIdByName(this.questions, 'locationLong'),
       pendingData: {},
       selectedLocation: null,
       columns: [
@@ -174,6 +175,14 @@ export default {
           this.isEnteringLocationInfo = true;
           this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
           this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
+
+          // Set default metadata automatically when user selects location by map
+          this.pendingData[getQuestionIdByName(this.questions, 'horizCollectionMethod')] = this.collectionMethods.find(
+            (v) => v.id === 18
+          );
+          this.pendingData[getQuestionIdByName(this.questions, 'horizCoordinateSystem')] = this.coordRefSystems.find(
+            (v) => v.id === 16
+          );
         });
       } else if (this.map) {
         this.map.off('click');
