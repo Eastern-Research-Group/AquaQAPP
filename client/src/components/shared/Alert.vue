@@ -3,7 +3,8 @@
     <div class="message-body">
       <span :class="'fa is-size-3 ' + getIcon()"></span>
       <span v-if="isMessageHTML" class="alert-message has-text-weight-semibold" :is="contentComp"></span>
-      <span v-if="!isMessageHTML" class="alert-message has-text-weight-semibold">{{ message }}</span>
+      <span v-else-if="!message" class="alert-message has-text-weight-semibold"><slot /></span>
+      <span v-else class="alert-message has-text-weight-semibold">{{ message }}</span>
     </div>
   </div>
 </template>
@@ -14,7 +15,7 @@ export default {
   props: {
     message: {
       type: String,
-      required: true,
+      required: false,
     },
     type: {
       type: String,
