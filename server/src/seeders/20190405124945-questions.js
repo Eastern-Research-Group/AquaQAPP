@@ -420,7 +420,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '10',
+      sectionNumber: '9',
       questionName: 'waterConcerns',
       questionLabel: 'Water Quality Concerns',
       dataEntryInstructions: 'What are your water quality concerns? Select all that apply.',
@@ -434,7 +434,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '10',
+      sectionNumber: '9',
       questionName: 'differByLocation',
       questionLabel: 'Do your water quality concerns differ by sampling location?',
       dataEntryInstructions: '',
@@ -448,7 +448,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'locationId',
       questionLabel: 'Location ID',
       dataEntryInstructions: '',
@@ -461,7 +461,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'locationName',
       questionLabel: 'Location Name',
       dataEntryInstructions: '',
@@ -474,7 +474,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'locationLat',
       questionLabel: 'Location Latitude',
       dataEntryInstructions: '',
@@ -487,7 +487,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'locationLong',
       questionLabel: 'Location Longitude',
       dataEntryInstructions: '',
@@ -500,7 +500,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'waterType',
       questionLabel: 'Water Type',
       dataEntryInstructions: '',
@@ -514,7 +514,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'mapWaterConcerns',
       questionLabel: 'Water Quality Concerns',
       dataEntryInstructions: '',
@@ -528,7 +528,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'locationType',
       questionLabel: 'Location Type',
       dataEntryInstructions: '',
@@ -542,7 +542,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'horizCollectionMethod',
       questionLabel: 'Horizontal Collection Method',
       dataEntryInstructions: '',
@@ -556,7 +556,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '10',
       questionName: 'horizCoordinateSystem',
       questionLabel: 'Horizontal Coordinate Reference System',
       dataEntryInstructions: '',
@@ -570,7 +570,7 @@ module.exports = {
       updatedAt: new Date(),
     });
     records.push({
-      sectionNumber: '12',
+      sectionNumber: '11',
       questionLabel: 'Parameters',
       questionName: 'parameters',
       dataEntryInstructions: '',
