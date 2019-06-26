@@ -59,6 +59,9 @@ const getters = {
           dataObj[sectionName][datum.valueId] = {};
         }
         dataObj[sectionName][datum.valueId][key] = datum.value;
+      } else if (key && key === 'waterConcerns') {
+        const concernCodes = datum.value.split(',');
+        dataObj[key] = rootState.ref.concerns.filter((c) => concernCodes.indexOf(c.code) > -1);
       } else if (key && key === 'parameters') {
         const paramIds = datum.value.split(',');
         paramIds.forEach((id) => {
