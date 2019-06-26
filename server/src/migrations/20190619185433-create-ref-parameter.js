@@ -7,13 +7,73 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      label: {
         type: Sequelize.STRING,
       },
-      concern: {
+      parameter: {
         type: Sequelize.STRING,
       },
-      waterType: {
+      method: {
+        type: Sequelize.STRING,
+      },
+      fresh: {
+        type: Sequelize.BOOLEAN,
+      },
+      salt: {
+        type: Sequelize.BOOLEAN,
+      },
+      units: {
+        type: Sequelize.STRING,
+      },
+      accuracy: {
+        type: Sequelize.STRING,
+      },
+      precision: {
+        type: Sequelize.STRING,
+      },
+      expectedRange: {
+        type: Sequelize.STRING,
+      },
+      sampleCollectionMethod: {
+        type: Sequelize.STRING,
+      },
+      sampleContainer: {
+        type: Sequelize.STRING,
+      },
+      sampleVolume: {
+        type: Sequelize.STRING,
+      },
+      samplePreservation: {
+        type: Sequelize.STRING,
+      },
+      maxHoldingTime: {
+        type: Sequelize.STRING,
+      },
+      mdl: {
+        type: Sequelize.STRING,
+      },
+      labName: {
+        type: Sequelize.STRING,
+      },
+      accuracyChecks: {
+        type: Sequelize.STRING,
+      },
+      precisionChecks: {
+        type: Sequelize.STRING,
+      },
+      percentFieldQC: {
+        type: Sequelize.STRING,
+      },
+      instrument: {
+        type: Sequelize.STRING,
+      },
+      calibrationFrequency: {
+        type: Sequelize.STRING,
+      },
+      calibrationStandard: {
+        type: Sequelize.STRING,
+      },
+      correctiveAction: {
         type: Sequelize.STRING,
       },
     });
