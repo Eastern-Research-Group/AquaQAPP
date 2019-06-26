@@ -7,9 +7,16 @@
           <div class="column is-two-thirds">
             <div class="columns">
               <div class="column is-10">
-                <p>Parameters for {{ waterType.name }} based on selected concerns</p>
-                <div class="field checkboxes-container">
-                  <div v-for="param in getFilteredParams(waterType.name)" class="field" :key="param.id">
+                <p>Suggested parameters for {{ waterType.name }} water based on selected concerns</p>
+                <div
+                  v-if="getFilteredParams(suggestedParams, waterType.name).length"
+                  class="field checkboxes-container"
+                >
+                  <div
+                    v-for="param in getFilteredParams(suggestedParams, waterType.name)"
+                    class="field"
+                    :key="param.id"
+                  >
                     <input
                       class="is-checkradio is-info"
                       :id="param.id"
@@ -18,38 +25,41 @@
                       :checked="isChecked(param.id)"
                       @change="$emit('updateData', $event, paramQuestion)"
                     />
-                    <label :for="param.id">{{ param.name }}</label>
+                    <label :for="param.id">{{ param.label }}</label>
                   </div>
+                </div>
+                <div v-else class="field checkboxes-container">
+                  <i>There are no suggested parameters based on selected concerns</i>
                 </div>
               </div>
               <div class="column arrows is-hidden-mobile">
                 <span class="fas fa-angle-double-right is-size-3 "></span>
               </div>
             </div>
-            <!-- Removed until "Suggested parameters" logic is determined
             <div class="columns">
               <div class="column is-10">
-                <p>
-                  All {{ waterType.name }} (other parameters that aren't suggested but are part of the selected
-                  concerns)
-                </p>
-                <div class="field checkboxes-container">
-                  <div v-for="param in getFilteredParams(waterType.name)" class="field" :key="param.id">
+                <p>All other parameters for {{ waterType.name }} water</p>
+                <div v-if="getFilteredParams(allParams, waterType.name).length" class="field checkboxes-container">
+                  <div v-for="param in getFilteredParams(allParams, waterType.name)" class="field" :key="param.id">
                     <input
                       class="is-checkradio is-info"
                       :id="param.id"
                       type="checkbox"
                       :value="param.id"
-                      v-model="selectedParams"
+                      :checked="isChecked(param.id)"
+                      @change="$emit('updateData', $event, paramQuestion)"
                     />
-                    <label :for="param.id">{{ param.name }}</label>
+                    <label :for="param.id">{{ param.label }}</label>
                   </div>
+                </div>
+                <div v-else class="field checkboxes-container">
+                  <i>There are no other parameters for {{ waterType.name }} water</i>
                 </div>
               </div>
               <div class="column arrows is-hidden-mobile">
-                <span class="fas fa-angle-double-right is-size-3"></span>
+                <span class="fas fa-angle-double-right is-size-3 "></span>
               </div>
-            </div> -->
+            </div>
             <div class="columns">
               <div class="column is-10">
                 <div class="field">
@@ -105,24 +115,41 @@ export default {
     };
   },
   computed: {
-    ...mapState('ref', ['parameters', 'waterTypes']),
+    ...mapState('ref', ['concerns', 'parameters', 'waterTypes']),
     ...mapGetters('qapp', ['qappData']),
     ...mapGetters('structure', ['concernsQuestionId', 'locationWaterTypeQuestionId']),
+    selectedConcernCodes() {
+      return this.qappData[this.concernsQuestionId].split(',');
+    },
     selectedParams() {
       return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
     },
+    suggestedParams() {
+      const params = [];
+      this.parameters.forEach((param) => {
+        if (param.concerns.map((v) => v.code).some((c) => this.selectedConcernCodes.indexOf(c) > -1)) {
+          params.push(param);
+        }
+      });
+      return params;
+    },
+    allParams() {
+      const params = [];
+      this.parameters.forEach((param) => {
+        if (this.suggestedParams.map((p) => p.id).indexOf(param.id) === -1) {
+          params.push(param);
+        }
+      });
+      return params;
+    },
   },
   methods: {
-    getFilteredParams(waterType) {
-      const selectedConcerns = this.qappData[this.concernsQuestionId].split(',');
-      /* Check if any one concern from parameters ref matches any one concern from selected concerns (using Array.some())
-       * Then, check if parameter's water type matches the current tab's water type (or if param's water type is "All")
-       */
-      return this.parameters.filter(
-        (v) =>
-          v.concern.split(',').some((c) => selectedConcerns.indexOf(c) > -1) &&
-          (v.waterType.split(',').indexOf(waterType) > -1 || v.waterType === 'All')
-      );
+    getFilteredParams(params, waterType) {
+      if (waterType === 'Fresh') {
+        return params.filter((p) => p.fresh);
+      }
+      // salt or brackish types are both indicated by the "salt" boolean column
+      return params.filter((p) => p.salt);
     },
     getWaterTypes() {
       let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
@@ -137,7 +164,9 @@ export default {
     },
     getParamLabel(param) {
       const pId = parseInt(param, 10);
-      return this.parameters.find((p) => p.id === pId) ? this.parameters.find((p) => p.id === pId).name : param;
+      return this.parameters.find((p) => p.id === pId)
+        ? this.parameters.find((p) => p.id === pId).label
+        : `OTHER - ${param}`;
     },
     updateParams(e) {
       this.$emit('updateData', e, this.paramQuestion);
@@ -166,7 +195,7 @@ export default {
   background-color: $darkBlue;
   padding: 15px;
   margin-top: 10px;
-  max-height: 300px;
+  max-height: 180px;
   overflow: auto;
   border-radius: 4px;
 }

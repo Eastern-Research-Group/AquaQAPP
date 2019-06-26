@@ -10,11 +10,19 @@ const {
 module.exports = {
   async concerns(req, res) {
     try {
-      const concerns = await RefConcern.findAll({});
+      const concerns = await RefConcern.findAll({
+        include: [
+          {
+            model: RefParameter,
+            attributes: ['id', 'label'],
+            as: 'parameters',
+          },
+        ],
+      });
       res.send(concerns);
     } catch (err) {
       res.status(400).send({
-        err: 'Data unavailable.',
+        err: err.toString(),
       });
     }
   },
@@ -50,7 +58,15 @@ module.exports = {
   },
   async parameters(req, res) {
     try {
-      const params = await RefParameter.findAll({});
+      const params = await RefParameter.findAll({
+        include: [
+          {
+            model: RefConcern,
+            attributes: ['id', 'code'],
+            as: 'concerns',
+          },
+        ],
+      });
       res.send(params);
     } catch (err) {
       res.status(400).send({
