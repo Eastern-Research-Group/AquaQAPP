@@ -8,6 +8,7 @@ const state = {
   data: [],
   doc: null,
   completedSections: [],
+  isSaving: false,
 };
 
 const getters = {
@@ -111,6 +112,9 @@ const mutations = {
   SET_DOC(state, value) {
     state.doc = value;
   },
+  SET_IS_SAVING(state, value) {
+    state.isSaving = value;
+  },
 };
 
 const actions = {
@@ -140,8 +144,11 @@ const actions = {
   },
   async save({ commit }, payload) {
     // TODO: implement error handling on each save
+    commit('SET_IS_SAVING', true);
+
     const qappRes = await axios.post('api/qapps/data', payload);
     commit('SET_CURRENT_QAPP', qappRes.data);
+    commit('SET_IS_SAVING', false);
   },
   async updateData({ commit }, payload) {
     const qappRes = await axios.put('api/qapps/data', payload);

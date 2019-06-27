@@ -14,7 +14,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="rows.length === 0">
+            <tr v-if="isFetching">
+              <td :colspan="columns.length + (shouldHaveActionsCol ? 1 : 0)">
+                <LoadingIndicator message="Loading..." class="dark" />
+              </td>
+            </tr>
+            <tr v-else-if="rows.length === 0">
               <td :colspan="columns.length + (shouldHaveActionsCol ? 1 : 0)">
                 {{ noDataMessage }}
               </td>
@@ -58,7 +63,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Button from './Button';
+import LoadingIndicator from '@/components/shared/LoadingIndicator';
 
 export default {
   props: {
@@ -84,7 +91,10 @@ export default {
       required: false,
     },
   },
-  components: { Button },
+  components: { Button, LoadingIndicator },
+  computed: {
+    ...mapState('qapps', ['isFetching']),
+  },
 };
 </script>
 
