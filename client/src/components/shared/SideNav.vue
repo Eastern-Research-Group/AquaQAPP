@@ -62,7 +62,7 @@ export default {
 .modal-content {
   position: fixed;
   padding: 1em;
-  width: 25em;
+  width: 30rem;
   right: 0;
   top: 0;
   border-radius: 0;

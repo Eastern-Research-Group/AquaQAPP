@@ -61,8 +61,11 @@
               v-else
               v-model="pendingData[question.id]"
               :options="getOptions(question.refName)"
-              :placeholder="`Select ${question.questionLabel}`"
               :multiple="true"
+              :taggable="true"
+              tag-placeholder="Add as other rationale"
+              placeholder="Select rationale, or type to specify other rationale"
+              @tag="addOther($event, question)"
             ></Multiselect>
           </div>
         </div>
@@ -233,8 +236,12 @@ export default {
           datum.forEach((field) => {
             if (typeof sampleDesign[field.valueId] === 'undefined') sampleDesign[field.valueId] = {};
             if (question.refName) {
-              sampleDesign[field.valueId][key] =
-                this[question.refName].find((r) => r.id === parseInt(field.value, 10)) || field.value.split(',');
+              const ref = this[question.refName].find((r) => r.id === parseInt(field.value, 10));
+              if (ref) {
+                sampleDesign[field.valueId][key] = ref;
+              } else if (field.value) {
+                sampleDesign[field.valueId][key] = field.value.split(',');
+              }
             } else {
               sampleDesign[field.valueId][key] = field.value;
             }
@@ -286,6 +293,15 @@ export default {
         }
       });
       return cleanedData;
+    },
+    addOther(value, question) {
+      const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
+      let newVal = this.pendingData[question.id];
+      // if values already exist for this question, push entered value into array, otherwise set as array
+      if (newVal) newVal.push(enteredVal);
+      else newVal = [enteredVal];
+      // set pending data object to the new value
+      this.$set(this.pendingData, question.id, newVal);
     },
   },
 };
