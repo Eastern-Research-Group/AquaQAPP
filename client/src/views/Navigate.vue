@@ -230,7 +230,12 @@ export default {
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locationQuestionId']),
+    ...mapGetters('structure', [
+      'concernsQuestionId',
+      'concernsDifferByLocQuestionId',
+      'locationQuestionId',
+      'parametersQuestionId',
+    ]),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -406,6 +411,9 @@ export default {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
+      } else if (this.currentSection.sectionLabel === 'Sample Design' && !this.qappData[this.parametersQuestionId]) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
       }
       return sectionNotAvailable;
     },
