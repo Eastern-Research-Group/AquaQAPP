@@ -21,6 +21,9 @@ const getters = {
   locationWaterTypeQuestionId(state) {
     return getQuestionIdByName(state.questions, 'waterType');
   },
+  parametersQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'parameters');
+  },
 };
 
 const mutations = {

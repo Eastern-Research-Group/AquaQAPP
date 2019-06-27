@@ -1,12 +1,12 @@
 <template>
   <div class="clear">
-    <label class="label is-size-4">Project Organization/Personnel</label>
+    <label class="label is-size-4">Sample Design</label>
     <Table
       :columns="columns"
       :rows="rows"
       :shouldHaveActionsCol="true"
       :shouldHaveGlobalActions="true"
-      noDataMessage="No personnel have been added. Add personnel to continue."
+      noDataMessage="No sample design information has been added for selected parameters."
       @onEdit="onEdit"
       @onDelete="onDelete"
       @onAdd="onAddInfo"
@@ -14,21 +14,11 @@
     <SideNav
       v-if="isEnteringInfo"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Org/Personnel' : 'Add Org/Personnel'"
+      :title="shouldShowEdit ? 'Edit Sample Design Information' : 'Add Sample Design Information'"
     >
-      <form @submit.prevent="submitPersonnelData">
+      <form @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
-          <label
-            v-if="
-              question.dataEntryType === 'text' ||
-                question.dataEntryType === 'largeText' ||
-                question.dataEntryType === 'email' ||
-                question.dataEntryType === 'tel'
-            "
-            class="label"
-            :for="`question${question.id}`"
-            >{{ question.questionLabel }}</label
-          >
+          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
@@ -40,29 +30,15 @@
             required
           />
           <input
-            v-if="question.dataEntryType === 'email'"
+            v-if="question.dataEntryType === 'number'"
             :id="`question${question.id}`"
             v-model="pendingData[question.id]"
             class="input"
-            type="email"
+            type="number"
             :placeholder="`Enter ${question.questionLabel}`"
             :maxlength="question.maxLength"
             required
           />
-          <input
-            v-if="question.dataEntryType === 'tel'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
-            class="input"
-            type="tel"
-            :placeholder="`Enter ${question.questionLabel}`"
-            :maxlength="question.maxLength"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            required
-            oninvalid="this.setCustomValidity('Enter phone number in the following format: 123-456-7890')"
-            oninput="this.setCustomValidity('')"
-          />
-          <small v-if="question.dataEntryType === 'tel'">Format: 123-456-7890</small>
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
@@ -72,32 +48,26 @@
             :maxlength="question.maxLength"
             required
           ></textarea>
-          <div class="field" v-if="question.dataEntryType === 'checkbox'">
-            <input
-              class="is-checkradio"
-              :id="question.id"
-              type="checkbox"
-              true-value="X"
-              false-value=""
+          <div v-if="question.dataEntryType === 'select'">
+            <Multiselect
+              v-if="question.questionLabel === 'Parameter'"
               v-model="pendingData[question.id]"
-            />
-            <label :for="question.id">{{ question.questionLabel }}</label>
-          </div>
-          <div class="field" v-if="question.dataEntryType === 'singleCheckbox'">
-            <input
-              class="is-checkradio"
-              :id="question.id"
-              type="checkbox"
-              true-value="X"
-              false-value=""
+              :options="getParameters()"
+              :placeholder="`Select ${question.questionLabel}`"
+              label="label"
+              track-by="id"
+            ></Multiselect>
+            <Multiselect
+              v-else
               v-model="pendingData[question.id]"
-              :disabled="isPrimaryContactDisabled"
-            />
-            <label :for="question.id">{{ question.questionLabel }}</label>
+              :options="getOptions(question.refName)"
+              :placeholder="`Select ${question.questionLabel}`"
+              :multiple="true"
+            ></Multiselect>
           </div>
         </div>
         <Button
-          :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
+          :label="shouldShowEdit ? 'Save' : 'Add and Save'"
           :type="shouldShowEdit ? 'primary' : 'success'"
           submit
         />
@@ -105,30 +75,35 @@
     </SideNav>
     <DeleteWarning
       v-if="shouldShowDelete"
-      title="Delete Personnel"
-      :itemLabel="shouldDeleteAll ? 'all personnel' : selectedPersonnel['Full Name']"
+      title="Delete Sample Design Information"
+      :itemLabel="
+        shouldDeleteAll
+          ? 'all sample design information'
+          : `sample design information for ${selectedRow.parameterLabel}`
+      "
       @close="() => (shouldShowDelete = false)"
-      @onDelete="deletePersonnelData"
+      @onDelete="deleteData"
     />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import Multiselect from 'vue-multiselect';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
-  name: 'PersonnelTable',
+  name: 'SampleDesign',
   props: {
     questions: {
       type: Array,
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning },
+  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
   data() {
     return {
       isEnteringInfo: false,
@@ -136,30 +111,17 @@ export default {
       shouldShowDelete: false,
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
-      selectedPersonnel: null,
-      isPrimaryContactDisabled: false,
+      selectedRow: null,
       pendingData: {},
       rows: [],
       columns: [
         {
-          key: 'Full Name',
-          label: 'Name',
+          key: 'parameterLabel',
+          label: 'Parameter',
         },
         {
-          key: 'Title/Position',
-          label: 'Title/Position',
-        },
-        {
-          key: 'Include in distribution list?',
-          label: 'Distribution List',
-        },
-        {
-          key: 'Include in the approval list?',
-          label: 'Approval Sheet',
-        },
-        {
-          key: 'Organization',
-          label: 'Organization',
+          key: 'Number of Sample Locations',
+          label: 'Number of Sample Locations',
         },
       ],
     };
@@ -168,30 +130,27 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
+    ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales']),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['parametersQuestionId']),
   },
   mounted() {
-    this.refreshPersonnelData();
+    this.refreshData();
   },
   methods: {
     onEdit(row) {
-      this.selectedPersonnel = row;
+      this.selectedRow = row;
+      // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
-
-      if (this.rows.find(() => row['Primary Contact'] === 'X') && row['Primary Contact'] !== 'X') {
-        this.isPrimaryContactDisabled = true;
-      } else {
-        this.isPrimaryContactDisabled = false;
-      }
     },
     onDelete(row) {
       this.shouldShowDelete = true;
       if (row) {
-        this.selectedPersonnel = row;
+        this.selectedRow = row;
         this.shouldDeleteAll = false;
         this.shouldDeleteSingle = true;
       } else {
@@ -202,35 +161,29 @@ export default {
     async onAddInfo() {
       this.pendingData = {};
       this.isEnteringInfo = true;
-      this.selectedPersonnel = null;
+      this.selectedRow = null;
       this.shouldShowEdit = false;
-
-      if (this.rows.find((row) => row['Primary Contact'] === 'X')) {
-        this.isPrimaryContactDisabled = true;
-      } else {
-        this.isPrimaryContactDisabled = false;
-      }
     },
-    submitPersonnelData() {
+    submitData() {
       if (this.shouldShowEdit) {
-        this.editPersonnelData();
+        this.editData();
       } else {
-        this.addPersonnelData();
+        this.addData();
       }
     },
-    async editPersonnelData() {
+    async editData() {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
-        valueId: this.selectedPersonnel.valueId,
-        values: this.pendingData,
+        valueId: this.selectedRow.valueId,
+        values: this.cleanData(this.pendingData),
       });
-      this.refreshPersonnelData();
+      this.refreshData();
       this.isEnteringInfo = false;
     },
-    addPersonnelData() {
-      const personnelData = {};
+    addData() {
+      const sampleData = {};
       this.questions.forEach((q) => {
-        personnelData[q.questionLabel] = this.pendingData[q.id];
+        sampleData[q.questionLabel] = this.pendingData[q.id];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -240,34 +193,36 @@ export default {
       }
 
       this.rows.push({
-        ...personnelData,
+        ...sampleData,
+        parameterLabel: sampleData.Parameter.label,
         valueId: newValueId,
       });
 
-      this.$emit('saveData', null, newValueId, this.pendingData);
+      // Emit saveData to parent component to save to DB
+      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       this.isEnteringInfo = false;
       this.pendingData = {};
     },
-    async deletePersonnelData() {
+    async deleteData() {
       let valueIds = [];
       if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedPersonnel.valueId];
+        valueIds = [this.selectedRow.valueId];
       } else {
         valueIds = this.rows.map((r) => r.valueId);
       }
       const questionIds = this.questions.map((q) => q.id);
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
-      this.refreshPersonnelData();
+      this.refreshData();
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;
     },
-    refreshPersonnelData() {
+    refreshData() {
       this.rows = [];
 
-      // Add rows to table if personnel data already exists
-      const personnel = {};
+      // Add rows to table if sample data already exists
+      const sampleDesign = {};
 
       // Logic to loop through existing qapp data and set up rows for table
       Object.keys(this.qappData).forEach((qId) => {
@@ -275,26 +230,62 @@ export default {
         const question = this.questions.find((q) => q.id === parseInt(qId, 10));
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
-          datum.forEach((personnelField) => {
-            if (typeof personnel[personnelField.valueId] === 'undefined') personnel[personnelField.valueId] = {};
+          datum.forEach((field) => {
+            if (typeof sampleDesign[field.valueId] === 'undefined') sampleDesign[field.valueId] = {};
             if (question.refName) {
-              personnel[personnelField.valueId][key] = this[question.refName].find(
-                (r) => r.id === parseInt(personnelField.value, 10)
-              );
+              sampleDesign[field.valueId][key] =
+                this[question.refName].find((r) => r.id === parseInt(field.value, 10)) || field.value.split(',');
             } else {
-              personnel[personnelField.valueId][key] = personnelField.value;
+              sampleDesign[field.valueId][key] = field.value;
             }
           });
         }
       });
 
-      Object.keys(personnel).forEach((personnelId) => {
-        const row = personnel[personnelId];
+      Object.keys(sampleDesign).forEach((sampleDesignId) => {
+        const row = sampleDesign[sampleDesignId];
         this.rows.push({
           ...row,
-          valueId: personnelId,
+          parameterLabel: row.Parameter.label,
+          valueId: sampleDesignId,
         });
       });
+    },
+    getOptions(refName) {
+      // get reference data array based on refName field in questions table
+      return this[refName];
+    },
+    getParameters() {
+      const params = [];
+      const selectedParams = this.qappData[this.parametersQuestionId];
+      if (selectedParams) {
+        this.parameters.forEach((param) => {
+          if (selectedParams.split(',').indexOf(param.id.toString()) > -1) {
+            params.push(param);
+          }
+        });
+      }
+      return params;
+    },
+    cleanData() {
+      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
+      const cleanedData = {};
+      Object.keys(this.pendingData).forEach((qId) => {
+        if (typeof this.pendingData[qId] === 'object') {
+          // if array, store comma separate list of codes
+          if (Array.isArray(this.pendingData[qId])) {
+            const idArray = this.pendingData[qId].map((datum) => {
+              return datum.id || datum;
+            });
+            cleanedData[qId] = idArray.join(',');
+          } else {
+            cleanedData[qId] = this.pendingData[qId].id;
+          }
+        } else {
+          cleanedData[qId] = this.pendingData[qId];
+        }
+      });
+      return cleanedData;
     },
   },
 };

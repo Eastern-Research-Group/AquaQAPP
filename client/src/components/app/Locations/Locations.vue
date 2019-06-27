@@ -304,7 +304,8 @@ export default {
       } else {
         valueIds = this.markers.map((m) => m.valueId);
       }
-      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds });
+      const questionIds = this.questions.map((q) => q.id);
+      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
       this.refreshLocationData(); // refresh markers and table data after deleting
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;

@@ -231,7 +231,8 @@ export default {
       } else {
         valueIds = this.rows.map((r) => r.valueId);
       }
-      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds });
+      const questionIds = this.questions.map((q) => q.id);
+      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
       this.refreshActivityData();
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
