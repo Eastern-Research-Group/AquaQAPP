@@ -194,6 +194,7 @@ import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
+import SampleDesign from '@/components/app/SampleDesign';
 
 export default {
   components: {
@@ -210,6 +211,7 @@ export default {
     HoverText,
     ProjectActivities,
     LoadingIndicator,
+    SampleDesign,
   },
   data() {
     return {
@@ -356,7 +358,8 @@ export default {
         if (
           this.currentSection.sectionLabel !== 'Monitoring Locations' &&
           this.currentSection.sectionLabel !== 'Project Organization/Personnel' &&
-          this.currentSection.sectionLabel !== 'Project Activities'
+          this.currentSection.sectionLabel !== 'Project Activities' &&
+          this.currentSection.sectionLabel !== 'Sample Design'
         ) {
           this.saveData();
         }

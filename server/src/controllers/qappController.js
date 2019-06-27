@@ -209,6 +209,7 @@ module.exports = {
         where: {
           qappId: req.body.qappId,
           valueId: { [Op.or]: req.body.valueIds },
+          questionId: { [Op.or]: req.body.questionIds },
         },
       });
       // redirect to return latest QAPP with data
