@@ -54,6 +54,10 @@ module.exports = {
   async show(req, res) {
     try {
       const qapp = await Qapp.findOne({
+        order: [
+          // Will escape title and validate DESC against a list of valid direction parameters
+          ['completedSections', 'sectionId', 'ASC'],
+        ],
         where: { userId: req.user.id, id: req.params.id },
         include: [
           {
