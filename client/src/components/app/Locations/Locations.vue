@@ -30,6 +30,13 @@
       :title="shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
       <form @submit.prevent="submitLocationData">
+        <Alert
+          v-if="isFormIncomplete"
+          ref="alert"
+          type="error"
+          message="All fields are required. Please enter all fields to submit."
+          tabindex="0"
+        />
         <div class="field" v-for="question in questions" :key="question.id">
           <label
             v-if="question.questionLabel !== 'Water Quality Concerns' || shouldShowConcerns()"
@@ -82,7 +89,7 @@
           </div>
         </div>
         <Button
-          :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
+          :label="shouldShowEdit ? 'Save' : 'Add and Save'"
           :type="shouldShowEdit ? 'primary' : 'success'"
           submit
         />
@@ -108,6 +115,7 @@ import Tabs from '@/components/shared/Tabs';
 import Button from '@/components/shared/Button';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
+import Alert from '@/components/shared/Alert';
 import '../../../../static/bulma-multiselect.css';
 
 export default {
@@ -117,7 +125,7 @@ export default {
       required: true,
     },
   },
-  components: { Map, SideNav, Tabs, Button, Multiselect, Table, DeleteWarning },
+  components: { Map, SideNav, Tabs, Button, Multiselect, Table, DeleteWarning, Alert },
   data() {
     return {
       markers: [],
@@ -138,6 +146,7 @@ export default {
         { key: 'Location Latitude', label: 'Latitude' },
         { key: 'Location Longitude', label: 'Longitude' },
       ],
+      isFormIncomplete: false,
     };
   },
   computed: {
@@ -149,7 +158,7 @@ export default {
       allQuestions: (state) => state.structure.questions,
     }),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId']),
+    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locConcernsQuestionId']),
   },
   mounted() {
     this.refreshLocationData();
@@ -172,6 +181,7 @@ export default {
       // after clicking Add Location button, add click event to get Lat/Long of clicked area
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
+          this.isFormIncomplete = false;
           this.isEnteringLocationInfo = true;
           this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
           this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
@@ -256,12 +266,14 @@ export default {
       if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
+      this.isFormIncomplete = false;
       this.pendingData = {};
       this.isEnteringLocationInfo = true;
       this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
     onEdit(location) {
+      this.isFormIncomplete = false;
       this.selectedLocation = location;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
@@ -271,9 +283,23 @@ export default {
       this.shouldShowEdit = true;
     },
     submitLocationData() {
-      if (this.shouldShowEdit) {
+      this.isFormIncomplete = false;
+      // check that each field is completed before submitting
+      this.questions.forEach((q) => {
+        if (
+          (!this.pendingData[q.id] && this.shouldShowConcerns()) ||
+          (!this.pendingData[q.id] && !this.shouldShowConcerns() && q.id !== this.locConcernsQuestionId)
+        ) {
+          this.isFormIncomplete = true;
+        }
+      });
+      // nextTick waits until Alert is now displayed (based on its v-if), and then sets focus to the alert
+      this.$nextTick().then(() => {
+        if (this.$refs.alert) this.$refs.alert.$el.focus();
+      });
+      if (!this.isFormIncomplete && this.shouldShowEdit) {
         this.editLocationData();
-      } else {
+      } else if (!this.isFormIncomplete) {
         this.addLocationData();
       }
     },
