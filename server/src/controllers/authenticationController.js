@@ -15,8 +15,8 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   service: config.service,
   auth: {
-    user: config.db.email,
-    pass: 'Aquaqapp1010',
+    user: config.email,
+    pass: config.emailPassword,
   },
 });
 
