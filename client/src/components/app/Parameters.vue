@@ -1,0 +1,221 @@
+<template>
+  <div>
+    <label class="label is-size-4">Parameters</label>
+    <Tabs :tabs="getWaterTypes()">
+      <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
+        <div :key="waterType.id" class="columns tab-content">
+          <div class="column is-two-thirds">
+            <div class="columns">
+              <div class="column is-10">
+                <p>Suggested parameters for {{ waterType.name }} water based on selected concerns</p>
+                <div
+                  v-if="getFilteredParams(suggestedParams, waterType.name).length"
+                  class="field checkboxes-container"
+                >
+                  <div
+                    v-for="param in getFilteredParams(suggestedParams, waterType.name)"
+                    class="field"
+                    :key="param.id"
+                  >
+                    <input
+                      class="is-checkradio is-info"
+                      :id="param.id"
+                      type="checkbox"
+                      :value="param.id"
+                      :checked="isChecked(param.id)"
+                      @change="$emit('updateData', $event, paramQuestion)"
+                    />
+                    <label :for="param.id">{{ param.label }}</label>
+                  </div>
+                </div>
+                <div v-else class="field checkboxes-container">
+                  <i>There are no suggested parameters based on selected concerns</i>
+                </div>
+              </div>
+              <div class="column arrows is-hidden-mobile">
+                <span class="fas fa-angle-double-right is-size-3 "></span>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-10">
+                <p>All other parameters for {{ waterType.name }} water</p>
+                <div v-if="getFilteredParams(allParams, waterType.name).length" class="field checkboxes-container">
+                  <div v-for="param in getFilteredParams(allParams, waterType.name)" class="field" :key="param.id">
+                    <input
+                      class="is-checkradio is-info"
+                      :id="param.id"
+                      type="checkbox"
+                      :value="param.id"
+                      :checked="isChecked(param.id)"
+                      @change="$emit('updateData', $event, paramQuestion)"
+                    />
+                    <label :for="param.id">{{ param.label }}</label>
+                  </div>
+                </div>
+                <div v-else class="field checkboxes-container">
+                  <i>There are no other parameters for {{ waterType.name }} water</i>
+                </div>
+              </div>
+              <div class="column arrows is-hidden-mobile">
+                <span class="fas fa-angle-double-right is-size-3 "></span>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-10">
+                <div class="field">
+                  <p>Other</p>
+                  <input ref="otherInput" class="input" type="text" @keyup.enter="updateParams($event)" />
+                </div>
+              </div>
+              <div class="column arrows is-hidden-mobile">
+                <span class="fas fa-angle-double-right is-size-3 "></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="has-text-centered">Selected</p>
+            <div class="box selected-parameters">
+              <ul>
+                <li v-for="param in selectedParams" :key="param" class="param-label has-text-weight-semibold">
+                  {{ getParamLabel(param) }}
+                  <span
+                    class="fa fa-times"
+                    @click="$emit('updateData', { target: { value: param.id || param } }, paramQuestion)"
+                  ></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </template>
+    </Tabs>
+  </div>
+</template>
+
+<script>
+import { mapState, mapGetters } from 'vuex';
+import Tabs from '@/components/shared/Tabs';
+
+export default {
+  name: 'Parameters',
+  props: {
+    pendingData: {
+      type: Object,
+      required: true,
+    },
+    questions: {
+      type: Array,
+      required: true,
+    },
+  },
+  components: { Tabs },
+  data() {
+    return {
+      paramQuestion: this.questions[0],
+    };
+  },
+  computed: {
+    ...mapState('ref', ['concerns', 'parameters', 'waterTypes']),
+    ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['concernsQuestionId', 'locationWaterTypeQuestionId']),
+    selectedConcernCodes() {
+      return this.qappData[this.concernsQuestionId].split(',');
+    },
+    selectedParams() {
+      return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
+    },
+    suggestedParams() {
+      const params = [];
+      this.parameters.forEach((param) => {
+        if (param.concerns.map((v) => v.code).some((c) => this.selectedConcernCodes.indexOf(c) > -1)) {
+          params.push(param);
+        }
+      });
+      return params;
+    },
+    allParams() {
+      const params = [];
+      this.parameters.forEach((param) => {
+        if (this.suggestedParams.map((p) => p.id).indexOf(param.id) === -1) {
+          params.push(param);
+        }
+      });
+      return params;
+    },
+  },
+  methods: {
+    getFilteredParams(params, waterType) {
+      if (waterType === 'Fresh') {
+        return params.filter((p) => p.fresh);
+      }
+      // salt or brackish types are both indicated by the "salt" boolean column
+      return params.filter((p) => p.salt);
+    },
+    getWaterTypes() {
+      let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
+      waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
+      return waterTypes.map((v) => ({
+        id: v,
+        name: v,
+      }));
+    },
+    isChecked(paramId) {
+      return this.selectedParams.indexOf(paramId.toString()) > -1;
+    },
+    getParamLabel(param) {
+      const pId = parseInt(param, 10);
+      return this.parameters.find((p) => p.id === pId)
+        ? this.parameters.find((p) => p.id === pId).label
+        : `OTHER - ${param}`;
+    },
+    updateParams(e) {
+      this.$emit('updateData', e, this.paramQuestion);
+      this.$refs.otherInput[0].value = '';
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+@import '../../../static/variables';
+
+.selected-parameters {
+  height: 95% !important;
+}
+
+.arrows {
+  margin: auto;
+  height: 100%;
+  text-align: center;
+  position: relative;
+  top: 13px;
+}
+
+.checkboxes-container {
+  background-color: $darkBlue;
+  padding: 15px;
+  margin-top: 10px;
+  max-height: 180px;
+  overflow: auto;
+  border-radius: 4px;
+}
+
+.tab-content {
+  margin-top: 10px;
+}
+
+.box {
+  margin: 0.5rem 0;
+}
+
+.param-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fa-times {
+  color: $danger;
+  cursor: pointer;
+}
+</style>
