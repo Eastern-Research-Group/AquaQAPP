@@ -25,6 +25,7 @@
       <section class="right column is-three-quarters">
         <Alert v-if="isSectionNotAvailable()" :message="this.sectionNotAvailableMessage" type="error" />
         <form v-else @submit.prevent>
+          <LoadingIndicator v-if="isSaving" message="Saving..." class="dark is-pulled-right" />
           <Button
             :label="hasSaved ? 'Saved' : 'Save'"
             type="primary"
@@ -33,11 +34,13 @@
             :title="getSaveBtnHoverText()"
             @click.native="saveData"
           />
+
           <MarkComplete
             @markComplete="markComplete(currentSection.sectionNumber)"
             :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
             :disabled="checkRequiredFields()"
           />
+
           <div
             class="field"
             v-for="question in currentQuestions.filter(
@@ -45,14 +48,10 @@
             )"
             :key="question.id"
           >
-            <div>
+            <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
+            <div v-else>
               <label class="label is-size-4">{{ question.questionLabel }}</label>
-              <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
-              <div
-                class="instructions"
-                v-if="question.dataEntryInstructions"
-                v-html="question.dataEntryInstructions"
-              ></div>
+              <p v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions" />
               <input
                 v-if="question.dataEntryType === 'text'"
                 class="input"
@@ -183,11 +182,14 @@ import MarkComplete from '@/components/shared/MarkComplete';
 import CheckboxButton from '@/components/shared/CheckboxButton';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
+import LoadingIndicator from '@/components/shared/LoadingIndicator';
 
 // Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
+import ProjectActivities from '@/components/app/ProjectActivities';
+import SampleDesign from '@/components/app/SampleDesign';
 
 export default {
   components: {
@@ -202,6 +204,9 @@ export default {
     PersonnelTable,
     Modal,
     HoverText,
+    ProjectActivities,
+    LoadingIndicator,
+    SampleDesign,
   },
   data() {
     return {
@@ -216,11 +221,17 @@ export default {
     };
   },
   computed: {
-    ...mapState('qapp', ['completedSections']),
+    ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locationQuestionId']),
+    ...mapGetters('structure', [
+      'concernsQuestionId',
+      'concernsDifferByLocQuestionId',
+      'locationQuestionId',
+      'parametersQuestionId',
+      'locConcernsQuestionId',
+    ]),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -236,13 +247,8 @@ export default {
     },
     locationConcerns() {
       let concerns = [];
-      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');
-      if (
-        locationConcernQuestion &&
-        locationConcernQuestion.section.sectionLabel === 'Monitoring Locations' &&
-        this.qappData[locationConcernQuestion.id]
-      ) {
-        this.qappData[locationConcernQuestion.id].forEach((location) => {
+      if (this.qappData[this.locConcernsQuestionId]) {
+        this.qappData[this.locConcernsQuestionId].forEach((location) => {
           if (location.value) {
             concerns = concerns.concat(location.value.split(','));
           }
@@ -347,7 +353,9 @@ export default {
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
           this.currentSection.sectionLabel !== 'Monitoring Locations' &&
-          this.currentSection.sectionLabel !== 'Project Organization/Personnel'
+          this.currentSection.sectionLabel !== 'Project Organization/Personnel' &&
+          this.currentSection.sectionLabel !== 'Project Activities' &&
+          this.currentSection.sectionLabel !== 'Sample Design'
         ) {
           this.saveData();
         }
@@ -394,6 +402,9 @@ export default {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
+      } else if (this.currentSection.sectionLabel === 'Sample Design' && !this.qappData[this.parametersQuestionId]) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
       }
       return sectionNotAvailable;
     },
@@ -457,10 +468,6 @@ export default {
 
 .notification {
   margin-top: 1em;
-}
-
-.instructions {
-  display: inline;
 }
 
 textarea {

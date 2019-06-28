@@ -8,6 +8,7 @@ const state = {
   data: [],
   doc: null,
   completedSections: [],
+  isSaving: false,
 };
 
 const getters = {
@@ -47,8 +48,9 @@ const getters = {
     });
     const dataObj = {};
     sortedData.forEach((datum) => {
-      const key = rootState.structure.questions.find((q) => q.id === datum.questionId).questionName;
-      const { sectionName } = rootState.structure.questions.find((q) => q.id === datum.questionId).section;
+      const question = rootState.structure.questions.find((q) => q.id === datum.questionId);
+      const sectionName = question ? question.section.sectionName : null;
+      const key = question ? question.questionName : null;
       if (datum.valueId) {
         // if valueId exists, further format data into an array of objects split out by each valueId
         if (!dataObj[sectionName]) {
@@ -58,6 +60,39 @@ const getters = {
           dataObj[sectionName][datum.valueId] = {};
         }
         dataObj[sectionName][datum.valueId][key] = datum.value;
+      } else if (key && key === 'waterConcerns') {
+        const concernCodes = datum.value.split(',');
+        dataObj[key] = rootState.ref.concerns.filter((c) => concernCodes.indexOf(c.code) > -1);
+      } else if (key && key === 'parameters') {
+        const paramIds = datum.value.split(',');
+        paramIds.forEach((id) => {
+          if (isNaN(id)) {
+            // eslint-disable-line
+            // If id is not a number, that means it was entered by user as "Other". Place these in separate array
+            if (!dataObj.otherParameters) dataObj.otherParameters = [];
+            dataObj.otherParameters.push(id);
+          } else {
+            // Otherwise, find the full parameter data object and store in "parameters" array
+            if (!dataObj[key]) dataObj[key] = [];
+            dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
+
+            if (typeof dataObj[key][0] === 'object') {
+              let nutrientsArray = dataObj[key].filter(
+                (p) =>
+                  p.parameter === 'Total nitrogen' ||
+                  p.parameter === 'Ammonium-N' ||
+                  p.parameter === 'Nitrate-Nitrite-N' ||
+                  p.parameter === 'Total phosphorus' ||
+                  p.parameter === 'Orthophosphate'
+              );
+              if (nutrientsArray.length > 0) {
+                dataObj['hasNutrients'] = 'Y';
+              } else {
+                dataObj['hasNutrients'] = 'N';
+              }
+            }
+          }
+        });
       } else if (key) {
         dataObj[key] = datum.value;
       }
@@ -110,6 +145,9 @@ const mutations = {
   SET_DOC(state, value) {
     state.doc = value;
   },
+  SET_IS_SAVING(state, value) {
+    state.isSaving = value;
+  },
 };
 
 const actions = {
@@ -139,8 +177,11 @@ const actions = {
   },
   async save({ commit }, payload) {
     // TODO: implement error handling on each save
+    commit('SET_IS_SAVING', true);
+
     const qappRes = await axios.post('api/qapps/data', payload);
     commit('SET_CURRENT_QAPP', qappRes.data);
+    commit('SET_IS_SAVING', false);
   },
   async updateData({ commit }, payload) {
     const qappRes = await axios.put('api/qapps/data', payload);

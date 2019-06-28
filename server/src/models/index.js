@@ -34,6 +34,18 @@ db.Question.belongsTo(db.Section, {
 });
 db.Qapp.hasMany(db.CompletedQappSection, { foreignKey: 'qappId', as: 'completedSections' });
 db.Question.hasMany(db.Example, { foreignKey: 'questionId', as: 'examples' });
+db.RefParameter.belongsToMany(db.RefConcern, {
+  through: 'RefParameterConcerns',
+  foreignKey: 'refConcernId',
+  timestamps: false,
+  as: 'concerns',
+});
+db.RefConcern.belongsToMany(db.RefParameter, {
+  through: 'RefParameterConcerns',
+  foreignKey: 'refParameterId',
+  timestamps: false,
+  as: 'parameters',
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

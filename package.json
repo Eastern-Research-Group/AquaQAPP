@@ -1,7 +1,9 @@
 {
   "name": "aquaqapp",
   "scripts": {
-    "build": "npm run migrate && npm run seed && vue-cli-service build",
+    "build": "node server/src/build.js",
+    "build:dev": "npm run migrate && npm run seed && vue-cli-service build",
+    "build:prod": "vue-cli-service build",
     "prod": "node server/src/server.js",
     "lint": "eslint . --ext .js,.vue",
     "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate",

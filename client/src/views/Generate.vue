@@ -1,20 +1,43 @@
 <template>
-  <div>
-    <Button label="Generate" type="success" @click.native="generateQapp" />
+  <div class="content">
+    <Alert v-if="completedSections.length !== sections.length" type="warning">
+      <p>All QAPP sections must be marked complete before generating.</p>
+      <p>Please complete the following sections to continue:</p>
+      <ul>
+        <li v-for="section in incompleteSections" :key="section.id">
+          {{ section.sectionLabel }}
+        </li>
+      </ul>
+    </Alert>
+    <Button
+      label="Generate QAPP"
+      type="success"
+      @click.native="generateQapp"
+      :disabled="completedSections.length !== sections.length"
+    />
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
-import { mapActions } from 'vuex';
 
 export default {
   name: 'Generate',
-  components: { Button },
+  components: { Alert, Button },
   mounted() {
     // Fetch latest qapp data
     this.$store.dispatch('qapp/get', this.$route.params.id);
     this.getQuestions();
+    this.getSections();
+  },
+  computed: {
+    ...mapState('qapp', ['completedSections']),
+    ...mapState('structure', ['sections']),
+    incompleteSections() {
+      return this.sections.filter((v) => this.completedSections.indexOf(v.id) === -1);
+    },
   },
   methods: {
     ...mapActions('structure', ['getSections', 'getQuestions']),
@@ -53,4 +76,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.content {
+  display: inline-block;
+
+  ul {
+    margin-top: 0.3em;
+  }
+}
+</style>

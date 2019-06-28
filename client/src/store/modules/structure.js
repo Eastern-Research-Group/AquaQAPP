@@ -1,11 +1,5 @@
 import axios from 'axios';
-
-const getQuestionIdByName = (questions, name) => {
-  if (questions.length) {
-    return questions.find((q) => q.questionName === name).id;
-  }
-  return null;
-};
+import getQuestionIdByName from '@/utils/getQuestionIdByName';
 
 const state = {
   sections: [],
@@ -22,6 +16,9 @@ const getters = {
   rolesQuestionId(state) {
     return getQuestionIdByName(state.questions, 'roles');
   },
+  locConcernsQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'mapWaterConcerns');
+  },
   concernsDifferByLocQuestionId(state) {
     return getQuestionIdByName(state.questions, 'differByLocation');
   },
@@ -30,6 +27,9 @@ const getters = {
   },
   locationWaterTypeQuestionId(state) {
     return getQuestionIdByName(state.questions, 'waterType');
+  },
+  parametersQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'parameters');
   },
 };
 

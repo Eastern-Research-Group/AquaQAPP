@@ -39,29 +39,29 @@ module.exports = {
     records.push({
       sectionNumber: '6',
       sectionLevel: '1',
-      sectionLabel: 'Organizational History and Mission',
-      sectionName: 'orgHistoryMission',
+      sectionLabel: 'Project Description',
+      sectionName: 'projectDescription',
       sectionSort: 6,
     });
     records.push({
       sectionNumber: '7',
       sectionLevel: '1',
-      sectionLabel: 'Monitoring History and Status',
-      sectionName: 'monitorHistoryStatus',
+      sectionLabel: 'Organizational History and Mission',
+      sectionName: 'orgHistoryMission',
       sectionSort: 7,
     });
     records.push({
       sectionNumber: '8',
       sectionLevel: '1',
-      sectionLabel: 'Project Tasks',
-      sectionName: 'projectTasks',
+      sectionLabel: 'Monitoring History and Status',
+      sectionName: 'monitorHistoryStatus',
       sectionSort: 8,
     });
     records.push({
       sectionNumber: '9',
       sectionLevel: '1',
-      sectionLabel: 'Project Schedule',
-      sectionName: 'projectSchedule',
+      sectionLabel: 'Project Activities',
+      sectionName: 'projectActivities',
       sectionSort: 9,
     });
     records.push({

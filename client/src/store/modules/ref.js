@@ -12,11 +12,25 @@ const state = {
   crosswalks: [],
   parameters: [],
   samplingMethodologies: [],
-  // todo: make this an array of objects with keys for label and component name, then display custom component dynamically
+  locationRationales: [
+    'Spatial coverage of waterbody',
+    'Feature of interest',
+    'Regulatory requirement',
+    'Proximity to impact or suspected pollution source',
+    'Capacity (funding or staffing) Replication of previous sampling efforts (e.g. by DEP or EPA)',
+  ],
+  sampleNumRationales: [
+    'Random or probabilistic',
+    'Accessibility considerations',
+    'Proximity to potential pollutant source',
+    'Replication of previous sampling efforts (e.g. by DEP or EPA)',
+  ],
   customSections: [
     { component: 'PersonnelTable', label: 'Project Organization/Personnel' },
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
+    { component: 'ProjectActivities', label: 'Project Activities' },
+    { component: 'SampleDesign', label: 'Sample Design' },
   ],
 };
 
