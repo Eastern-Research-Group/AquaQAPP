@@ -8,6 +8,7 @@ const state = {
   currentPassword: null,
   newPassword: null,
   confirmNewPassword: null,
+  newOrganization: null,
 };
 
 const mutations = {
@@ -32,6 +33,9 @@ const mutations = {
   SET_TOKEN(state, value) {
     state.resetPasswordToken = value;
   },
+  SET_ORGANIZATION(state, value) {
+    state.newOrganization = value;
+  },
 };
 
 const actions = {
@@ -53,12 +57,13 @@ const actions = {
     await axios.post('auth/resetPassword', postData);
   },
   async saveProfile({ state }) {
-    if (!state.newName || !state.newEmail) {
+    if (!state.newName || !state.newEmail || !state.newOrganization) {
       return;
     }
     const postData = {
       newName: state.newName,
       newEmail: state.newEmail,
+      newOrganization: state.newOrganization,
     };
     await axios.post('auth/user', postData);
   },
