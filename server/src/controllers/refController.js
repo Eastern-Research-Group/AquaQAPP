@@ -1,5 +1,4 @@
 const {
-  Crosswalk,
   RefConcern,
   RefRole,
   RefLocationType,
@@ -79,16 +78,6 @@ module.exports = {
         ],
       });
       res.send(params);
-    } catch (err) {
-      res.status(400).send({
-        err: 'Data unavailable.',
-      });
-    }
-  },
-  async crosswalks(req, res) {
-    try {
-      const refs = await Crosswalk.findAll({});
-      res.send(refs);
     } catch (err) {
       res.status(400).send({
         err: 'Data unavailable.',

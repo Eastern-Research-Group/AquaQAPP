@@ -1,5 +1,4 @@
 import axios from 'axios';
-import reduceCrosswalk from '@/utils/reduceCrosswalk';
 
 const state = {
   concerns: [],
@@ -9,7 +8,6 @@ const state = {
   coordRefSystems: [],
   waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Salt' }, { id: 'Brackish', name: 'Brackish' }],
   yesNo: [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }],
-  crosswalks: [],
   parameters: [],
   samplingMethodologies: [],
   locationRationales: [
@@ -57,13 +55,8 @@ const actions = {
     const coordRefSystems = await axios.get('api/coord-ref-systems');
     commit('SET_REF', { ref: 'coordRefSystems', data: coordRefSystems.data });
 
-    const crosswalks = await axios.get('api/crosswalks');
-    commit('SET_REF', { ref: 'crosswalks', data: crosswalks.data });
-
     const parameters = await axios.get('api/parameters');
     commit('SET_REF', { ref: 'parameters', data: parameters.data });
-
-    commit('SET_REF', { ref: 'samplingMethodologies', data: reduceCrosswalk(crosswalks.data, 'samplingMethodology') });
   },
 };
 
