@@ -97,15 +97,8 @@ export default {
             password: this.password,
             confirmPassword: this.confirmPassword,
           },
-          success: () => {
-            // auto-login after registration
-            this.$auth.login({
-              data: {
-                email: this.email,
-                password: this.password,
-              },
-            });
-          },
+          autoLogin: true,
+          redirect: { name: 'dashboard' },
         });
       } catch (error) {
         this.error = error.response.data.error;
