@@ -15,8 +15,8 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   service: config.service,
   auth: {
-    user: config.db.email,
-    pass: 'Aquaqapp1010',
+    user: config.email,
+    pass: config.emailPassword,
   },
 });
 
@@ -260,8 +260,8 @@ module.exports = {
 
   async user(req, res) {
     try {
-      const { newName, newEmail } = req.body;
-      if (!newEmail || !newName) {
+      const { newName, newEmail, newOrganization } = req.body;
+      if (!newEmail || !newName || !newOrganization) {
         const userJson = req.user.toJSON();
         const token = jwtSignUser(userJson);
         delete userJson.password;
@@ -294,6 +294,7 @@ module.exports = {
         {
           name: newName,
           email: newEmail,
+          organization: newOrganization,
         },
         {
           where: {

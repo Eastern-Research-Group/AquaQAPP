@@ -20,5 +20,6 @@ module.exports = {
       updatedAt: new Date(),
     });
   },
-  down: (queryInterface) => queryInterface.bulkDelete('Qapps', null, {}),
+  // we won't want to delete qapp table data, so just return an empty promise on down method
+  down: () => Promise.resolve(),
 };

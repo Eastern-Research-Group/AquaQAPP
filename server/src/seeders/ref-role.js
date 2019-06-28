@@ -35,4 +35,6 @@ module.exports = {
     });
     return queryInterface.bulkInsert('RefRoles', records);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('RefRoles', null, {}),
 };

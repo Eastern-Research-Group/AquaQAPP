@@ -43,6 +43,7 @@
                     () => {
                       shouldShowProfile = true;
                       error = null;
+                      showSuccessProfileMessage = false;
                     }
                   "
                 >
@@ -83,6 +84,17 @@
                 required
                 placeholder="Enter email"
                 v-model="$auth.user().email"
+                maxlength="255"
+              />
+            </div>
+            <div class="field">
+              <label class="label has-text-white">Organization</label>
+              <input
+                class="input"
+                type="text"
+                required
+                placeholder="Enter organization"
+                v-model="$auth.user().organization"
                 maxlength="255"
               />
             </div>
@@ -221,6 +233,7 @@ export default {
           data: {
             name: this.name,
             email: this.email,
+            organization: this.organization,
           },
         });
         this.showSuccessProfileMessage = true;
@@ -296,6 +309,14 @@ export default {
       },
       set(value) {
         this.$store.commit('user/SET_PASSWORD_CONFIRMATION', value);
+      },
+    },
+    organization: {
+      get() {
+        return this.$store.state.user.newOrganization;
+      },
+      set(value) {
+        this.$store.commit('user/SET_ORGANIZATION', value);
       },
     },
   },

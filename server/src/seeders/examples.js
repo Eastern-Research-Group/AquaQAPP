@@ -18,4 +18,6 @@ module.exports = {
     });
     return queryInterface.bulkInsert('Examples', records);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('Examples', null, {}),
 };

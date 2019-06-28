@@ -6,4 +6,6 @@ module.exports = {
     const json = wqxXmlToJson(path.resolve(__dirname, './data/MonitoringLocationType.xml'));
     return queryInterface.bulkInsert('RefLocationTypes', json);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('RefLocationTypes', null, {}),
 };

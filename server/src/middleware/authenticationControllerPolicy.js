@@ -15,6 +15,7 @@ module.exports = {
         .max(30)
         .required(),
       confirmPassword: Joi.any().valid(Joi.ref('password')),
+      organization: Joi.string(),
     };
 
     const { error } = Joi.validate(req.body, schema);

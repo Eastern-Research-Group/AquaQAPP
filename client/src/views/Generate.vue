@@ -34,8 +34,6 @@ export default {
     this.$store.dispatch('qapp/get', this.$route.params.id).catch(() => {
       this.notFoundError = 'The requested QAPP was not found.';
     });
-    this.getQuestions();
-    this.getSections();
   },
   computed: {
     ...mapState('qapp', ['completedSections']),
@@ -45,7 +43,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions('structure', ['getSections', 'getQuestions']),
     ...mapActions('qapp', ['generate']),
     async generateQapp() {
       await this.generate();

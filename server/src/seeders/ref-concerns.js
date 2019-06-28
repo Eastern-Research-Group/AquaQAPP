@@ -39,4 +39,6 @@ module.exports = {
     });
     return queryInterface.bulkInsert('RefConcerns', records);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('RefConcerns', null, {}),
 };

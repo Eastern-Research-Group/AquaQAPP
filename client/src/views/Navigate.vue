@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
 import Button from '@/components/shared/Button';
@@ -267,17 +267,11 @@ export default {
       return;
     }
 
-    // Fetch structure data from DB to generate sections and questions on the fly
-    this.getQuestions();
-    await this.getSections();
     if (this.sections) {
       this.getFirstUncompletedSectionIndex();
     }
-    // Fetch lookup reference data
-    this.$store.dispatch('ref/getData');
   },
   methods: {
-    ...mapActions('structure', ['getSections', 'getQuestions']),
     changeSection(section) {
       this.dataError = null;
       if (this.hasUnsavedData()) {
