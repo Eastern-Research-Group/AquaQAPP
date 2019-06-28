@@ -8,6 +8,7 @@ module.exports = {
       defaults: {
         name: 'Tester',
         email: 'tester@test.com',
+        organization: 'Test',
         password: 'password',
         createdAt: new Date(),
         updatedAt: new Date(),

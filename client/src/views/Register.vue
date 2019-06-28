@@ -10,6 +10,17 @@
             <input class="input" type="text" required placeholder="Enter name" v-model="name" maxlength="255" />
           </div>
           <div class="field">
+            <label class="label is-size-5">Organization</label>
+            <input
+              class="input"
+              type="text"
+              required
+              placeholder="Enter organization"
+              v-model="organization"
+              maxlength="255"
+            />
+          </div>
+          <div class="field">
             <label class="label is-size-5">Email</label>
             <input class="input" type="email" required placeholder="Enter email" v-model="email" maxlength="255" />
           </div>
@@ -84,6 +95,7 @@ export default {
       password: '',
       error: null,
       confirmPassword: '',
+      organization: '',
     };
   },
   methods: {
@@ -96,6 +108,7 @@ export default {
             confirmEmail: this.confirmEmail,
             password: this.password,
             confirmPassword: this.confirmPassword,
+            organization: this.organization,
           },
           autoLogin: true,
           redirect: { name: 'dashboard' },
