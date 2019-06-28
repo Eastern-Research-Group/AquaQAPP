@@ -259,7 +259,13 @@ export default {
   },
   async mounted() {
     // Fetch latest qapp data
-    await this.$store.dispatch('qapp/get', this.$route.params.id);
+    try {
+      await this.$store.dispatch('qapp/get', this.$route.params.id);
+    } catch (e) {
+      // 241 - handle the "no qapp found" error gracefully
+      this.$router.push({ name: 'dashboard', params: { notFound: '1' } });
+      return;
+    }
 
     if (this.sections) {
       this.getFirstUncompletedSectionIndex();

@@ -78,6 +78,8 @@ import Alert from '@/components/shared/Alert';
 export default {
   components: { SideNav, Button, Table, DeleteWarning, Alert },
   async mounted() {
+    // 241 - handle the "no qapp found" error gracefully
+    if (this.$route.params.notFound === '1') this.addError = 'The requested QAPP was not found.';
     this.$store.commit('qapp/CLEAR_CURRENT_QAPP');
     this.getQapps();
     this.getSections();
