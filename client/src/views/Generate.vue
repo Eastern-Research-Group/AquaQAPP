@@ -30,6 +30,12 @@ export default {
   name: 'Generate',
   components: { Alert, Button },
   mounted() {
+    // Fetch structure data from DB to generate sections and questions on the fly
+    this.$store.dispatch('structure/getSections');
+    this.$store.dispatch('structure/getQuestions');
+    // Fetch lookup reference data
+    this.$store.dispatch('ref/getData');
+
     // Fetch latest qapp data - [241 - handle the "no qapp found" error gracefully]
     this.$store.dispatch('qapp/get', this.$route.params.id).catch(() => {
       this.notFoundError = 'The requested QAPP was not found.';
