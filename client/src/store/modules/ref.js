@@ -3,6 +3,7 @@ import reduceCrosswalk from '@/utils/reduceCrosswalk';
 
 const state = {
   concerns: [],
+  roles: [],
   locationTypes: [],
   collectionMethods: [],
   coordRefSystems: [],
@@ -43,6 +44,9 @@ const actions = {
   async getData({ commit }) {
     const concerns = await axios.get('api/concerns');
     commit('SET_REF', { ref: 'concerns', data: concerns.data });
+
+    const roles = await axios.get('api/roles');
+    commit('SET_REF', { ref: 'roles', data: roles.data.map((role) => role.label) });
 
     const locationTypes = await axios.get('api/location-types');
     commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data });
