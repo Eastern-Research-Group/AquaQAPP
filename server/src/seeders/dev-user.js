@@ -11,6 +11,7 @@ module.exports = {
         password: 'password',
         createdAt: new Date(),
         updatedAt: new Date(),
+        organization: 'Test',
       },
     });
     return User.findOrCreate({
@@ -21,6 +22,7 @@ module.exports = {
         password: 'password',
         createdAt: new Date(),
         updatedAt: new Date(),
+        organization: 'Test',
       },
     });
   },
