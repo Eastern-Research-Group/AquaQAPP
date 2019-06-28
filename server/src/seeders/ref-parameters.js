@@ -6,4 +6,6 @@ module.exports = {
     const json = await csvToJson(path.resolve(__dirname, './data/Parameters.csv'));
     return queryInterface.bulkInsert('RefParameters', json);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('RefParameters', null, {}),
 };

@@ -1,6 +1,6 @@
 module.exports = {
   up(queryInterface) {
-    const records = [];
+    let records = [];
     records.push({
       sectionNumber: '1',
       sectionLevel: '1',
@@ -92,6 +92,13 @@ module.exports = {
       sectionName: 'sampleDesign',
       sectionSort: 13,
     });
+    // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
+    records = records.map((record, index) => ({
+      ...record,
+      id: index + 1,
+    }));
     return queryInterface.bulkInsert('Sections', records);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('Sections', null, {}),
 };

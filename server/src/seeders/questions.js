@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface) => {
-    const records = [];
+    let records = [];
     records.push({
       sectionNumber: '1',
       questionName: 'title',
@@ -11,8 +11,6 @@ module.exports = {
       maxLength: '255',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '2',
@@ -24,8 +22,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -37,8 +33,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -50,8 +44,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 2,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -63,8 +55,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 3,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -76,8 +66,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 4,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -89,8 +77,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: false,
       sectionQuestionSort: 5,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -102,8 +88,6 @@ module.exports = {
       maxLength: '512',
       hasExamples: false,
       sectionQuestionSort: 6,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -116,8 +100,6 @@ module.exports = {
       hasExamples: false,
       refName: 'roles',
       sectionQuestionSort: 7,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -129,8 +111,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 8,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -142,8 +122,6 @@ module.exports = {
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 9,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -155,8 +133,6 @@ module.exports = {
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 10,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -168,8 +144,6 @@ module.exports = {
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 11,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -181,8 +155,6 @@ module.exports = {
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 12,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -194,8 +166,6 @@ module.exports = {
       maxLength: '1000',
       hasExamples: false,
       sectionQuestionSort: 13,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '3',
@@ -207,8 +177,6 @@ module.exports = {
       maxLength: '4096',
       hasExamples: false,
       sectionQuestionSort: 14,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '4',
@@ -222,8 +190,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: true,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '5',
@@ -235,8 +201,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '6',
@@ -248,8 +212,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '7',
@@ -261,8 +223,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '8',
@@ -274,8 +234,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -287,8 +245,6 @@ module.exports = {
       maxLength: '4000',
       hasExamples: true,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -300,8 +256,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 2,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -313,8 +267,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 3,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -326,8 +278,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 4,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -339,8 +289,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 5,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -352,8 +300,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 6,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -365,8 +311,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 7,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -378,8 +322,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 8,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -391,8 +333,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 9,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -404,8 +344,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 10,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -417,8 +355,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 11,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -430,8 +366,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 12,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '9',
@@ -443,8 +377,6 @@ module.exports = {
       maxLength: '75',
       hasExamples: true,
       sectionQuestionSort: 13,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '10',
@@ -457,8 +389,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 1,
       refName: 'concerns',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '10',
@@ -471,8 +401,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 2,
       refName: 'yesNo',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -484,8 +412,6 @@ module.exports = {
       maxLength: '35',
       hasExamples: false,
       sectionQuestionSort: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -497,8 +423,6 @@ module.exports = {
       maxLength: '255',
       hasExamples: false,
       sectionQuestionSort: 2,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -510,8 +434,6 @@ module.exports = {
       maxLength: '12',
       hasExamples: false,
       sectionQuestionSort: 3,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -523,8 +445,6 @@ module.exports = {
       maxLength: '12',
       hasExamples: false,
       sectionQuestionSort: 4,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -537,8 +457,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 5,
       refName: 'waterTypes',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -551,8 +469,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 6,
       refName: 'concerns',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -565,8 +481,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 7,
       refName: 'locationTypes',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -579,8 +493,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 8,
       refName: 'collectionMethods',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '11',
@@ -593,8 +505,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 9,
       refName: 'coordRefSystems',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '12',
@@ -607,8 +517,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 1,
       refName: 'parameters',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '13',
@@ -621,8 +529,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 1,
       refName: 'parameters',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '13',
@@ -634,8 +540,6 @@ module.exports = {
       maxLength: '4',
       hasExamples: false,
       sectionQuestionSort: 2,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '13',
@@ -648,8 +552,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 3,
       refName: 'locationRationales',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '13',
@@ -662,8 +564,6 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 4,
       refName: 'sampleNumRationales',
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '13',
@@ -675,8 +575,6 @@ module.exports = {
       maxLength: '255',
       hasExamples: false,
       sectionQuestionSort: 5,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     records.push({
       sectionNumber: '13',
@@ -688,9 +586,14 @@ module.exports = {
       maxLength: '255',
       hasExamples: false,
       sectionQuestionSort: 6,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
+    // manually set ids so they always start at 1 (question ids are used when saving data so must be consistent)
+    records = records.map((record, index) => ({
+      ...record,
+      id: index + 1,
+    }));
     return queryInterface.bulkInsert('Questions', records);
   },
+
+  down: (queryInterface) => queryInterface.bulkDelete('Questions', null, {}),
 };

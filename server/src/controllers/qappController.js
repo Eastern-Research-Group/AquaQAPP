@@ -83,7 +83,7 @@ module.exports = {
   },
   async store(req, res) {
     try {
-      const question = await Question.findOne({ where: { id: 1 } });
+      const question = await Question.findOne({ where: { questionName: 'title' } });
       const error = checkFieldLength(question, req.body);
       if (error !== null) {
         res.status(400).send({ error });

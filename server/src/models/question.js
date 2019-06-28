@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       sectionQuestionSort: DataTypes.INTEGER,
       refName: DataTypes.STRING,
     },
-    {}
+    {
+      timestamps: false,
+    }
   );
   /* Question.associate = function(models) {
     // associations can be defined here

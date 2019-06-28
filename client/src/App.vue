@@ -25,5 +25,12 @@ export default {
     InfoHeader,
     ProgressBar,
   },
+  created() {
+    // Fetch structure data from DB to generate sections and questions on the fly
+    this.$store.dispatch('structure/getSections');
+    this.$store.dispatch('structure/getQuestions');
+    // Fetch lookup reference data
+    this.$store.dispatch('ref/getData');
+  },
 };
 </script>
