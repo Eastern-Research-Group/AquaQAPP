@@ -258,6 +258,12 @@ export default {
     },
   },
   async mounted() {
+    // Fetch structure data from DB to generate sections and questions on the fly
+    await this.$store.dispatch('structure/getSections');
+    this.$store.dispatch('structure/getQuestions');
+    // Fetch lookup reference data
+    this.$store.dispatch('ref/getData');
+
     // Fetch latest qapp data
     try {
       await this.$store.dispatch('qapp/get', this.$route.params.id);
