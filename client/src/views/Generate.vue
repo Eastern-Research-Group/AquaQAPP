@@ -1,20 +1,23 @@
 <template>
-  <div class="content">
-    <Alert v-if="completedSections.length !== sections.length" type="warning">
-      <p>All QAPP sections must be marked complete before generating.</p>
-      <p>Please complete the following sections to continue:</p>
-      <ul>
-        <li v-for="section in incompleteSections" :key="section.id">
-          {{ section.sectionLabel }}
-        </li>
-      </ul>
-    </Alert>
-    <Button
-      label="Generate QAPP"
-      type="success"
-      @click.native="generateQapp"
-      :disabled="completedSections.length !== sections.length"
-    />
+  <div>
+    <Alert v-if="notFoundError !== null" :message="notFoundError" type="error"></Alert>
+    <div class="content" v-else>
+      <Alert v-if="completedSections.length !== sections.length" type="warning">
+        <p>All QAPP sections must be marked complete before generating.</p>
+        <p>Please complete the following sections to continue:</p>
+        <ul>
+          <li v-for="section in incompleteSections" :key="section.id">
+            {{ section.sectionLabel }}
+          </li>
+        </ul>
+      </Alert>
+      <Button
+        label="Generate QAPP"
+        type="success"
+        @click.native="generateQapp"
+        :disabled="completedSections.length !== sections.length"
+      />
+    </div>
   </div>
 </template>
 
@@ -27,8 +30,10 @@ export default {
   name: 'Generate',
   components: { Alert, Button },
   mounted() {
-    // Fetch latest qapp data
-    this.$store.dispatch('qapp/get', this.$route.params.id);
+    // Fetch latest qapp data - [241 - handle the "no qapp found" error gracefully]
+    this.$store.dispatch('qapp/get', this.$route.params.id).catch(() => {
+      this.notFoundError = 'The requested QAPP was not found.';
+    });
     this.getQuestions();
     this.getSections();
   },
@@ -72,6 +77,11 @@ export default {
         window.URL.revokeObjectURL(data);
       }, 100);
     },
+  },
+  data() {
+    return {
+      notFoundError: null,
+    };
   },
 };
 </script>
