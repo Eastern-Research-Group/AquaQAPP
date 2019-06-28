@@ -77,7 +77,7 @@ const getters = {
             dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
 
             if (typeof dataObj[key][0] === 'object') {
-              let nutrientsArray = dataObj[key].filter(
+              const nutrientsArray = dataObj[key].filter(
                 (p) =>
                   p.parameter === 'Total nitrogen' ||
                   p.parameter === 'Ammonium-N' ||
@@ -86,9 +86,9 @@ const getters = {
                   p.parameter === 'Orthophosphate'
               );
               if (nutrientsArray.length > 0) {
-                dataObj['hasNutrients'] = 'Y';
+                dataObj.hasNutrients = 'Y';
               } else {
-                dataObj['hasNutrients'] = 'N';
+                dataObj.hasNutrients = 'N';
               }
             }
           }
