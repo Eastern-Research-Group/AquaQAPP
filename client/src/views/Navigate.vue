@@ -51,12 +51,7 @@
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
               <label class="label is-size-4">{{ question.questionLabel }}</label>
-              <p class="has-text-weight-bold" v-if="question.dataEntryInstructions">Instructions:</p>
-              <div
-                class="instructions"
-                v-if="question.dataEntryInstructions"
-                v-html="question.dataEntryInstructions"
-              ></div>
+              <p v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions" />
               <input
                 v-if="question.dataEntryType === 'text'"
                 class="input"
@@ -235,6 +230,7 @@ export default {
       'concernsDifferByLocQuestionId',
       'locationQuestionId',
       'parametersQuestionId',
+      'locConcernsQuestionId',
     ]),
     currentQuestions() {
       return this.questions
@@ -251,13 +247,8 @@ export default {
     },
     locationConcerns() {
       let concerns = [];
-      const locationConcernQuestion = this.questions.find((q) => q.questionLabel === 'Water Quality Concerns');
-      if (
-        locationConcernQuestion &&
-        locationConcernQuestion.section.sectionLabel === 'Monitoring Locations' &&
-        this.qappData[locationConcernQuestion.id]
-      ) {
-        this.qappData[locationConcernQuestion.id].forEach((location) => {
+      if (this.qappData[this.locConcernsQuestionId]) {
+        this.qappData[this.locConcernsQuestionId].forEach((location) => {
           if (location.value) {
             concerns = concerns.concat(location.value.split(','));
           }
@@ -477,10 +468,6 @@ export default {
 
 .notification {
   margin-top: 1em;
-}
-
-.instructions {
-  display: inline;
 }
 
 textarea {

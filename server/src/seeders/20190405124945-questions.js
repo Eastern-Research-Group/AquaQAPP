@@ -436,7 +436,7 @@ module.exports = {
       sectionNumber: '10',
       questionName: 'waterConcerns',
       questionLabel: 'Water Quality Concerns',
-      dataEntryInstructions: 'What are your water quality concerns? Select all that apply.',
+      dataEntryInstructions: 'Select all that apply.',
       dataEntryTip: '',
       dataEntryType: 'checkboxBtn',
       maxLength: '100',

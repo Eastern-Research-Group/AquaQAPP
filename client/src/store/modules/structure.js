@@ -12,6 +12,9 @@ const getters = {
   concernsQuestionId(state) {
     return getQuestionIdByName(state.questions, 'waterConcerns');
   },
+  locConcernsQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'mapWaterConcerns');
+  },
   concernsDifferByLocQuestionId(state) {
     return getQuestionIdByName(state.questions, 'differByLocation');
   },
