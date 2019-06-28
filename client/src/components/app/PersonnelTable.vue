@@ -19,12 +19,7 @@
       <form @submit.prevent="submitPersonnelData">
         <div class="field" v-for="question in questions" :key="question.id">
           <label
-            v-if="
-              question.dataEntryType === 'text' ||
-                question.dataEntryType === 'largeText' ||
-                question.dataEntryType === 'email' ||
-                question.dataEntryType === 'tel'
-            "
+            v-if="['text', 'largeText', 'email', 'tel', 'select'].indexOf(question.dataEntryType) !== -1"
             class="label"
             :for="`question${question.id}`"
             >{{ question.questionLabel }}</label
@@ -95,12 +90,19 @@
             />
             <label :for="question.id">{{ question.questionLabel }}</label>
           </div>
+          <div v-if="question.dataEntryType === 'select'">
+            <multiselect
+              v-model="pendingData[question.id]"
+              :options="roles"
+              :multiple="true"
+              :taggable="true"
+              tag-placeholder="Add this as a new role"
+              :placeholder="`Select roles, or type to add other roles`"
+              @tag="addRole($event, question)"
+            ></multiselect>
+          </div>
         </div>
-        <Button
-          :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
-          :type="shouldShowEdit ? 'primary' : 'success'"
-          submit
-        />
+        <Button label="Save" :type="shouldShowEdit ? 'primary' : 'success'" submit />
       </form>
     </SideNav>
     <DeleteWarning
@@ -114,11 +116,13 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
+import '../../../static/bulma-multiselect.css';
 
 export default {
   name: 'PersonnelTable',
@@ -128,7 +132,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning },
+  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
   data() {
     return {
       isEnteringInfo: false,
@@ -146,8 +150,8 @@ export default {
           label: 'Name',
         },
         {
-          key: 'Title/Position',
-          label: 'Title/Position',
+          key: 'Title',
+          label: 'Title',
         },
         {
           key: 'Include in distribution list?',
@@ -168,12 +172,23 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
+    ...mapState('ref', ['roles']),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['rolesQuestionId']),
   },
   mounted() {
     this.refreshPersonnelData();
   },
   methods: {
+    addRole(value, question) {
+      const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
+      let newVal = this.pendingData[question.id];
+      // if values already exist for this question, push entered value into array, otherwise set as array
+      if (newVal) newVal.push(enteredVal);
+      else newVal = [enteredVal];
+      // set pending data object to the new value
+      this.$set(this.pendingData, question.id, newVal);
+    },
     onEdit(row) {
       this.selectedPersonnel = row;
       this.questions.forEach((q) => {
@@ -222,7 +237,7 @@ export default {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedPersonnel.valueId,
-        values: this.pendingData,
+        values: this.cleanData(this.pendingData),
       });
       this.refreshPersonnelData();
       this.isEnteringInfo = false;
@@ -244,7 +259,7 @@ export default {
         valueId: newValueId,
       });
 
-      this.$emit('saveData', null, newValueId, this.pendingData);
+      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       this.isEnteringInfo = false;
       this.pendingData = {};
@@ -277,9 +292,12 @@ export default {
           datum.forEach((personnelField) => {
             if (typeof personnel[personnelField.valueId] === 'undefined') personnel[personnelField.valueId] = {};
             if (question.refName) {
-              personnel[personnelField.valueId][key] = this[question.refName].find(
-                (r) => r.id === parseInt(personnelField.value, 10)
-              );
+              const ref = this[question.refName].find((r) => r.id === parseInt(personnelField.value, 10));
+              if (ref) {
+                personnel[personnelField.valueId][key] = ref;
+              } else if (personnelField.value) {
+                personnel[personnelField.valueId][key] = personnelField.value.split(',');
+              }
             } else {
               personnel[personnelField.valueId][key] = personnelField.value;
             }
@@ -296,6 +314,26 @@ export default {
           // ['Include in the approval list?']: row['Include in the approval list?'] === 'Yes' ? 'X' : '',
         });
       });
+    },
+    cleanData() {
+      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
+      const cleanedData = {};
+      Object.keys(this.pendingData).forEach((qId) => {
+        if (this.pendingData[qId] !== null && typeof this.pendingData[qId] === 'object') {
+          // if array, store comma separate list of codes
+          if (Array.isArray(this.pendingData[qId])) {
+            const idArray = this.pendingData[qId].map((datum) => {
+              return datum.id || datum;
+            });
+            cleanedData[qId] = idArray.join(',');
+          } else {
+            cleanedData[qId] = this.pendingData[qId].id;
+          }
+        } else {
+          cleanedData[qId] = this.pendingData[qId];
+        }
+      });
+      return cleanedData;
     },
   },
 };

@@ -11,12 +11,16 @@ const state = {
   sections: [],
   questions: [],
   concerns: [],
+  roles: [],
   isFetching: false,
 };
 
 const getters = {
   concernsQuestionId(state) {
     return getQuestionIdByName(state.questions, 'waterConcerns');
+  },
+  rolesQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'roles');
   },
   concernsDifferByLocQuestionId(state) {
     return getQuestionIdByName(state.questions, 'differByLocation');
@@ -38,6 +42,9 @@ const mutations = {
   },
   SET_CONCERNS(state, value) {
     state.concerns = value;
+  },
+  SET_ROLES(state, value) {
+    state.roles = value;
   },
   SET_IS_FETCHING(state, value) {
     state.isFetching = value;
@@ -67,6 +74,14 @@ const actions = {
 
     const concerns = await axios.get('api/concerns');
     commit('SET_CONCERNS', concerns.data);
+    commit('SET_IS_FETCHING', false);
+  },
+  async getRoles({ commit }) {
+    commit('SET_ROLES', []);
+    commit('SET_IS_FETCHING', true);
+
+    const roles = await axios.get('api/roles');
+    commit('SET_ROLES', roles.data);
     commit('SET_IS_FETCHING', false);
   },
 };

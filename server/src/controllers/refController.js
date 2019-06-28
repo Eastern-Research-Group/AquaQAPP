@@ -1,6 +1,7 @@
 const {
   Crosswalk,
   RefConcern,
+  RefRole,
   RefLocationType,
   RefHorizontalCollectionMethod,
   RefHorizontalCoordRefSystem,
@@ -12,6 +13,16 @@ module.exports = {
     try {
       const concerns = await RefConcern.findAll({});
       res.send(concerns);
+    } catch (err) {
+      res.status(400).send({
+        err: 'Data unavailable.',
+      });
+    }
+  },
+  async roles(req, res) {
+    try {
+      const roles = await RefRole.findAll({});
+      res.send(roles);
     } catch (err) {
       res.status(400).send({
         err: 'Data unavailable.',

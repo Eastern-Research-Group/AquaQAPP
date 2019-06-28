@@ -48,8 +48,9 @@ module.exports = (app) => {
   // generate routes
   app.post('/api/generate', isAuthenticated, generateController.generate);
 
-  // referencce routes
+  // reference routes
   app.get('/api/concerns', isAuthenticated, refController.concerns);
+  app.get('/api/roles', isAuthenticated, refController.roles);
   app.get('/api/location-types', isAuthenticated, refController.locationTypes);
   app.get('/api/collection-methods', isAuthenticated, refController.collectionMethods);
   app.get('/api/coord-ref-systems', isAuthenticated, refController.coordRefSystems);
