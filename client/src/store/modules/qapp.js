@@ -66,7 +66,8 @@ const getters = {
       } else if (key && key === 'parameters') {
         const paramIds = datum.value.split(',');
         paramIds.forEach((id) => {
-          if (isNaN(id)) { // eslint-disable-line
+          if (isNaN(id)) {
+            // eslint-disable-line
             // If id is not a number, that means it was entered by user as "Other". Place these in separate array
             if (!dataObj.otherParameters) dataObj.otherParameters = [];
             dataObj.otherParameters.push(id);
@@ -74,6 +75,22 @@ const getters = {
             // Otherwise, find the full parameter data object and store in "parameters" array
             if (!dataObj[key]) dataObj[key] = [];
             dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
+
+            if (typeof dataObj[key][0] === 'object') {
+              let nutrientsArray = dataObj[key].filter(
+                (p) =>
+                  p.parameter === 'Total nitrogen' ||
+                  p.parameter === 'Ammonium-N' ||
+                  p.parameter === 'Nitrate-Nitrite-N' ||
+                  p.parameter === 'Total phosphorus' ||
+                  p.parameter === 'Orthophosphate'
+              );
+              if (nutrientsArray.length > 0) {
+                dataObj['hasNutrients'] = 'Y';
+              } else {
+                dataObj['hasNutrients'] = 'N';
+              }
+            }
           }
         });
       } else if (key) {
