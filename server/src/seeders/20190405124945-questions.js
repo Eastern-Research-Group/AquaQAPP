@@ -43,7 +43,7 @@ module.exports = {
     records.push({
       sectionNumber: '3',
       questionName: 'titlePosition',
-      questionLabel: 'Title/Position',
+      questionLabel: 'Title',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -107,6 +107,20 @@ module.exports = {
     });
     records.push({
       sectionNumber: '3',
+      questionName: 'roles',
+      questionLabel: 'Roles',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'select',
+      maxLength: '4000',
+      hasExamples: false,
+      refName: 'roles',
+      sectionQuestionSort: 7,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    records.push({
+      sectionNumber: '3',
       questionName: 'address',
       questionLabel: 'Address',
       dataEntryInstructions: '',
@@ -114,7 +128,7 @@ module.exports = {
       dataEntryType: 'text',
       maxLength: '4000',
       hasExamples: false,
-      sectionQuestionSort: 7,
+      sectionQuestionSort: 8,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -127,7 +141,7 @@ module.exports = {
       dataEntryType: 'text',
       maxLength: '1000',
       hasExamples: false,
-      sectionQuestionSort: 8,
+      sectionQuestionSort: 9,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -140,7 +154,7 @@ module.exports = {
       dataEntryType: 'text',
       maxLength: '1000',
       hasExamples: false,
-      sectionQuestionSort: 9,
+      sectionQuestionSort: 10,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -153,7 +167,7 @@ module.exports = {
       dataEntryType: 'text',
       maxLength: '1000',
       hasExamples: false,
-      sectionQuestionSort: 10,
+      sectionQuestionSort: 11,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -166,7 +180,7 @@ module.exports = {
       dataEntryType: 'tel',
       maxLength: '1000',
       hasExamples: false,
-      sectionQuestionSort: 11,
+      sectionQuestionSort: 12,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -179,7 +193,7 @@ module.exports = {
       dataEntryType: 'email',
       maxLength: '1000',
       hasExamples: false,
-      sectionQuestionSort: 12,
+      sectionQuestionSort: 13,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
