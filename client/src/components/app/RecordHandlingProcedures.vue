@@ -58,7 +58,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import Multiselect from 'vue-multiselect';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
@@ -72,7 +71,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
+  components: { Button, SideNav, Table, DeleteWarning },
   data() {
     return {
       isEnteringInfo: false,
