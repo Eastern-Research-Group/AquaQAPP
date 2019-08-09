@@ -609,6 +609,72 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 2,
     });
+    records.push({
+      sectionNumber: '15',
+      questionName: 'dataSource',
+      questionLabel: 'Data Source',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 1,
+    });
+    records.push({
+      sectionNumber: '15',
+      questionName: 'waterbodyType',
+      questionLabel: 'Waterbody Type',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 2,
+    });
+    records.push({
+      sectionNumber: '15',
+      questionName: 'sampleDataParams',
+      questionLabel: 'Sample Data Parameters',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '2000',
+      hasExamples: false,
+      sectionQuestionSort: 3,
+    });
+    records.push({
+      sectionNumber: '15',
+      questionName: 'sampleDesign',
+      questionLabel: 'Sample Design',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 4,
+    });
+    records.push({
+      sectionNumber: '15',
+      questionName: 'geographicArea',
+      questionLabel: 'Geographic Area',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 5,
+    });
+    records.push({
+      sectionNumber: '15',
+      questionName: 'webDataLinks',
+      questionLabel: 'Web Data Links',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '2000',
+      hasExamples: false,
+      sectionQuestionSort: 6,
+    });
     // manually set ids so they always start at 1 (question ids are used when saving data so must be consistent)
     records = records.map((record, index) => ({
       ...record,

@@ -99,6 +99,13 @@ module.exports = {
       sectionName: 'recordHandling',
       sectionSort: 14,
     });
+    records.push({
+      sectionNumber: '15',
+      sectionLevel: '1',
+      sectionLabel: 'Secondary Data',
+      sectionName: 'secondaryData',
+      sectionSort: 15,
+    });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({
       ...record,
