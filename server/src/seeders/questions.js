@@ -587,6 +587,28 @@ module.exports = {
       hasExamples: false,
       sectionQuestionSort: 6,
     });
+    records.push({
+      sectionNumber: '14',
+      questionName: 'activity',
+      questionLabel: 'Activity',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'text',
+      maxLength: '75',
+      hasExamples: false,
+      sectionQuestionSort: 1,
+    });
+    records.push({
+      sectionNumber: '14',
+      questionName: 'procedures',
+      questionLabel: 'Procedures',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '255',
+      hasExamples: false,
+      sectionQuestionSort: 2,
+    });
     // manually set ids so they always start at 1 (question ids are used when saving data so must be consistent)
     records = records.map((record, index) => ({
       ...record,
