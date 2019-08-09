@@ -190,6 +190,7 @@ import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
 import SampleDesign from '@/components/app/SampleDesign';
+import RecordHandlingProcedures from '@/components/app/RecordHandlingProcedures';
 
 export default {
   components: {
@@ -207,6 +208,7 @@ export default {
     ProjectActivities,
     LoadingIndicator,
     SampleDesign,
+    RecordHandlingProcedures,
   },
   data() {
     return {
@@ -358,10 +360,8 @@ export default {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
-          this.currentSection.sectionLabel !== 'Monitoring Locations' &&
-          this.currentSection.sectionLabel !== 'Project Organization/Personnel' &&
-          this.currentSection.sectionLabel !== 'Project Activities' &&
-          this.currentSection.sectionLabel !== 'Sample Design'
+          !this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
+          this.currentSection.sectionLabel === 'Parameters'
         ) {
           this.saveData();
         }
