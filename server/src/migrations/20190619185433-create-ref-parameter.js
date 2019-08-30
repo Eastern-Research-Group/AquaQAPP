@@ -16,11 +16,17 @@ module.exports = {
       method: {
         type: Sequelize.STRING,
       },
+      waterType: {
+        type: Sequelize.STRING,
+      },
       fresh: {
         type: Sequelize.BOOLEAN,
       },
       salt: {
         type: Sequelize.BOOLEAN,
+      },
+      monitoringCategory: {
+        type: Sequelize.STRING,
       },
       units: {
         type: Sequelize.STRING,
