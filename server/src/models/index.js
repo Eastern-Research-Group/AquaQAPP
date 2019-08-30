@@ -36,13 +36,13 @@ db.Qapp.hasMany(db.CompletedQappSection, { foreignKey: 'qappId', as: 'completedS
 db.Question.hasMany(db.Example, { foreignKey: 'questionId', as: 'examples' });
 db.RefParameter.belongsToMany(db.RefConcern, {
   through: 'RefParameterConcerns',
-  foreignKey: 'refConcernId',
+  foreignKey: 'refParameterId',
   timestamps: false,
   as: 'concerns',
 });
 db.RefConcern.belongsToMany(db.RefParameter, {
   through: 'RefParameterConcerns',
-  foreignKey: 'refParameterId',
+  foreignKey: 'refConcernId',
   timestamps: false,
   as: 'parameters',
 });
