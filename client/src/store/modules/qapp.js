@@ -89,6 +89,13 @@ const getters = {
               } else {
                 dataObj.hasNutrients = 'N';
               }
+              dataObj.parameters.forEach((p) => {
+                if (p.fresh) {
+                  p.waterType = 'fresh';
+                } else if (p.salt) {
+                  p.waterType = 'salt';
+                }
+              });
             }
           }
         });
