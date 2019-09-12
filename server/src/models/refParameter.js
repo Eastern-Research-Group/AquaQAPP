@@ -47,6 +47,9 @@ module.exports = (sequelize, DataTypes) => {
       mdl: {
         type: DataTypes.STRING,
       },
+      monitoringCategory: {
+        type: DataTypes.STRING,
+      },
       labName: {
         type: DataTypes.STRING,
       },
