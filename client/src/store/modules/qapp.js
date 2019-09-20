@@ -76,19 +76,6 @@ const getters = {
             dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
 
             if (typeof dataObj[key][0] === 'object') {
-              const nutrientsArray = dataObj[key].filter(
-                (p) =>
-                  p.parameter === 'Total nitrogen' ||
-                  p.parameter === 'Ammonium-N' ||
-                  p.parameter === 'Nitrate-Nitrite-N' ||
-                  p.parameter === 'Total phosphorus' ||
-                  p.parameter === 'Orthophosphate'
-              );
-              if (nutrientsArray.length > 0) {
-                dataObj.hasNutrients = 'Y';
-              } else {
-                dataObj.hasNutrients = 'N';
-              }
               dataObj.parameters.forEach((p) => {
                 if (p.fresh) {
                   p.waterType = 'fresh';
