@@ -74,16 +74,6 @@ const getters = {
             // Otherwise, find the full parameter data object and store in "parameters" array
             if (!dataObj[key]) dataObj[key] = [];
             dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
-
-            if (typeof dataObj[key][0] === 'object') {
-              dataObj.parameters.forEach((p) => {
-                if (p.fresh) {
-                  p.waterType = 'fresh';
-                } else if (p.salt) {
-                  p.waterType = 'salt';
-                }
-              });
-            }
           }
         });
       } else if (key) {
