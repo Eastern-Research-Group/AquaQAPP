@@ -184,8 +184,7 @@ module.exports = {
       questionLabel: 'Problem Definition',
       dataEntryInstructions:
         'State the specific environmental problem to be investigated. Include sufficient background information to provide a historical and scientific perspective for the current project.',
-      dataEntryTip:
-        '<b>Be sure to:</b> <li>Check the text carefully</li><li>Change the wording if it does not make sense to you.</li><p>ITEP has assembled a website of resources including example SPSs technical reports, spreadsheets, databases, EPA laws, programs and links.</p>',
+      dataEntryTip: '',
       dataEntryType: 'largeText',
       maxLength: '4000',
       hasExamples: true,
