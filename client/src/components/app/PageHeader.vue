@@ -37,7 +37,13 @@
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <Button label="Generate" type="success" v-if="$route.name === 'navigate'" @click.native="generateQapp" />
+              <Button
+                label="Generate"
+                type="success"
+                v-if="$route.name === 'navigate'"
+                @click.native="generateQapp"
+                :disabled="completedSections.length < 1"
+              />
             </div>
           </div>
         </div>
@@ -47,6 +53,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Button from '@/components/shared/Button';
 
 export default {
@@ -56,6 +63,9 @@ export default {
     return {
       isActive: false,
     };
+  },
+  computed: {
+    ...mapState('qapp', ['completedSections']),
   },
   methods: {
     navigateTo(route) {

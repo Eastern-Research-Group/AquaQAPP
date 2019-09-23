@@ -2,7 +2,8 @@
   <div>
     <Alert v-if="notFoundError !== null" :message="notFoundError" type="error"></Alert>
     <div class="content" v-else>
-      <Alert v-if="completedSections.length !== sections.length" type="warning">
+      <LoadingIndicator v-if="this.completedSections.length === 0" message="Loading..." class="dark" />
+      <Alert v-else-if="completedSections.length !== sections.length" type="warning">
         <p>All QAPP sections must be marked complete before generating.</p>
         <p>Please complete the following sections to continue:</p>
         <ul>
@@ -25,10 +26,11 @@
 import { mapActions, mapState } from 'vuex';
 import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
+import LoadingIndicator from '@/components/shared/LoadingIndicator';
 
 export default {
   name: 'Generate',
-  components: { Alert, Button },
+  components: { Alert, Button, LoadingIndicator },
   mounted() {
     // Fetch structure data from DB to generate sections and questions on the fly
     this.$store.dispatch('structure/getSections');
