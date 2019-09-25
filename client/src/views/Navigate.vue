@@ -465,7 +465,7 @@ export default {
     },
     cancelYesNo() {
       this.shouldDisplayConcernsWarning = false;
-      return (this.pendingData[this.concernsDifferByLocQuestionId] = 'Y');
+      this.pendingData[this.concernsDifferByLocQuestionId] = 'Y';
     },
   },
 };
