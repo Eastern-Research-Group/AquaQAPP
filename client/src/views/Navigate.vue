@@ -91,14 +91,6 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               ></textarea>
-              <HoverText
-                v-if="question.refName === 'concerns' && locationConcerns.length"
-                hoverId="concernsInfo"
-                linkText="Why are some concerns disabled?"
-              >
-                There are monitoring locations associated with these concerns. You must delete these locations before
-                the concerns can be removed.
-              </HoverText>
               <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
                 <CheckboxButton
                   v-for="option in getOptions(question.refName)"
@@ -109,8 +101,8 @@
                   :singleSelectId="question.questionLabel"
                   :value="option.code"
                   :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
-                  :disabled="locationConcerns.indexOf(option.code) > -1"
                   @check="updatePendingData($event, question)"
+                  @click.native="triggerConcernsWarningModal(option.code)"
                 />
               </div>
               <div class="btn-container has-text-right">
@@ -168,6 +160,16 @@
           <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
         </div>
       </Modal>
+      <Modal v-if="shouldDisplayConcernsWarning" @close="closeConcernsWarningModal">
+        <Alert
+          message="Selecting No will remove all selected concerns from existing monitoring locations."
+          type="warning"
+        />
+        <div class="btn-container">
+          <Button label="Continue" type="success" @click.native="removeConcerns" />
+          <Button label="Cancel" type="danger" @click.native="cancelYesNo" />
+        </div>
+      </Modal>
     </div>
   </div>
 </template>
@@ -222,13 +224,14 @@ export default {
       pendingSection: null,
       sectionNotAvailableMessage: '',
       dataError: null,
+      shouldDisplayConcernsWarning: false,
     };
   },
   computed: {
     ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
-    ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('qapp', ['qappData', 'wordDocData']),
     ...mapGetters('structure', [
       'concernsQuestionId',
       'concernsDifferByLocQuestionId',
@@ -248,17 +251,6 @@ export default {
           }
           return 0;
         });
-    },
-    locationConcerns() {
-      let concerns = [];
-      if (this.qappData[this.locConcernsQuestionId]) {
-        this.qappData[this.locConcernsQuestionId].forEach((location) => {
-          if (location.value) {
-            concerns = concerns.concat(location.value.split(','));
-          }
-        });
-      }
-      return concerns;
     },
   },
   async mounted() {
@@ -447,6 +439,33 @@ export default {
     closeUnsavedWarningModal() {
       this.shouldDisplayUnsavedWarning = false;
       this.pendingSection = null;
+    },
+    closeConcernsWarningModal() {
+      this.shouldDisplayConcernsWarning = false;
+    },
+    triggerConcernsWarningModal(value) {
+      if (value === 'N' && !!this.qappData[this.concernsQuestionId]) {
+        this.shouldDisplayConcernsWarning = true;
+      }
+    },
+    async removeConcerns() {
+      this.shouldDisplayConcernsWarning = false;
+      this.dataError = null;
+      await this.$store
+        .dispatch('qapp/save', {
+          qappId: this.$store.state.qapp.id,
+          questionId: this.locConcernsQuestionId,
+          value: null,
+          valueId: 'remove_all_concerns',
+        })
+        .catch((error) => {
+          if (this.dataError === null) this.dataError = error.response.data.error;
+          else this.dataError += `<br/>${error.response.data.error}`;
+        });
+    },
+    cancelYesNo() {
+      this.shouldDisplayConcernsWarning = false;
+      return (this.pendingData[this.concernsDifferByLocQuestionId] = 'Y');
     },
   },
 };

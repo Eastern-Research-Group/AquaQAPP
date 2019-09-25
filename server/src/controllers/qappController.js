@@ -164,17 +164,28 @@ module.exports = {
         res.status(400).send({ error });
         return;
       }
-      // check if record already exists with same qapp id and question id
-      let qappDatum = await QappDatum.findOne({
-        where: { qappId: req.body.qappId, questionId: req.body.questionId, valueId: req.body.valueId },
-      });
 
-      // if record exists, update, otherwise create
-      if (qappDatum) {
-        qappDatum = await qappDatum.update(req.body);
+      let qappDatum = '';
+
+      if (req.body.valueId === 'remove_all_concerns') {
+        qappDatum = await QappDatum.findAll({
+          where: { qappId: req.body.qappId, questionId: req.body.questionId },
+        });
+        qappDatum = await QappDatum.update({ value: req.body.value }, { where: { questionId: req.body.questionId } });
       } else {
-        qappDatum = await QappDatum.create(req.body);
+        qappDatum = await QappDatum.findOne({
+          where: { qappId: req.body.qappId, questionId: req.body.questionId, valueId: req.body.valueId },
+        });
+        // check if record already exists with same qapp id and question id
+
+        // if record exists, update, otherwise create
+        if (qappDatum) {
+          qappDatum = await qappDatum.update(req.body);
+        } else {
+          qappDatum = await QappDatum.create(req.body);
+        }
       }
+
       // redirect to return latest QAPP with data
       res.redirect(`/api/qapps/${req.body.qappId}`);
     } catch (err) {
