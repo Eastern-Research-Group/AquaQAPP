@@ -146,10 +146,10 @@ export default {
   methods: {
     getFilteredParams(params, waterType) {
       if (waterType === 'Fresh') {
-        return params.filter((p) => p.fresh);
+        return params.filter((p) => p.waterType === 'Freshwater');
       }
       // salt or brackish types are both indicated by the "salt" boolean column
-      return params.filter((p) => p.salt);
+      return params.filter((p) => p.waterType === 'Saltwater');
     },
     getWaterTypes() {
       let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
