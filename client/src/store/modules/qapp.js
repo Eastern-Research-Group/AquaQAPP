@@ -1,4 +1,5 @@
 import axios from 'axios';
+import format from 'date-fns/format';
 
 const state = {
   id: null,
@@ -66,7 +67,8 @@ const getters = {
       } else if (key && key === 'parameters') {
         const paramIds = datum.value.split(',');
         paramIds.forEach((id) => {
-          if (isNaN(id)) { // eslint-disable-line
+          if (isNaN(id)) {
+            // eslint-disable-line
             // If id is not a number, that means it was entered by user as "Other". Place these in separate array
             if (!dataObj.otherParameters) dataObj.otherParameters = [];
             dataObj.otherParameters.push(id);
@@ -89,6 +91,9 @@ const getters = {
         dataObj[key] = dataObj[key].filter((arrItem) => arrItem);
       }
     });
+
+    dataObj.dateGenerated = format(new Date(), 'MMMM do, yyyy');
+
     return dataObj;
   },
   progress(state, getters, rootState) {
