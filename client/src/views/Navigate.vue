@@ -91,6 +91,14 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               ></textarea>
+              <HoverText
+                v-if="question.refName === 'concerns' && locationConcerns.length"
+                hoverId="concernsInfo"
+                linkText="Why are some concerns disabled?"
+              >
+                There are monitoring locations associated with these concerns. You must delete these locations before
+                the concerns can be removed.
+              </HoverText>
               <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
                 <CheckboxButton
                   v-for="option in getOptions(question.refName)"
@@ -100,6 +108,7 @@
                   :isSingleSelect="question.refName === 'yesNo'"
                   :singleSelectId="question.questionLabel"
                   :value="option.code"
+                  :disabled="locationConcerns.indexOf(option.code) > -1"
                   :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
                   @check="updatePendingData($event, question)"
                   @click.native="triggerConcernsWarningModal(option.code)"
@@ -253,6 +262,17 @@ export default {
           }
           return 0;
         });
+    },
+    locationConcerns() {
+      let concerns = [];
+      if (this.qappData[this.locConcernsQuestionId]) {
+        this.qappData[this.locConcernsQuestionId].forEach((location) => {
+          if (location.value) {
+            concerns = concerns.concat(location.value.split(','));
+          }
+        });
+      }
+      return concerns;
     },
   },
   async mounted() {
