@@ -185,7 +185,8 @@ import CheckboxButton from '@/components/shared/CheckboxButton';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
-
+import isEqual from 'lodash/isEqual';
+import uniqBy from 'lodash/uniqBy';
 // Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
@@ -230,7 +231,7 @@ export default {
   computed: {
     ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
+    ...mapState('ref', ['concerns', 'yesNo', 'customSections', 'parameters']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
     ...mapGetters('structure', [
       'concernsQuestionId',
@@ -238,6 +239,7 @@ export default {
       'locationQuestionId',
       'parametersQuestionId',
       'locConcernsQuestionId',
+      'sampleDesignQuestionId',
     ]),
     currentQuestions() {
       return this.questions
@@ -330,16 +332,33 @@ export default {
     },
     checkRequiredFields() {
       let hasEmptyFields = false;
-      this.currentQuestions.forEach((q) => {
-        if (
-          (!this.pendingData[q.id] ||
-            (this.pendingData[q.id] && typeof this.pendingData[q.id] === 'string' && !this.pendingData[q.id].trim())) &&
-          (!this.qappData[q.id] ||
-            (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
-        ) {
-          hasEmptyFields = true;
+
+      if (this.currentSection.sectionName === 'sampleDesign') {
+        hasEmptyFields = true;
+        let selectedParams = this.qappData[this.parametersQuestionId];
+        selectedParams = selectedParams.split(',');
+        let tableParams = [];
+        if (selectedParams.length > 0 && this.qappData[this.sampleDesignQuestionId]) {
+          this.qappData[this.sampleDesignQuestionId].forEach((param) => {
+            tableParams.push(param.value);
+          });
+          tableParams = uniqBy(tableParams);
+          hasEmptyFields = !isEqual(tableParams.sort(), selectedParams.sort());
         }
-      });
+      } else {
+        this.currentQuestions.forEach((q) => {
+          if (
+            (!this.pendingData[q.id] ||
+              (this.pendingData[q.id] &&
+                typeof this.pendingData[q.id] === 'string' &&
+                !this.pendingData[q.id].trim())) &&
+            (!this.qappData[q.id] ||
+              (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
+          ) {
+            hasEmptyFields = true;
+          }
+        });
+      }
       return hasEmptyFields;
     },
     hasUnsavedData() {
