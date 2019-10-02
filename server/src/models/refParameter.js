@@ -71,6 +71,21 @@ module.exports = (sequelize, DataTypes) => {
       waterType: {
         type: DataTypes.STRING,
       },
+      numberSamplingLocations: {
+        type: DataTypes.STRING,
+      },
+      rationaleNumberSamples: {
+        type: DataTypes.STRING,
+      },
+      siteLocationRationale: {
+        type: DataTypes.STRING,
+      },
+      frequency: {
+        type: DataTypes.STRING,
+      },
+      numberTypeQCSamples: {
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,
