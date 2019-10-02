@@ -21,6 +21,7 @@
           @onAddLocation="onAddLocation"
           @onEdit="onEdit"
           @onDelete="onDelete"
+          :onDisable="disableDeleteBtn()"
         />
       </template>
     </Tabs>
@@ -153,17 +154,50 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
-    ...mapState('ref', ['locationTypes', 'collectionMethods', 'coordRefSystems', 'concerns', 'waterTypes']),
+    ...mapState('ref', [
+      'locationTypes',
+      'collectionMethods',
+      'coordRefSystems',
+      'concerns',
+      'waterTypes',
+      'parameters',
+    ]),
     ...mapState({
       allQuestions: (state) => state.structure.questions,
     }),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locConcernsQuestionId']),
+    ...mapGetters('structure', [
+      'concernsQuestionId',
+      'concernsDifferByLocQuestionId',
+      'locConcernsQuestionId',
+      'parametersQuestionId',
+    ]),
   },
   mounted() {
     this.refreshLocationData();
+    this.disableDeleteBtn();
   },
   methods: {
+    disableDeleteBtn(location) {
+      if (location) {
+        let selectedParams = this.qappData[this.parametersQuestionId].split(',');
+        let filteredParams = [];
+        this.parameters.forEach((param) => {
+          if (selectedParams.some((p) => parseInt(p) === param.id)) {
+            filteredParams.push(param);
+          }
+        });
+        this.selectedLocation = location;
+        if (location['Water Type'] === 'Fresh' && !!filteredParams.find((p) => p.waterType === 'Freshwater')) {
+          return true;
+        } else if (location['Water Type'] === 'Salt' && !!filteredParams.find((p) => p.waterType === 'Saltwater')) {
+          return true;
+        }
+      } else {
+        this.selectedLocation = null;
+      }
+      return false;
+    },
     getOptions(refName) {
       // get reference data array based on refName field in questions table
       return this[refName];

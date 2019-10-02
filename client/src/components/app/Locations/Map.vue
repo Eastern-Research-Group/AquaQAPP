@@ -37,6 +37,7 @@
                   type="danger"
                   icon="trash-alt"
                   :shouldShowIcon="true"
+                  :disabled="$emit('onDisable', marker)"
                   @click.native="$emit('onDelete', marker)"
                 />
               </div>
@@ -79,6 +80,10 @@ export default {
       type: Array,
       required: false,
       default: () => [],
+    },
+    onDisable: {
+      type: Boolean,
+      required: false,
     },
   },
   watch: {
