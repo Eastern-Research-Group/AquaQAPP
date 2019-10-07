@@ -1,7 +1,8 @@
 @import 'variables';
 
 // set app content to take up full page height
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -23,7 +24,8 @@ html {
   overflow-y: auto !important;
 }
 
-.table td, .table th {
+.table td,
+.table th {
   vertical-align: middle !important;
 }
 
@@ -32,8 +34,10 @@ html {
 }
 
 .main-section {
-  .title, .subtitle, .label {
-    color: #FFF;
+  .title,
+  .subtitle,
+  .label {
+    color: #fff;
   }
   .label {
     font-weight: normal;
@@ -52,13 +56,13 @@ html {
 .select {
   width: 100%;
 
-    select:invalid {
-      color: hsla(0, 0%, 48%, 0.7);
-    }
+  select:invalid {
+    color: hsla(0, 0%, 48%, 0.7);
+  }
 
-    select option {
-      color: #363636;
-    }
+  select option {
+    color: #363636;
+  }
 }
 
 // Import bulma and plugins
@@ -66,21 +70,30 @@ html {
 @import '../../node_modules/bulma-checkradio/dist/css/bulma-checkradio.min.css';
 
 // Override bulma checkradio plugin styles
-.is-checkradio[type="radio"].is-info:checked + label::after {
+.is-checkradio[type='radio'].is-info:checked + label::after {
   border-color: $lightBlue !important;
   background-color: $lightBlue !important;
 }
 
-.is-checkradio[type="checkbox"].is-info:checked + label::after {
+.is-checkradio[type='checkbox'].is-info:checked + label::after {
   border-width: 3px;
   top: 0.45rem;
   left: 0.6rem;
 }
 
 // Makes sure that when checkboxes are in overflowed divs, whitespace won't appear at bottom of page
-.is-checkradio[type=checkbox], .is-checkradio[type=radio] {
+.is-checkradio[type='checkbox'],
+.is-checkradio[type='radio'] {
   left: -999em;
   top: -999em;
+}
+
+.menu-list button {
+  &:focus {
+    box-shadow: none !important;
+    outline: 2px dotted #aeb0b5 !important;
+    outline-offset: 2px !important;
+  }
 }
 
 // Import font-awesome
