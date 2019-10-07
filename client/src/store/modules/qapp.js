@@ -89,6 +89,16 @@ const getters = {
          */
         dataObj[key] = dataObj[key].filter((arrItem) => arrItem);
       }
+
+      if (dataObj.sampleDesign) {
+        dataObj.sampleDesign.forEach((s) => {
+          const parameter = rootState.ref.parameters.find((p) => p.id === parseInt(s.sampleParameter, 10));
+          if (parameter) {
+            s.sampleParameter = parameter.label;
+            s.monitoringCategory = parameter.monitoringCategory;
+          }
+        });
+      }
     });
 
     dataObj.dateGenerated = format(new Date(), 'MMMM do, yyyy');
