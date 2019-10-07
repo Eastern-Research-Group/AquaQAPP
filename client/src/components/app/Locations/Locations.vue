@@ -21,7 +21,6 @@
           @onAddLocation="onAddLocation"
           @onEdit="onEdit"
           @onDelete="onDelete"
-          :onDisable="disableDeleteBtn()"
         />
       </template>
     </Tabs>
@@ -102,6 +101,14 @@
       :itemLabel="shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']"
       @close="() => (shouldShowDelete = false)"
       @onDelete="deleteLocationData"
+      :disabled="disabled"
+      :message="
+        disabled
+          ? `${
+              selectedLocation['Location Name']
+            } is associated with one or more selected parameters that must be removed before deleting this location.`
+          : `Are you sure you want to delete ${shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']}?`
+      "
     />
   </div>
 </template>
@@ -148,6 +155,7 @@ export default {
         { key: 'Location Longitude', label: 'Longitude' },
       ],
       isFormIncomplete: false,
+      disabled: false,
     };
   },
   computed: {
@@ -175,28 +183,24 @@ export default {
   },
   mounted() {
     this.refreshLocationData();
-    this.disableDeleteBtn();
   },
   methods: {
-    disableDeleteBtn(location) {
+    onDisableDelete(location) {
       if (location) {
-        let selectedParams = this.qappData[this.parametersQuestionId].split(',');
-        let filteredParams = [];
+        const selectedParams = this.qappData[this.parametersQuestionId].split(',');
+        const filteredParams = [];
         this.parameters.forEach((param) => {
-          if (selectedParams.some((p) => parseInt(p) === param.id)) {
+          if (selectedParams.some((p) => parseInt(p, 10) === param.id)) {
             filteredParams.push(param);
           }
         });
-        this.selectedLocation = location;
+        console.log(location);
         if (location['Water Type'] === 'Fresh' && !!filteredParams.find((p) => p.waterType === 'Freshwater')) {
-          return true;
+          this.disabled = true;
         } else if (location['Water Type'] === 'Salt' && !!filteredParams.find((p) => p.waterType === 'Saltwater')) {
-          return true;
+          this.disabled = true;
         }
-      } else {
-        this.selectedLocation = null;
       }
-      return false;
     },
     getOptions(refName) {
       // get reference data array based on refName field in questions table
@@ -348,10 +352,12 @@ export default {
     },
     onDelete(location) {
       this.shouldShowDelete = true;
+      this.disabled = false;
       if (location) {
         this.selectedLocation = location;
         this.shouldDeleteAll = false;
         this.shouldDeleteSingle = true;
+        this.onDisableDelete(this.selectedLocation);
       } else {
         this.shouldDeleteSingle = false;
         this.shouldDeleteAll = true;
