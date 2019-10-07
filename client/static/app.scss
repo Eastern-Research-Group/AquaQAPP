@@ -77,5 +77,11 @@ html {
   left: 0.6rem;
 }
 
+// Makes sure that when checkboxes are in overflowed divs, whitespace won't appear at bottom of page
+.is-checkradio[type=checkbox], .is-checkradio[type=radio] {
+  left: -999em;
+  top: -999em;
+}
+
 // Import font-awesome
 @import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';

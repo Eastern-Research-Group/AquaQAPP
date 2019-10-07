@@ -82,6 +82,21 @@ module.exports = {
       correctiveAction: {
         type: Sequelize.STRING,
       },
+      numberSamplingLocations: {
+        type: Sequelize.STRING,
+      },
+      rationaleNumberSamples: {
+        type: Sequelize.STRING,
+      },
+      siteLocationRationale: {
+        type: Sequelize.STRING,
+      },
+      frequency: {
+        type: Sequelize.STRING,
+      },
+      numberTypeQCSamples: {
+        type: Sequelize.STRING,
+      },
     });
   },
   down: (queryInterface) => {
