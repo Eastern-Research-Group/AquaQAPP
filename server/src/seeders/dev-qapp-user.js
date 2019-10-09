@@ -100,20 +100,22 @@ module.exports = {
       },
       {
         questionId: 20,
-        value: 'Organizational history and mission',
-      },
-      {
-        questionId: 21,
-        value: 'Monitoring history and status',
-      },
-      {
-        questionId: 22,
         value: 'Sampling',
         valueId: 1,
       },
       {
-        questionId: 23,
+        questionId: 21,
         value: '',
+        valueId: 1,
+      },
+      {
+        questionId: 22,
+        value: '',
+        valueId: 1,
+      },
+      {
+        questionId: 23,
+        value: 'Y',
         valueId: 1,
       },
       {
@@ -123,12 +125,12 @@ module.exports = {
       },
       {
         questionId: 25,
-        value: 'Y',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 26,
-        value: '',
+        value: 'Y',
         valueId: 1,
       },
       {
@@ -138,12 +140,12 @@ module.exports = {
       },
       {
         questionId: 28,
-        value: 'Y',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 29,
-        value: '',
+        value: 'Y',
         valueId: 1,
       },
       {
@@ -153,173 +155,163 @@ module.exports = {
       },
       {
         questionId: 31,
-        value: 'Y',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 32,
-        value: '',
-        valueId: 1,
-      },
-      {
-        questionId: 33,
-        value: '',
-        valueId: 1,
-      },
-      {
-        questionId: 34,
         value: 'Y',
         valueId: 1,
       },
       {
-        questionId: 35,
+        questionId: 33,
         value: 'ACID,GENPHYS,REC',
       },
       {
-        questionId: 36,
+        questionId: 34,
         value: 'N',
       },
       {
-        questionId: 37,
+        questionId: 35,
         value: '12345',
         valueId: 1,
       },
       {
-        questionId: 38,
+        questionId: 36,
         value: 'Sampling Location',
         valueId: 1,
       },
       {
-        questionId: 39,
+        questionId: 37,
         value: '38.9072',
         valueId: 1,
       },
       {
-        questionId: 40,
+        questionId: 38,
         value: '-77.0369',
         valueId: 1,
       },
       {
-        questionId: 41,
+        questionId: 39,
         value: 'Fresh',
         valueId: 1,
       },
       {
-        questionId: 43,
+        questionId: 41,
         value: '6',
         valueId: 1,
       },
       {
-        questionId: 44,
+        questionId: 42,
         value: '3',
+        valueId: 1,
+      },
+      {
+        questionId: 43,
+        value: '3',
+        valueId: 1,
+      },
+      {
+        questionId: 44,
+        value: '2,3',
+      },
+      {
+        questionId: 45,
+        value: '2',
+        valueId: 1,
+      },
+      {
+        questionId: 46,
+        value: 12,
+        valueId: 1,
+      },
+      {
+        questionId: 47,
+        value: 'Rationale',
+        valueId: 1,
+      },
+      {
+        questionId: 48,
+        value: 'Rationale',
+        valueId: 1,
+      },
+      {
+        questionId: 49,
+        value: 'Frequently',
+        valueId: 1,
+      },
+      {
+        questionId: 50,
+        value: 10,
         valueId: 1,
       },
       {
         questionId: 45,
         value: '3',
-        valueId: 1,
-      },
-      {
-        questionId: 46,
-        value: '2,3',
-      },
-      {
-        questionId: 47,
-        value: '2',
-        valueId: 1,
-      },
-      {
-        questionId: 48,
-        value: 12,
-        valueId: 1,
-      },
-      {
-        questionId: 49,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
-        questionId: 50,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
-        questionId: 51,
-        value: 'Frequently',
-        valueId: 1,
-      },
-      {
-        questionId: 52,
-        value: 10,
-        valueId: 1,
-      },
-      {
-        questionId: 47,
-        value: '3',
         valueId: 2,
       },
       {
-        questionId: 48,
+        questionId: 46,
         value: 8,
         valueId: 2,
       },
       {
+        questionId: 47,
+        value: 'Rationale',
+        valueId: 2,
+      },
+      {
+        questionId: 48,
+        value: 'Rationale',
+        valueId: 2,
+      },
+      {
         questionId: 49,
-        value: 'Rationale',
-        valueId: 2,
-      },
-      {
-        questionId: 50,
-        value: 'Rationale',
-        valueId: 2,
-      },
-      {
-        questionId: 51,
         value: 'Frequently',
         valueId: 2,
       },
       {
-        questionId: 52,
+        questionId: 50,
         value: 10,
         valueId: 2,
       },
       {
-        questionId: 53,
+        questionId: 51,
         value: 'Record keeping',
         valueId: 1,
       },
       {
-        questionId: 54,
+        questionId: 52,
         value: 'Procedure',
         valueId: 1,
       },
       {
-        questionId: 55,
+        questionId: 53,
         value: 'Source',
         valueId: 1,
       },
       {
-        questionId: 56,
+        questionId: 54,
         value: 'Beach',
         valueId: 1,
       },
       {
-        questionId: 57,
+        questionId: 55,
         value: 'Chloride',
         valueId: 1,
       },
       {
-        questionId: 58,
+        questionId: 56,
         value: 'Sample Design',
         valueId: 1,
       },
       {
-        questionId: 59,
+        questionId: 57,
         value: 'Northeast',
         valueId: 1,
       },
       {
-        questionId: 60,
+        questionId: 58,
         value: 'https://google.com',
         valueId: 1,
       },
@@ -337,7 +329,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 16; i += 1) {
+    for (let i = 1; i < 14; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,

@@ -46,65 +46,51 @@ module.exports = {
     records.push({
       sectionNumber: '7',
       sectionLevel: '1',
-      sectionLabel: 'Organizational History and Mission',
-      sectionName: 'orgHistoryMission',
+      sectionLabel: 'Project Activities',
+      sectionName: 'projectActivities',
       sectionSort: 7,
     });
     records.push({
       sectionNumber: '8',
       sectionLevel: '1',
-      sectionLabel: 'Monitoring History and Status',
-      sectionName: 'monitorHistoryStatus',
+      sectionLabel: 'Water Quality Concerns',
+      sectionName: 'waterQualityConcerns',
       sectionSort: 8,
     });
     records.push({
       sectionNumber: '9',
       sectionLevel: '1',
-      sectionLabel: 'Project Activities',
-      sectionName: 'projectActivities',
+      sectionLabel: 'Monitoring Locations',
+      sectionName: 'monitoringLocations',
       sectionSort: 9,
     });
     records.push({
       sectionNumber: '10',
       sectionLevel: '1',
-      sectionLabel: 'Water Quality Concerns',
-      sectionName: 'waterQualityConcerns',
+      sectionLabel: 'Parameters',
+      sectionName: 'parameters',
       sectionSort: 10,
     });
     records.push({
       sectionNumber: '11',
       sectionLevel: '1',
-      sectionLabel: 'Monitoring Locations',
-      sectionName: 'monitoringLocations',
+      sectionLabel: 'Sample Design',
+      sectionName: 'sampleDesign',
       sectionSort: 11,
     });
     records.push({
       sectionNumber: '12',
       sectionLevel: '1',
-      sectionLabel: 'Parameters',
-      sectionName: 'parameters',
+      sectionLabel: 'Record Handling Procedures',
+      sectionName: 'recordHandling',
       sectionSort: 12,
     });
     records.push({
       sectionNumber: '13',
       sectionLevel: '1',
-      sectionLabel: 'Sample Design',
-      sectionName: 'sampleDesign',
-      sectionSort: 13,
-    });
-    records.push({
-      sectionNumber: '14',
-      sectionLevel: '1',
-      sectionLabel: 'Record Handling Procedures',
-      sectionName: 'recordHandling',
-      sectionSort: 14,
-    });
-    records.push({
-      sectionNumber: '15',
-      sectionLevel: '1',
       sectionLabel: 'Secondary Data',
       sectionName: 'secondaryData',
-      sectionSort: 15,
+      sectionSort: 13,
     });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({
