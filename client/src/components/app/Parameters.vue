@@ -76,11 +76,21 @@
             <p class="has-text-centered">Selected</p>
             <div class="box selected-parameters">
               <ul>
-                <li v-for="param in selectedParams" :key="param" class="param-label has-text-weight-semibold">
-                  {{ getParamLabel(param) }}
+                <li
+                  v-for="param in sortedParams"
+                  :key="param.id || param.parameter"
+                  class="param-label has-text-weight-semibold"
+                >
+                  {{ param.label || `${param.parameter} - OTHER` }}
                   <span
                     class="fa fa-times"
-                    @click="$emit('updateData', { target: { value: param.id || param } }, paramQuestion)"
+                    @click="
+                      $emit(
+                        'updateData',
+                        { target: { value: param.id ? param.id.toString() : param.parameter } },
+                        paramQuestion
+                      )
+                    "
                   ></span>
                 </li>
               </ul>
@@ -95,6 +105,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import Tabs from '@/components/shared/Tabs';
+import sortBy from 'lodash/sortBy';
 
 export default {
   name: 'Parameters',
@@ -124,6 +135,18 @@ export default {
     selectedParams() {
       return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
     },
+    sortedParams() {
+      let sortedParams = [];
+      this.selectedParams.forEach((param) => {
+        if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
+          sortedParams.push(this.parameters.find((p) => p.id === parseInt(param, 10)));
+        } else {
+          sortedParams.push({ parameter: param });
+        }
+      });
+      sortedParams = sortBy(sortedParams, [(p) => p.parameter.toLowerCase()]);
+      return sortedParams;
+    },
     suggestedParams() {
       const params = [];
       this.parameters.forEach((param) => {
@@ -146,10 +169,10 @@ export default {
   methods: {
     getFilteredParams(params, waterType) {
       if (waterType === 'Fresh') {
-        return params.filter((p) => p.waterType === 'Freshwater');
+        return sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
       }
       // salt or brackish types are both indicated by the "salt" boolean column
-      return params.filter((p) => p.waterType === 'Saltwater');
+      return sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
     },
     getWaterTypes() {
       let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
@@ -161,12 +184,6 @@ export default {
     },
     isChecked(paramId) {
       return this.selectedParams.indexOf(paramId.toString()) > -1;
-    },
-    getParamLabel(param) {
-      const pId = parseInt(param, 10);
-      return this.parameters.find((p) => p.id === pId)
-        ? this.parameters.find((p) => p.id === pId).label
-        : `OTHER - ${param}`;
     },
     updateParams(e) {
       this.$emit('updateData', e, this.paramQuestion);
