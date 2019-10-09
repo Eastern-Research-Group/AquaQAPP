@@ -214,28 +214,6 @@ module.exports = {
     });
     records.push({
       sectionNumber: '7',
-      questionName: 'orgHistoryMission',
-      questionLabel: 'Organizational History and Mission',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '4000',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-    });
-    records.push({
-      sectionNumber: '8',
-      questionName: 'monitorHistoryStatus',
-      questionLabel: 'Monitoring History and Status',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '4000',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-    });
-    records.push({
-      sectionNumber: '9',
       questionName: 'activity',
       questionLabel: 'Activity',
       dataEntryInstructions: '',
@@ -246,7 +224,7 @@ module.exports = {
       sectionQuestionSort: 1,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'january',
       questionLabel: 'January',
       dataEntryInstructions: '',
@@ -257,7 +235,7 @@ module.exports = {
       sectionQuestionSort: 2,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'february',
       questionLabel: 'February',
       dataEntryInstructions: '',
@@ -268,7 +246,7 @@ module.exports = {
       sectionQuestionSort: 3,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'march',
       questionLabel: 'March',
       dataEntryInstructions: '',
@@ -279,7 +257,7 @@ module.exports = {
       sectionQuestionSort: 4,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'april',
       questionLabel: 'April',
       dataEntryInstructions: '',
@@ -290,7 +268,7 @@ module.exports = {
       sectionQuestionSort: 5,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'may',
       questionLabel: 'May',
       dataEntryInstructions: '',
@@ -301,7 +279,7 @@ module.exports = {
       sectionQuestionSort: 6,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'june',
       questionLabel: 'June',
       dataEntryInstructions: '',
@@ -312,7 +290,7 @@ module.exports = {
       sectionQuestionSort: 7,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'july',
       questionLabel: 'July',
       dataEntryInstructions: '',
@@ -323,7 +301,7 @@ module.exports = {
       sectionQuestionSort: 8,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'august',
       questionLabel: 'August',
       dataEntryInstructions: '',
@@ -334,7 +312,7 @@ module.exports = {
       sectionQuestionSort: 9,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'september',
       questionLabel: 'September',
       dataEntryInstructions: '',
@@ -345,7 +323,7 @@ module.exports = {
       sectionQuestionSort: 10,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'october',
       questionLabel: 'October',
       dataEntryInstructions: '',
@@ -356,7 +334,7 @@ module.exports = {
       sectionQuestionSort: 11,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'november',
       questionLabel: 'November',
       dataEntryInstructions: '',
@@ -367,7 +345,7 @@ module.exports = {
       sectionQuestionSort: 12,
     });
     records.push({
-      sectionNumber: '9',
+      sectionNumber: '7',
       questionName: 'december',
       questionLabel: 'December',
       dataEntryInstructions: '',
@@ -378,7 +356,7 @@ module.exports = {
       sectionQuestionSort: 13,
     });
     records.push({
-      sectionNumber: '10',
+      sectionNumber: '8',
       questionName: 'waterConcerns',
       questionLabel: 'Water Quality Concerns',
       dataEntryInstructions: 'Select all that apply.',
@@ -390,7 +368,7 @@ module.exports = {
       refName: 'concerns',
     });
     records.push({
-      sectionNumber: '10',
+      sectionNumber: '8',
       questionName: 'differByLocation',
       questionLabel: 'Do your water quality concerns differ by sampling location?',
       dataEntryInstructions: '',
@@ -402,7 +380,7 @@ module.exports = {
       refName: 'yesNo',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'locationId',
       questionLabel: 'Location ID',
       dataEntryInstructions: '',
@@ -413,7 +391,7 @@ module.exports = {
       sectionQuestionSort: 1,
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'locationName',
       questionLabel: 'Location Name',
       dataEntryInstructions: '',
@@ -424,7 +402,7 @@ module.exports = {
       sectionQuestionSort: 2,
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'locationLat',
       questionLabel: 'Location Latitude',
       dataEntryInstructions: '',
@@ -435,7 +413,7 @@ module.exports = {
       sectionQuestionSort: 3,
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'locationLong',
       questionLabel: 'Location Longitude',
       dataEntryInstructions: '',
@@ -446,7 +424,7 @@ module.exports = {
       sectionQuestionSort: 4,
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'waterType',
       questionLabel: 'Water Type',
       dataEntryInstructions: '',
@@ -458,7 +436,7 @@ module.exports = {
       refName: 'waterTypes',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'mapWaterConcerns',
       questionLabel: 'Water Quality Concerns',
       dataEntryInstructions: '',
@@ -470,7 +448,7 @@ module.exports = {
       refName: 'concerns',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'locationType',
       questionLabel: 'Location Type',
       dataEntryInstructions: '',
@@ -482,7 +460,7 @@ module.exports = {
       refName: 'locationTypes',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'horizCollectionMethod',
       questionLabel: 'Horizontal Collection Method',
       dataEntryInstructions: '',
@@ -494,7 +472,7 @@ module.exports = {
       refName: 'collectionMethods',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '9',
       questionName: 'horizCoordinateSystem',
       questionLabel: 'Horizontal Coordinate Reference System',
       dataEntryInstructions: '',
@@ -506,7 +484,7 @@ module.exports = {
       refName: 'coordRefSystems',
     });
     records.push({
-      sectionNumber: '12',
+      sectionNumber: '10',
       questionLabel: 'Parameters',
       questionName: 'parameters',
       dataEntryInstructions: '',
@@ -518,7 +496,7 @@ module.exports = {
       refName: 'parameters',
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '11',
       questionLabel: 'Parameter',
       questionName: 'sampleParameter',
       dataEntryInstructions: '',
@@ -530,7 +508,7 @@ module.exports = {
       refName: 'parameters',
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '11',
       questionLabel: 'Number of Sample Locations',
       questionName: 'numSampleLocations',
       dataEntryInstructions: '',
@@ -541,7 +519,7 @@ module.exports = {
       sectionQuestionSort: 2,
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '11',
       questionLabel: 'Site Location Rationale',
       questionName: 'locationRationale',
       dataEntryInstructions: '',
@@ -553,7 +531,7 @@ module.exports = {
       refName: 'locationRationales',
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '11',
       questionLabel: 'Rationale for Number of Samples',
       questionName: 'sampleNumRationale',
       dataEntryInstructions: '',
@@ -565,7 +543,7 @@ module.exports = {
       refName: 'sampleNumRationales',
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '11',
       questionLabel: 'Frequency',
       questionName: 'frequency',
       dataEntryInstructions: '',
@@ -576,7 +554,7 @@ module.exports = {
       sectionQuestionSort: 5,
     });
     records.push({
-      sectionNumber: '13',
+      sectionNumber: '11',
       questionLabel: 'Number/Type of QC Samples',
       questionName: 'numQcSamples',
       dataEntryInstructions: '',
@@ -587,7 +565,7 @@ module.exports = {
       sectionQuestionSort: 6,
     });
     records.push({
-      sectionNumber: '14',
+      sectionNumber: '12',
       questionName: 'activity',
       questionLabel: 'Activity',
       dataEntryInstructions: '',
@@ -598,7 +576,7 @@ module.exports = {
       sectionQuestionSort: 1,
     });
     records.push({
-      sectionNumber: '14',
+      sectionNumber: '12',
       questionName: 'procedures',
       questionLabel: 'Procedures',
       dataEntryInstructions: '',
@@ -609,7 +587,7 @@ module.exports = {
       sectionQuestionSort: 2,
     });
     records.push({
-      sectionNumber: '15',
+      sectionNumber: '13',
       questionName: 'dataSource',
       questionLabel: 'Data Source',
       dataEntryInstructions: '',
@@ -620,7 +598,7 @@ module.exports = {
       sectionQuestionSort: 1,
     });
     records.push({
-      sectionNumber: '15',
+      sectionNumber: '13',
       questionName: 'waterbodyType',
       questionLabel: 'Waterbody Type',
       dataEntryInstructions: '',
@@ -631,7 +609,7 @@ module.exports = {
       sectionQuestionSort: 2,
     });
     records.push({
-      sectionNumber: '15',
+      sectionNumber: '13',
       questionName: 'sampleDataParams',
       questionLabel: 'Sample Data Parameters',
       dataEntryInstructions: '',
@@ -642,7 +620,7 @@ module.exports = {
       sectionQuestionSort: 3,
     });
     records.push({
-      sectionNumber: '15',
+      sectionNumber: '13',
       questionName: 'sampleDesign',
       questionLabel: 'Sample Design',
       dataEntryInstructions: '',
@@ -653,7 +631,7 @@ module.exports = {
       sectionQuestionSort: 4,
     });
     records.push({
-      sectionNumber: '15',
+      sectionNumber: '13',
       questionName: 'geographicArea',
       questionLabel: 'Geographic Area',
       dataEntryInstructions: '',
@@ -664,7 +642,7 @@ module.exports = {
       sectionQuestionSort: 5,
     });
     records.push({
-      sectionNumber: '15',
+      sectionNumber: '13',
       questionName: 'webDataLinks',
       questionLabel: 'Web Data Links',
       dataEntryInstructions: '',
