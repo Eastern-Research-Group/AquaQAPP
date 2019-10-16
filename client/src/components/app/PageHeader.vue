@@ -34,6 +34,7 @@
           </div>
           <div class="navbar-end" v-if="$auth.check()">
             <div class="navbar-item">
+              <a class="navbar-item" href="" target="_blank" v-if="$route.name === 'navigate'">User's Guide</a>
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
