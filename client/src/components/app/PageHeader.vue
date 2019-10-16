@@ -38,7 +38,7 @@
                 <strong>Dashboard</strong>
               </router-link>
               <Button
-                label="Generate"
+                label="Generate QAPP"
                 type="success"
                 v-if="$route.name === 'navigate'"
                 @click.native="generateQapp"
