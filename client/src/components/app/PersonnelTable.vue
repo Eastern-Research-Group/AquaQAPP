@@ -14,7 +14,7 @@
     <SideNav
       v-if="isEnteringInfo"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Org/Personnel' : 'Add Org/Personnel'"
+      :title="shouldShowEdit ? 'Edit Organization/Personnel' : 'Add Organization/Personnel'"
     >
       <form @submit.prevent="submitPersonnelData">
         <Alert
@@ -155,11 +155,11 @@ export default {
       rows: [],
       columns: [
         {
-          key: 'Full Name',
+          key: 'Full Name of Personnel',
           label: 'Name',
         },
         {
-          key: 'Title',
+          key: 'Job Title',
           label: 'Title',
         },
         {
@@ -171,7 +171,7 @@ export default {
           label: 'Approval Sheet',
         },
         {
-          key: 'Organization',
+          key: 'Organization Name',
           label: 'Organization',
         },
       ],
