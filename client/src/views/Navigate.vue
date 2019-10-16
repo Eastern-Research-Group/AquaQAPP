@@ -143,9 +143,6 @@
                 <p v-else class="has-text-black example-text" ref="exampleText">
                   {{ question.examples[0].text }}
                 </p>
-                <div class="has-text-right">
-                  <Button label="Add Example" type="success" @click.native="addExample(question.id)" />
-                </div>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
@@ -330,11 +327,6 @@ export default {
     },
     getOptions(refName) {
       return this[refName];
-    },
-    addExample(qId) {
-      this.pendingData[qId] = this.pendingData[qId] || ''; // if undefined, set as empty string
-      this.$set(this.pendingData, qId, this.pendingData[qId] + this.$refs.exampleText[0].innerText);
-      this.shouldShowExample = false;
     },
     updatePendingData(e, question) {
       this.hasSaved = false;
