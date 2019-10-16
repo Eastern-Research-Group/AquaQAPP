@@ -17,6 +17,13 @@
       :title="shouldShowEdit ? 'Edit Org/Personnel' : 'Add Org/Personnel'"
     >
       <form @submit.prevent="submitPersonnelData">
+        <Alert
+          v-if="isFormIncomplete"
+          ref="alert"
+          type="error"
+          message="All fields are required. Please enter all fields to submit."
+          tabindex="0"
+        />
         <div class="field" v-for="question in questions" :key="question.id">
           <label
             v-if="['text', 'largeText', 'email', 'tel', 'select'].indexOf(question.dataEntryType) !== -1"
@@ -118,6 +125,7 @@
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
+import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
@@ -132,7 +140,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
+  components: { Alert, Button, SideNav, Table, DeleteWarning, Multiselect },
   data() {
     return {
       isEnteringInfo: false,
@@ -142,6 +150,7 @@ export default {
       shouldDeleteSingle: false,
       selectedPersonnel: null,
       isPrimaryContactDisabled: false,
+      isFormIncomplete: false,
       pendingData: {},
       rows: [],
       columns: [
@@ -227,6 +236,21 @@ export default {
       }
     },
     submitPersonnelData() {
+      // Check that all non-checkbox questions have been filled out before submitting
+      this.isFormIncomplete = false;
+      this.questions.forEach((q) => {
+        if (q.dataEntryType !== 'checkbox' && (!this.pendingData[q.id] || !this.pendingData[q.id].length)) {
+          this.isFormIncomplete = true;
+        }
+      });
+      // nextTick waits until Alert is now displayed (based on its v-if), and then sets focus to the alert
+      if (this.isFormIncomplete) {
+        this.$nextTick().then(() => {
+          this.$refs.alert.$el.focus();
+        });
+        return;
+      }
+
       if (this.shouldShowEdit) {
         this.editPersonnelData();
       } else {
