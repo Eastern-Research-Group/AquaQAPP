@@ -28,7 +28,7 @@ module.exports = {
       },
       {
         questionId: 5,
-        value: 'Y',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -38,7 +38,7 @@ module.exports = {
       },
       {
         questionId: 7,
-        value: 'Y',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -115,7 +115,7 @@ module.exports = {
       },
       {
         questionId: 23,
-        value: 'Y',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -130,7 +130,7 @@ module.exports = {
       },
       {
         questionId: 26,
-        value: 'Y',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -145,7 +145,7 @@ module.exports = {
       },
       {
         questionId: 29,
-        value: 'Y',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -160,7 +160,7 @@ module.exports = {
       },
       {
         questionId: 32,
-        value: 'Y',
+        value: 'X',
         valueId: 1,
       },
       {

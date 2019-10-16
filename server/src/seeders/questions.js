@@ -26,7 +26,7 @@ module.exports = {
     records.push({
       sectionNumber: '3',
       questionName: 'fullName',
-      questionLabel: 'Full Name',
+      questionLabel: 'Full Name of Personnel',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -37,7 +37,7 @@ module.exports = {
     records.push({
       sectionNumber: '3',
       questionName: 'titlePosition',
-      questionLabel: 'Title',
+      questionLabel: 'Job Title',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
@@ -81,7 +81,7 @@ module.exports = {
     records.push({
       sectionNumber: '3',
       questionName: 'organization',
-      questionLabel: 'Organization',
+      questionLabel: 'Organization Name',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',
