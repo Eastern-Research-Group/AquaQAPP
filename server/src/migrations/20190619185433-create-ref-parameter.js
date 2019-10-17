@@ -16,11 +16,17 @@ module.exports = {
       method: {
         type: Sequelize.STRING,
       },
+      waterType: {
+        type: Sequelize.STRING,
+      },
       fresh: {
         type: Sequelize.BOOLEAN,
       },
       salt: {
         type: Sequelize.BOOLEAN,
+      },
+      monitoringCategory: {
+        type: Sequelize.STRING,
       },
       units: {
         type: Sequelize.STRING,
@@ -74,6 +80,21 @@ module.exports = {
         type: Sequelize.STRING,
       },
       correctiveAction: {
+        type: Sequelize.STRING,
+      },
+      numberSamplingLocations: {
+        type: Sequelize.STRING,
+      },
+      rationaleNumberSamples: {
+        type: Sequelize.STRING,
+      },
+      siteLocationRationale: {
+        type: Sequelize.STRING,
+      },
+      frequency: {
+        type: Sequelize.STRING,
+      },
+      numberTypeQCSamples: {
         type: Sequelize.STRING,
       },
     });

@@ -66,8 +66,9 @@
         <template #default="props">
           <form id="editProfile" @submit.prevent="handleProfileSubmit">
             <div class="field">
-              <label class="label has-text-white">Full Name</label>
+              <label for="name" class="label has-text-white">Full Name</label>
               <input
+                id="name"
                 class="input"
                 type="text"
                 required
@@ -77,8 +78,9 @@
               />
             </div>
             <div class="field">
-              <label class="label has-text-white">Email</label>
+              <label for="email" class="label has-text-white">Email</label>
               <input
+                id="email"
                 class="input"
                 type="email"
                 required
@@ -88,8 +90,9 @@
               />
             </div>
             <div class="field">
-              <label class="label has-text-white">Organization</label>
+              <label for="organization" class="label has-text-white">Organization</label>
               <input
+                id="organization"
                 class="input"
                 type="text"
                 required

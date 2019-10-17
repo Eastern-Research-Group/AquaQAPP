@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="navigate-container">
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
@@ -43,17 +43,19 @@
 
           <div
             class="field"
-            v-for="question in currentQuestions.filter(
+            v-for="(question, index) in currentQuestions.filter(
               (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
             )"
             :key="question.id"
           >
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
-              <label class="label is-size-4">{{ question.questionLabel }}</label>
-              <p v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions" />
+              <label :for="`question${question.id}`" class="label is-size-4">{{ question.questionLabel }}</label>
+              <!-- only display instructions under first question label, since it is for the whole seciton -->
+              <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
               <input
                 v-if="question.dataEntryType === 'text'"
+                :id="`question${question.id}`"
                 class="input"
                 type="text"
                 required
@@ -64,6 +66,7 @@
               />
               <input
                 v-if="question.dataEntryType === 'phone'"
+                :id="`question${question.id}`"
                 class="input"
                 type="tel"
                 required
@@ -74,6 +77,7 @@
               />
               <input
                 v-if="question.dataEntryType === 'email'"
+                :id="`question${question.id}`"
                 class="input"
                 type="email"
                 required
@@ -84,6 +88,7 @@
               />
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
+                :id="`question${question.id}`"
                 class="input"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
@@ -99,20 +104,24 @@
                 There are monitoring locations associated with these concerns. You must delete these locations before
                 the concerns can be removed.
               </HoverText>
-              <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
-                <CheckboxButton
-                  v-for="option in getOptions(question.refName)"
-                  :key="option.id"
-                  :id="option.code"
-                  :name="option.label"
-                  :isSingleSelect="question.refName === 'yesNo'"
-                  :singleSelectId="question.questionLabel"
-                  :value="option.code"
-                  :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
-                  :disabled="locationConcerns.indexOf(option.code) > -1"
-                  @check="updatePendingData($event, question)"
-                />
-              </div>
+              <fieldset v-if="question.dataEntryType === 'checkboxBtn'">
+                <legend class="is-sr-only">{{ question.questionLabel }}</legend>
+                <div class="columns is-multiline">
+                  <CheckboxButton
+                    v-for="option in getOptions(question.refName)"
+                    :key="option.id"
+                    :id="option.code"
+                    :name="option.label"
+                    :isSingleSelect="question.refName === 'yesNo'"
+                    :singleSelectId="question.questionLabel"
+                    :value="option.code"
+                    :disabled="locationConcerns.indexOf(option.code) > -1"
+                    :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
+                    @check="updatePendingData($event, question)"
+                    @click.native="triggerConcernsWarningModal(option.code)"
+                  />
+                </div>
+              </fieldset>
               <div class="btn-container has-text-right">
                 <Button
                   class="example"
@@ -142,16 +151,16 @@
                 <p v-else class="has-text-black example-text" ref="exampleText">
                   {{ question.examples[0].text }}
                 </p>
-                <div class="has-text-right">
-                  <Button label="Add Example" type="success" @click.native="addExample(question.id)" />
-                </div>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
           </div>
-          <div v-for="customSection in customSections" :key="customSection.component">
+          <div v-if="customSection">
+            <h2 class="label is-size-4">
+              {{ currentSection.sectionLabel }}
+            </h2>
+            <p class="instructions content" v-html="currentSection.instructions"></p>
             <component
-              v-if="customSection.label === currentSection.sectionLabel"
               :is="customSection.component"
               :questions="currentQuestions"
               :pendingData="pendingData"
@@ -166,6 +175,16 @@
         <div class="btn-container">
           <Button label="Save Changes" type="success" @click.native="saveData" />
           <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
+        </div>
+      </Modal>
+      <Modal v-if="shouldDisplayConcernsWarning" @close="closeConcernsWarningModal">
+        <Alert
+          message="Selecting No will remove all selected concerns from existing monitoring locations."
+          type="warning"
+        />
+        <div class="btn-container">
+          <Button label="Continue" type="success" @click.native="removeConcerns" />
+          <Button label="Cancel" type="danger" @click.native="cancelYesNo" />
         </div>
       </Modal>
     </div>
@@ -183,13 +202,16 @@ import CheckboxButton from '@/components/shared/CheckboxButton';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
-
+import isEqual from 'lodash/isEqual';
+import uniqBy from 'lodash/uniqBy';
 // Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
 import SampleDesign from '@/components/app/SampleDesign';
+import RecordHandlingProcedures from '@/components/app/RecordHandlingProcedures';
+import SecondaryData from '@/components/app/SecondaryData';
 
 export default {
   components: {
@@ -207,6 +229,8 @@ export default {
     ProjectActivities,
     LoadingIndicator,
     SampleDesign,
+    RecordHandlingProcedures,
+    SecondaryData,
   },
   data() {
     return {
@@ -218,19 +242,21 @@ export default {
       pendingSection: null,
       sectionNotAvailableMessage: '',
       dataError: null,
+      shouldDisplayConcernsWarning: false,
     };
   },
   computed: {
     ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns', 'yesNo', 'customSections']),
-    ...mapGetters('qapp', ['qappData']),
+    ...mapState('ref', ['concerns', 'yesNo', 'customSections', 'parameters']),
+    ...mapGetters('qapp', ['qappData', 'wordDocData']),
     ...mapGetters('structure', [
       'concernsQuestionId',
       'concernsDifferByLocQuestionId',
       'locationQuestionId',
       'parametersQuestionId',
       'locConcernsQuestionId',
+      'sampleDesignQuestionId',
     ]),
     currentQuestions() {
       return this.questions
@@ -255,6 +281,9 @@ export default {
         });
       }
       return concerns;
+    },
+    customSection() {
+      return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
     },
   },
   async mounted() {
@@ -313,11 +342,6 @@ export default {
     getOptions(refName) {
       return this[refName];
     },
-    addExample(qId) {
-      this.pendingData[qId] = this.pendingData[qId] || ''; // if undefined, set as empty string
-      this.$set(this.pendingData, qId, this.pendingData[qId] + this.$refs.exampleText[0].innerText);
-      this.shouldShowExample = false;
-    },
     updatePendingData(e, question) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
@@ -334,16 +358,33 @@ export default {
     },
     checkRequiredFields() {
       let hasEmptyFields = false;
-      this.currentQuestions.forEach((q) => {
-        if (
-          (!this.pendingData[q.id] ||
-            (this.pendingData[q.id] && typeof this.pendingData[q.id] === 'string' && !this.pendingData[q.id].trim())) &&
-          (!this.qappData[q.id] ||
-            (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
-        ) {
-          hasEmptyFields = true;
+
+      if (this.currentSection.sectionName === 'sampleDesign') {
+        hasEmptyFields = true;
+        let selectedParams = this.qappData[this.parametersQuestionId];
+        selectedParams = selectedParams.split(',');
+        let tableParams = [];
+        if (selectedParams.length > 0 && this.qappData[this.sampleDesignQuestionId]) {
+          this.qappData[this.sampleDesignQuestionId].forEach((param) => {
+            tableParams.push(param.value);
+          });
+          tableParams = uniqBy(tableParams);
+          hasEmptyFields = !isEqual(tableParams.sort(), selectedParams.sort());
         }
-      });
+      } else {
+        this.currentQuestions.forEach((q) => {
+          if (
+            (!this.pendingData[q.id] ||
+              (this.pendingData[q.id] &&
+                typeof this.pendingData[q.id] === 'string' &&
+                !this.pendingData[q.id].trim())) &&
+            (!this.qappData[q.id] ||
+              (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
+          ) {
+            hasEmptyFields = true;
+          }
+        });
+      }
       return hasEmptyFields;
     },
     hasUnsavedData() {
@@ -358,10 +399,8 @@ export default {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
-          this.currentSection.sectionLabel !== 'Monitoring Locations' &&
-          this.currentSection.sectionLabel !== 'Project Organization/Personnel' &&
-          this.currentSection.sectionLabel !== 'Project Activities' &&
-          this.currentSection.sectionLabel !== 'Sample Design'
+          !this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
+          this.currentSection.sectionLabel === 'Parameters'
         ) {
           this.saveData();
         }
@@ -446,11 +485,42 @@ export default {
       this.shouldDisplayUnsavedWarning = false;
       this.pendingSection = null;
     },
+    closeConcernsWarningModal() {
+      this.shouldDisplayConcernsWarning = false;
+    },
+    triggerConcernsWarningModal(value) {
+      if (value === 'N' && !!this.qappData[this.concernsQuestionId]) {
+        this.shouldDisplayConcernsWarning = true;
+      }
+    },
+    async removeConcerns() {
+      this.shouldDisplayConcernsWarning = false;
+      this.dataError = null;
+      await this.$store
+        .dispatch('qapp/save', {
+          qappId: this.$store.state.qapp.id,
+          questionId: this.locConcernsQuestionId,
+          value: null,
+          valueId: 'remove_all_concerns',
+        })
+        .catch((error) => {
+          if (this.dataError === null) this.dataError = error.response.data.error;
+          else this.dataError += `<br/>${error.response.data.error}`;
+        });
+    },
+    cancelYesNo() {
+      this.shouldDisplayConcernsWarning = false;
+      this.pendingData[this.concernsDifferByLocQuestionId] = 'Y';
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.navigate-container {
+  margin-top: 2rem;
+}
+
 .menu {
   border-right: 1px solid #00b0e6;
 }
@@ -476,11 +546,13 @@ export default {
   margin-top: 1em;
 }
 
+.instructions {
+  margin-bottom: 1.25rem;
+}
+
 textarea {
   resize: vertical;
   height: 8em;
-  margin-top: 1em;
-  margin-bottom: 1em;
 }
 
 .right {

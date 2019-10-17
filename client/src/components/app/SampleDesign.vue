@@ -1,6 +1,5 @@
 <template>
   <div class="clear">
-    <label class="label is-size-4">Sample Design</label>
     <Table
       :columns="columns"
       :rows="rows"
@@ -13,10 +12,11 @@
     />
     <SideNav
       v-if="isEnteringInfo"
+      :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
       :title="shouldShowEdit ? 'Edit Sample Design Information' : 'Add Sample Design Information'"
     >
-      <form @submit.prevent="submitData">
+      <form ref="form" @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
           <input
@@ -87,12 +87,19 @@
       @close="() => (shouldShowDelete = false)"
       @onDelete="deleteData"
     />
+    <UnsavedWarning
+      v-if="shouldDisplayUnsavedWarning"
+      @onClose="() => (shouldDisplayUnsavedWarning = false)"
+      @onSave="saveChanges"
+      @onDiscard="discardChanges"
+    />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import Multiselect from 'vue-multiselect';
+import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
@@ -107,6 +114,7 @@ export default {
     },
   },
   components: { Button, SideNav, Table, DeleteWarning, Multiselect },
+  mixins: [unsavedChanges],
   data() {
     return {
       isEnteringInfo: false,
@@ -147,6 +155,7 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
+      this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
     },

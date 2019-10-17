@@ -1,4 +1,5 @@
 import axios from 'axios';
+import format from 'date-fns/format';
 
 const state = {
   id: null,
@@ -74,22 +75,6 @@ const getters = {
             // Otherwise, find the full parameter data object and store in "parameters" array
             if (!dataObj[key]) dataObj[key] = [];
             dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
-
-            if (typeof dataObj[key][0] === 'object') {
-              const nutrientsArray = dataObj[key].filter(
-                (p) =>
-                  p.parameter === 'Total nitrogen' ||
-                  p.parameter === 'Ammonium-N' ||
-                  p.parameter === 'Nitrate-Nitrite-N' ||
-                  p.parameter === 'Total phosphorus' ||
-                  p.parameter === 'Orthophosphate'
-              );
-              if (nutrientsArray.length > 0) {
-                dataObj.hasNutrients = 'Y';
-              } else {
-                dataObj.hasNutrients = 'N';
-              }
-            }
           }
         });
       } else if (key) {
@@ -104,7 +89,20 @@ const getters = {
          */
         dataObj[key] = dataObj[key].filter((arrItem) => arrItem);
       }
+
+      if (dataObj.sampleDesign) {
+        dataObj.sampleDesign.forEach((s) => {
+          const parameter = rootState.ref.parameters.find((p) => p.id === parseInt(s.sampleParameter, 10));
+          if (parameter) {
+            s.sampleParameter = parameter.label;
+            s.monitoringCategory = parameter.monitoringCategory;
+          }
+        });
+      }
     });
+
+    dataObj.dateGenerated = format(new Date(), 'MMMM do, yyyy');
+
     return dataObj;
   },
   progress(state, getters, rootState) {

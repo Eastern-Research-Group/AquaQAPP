@@ -31,6 +31,9 @@ const getters = {
   parametersQuestionId(state) {
     return getQuestionIdByName(state.questions, 'parameters');
   },
+  sampleDesignQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'sampleParameter');
+  },
 };
 
 const mutations = {

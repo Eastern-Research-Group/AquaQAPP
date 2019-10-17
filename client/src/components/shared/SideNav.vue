@@ -1,9 +1,14 @@
 <template>
   <div class="modal is-active">
     <div class="modal-background" @click="close"></div>
-    <div :class="`modal-content ${this.shouldDismiss ? 'dismiss' : ''}`">
+    <div
+      :class="`modal-content ${this.shouldDismiss ? 'dismiss' : ''}`"
+      @keydown.native.esc="close"
+      role="dialog"
+      aria-modal="true"
+    >
       <span class="title is-size-4">{{ title }}</span>
-      <button type="button" class="button is-text has-text-white is-pulled-right" @click="close">
+      <button type="button" class="button is-text has-text-white is-pulled-right" @click="close" aria-label="Close">
         <span class="fa fa-times"></span>
       </button>
       <hr />
@@ -17,6 +22,10 @@
 export default {
   name: 'SideNav',
   props: {
+    beforeClose: {
+      type: Function,
+      required: false,
+    },
     handleClose: {
       type: Function,
       required: true,
@@ -42,6 +51,9 @@ export default {
   },
   methods: {
     close() {
+      // if beforeClose function exists and returns false, do not continue with side nav closing
+      if (typeof this.beforeClose === 'function' && !this.beforeClose()) return;
+
       this.shouldDismiss = true;
       // delay 500ms for slide animation to complete
       setTimeout(() => this.handleClose(), 500);

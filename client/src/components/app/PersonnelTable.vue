@@ -1,6 +1,5 @@
 <template>
   <div class="clear">
-    <label class="label is-size-4">Project Organization/Personnel</label>
     <Table
       :columns="columns"
       :rows="rows"
@@ -13,10 +12,18 @@
     />
     <SideNav
       v-if="isEnteringInfo"
+      :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Org/Personnel' : 'Add Org/Personnel'"
+      :title="shouldShowEdit ? 'Edit Organization/Personnel' : 'Add Organization/Personnel'"
     >
-      <form @submit.prevent="submitPersonnelData">
+      <form ref="form" @submit.prevent="submitData">
+        <Alert
+          v-if="isFormIncomplete"
+          ref="alert"
+          type="error"
+          message="All fields are required. Please enter all fields to submit."
+          tabindex="0"
+        />
         <div class="field" v-for="question in questions" :key="question.id">
           <label
             v-if="['text', 'largeText', 'email', 'tel', 'select'].indexOf(question.dataEntryType) !== -1"
@@ -112,12 +119,20 @@
       @close="() => (shouldShowDelete = false)"
       @onDelete="deletePersonnelData"
     />
+    <UnsavedWarning
+      v-if="shouldDisplayUnsavedWarning"
+      @onClose="() => (shouldDisplayUnsavedWarning = false)"
+      @onSave="saveChanges"
+      @onDiscard="discardChanges"
+    />
   </div>
 </template>
 
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
+import unsavedChanges from '@/mixins/unsavedChanges';
+import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
@@ -132,7 +147,8 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
+  components: { Alert, Button, SideNav, Table, DeleteWarning, Multiselect },
+  mixins: [unsavedChanges],
   data() {
     return {
       isEnteringInfo: false,
@@ -142,15 +158,16 @@ export default {
       shouldDeleteSingle: false,
       selectedPersonnel: null,
       isPrimaryContactDisabled: false,
+      isFormIncomplete: false,
       pendingData: {},
       rows: [],
       columns: [
         {
-          key: 'Full Name',
+          key: 'Full Name of Personnel',
           label: 'Name',
         },
         {
-          key: 'Title',
+          key: 'Job Title',
           label: 'Title',
         },
         {
@@ -162,7 +179,7 @@ export default {
           label: 'Approval Sheet',
         },
         {
-          key: 'Organization',
+          key: 'Organization Name',
           label: 'Organization',
         },
       ],
@@ -194,6 +211,7 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
+      this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
 
@@ -226,7 +244,22 @@ export default {
         this.isPrimaryContactDisabled = false;
       }
     },
-    submitPersonnelData() {
+    submitData() {
+      // Check that all non-checkbox questions have been filled out before submitting
+      this.isFormIncomplete = false;
+      this.questions.forEach((q) => {
+        if (q.dataEntryType !== 'checkbox' && (!this.pendingData[q.id] || !this.pendingData[q.id].length)) {
+          this.isFormIncomplete = true;
+        }
+      });
+      // nextTick waits until Alert is now displayed (based on its v-if), and then sets focus to the alert
+      if (this.isFormIncomplete) {
+        this.$nextTick().then(() => {
+          this.$refs.alert.$el.focus();
+        });
+        return;
+      }
+
       if (this.shouldShowEdit) {
         this.editPersonnelData();
       } else {

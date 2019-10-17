@@ -40,6 +40,8 @@ export default {
           return 'fa-exclamation-circle';
         case 'warning':
           return 'fa-exclamation-triangle';
+        case 'info':
+          return 'fa-info-circle';
         default:
         case 'success':
           return 'fa-check-circle';
@@ -51,6 +53,8 @@ export default {
           return 'is-danger';
         case 'warning':
           return 'is-warning';
+        case 'info':
+          return 'is-primary';
         default:
         case 'success':
           return 'is-success';
@@ -78,6 +82,10 @@ export default {
 
   &.is-warning {
     background-color: #fff1d2;
+  }
+
+  &.is-info {
+    background-color: #e7f6f8;
   }
 
   .message-body {

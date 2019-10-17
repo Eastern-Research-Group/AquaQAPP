@@ -11,12 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       method: {
         type: DataTypes.STRING,
       },
-      fresh: {
-        type: DataTypes.BOOLEAN,
-      },
-      salt: {
-        type: DataTypes.BOOLEAN,
-      },
       units: {
         type: DataTypes.STRING,
       },
@@ -47,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
       mdl: {
         type: DataTypes.STRING,
       },
+      monitoringCategory: {
+        type: DataTypes.STRING,
+      },
       labName: {
         type: DataTypes.STRING,
       },
@@ -69,6 +66,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       correctiveAction: {
+        type: DataTypes.STRING,
+      },
+      waterType: {
         type: DataTypes.STRING,
       },
     },

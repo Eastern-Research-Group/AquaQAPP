@@ -1,6 +1,5 @@
 <template>
   <div>
-    <label class="label is-size-4">Monitoring Locations</label>
     <Tabs :tabs="[{ id: 'map', name: 'Map', isActive: true }, { id: 'list', name: 'List' }]">
       <template v-slot:list>
         <Table
@@ -25,11 +24,12 @@
       </template>
     </Tabs>
     <SideNav
-      v-if="isEnteringLocationInfo"
-      :handleClose="() => (this.isEnteringLocationInfo = false)"
+      v-if="isEnteringInfo"
+      :beforeClose="checkSidenavData"
+      :handleClose="() => (this.isEnteringInfo = false)"
       :title="shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
-      <form @submit.prevent="submitLocationData">
+      <form ref="form" @submit.prevent="submitLocationData">
         <Alert
           v-if="isFormIncomplete"
           ref="alert"
@@ -101,6 +101,22 @@
       :itemLabel="shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']"
       @close="() => (shouldShowDelete = false)"
       @onDelete="deleteLocationData"
+      :disabled="disabled"
+      :message="
+        (disabledAll &&
+          shouldDeleteAll &&
+          `One or more locations are associated with one or more selected parameters that must be removed before deleting all locations.`) ||
+          (disabled &&
+            `${
+              selectedLocation['Location Name']
+            } is associated with one or more selected parameters that must be removed before deleting this location.`)
+      "
+    />
+    <UnsavedWarning
+      v-if="shouldDisplayUnsavedWarning"
+      @onClose="() => (shouldDisplayUnsavedWarning = false)"
+      @onSave="saveChanges"
+      @onDiscard="discardChanges"
     />
   </div>
 </template>
@@ -109,6 +125,7 @@
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import getQuestionIdByName from '@/utils/getQuestionIdByName';
+import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
@@ -126,12 +143,13 @@ export default {
     },
   },
   components: { Map, SideNav, Tabs, Button, Multiselect, Table, DeleteWarning, Alert },
+  mixins: [unsavedChanges],
   data() {
     return {
       markers: [],
       map: null,
       isAddingLocation: false,
-      isEnteringLocationInfo: false,
+      isEnteringInfo: false,
       shouldShowDelete: false,
       shouldShowEdit: false,
       shouldDeleteAll: false,
@@ -147,23 +165,55 @@ export default {
         { key: 'Location Longitude', label: 'Longitude' },
       ],
       isFormIncomplete: false,
+      disabled: false,
+      disabledAll: false,
     };
   },
   computed: {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
-    ...mapState('ref', ['locationTypes', 'collectionMethods', 'coordRefSystems', 'concerns', 'waterTypes']),
+    ...mapState('ref', [
+      'locationTypes',
+      'collectionMethods',
+      'coordRefSystems',
+      'concerns',
+      'waterTypes',
+      'parameters',
+    ]),
     ...mapState({
       allQuestions: (state) => state.structure.questions,
     }),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['concernsQuestionId', 'concernsDifferByLocQuestionId', 'locConcernsQuestionId']),
+    ...mapGetters('structure', [
+      'concernsQuestionId',
+      'concernsDifferByLocQuestionId',
+      'locConcernsQuestionId',
+      'parametersQuestionId',
+    ]),
   },
   mounted() {
     this.refreshLocationData();
   },
   methods: {
+    onDisableDelete(location) {
+      if (location) {
+        const selectedParams = this.qappData[this.parametersQuestionId].split(',');
+        const filteredParams = [];
+        this.parameters.forEach((param) => {
+          if (selectedParams.some((p) => parseInt(p, 10) === param.id)) {
+            filteredParams.push(param);
+          }
+        });
+        if (location['Water Type'] === 'Fresh' && !!filteredParams.find((p) => p.waterType === 'Freshwater')) {
+          this.disabled = true;
+          this.disabledAll = true;
+        } else if (location['Water Type'] === 'Salt' && !!filteredParams.find((p) => p.waterType === 'Saltwater')) {
+          this.disabled = true;
+          this.disabledAll = true;
+        }
+      }
+    },
     getOptions(refName) {
       // get reference data array based on refName field in questions table
       return this[refName];
@@ -182,7 +232,7 @@ export default {
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isFormIncomplete = false;
-          this.isEnteringLocationInfo = true;
+          this.isEnteringInfo = true;
           this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
           this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
 
@@ -261,14 +311,14 @@ export default {
 
       // Close location side nav, clear inputs, and turn off click event for map
       this.isAddingLocation = false;
-      this.isEnteringLocationInfo = false;
+      this.isEnteringInfo = false;
       this.pendingData = {};
       if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
       this.isFormIncomplete = false;
       this.pendingData = {};
-      this.isEnteringLocationInfo = true;
+      this.isEnteringInfo = true;
       this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
@@ -279,7 +329,8 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, location[q.questionLabel]);
       });
-      this.isEnteringLocationInfo = true;
+      this.currentEditData = { ...this.pendingData };
+      this.isEnteringInfo = true;
       this.shouldShowEdit = true;
     },
     submitLocationData() {
@@ -310,15 +361,21 @@ export default {
         values: this.cleanData(this.pendingData),
       });
       this.refreshLocationData(); // refresh markers and table data after editing
-      this.isEnteringLocationInfo = false;
+      this.isEnteringInfo = false;
     },
     onDelete(location) {
       this.shouldShowDelete = true;
+      this.disabled = false;
       if (location) {
         this.selectedLocation = location;
         this.shouldDeleteAll = false;
         this.shouldDeleteSingle = true;
+        this.onDisableDelete(this.selectedLocation);
+      } else if (this.disabledAll) {
+        this.disabled = true;
+        this.shouldDeleteAll = true;
       } else {
+        this.disabledAll = false;
         this.shouldDeleteSingle = false;
         this.shouldDeleteAll = true;
       }

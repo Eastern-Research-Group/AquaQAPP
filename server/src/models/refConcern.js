@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       code: DataTypes.STRING,
       label: DataTypes.STRING,
+      concernSort: DataTypes.INTEGER,
     },
     {
       timestamps: false,

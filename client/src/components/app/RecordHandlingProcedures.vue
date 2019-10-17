@@ -1,12 +1,11 @@
 <template>
   <div class="clear">
     <Table
-      class="activities"
       :columns="columns"
       :rows="rows"
       :shouldHaveActionsCol="true"
       :shouldHaveGlobalActions="true"
-      noDataMessage="No activities have been added. Add activities to continue."
+      noDataMessage="No record handling procedures have been added. Click the Add button to add procedures."
       @onEdit="onEdit"
       @onDelete="onDelete"
       @onAdd="onAddInfo"
@@ -15,13 +14,21 @@
       v-if="isEnteringInfo"
       :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Activity and Schedule' : 'Add Activity and Schedule'"
+      :title="shouldShowEdit ? 'Edit Record Handling Procedures' : 'Add Record Handling Procedures'"
     >
       <form ref="form" @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
-          <label v-if="question.dataEntryType === 'largeText'" class="label" :for="`question${question.id}`">{{
-            question.questionLabel
-          }}</label>
+          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
+          <input
+            v-if="question.dataEntryType === 'text'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.id]"
+            class="input"
+            type="text"
+            :placeholder="`Enter ${question.questionLabel}`"
+            :maxlength="question.maxLength"
+            required
+          />
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
@@ -31,21 +38,9 @@
             :maxlength="question.maxLength"
             required
           ></textarea>
-          <div class="field" v-if="question.dataEntryType === 'checkbox'">
-            <input
-              class="is-checkradio"
-              :id="question.id"
-              type="checkbox"
-              true-value="X"
-              false-value=""
-              v-model="pendingData[question.id]"
-            />
-            <label :for="question.id">{{ question.questionLabel }}</label>
-          </div>
         </div>
-        <Alert v-if="error" :message="error" type="error" />
         <Button
-          :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
+          :label="shouldShowEdit ? 'Save' : 'Add and Save'"
           :type="shouldShowEdit ? 'primary' : 'success'"
           submit
         />
@@ -53,10 +48,10 @@
     </SideNav>
     <DeleteWarning
       v-if="shouldShowDelete"
-      title="Delete Activity"
-      :itemLabel="shouldDeleteAll ? 'all activities' : selectedActivity['Activity']"
+      title="Delete Record Handling Procedures"
+      :itemLabel="shouldDeleteAll ? 'all record handling procedures' : `procedures for ${selectedRow.Activity}`"
       @close="() => (shouldShowDelete = false)"
-      @onDelete="deleteActivityData"
+      @onDelete="deleteData"
     />
     <UnsavedWarning
       v-if="shouldDisplayUnsavedWarning"
@@ -70,21 +65,20 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
-import Table from '@/components/shared/Table';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
+import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
-import Alert from '@/components/shared/Alert';
 
 export default {
-  name: 'ProjectActivities',
+  name: 'RecordHandlingProcedures',
   props: {
     questions: {
       type: Array,
       required: true,
     },
   },
-  components: { Table, Button, SideNav, DeleteWarning, Alert },
+  components: { Button, SideNav, Table, DeleteWarning },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -93,8 +87,7 @@ export default {
       shouldShowDelete: false,
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
-      selectedActivity: null,
-      error: null,
+      selectedRow: null,
       pendingData: {},
       rows: [],
       columns: [
@@ -103,52 +96,8 @@ export default {
           label: 'Activity',
         },
         {
-          key: 'January',
-          label: 'J',
-        },
-        {
-          key: 'February',
-          label: 'F',
-        },
-        {
-          key: 'March',
-          label: 'M',
-        },
-        {
-          key: 'April',
-          label: 'A',
-        },
-        {
-          key: 'May',
-          label: 'M',
-        },
-        {
-          key: 'June',
-          label: 'J',
-        },
-        {
-          key: 'July',
-          label: 'J',
-        },
-        {
-          key: 'August',
-          label: 'A',
-        },
-        {
-          key: 'September',
-          label: 'S',
-        },
-        {
-          key: 'October',
-          label: 'O',
-        },
-        {
-          key: 'November',
-          label: 'N',
-        },
-        {
-          key: 'December',
-          label: 'J',
+          key: 'Procedures',
+          label: 'Procedures',
         },
       ],
     };
@@ -160,23 +109,23 @@ export default {
     ...mapGetters('qapp', ['qappData']),
   },
   mounted() {
-    this.refreshActivityData();
+    this.refreshData();
   },
   methods: {
     onEdit(row) {
-      this.selectedActivity = row;
+      this.selectedRow = row;
+      // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
-      this.error = null;
     },
     onDelete(row) {
       this.shouldShowDelete = true;
       if (row) {
-        this.selectedActivity = row;
+        this.selectedRow = row;
         this.shouldDeleteAll = false;
         this.shouldDeleteSingle = true;
       } else {
@@ -187,71 +136,67 @@ export default {
     async onAddInfo() {
       this.pendingData = {};
       this.isEnteringInfo = true;
-      this.selectedActivity = null;
+      this.selectedRow = null;
       this.shouldShowEdit = false;
-      this.error = null;
     },
     submitData() {
       if (this.shouldShowEdit) {
-        this.editActivityData();
+        this.editData();
       } else {
-        this.addActivityData();
+        this.addData();
       }
     },
-    async editActivityData() {
+    async editData() {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
-        valueId: this.selectedActivity.valueId,
-        values: this.pendingData,
+        valueId: this.selectedRow.valueId,
+        values: this.cleanData(this.pendingData),
       });
-      this.refreshActivityData();
+      this.refreshData();
       this.isEnteringInfo = false;
     },
-    addActivityData() {
-      const activityData = {};
+    addData() {
+      const proceduresData = {};
       this.questions.forEach((q) => {
-        activityData[q.questionLabel] = this.pendingData[q.id];
+        proceduresData[q.questionLabel] = this.pendingData[q.id];
       });
 
-      // A unique value id allows us to save multiple sets of activities to the DB, each tied to a value id
+      // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
       let newValueId = 1;
       if (this.rows.length) {
         newValueId = Math.max(...this.rows.map((row) => row.valueId)) + 1;
       }
 
-      if (Object.values(activityData).filter((x) => x).length > 1) {
-        this.rows.push({
-          ...activityData,
-          valueId: newValueId,
-        });
+      this.rows.push({
+        ...proceduresData,
+        valueId: newValueId,
+      });
 
-        this.$emit('saveData', null, newValueId, this.pendingData);
+      // Emit saveData to parent component to save to DB
+      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
-        this.isEnteringInfo = false;
-        this.pendingData = {};
-      } else {
-        this.error = 'User must select at least one month to add and save.';
-      }
+      this.isEnteringInfo = false;
+      this.pendingData = {};
     },
-    async deleteActivityData() {
+    async deleteData() {
       let valueIds = [];
       if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedActivity.valueId];
+        valueIds = [this.selectedRow.valueId];
       } else {
         valueIds = this.rows.map((r) => r.valueId);
       }
       const questionIds = this.questions.map((q) => q.id);
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
-      this.refreshActivityData();
+      this.refreshData();
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;
     },
-    refreshActivityData() {
+    refreshData() {
       this.rows = [];
 
-      // Add rows to table if activity data already exists
-      const activity = {};
+      // Add rows to table if procedure data already exists
+      const procedures = {};
 
       // Logic to loop through existing qapp data and set up rows for table
       Object.keys(this.qappData).forEach((qId) => {
@@ -259,40 +204,55 @@ export default {
         const question = this.questions.find((q) => q.id === parseInt(qId, 10));
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
-          datum.forEach((activityField) => {
-            if (typeof activity[activityField.valueId] === 'undefined') activity[activityField.valueId] = {};
-            if (question.refName) {
-              activity[activityField.valueId][key] = this[question.refName].find(
-                (r) => r.id === parseInt(activityField.value, 10)
-              );
-            } else {
-              activity[activityField.valueId][key] = activityField.value;
-            }
+          datum.forEach((field) => {
+            if (typeof procedures[field.valueId] === 'undefined') procedures[field.valueId] = {};
+            procedures[field.valueId][key] = field.value;
           });
         }
       });
 
-      Object.keys(activity).forEach((activityId) => {
-        const row = activity[activityId];
+      Object.keys(procedures).forEach((activityId) => {
+        const row = procedures[activityId];
         this.rows.push({
           ...row,
           valueId: activityId,
         });
       });
     },
+    getOptions(refName) {
+      // get reference data array based on refName field in questions table
+      return this[refName];
+    },
+    cleanData() {
+      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
+      const cleanedData = {};
+      Object.keys(this.pendingData).forEach((qId) => {
+        if (typeof this.pendingData[qId] === 'object') {
+          // if array, store comma separate list of codes
+          if (Array.isArray(this.pendingData[qId])) {
+            const idArray = this.pendingData[qId].map((datum) => {
+              return datum.id || datum;
+            });
+            cleanedData[qId] = idArray.join(',');
+          } else {
+            cleanedData[qId] = this.pendingData[qId].id;
+          }
+        } else {
+          cleanedData[qId] = this.pendingData[qId];
+        }
+      });
+      return cleanedData;
+    },
   },
 };
 </script>
 
 <style scoped>
+.clear {
+  clear: both;
+}
+
 textarea {
   height: 6em;
-}
-</style>
-
-<style>
-.activities .table thead th,
-.activities td {
-  border-width: 2px !important;
 }
 </style>

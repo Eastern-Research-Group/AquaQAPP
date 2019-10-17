@@ -4,7 +4,7 @@
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <router-link class="navbar-item is-size-5" to="/">
-            AquaQAPP
+            <h1>AquaQAPP</h1>
           </router-link>
 
           <a
@@ -34,10 +34,17 @@
           </div>
           <div class="navbar-end" v-if="$auth.check()">
             <div class="navbar-item">
+              <a class="navbar-item" href="" target="_blank" v-if="$route.name === 'navigate'">User's Guide</a>
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <Button label="Generate" type="success" v-if="$route.name === 'navigate'" @click.native="generateQapp" />
+              <Button
+                label="Generate QAPP"
+                type="success"
+                v-if="$route.name === 'navigate'"
+                @click.native="generateQapp"
+                :disabled="completedSections.length < 1"
+              />
             </div>
           </div>
         </div>
@@ -47,6 +54,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Button from '@/components/shared/Button';
 
 export default {
@@ -56,6 +64,9 @@ export default {
     return {
       isActive: false,
     };
+  },
+  computed: {
+    ...mapState('qapp', ['completedSections']),
   },
   methods: {
     navigateTo(route) {
@@ -72,6 +83,9 @@ export default {
 </script>
 
 <style>
+h1 {
+  font-weight: bold;
+}
 .page-header {
   background-color: #fff;
   font-weight: bold;
