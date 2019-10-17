@@ -50,11 +50,12 @@
           >
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
-              <label class="label is-size-4">{{ question.questionLabel }}</label>
+              <label :for="`question${question.id}`" class="label is-size-4">{{ question.questionLabel }}</label>
               <!-- only display instructions under first question label, since it is for the whole seciton -->
               <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
               <input
                 v-if="question.dataEntryType === 'text'"
+                :id="`question${question.id}`"
                 class="input"
                 type="text"
                 required
@@ -65,6 +66,7 @@
               />
               <input
                 v-if="question.dataEntryType === 'phone'"
+                :id="`question${question.id}`"
                 class="input"
                 type="tel"
                 required
@@ -75,6 +77,7 @@
               />
               <input
                 v-if="question.dataEntryType === 'email'"
+                :id="`question${question.id}`"
                 class="input"
                 type="email"
                 required
@@ -85,6 +88,7 @@
               />
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
+                :id="`question${question.id}`"
                 class="input"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
@@ -100,21 +104,24 @@
                 There are monitoring locations associated with these concerns. You must delete these locations before
                 the concerns can be removed.
               </HoverText>
-              <div v-if="question.dataEntryType === 'checkboxBtn'" class="columns is-multiline">
-                <CheckboxButton
-                  v-for="option in getOptions(question.refName)"
-                  :key="option.id"
-                  :id="option.code"
-                  :name="option.label"
-                  :isSingleSelect="question.refName === 'yesNo'"
-                  :singleSelectId="question.questionLabel"
-                  :value="option.code"
-                  :disabled="locationConcerns.indexOf(option.code) > -1"
-                  :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
-                  @check="updatePendingData($event, question)"
-                  @click.native="triggerConcernsWarningModal(option.code)"
-                />
-              </div>
+              <fieldset v-if="question.dataEntryType === 'checkboxBtn'">
+                <legend class="is-sr-only">{{ question.questionLabel }}</legend>
+                <div class="columns is-multiline">
+                  <CheckboxButton
+                    v-for="option in getOptions(question.refName)"
+                    :key="option.id"
+                    :id="option.code"
+                    :name="option.label"
+                    :isSingleSelect="question.refName === 'yesNo'"
+                    :singleSelectId="question.questionLabel"
+                    :value="option.code"
+                    :disabled="locationConcerns.indexOf(option.code) > -1"
+                    :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
+                    @check="updatePendingData($event, question)"
+                    @click.native="triggerConcernsWarningModal(option.code)"
+                  />
+                </div>
+              </fieldset>
               <div class="btn-container has-text-right">
                 <Button
                   class="example"
@@ -149,9 +156,9 @@
             </div>
           </div>
           <div v-if="customSection">
-            <label class="label is-size-4">
+            <h2 class="label is-size-4">
               {{ currentSection.sectionLabel }}
-            </label>
+            </h2>
             <p class="instructions content" v-html="currentSection.instructions"></p>
             <component
               :is="customSection.component"
