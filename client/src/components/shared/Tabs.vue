@@ -3,7 +3,7 @@
     <div class="tabs aq-tabs is-boxed">
       <ul>
         <li v-for="tab in tabs" :key="tab.id" :class="tab.id === activeTabId ? 'is-active' : ''">
-          <a @click="activeTabId = tab.id">{{ tab.name }}</a>
+          <button @click="activeTabId = tab.id">{{ tab.name }}</button>
         </li>
       </ul>
     </div>
@@ -42,19 +42,28 @@ export default {
       li {
         min-width: 5em;
 
-        a {
-          border: none;
-          color: #fff;
+        button {
+          align-items: center;
           background-color: $darkBlue;
+          border: none;
+          border-radius: 4px 4px 0 0;
+          color: #fff;
+          cursor: pointer;
+          display: flex;
+          font-size: 1rem;
+          height: unset;
+          justify-content: center;
           margin-right: 0.2em;
           margin-bottom: 0;
+          padding: 0.6em 1.5em;
+          vertical-align: top;
 
           &:hover {
             background-color: darken($darkBlue, 10);
           }
         }
 
-        &.is-active a {
+        &.is-active button {
           background-color: $lightBlue;
           font-weight: bold;
 
