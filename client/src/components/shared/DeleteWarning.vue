@@ -1,6 +1,6 @@
 <template>
   <Modal @close="$emit('close')">
-    <Alert :message="message" type="warning" />
+    <Alert :message="alertLabel" type="warning" />
     <div class="field is-grouped">
       <div class="control">
         <Button
@@ -43,5 +43,10 @@ export default {
     },
   },
   components: { Alert, Button, Modal },
+  computed: {
+    alertLabel() {
+      return this.message || `Are you sure you want to delete ${this.itemLabel}?`; /* eslint-disable-line */
+    },
+  },
 };
 </script>
