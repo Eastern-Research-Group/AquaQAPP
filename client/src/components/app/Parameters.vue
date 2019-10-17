@@ -1,6 +1,5 @@
 <template>
   <div>
-    <label class="label is-size-4">Parameters</label>
     <Tabs :tabs="getWaterTypes()">
       <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
         <div :key="waterType.id" class="columns tab-content">

@@ -1,6 +1,5 @@
 <template>
   <div class="clear">
-    <label class="label is-size-4">Record Handling Procedures</label>
     <Table
       :columns="columns"
       :rows="rows"

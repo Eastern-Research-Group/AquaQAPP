@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       sectionLabel: DataTypes.STRING,
       sectionName: DataTypes.STRING,
       sectionSort: DataTypes.INTEGER,
+      instructions: DataTypes.TEXT,
     },
     {
       timestamps: false,

@@ -51,6 +51,7 @@
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
               <label class="label is-size-4">{{ question.questionLabel }}</label>
+              <p class="instructions content" v-html="currentSection.instructions"></p>
               <p v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions" />
               <input
                 v-if="question.dataEntryType === 'text'"
@@ -147,9 +148,12 @@
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
           </div>
-          <div v-for="customSection in customSections" :key="customSection.component">
+          <div v-if="customSection">
+            <label class="label is-size-4">
+              {{ currentSection.sectionLabel }}
+            </label>
+            <p class="instructions content" v-html="currentSection.instructions"></p>
             <component
-              v-if="customSection.label === currentSection.sectionLabel"
               :is="customSection.component"
               :questions="currentQuestions"
               :pendingData="pendingData"
@@ -270,6 +274,9 @@ export default {
         });
       }
       return concerns;
+    },
+    customSection() {
+      return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
     },
   },
   async mounted() {
@@ -528,11 +535,13 @@ export default {
   margin-top: 1em;
 }
 
+.instructions {
+  margin-bottom: 1.25rem;
+}
+
 textarea {
   resize: vertical;
   height: 8em;
-  margin-top: 1em;
-  margin-bottom: 1em;
 }
 
 .right {
