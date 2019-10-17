@@ -4,7 +4,7 @@
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <router-link class="navbar-item is-size-5" to="/">
-            AquaQAPP
+            <h1>AquaQAPP</h1>
           </router-link>
 
           <a
@@ -83,6 +83,9 @@ export default {
 </script>
 
 <style>
+h1 {
+  font-weight: bold;
+}
 .page-header {
   background-color: #fff;
   font-weight: bold;

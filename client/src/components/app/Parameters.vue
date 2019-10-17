@@ -4,41 +4,45 @@
       <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
         <div :key="waterType.id" class="columns tab-content">
           <div class="column is-8 param-inputs">
-            <p>Suggested parameters for {{ waterType.name }} water based on selected concerns</p>
-            <div v-if="getFilteredParams(suggestedParams, waterType.name).length" class="field checkboxes-container">
-              <div v-for="param in getFilteredParams(suggestedParams, waterType.name)" class="field" :key="param.id">
-                <input
-                  class="is-checkradio is-info"
-                  :id="param.id"
-                  type="checkbox"
-                  :value="param.id"
-                  :checked="isChecked(param.id)"
-                  @change="$emit('updateData', $event, paramQuestion)"
-                />
-                <label :for="param.id">{{ param.label }}</label>
+            <fieldset>
+              <legend>Suggested parameters for {{ waterType.name }} water based on selected concerns</legend>
+              <div v-if="getFilteredParams(suggestedParams, waterType.name).length" class="field checkboxes-container">
+                <div v-for="param in getFilteredParams(suggestedParams, waterType.name)" class="field" :key="param.id">
+                  <input
+                    class="is-checkradio is-info"
+                    :id="param.id"
+                    type="checkbox"
+                    :value="param.id"
+                    :checked="isChecked(param.id)"
+                    @change="$emit('updateData', $event, paramQuestion)"
+                  />
+                  <label :for="param.id">{{ param.label }}</label>
+                </div>
               </div>
-            </div>
-            <div v-else class="field checkboxes-container">
-              <i>There are no suggested parameters based on selected concerns</i>
-            </div>
-            <p>All other parameters for {{ waterType.name }} water</p>
-            <div v-if="getFilteredParams(allParams, waterType.name).length" class="field checkboxes-container">
-              <div v-for="param in getFilteredParams(allParams, waterType.name)" class="field" :key="param.id">
-                <input
-                  class="is-checkradio is-info"
-                  :id="param.id"
-                  type="checkbox"
-                  :value="param.id"
-                  :checked="isChecked(param.id)"
-                  @change="$emit('updateData', $event, paramQuestion)"
-                />
-                <label :for="param.id">{{ param.label }}</label>
+              <div v-else class="field checkboxes-container">
+                <i>There are no suggested parameters based on selected concerns</i>
               </div>
-            </div>
-            <div v-else class="field checkboxes-container">
-              <i>There are no other parameters for {{ waterType.name }} water</i>
-            </div>
-            <label for="otherParam">Other</label>
+            </fieldset>
+            <fieldset>
+              <legend>All other parameters for {{ waterType.name }} water</legend>
+              <div v-if="getFilteredParams(allParams, waterType.name).length" class="field checkboxes-container">
+                <div v-for="param in getFilteredParams(allParams, waterType.name)" class="field" :key="param.id">
+                  <input
+                    class="is-checkradio is-info"
+                    :id="param.id"
+                    type="checkbox"
+                    :value="param.id"
+                    :checked="isChecked(param.id)"
+                    @change="$emit('updateData', $event, paramQuestion)"
+                  />
+                  <label :for="param.id">{{ param.label }}</label>
+                </div>
+              </div>
+              <div v-else class="field checkboxes-container">
+                <i>There are no other parameters for {{ waterType.name }} water</i>
+              </div>
+            </fieldset>
+            <label for="otherParam">Other parameters</label>
             <div class="field has-addons">
               <div class="control other-input">
                 <input ref="otherInput" id="otherParam" class="input" type="text" />
@@ -207,6 +211,10 @@ export default {
 
 .param-inputs {
   padding-right: 2rem;
+
+  fieldset {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .other-input {

@@ -19,6 +19,10 @@ export default {
 
 <style>
 .progress-bar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  margin-left: -1.5rem;
   background-color: #182e51;
   padding: 0.5em;
   font-size: 0.9em;

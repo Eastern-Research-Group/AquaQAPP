@@ -34,6 +34,8 @@ html {
 }
 
 .main-section {
+  position: relative;
+
   .title,
   .subtitle,
   .label {
@@ -90,11 +92,10 @@ html {
   height: 100%;
 }
 
-.menu-list button {
-  &:focus {
+button, a, input, .switch .checkbox {
+  &:focus, &:focus + .slider {
     box-shadow: none !important;
     outline: 2px dotted #aeb0b5 !important;
-    outline-offset: 2px !important;
   }
 }
 
