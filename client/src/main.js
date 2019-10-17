@@ -27,13 +27,6 @@ Vue.use(require('@websanova/vue-auth'), {
   notFoundRedirect: { path: '/dashboard' },
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  const VueAxe = require('vue-axe'); //eslint-disable-line
-  Vue.use(VueAxe, {
-    rules: [{ id: 'label', enabled: true }],
-  });
-}
-
 new Vue({
   router,
   store,
