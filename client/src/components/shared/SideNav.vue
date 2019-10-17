@@ -17,6 +17,10 @@
 export default {
   name: 'SideNav',
   props: {
+    beforeClose: {
+      type: Function,
+      required: false,
+    },
     handleClose: {
       type: Function,
       required: true,
@@ -42,6 +46,9 @@ export default {
   },
   methods: {
     close() {
+      // if beforeClose function exists and returns false, do not continue with side nav closing
+      if (typeof this.beforeClose === 'function' && !this.beforeClose()) return;
+
       this.shouldDismiss = true;
       // delay 500ms for slide animation to complete
       setTimeout(() => this.handleClose(), 500);
