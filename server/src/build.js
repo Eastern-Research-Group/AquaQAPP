@@ -8,7 +8,6 @@ if (process.env.HEROKU_ENV === 'dev') {
 
   // undo seeds and execute non-dev seeders for lookup data (do not insert any dummy data and do not delete user-entered data)
   execSync('sequelize db:seed:undo:all');
-  execSync('sequelize db:seed --seed examples');
   execSync('sequelize db:seed --seed questions');
   execSync('sequelize db:seed --seed ref-concerns');
   execSync('sequelize db:seed --seed ref-horizontal-collection-method');
