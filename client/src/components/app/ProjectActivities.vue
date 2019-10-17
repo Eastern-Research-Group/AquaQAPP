@@ -14,10 +14,11 @@
     />
     <SideNav
       v-if="isEnteringInfo"
+      :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
       :title="shouldShowEdit ? 'Edit Activity and Schedule' : 'Add Activity and Schedule'"
     >
-      <form @submit.prevent="submitActivityData">
+      <form ref="form" @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
           <label v-if="question.dataEntryType === 'largeText'" class="label" :for="`question${question.id}`">{{
             question.questionLabel
@@ -58,11 +59,18 @@
       @close="() => (shouldShowDelete = false)"
       @onDelete="deleteActivityData"
     />
+    <UnsavedWarning
+      v-if="shouldDisplayUnsavedWarning"
+      @onClose="() => (shouldDisplayUnsavedWarning = false)"
+      @onSave="saveChanges"
+      @onDiscard="discardChanges"
+    />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import unsavedChanges from '@/mixins/unsavedChanges';
 import Table from '@/components/shared/Table';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
@@ -78,6 +86,7 @@ export default {
     },
   },
   components: { Table, Button, SideNav, DeleteWarning, Alert },
+  mixins: [unsavedChanges],
   data() {
     return {
       isEnteringInfo: false,
@@ -160,6 +169,7 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
+      this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
       this.error = null;
@@ -182,7 +192,7 @@ export default {
       this.shouldShowEdit = false;
       this.error = null;
     },
-    submitActivityData() {
+    submitData() {
       if (this.shouldShowEdit) {
         this.editActivityData();
       } else {

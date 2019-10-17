@@ -13,10 +13,11 @@
     />
     <SideNav
       v-if="isEnteringInfo"
+      :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
       :title="shouldShowEdit ? 'Edit Organization/Personnel' : 'Add Organization/Personnel'"
     >
-      <form @submit.prevent="submitPersonnelData">
+      <form ref="form" @submit.prevent="submitData">
         <Alert
           v-if="isFormIncomplete"
           ref="alert"
@@ -119,12 +120,19 @@
       @close="() => (shouldShowDelete = false)"
       @onDelete="deletePersonnelData"
     />
+    <UnsavedWarning
+      v-if="shouldDisplayUnsavedWarning"
+      @onClose="() => (shouldDisplayUnsavedWarning = false)"
+      @onSave="saveChanges"
+      @onDiscard="discardChanges"
+    />
   </div>
 </template>
 
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
+import unsavedChanges from '@/mixins/unsavedChanges';
 import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
@@ -141,6 +149,7 @@ export default {
     },
   },
   components: { Alert, Button, SideNav, Table, DeleteWarning, Multiselect },
+  mixins: [unsavedChanges],
   data() {
     return {
       isEnteringInfo: false,
@@ -203,6 +212,7 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
+      this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
 
@@ -235,7 +245,7 @@ export default {
         this.isPrimaryContactDisabled = false;
       }
     },
-    submitPersonnelData() {
+    submitData() {
       // Check that all non-checkbox questions have been filled out before submitting
       this.isFormIncomplete = false;
       this.questions.forEach((q) => {

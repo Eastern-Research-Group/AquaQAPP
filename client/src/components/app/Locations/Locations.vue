@@ -25,11 +25,12 @@
       </template>
     </Tabs>
     <SideNav
-      v-if="isEnteringLocationInfo"
-      :handleClose="() => (this.isEnteringLocationInfo = false)"
+      v-if="isEnteringInfo"
+      :beforeClose="checkSidenavData"
+      :handleClose="() => (this.isEnteringInfo = false)"
       :title="shouldShowEdit ? 'Edit Location' : 'Add Location'"
     >
-      <form @submit.prevent="submitLocationData">
+      <form ref="form" @submit.prevent="submitLocationData">
         <Alert
           v-if="isFormIncomplete"
           ref="alert"
@@ -110,6 +111,12 @@
           : `Are you sure you want to delete ${shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']}?`
       "
     />
+    <UnsavedWarning
+      v-if="shouldDisplayUnsavedWarning"
+      @onClose="() => (shouldDisplayUnsavedWarning = false)"
+      @onSave="saveChanges"
+      @onDiscard="discardChanges"
+    />
   </div>
 </template>
 
@@ -117,6 +124,7 @@
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import getQuestionIdByName from '@/utils/getQuestionIdByName';
+import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import Tabs from '@/components/shared/Tabs';
@@ -134,12 +142,13 @@ export default {
     },
   },
   components: { Map, SideNav, Tabs, Button, Multiselect, Table, DeleteWarning, Alert },
+  mixins: [unsavedChanges],
   data() {
     return {
       markers: [],
       map: null,
       isAddingLocation: false,
-      isEnteringLocationInfo: false,
+      isEnteringInfo: false,
       shouldShowDelete: false,
       shouldShowEdit: false,
       shouldDeleteAll: false,
@@ -220,7 +229,7 @@ export default {
       if (this.isAddingLocation) {
         this.map.on('click', (e) => {
           this.isFormIncomplete = false;
-          this.isEnteringLocationInfo = true;
+          this.isEnteringInfo = true;
           this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
           this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
 
@@ -299,14 +308,14 @@ export default {
 
       // Close location side nav, clear inputs, and turn off click event for map
       this.isAddingLocation = false;
-      this.isEnteringLocationInfo = false;
+      this.isEnteringInfo = false;
       this.pendingData = {};
       if (this.map) this.map.off('click');
     },
     onAddLocationInfo() {
       this.isFormIncomplete = false;
       this.pendingData = {};
-      this.isEnteringLocationInfo = true;
+      this.isEnteringInfo = true;
       this.selectedLocation = null;
       this.shouldShowEdit = false;
     },
@@ -317,7 +326,8 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, location[q.questionLabel]);
       });
-      this.isEnteringLocationInfo = true;
+      this.currentEditData = { ...this.pendingData };
+      this.isEnteringInfo = true;
       this.shouldShowEdit = true;
     },
     submitLocationData() {
@@ -348,7 +358,7 @@ export default {
         values: this.cleanData(this.pendingData),
       });
       this.refreshLocationData(); // refresh markers and table data after editing
-      this.isEnteringLocationInfo = false;
+      this.isEnteringInfo = false;
     },
     onDelete(location) {
       this.shouldShowDelete = true;
