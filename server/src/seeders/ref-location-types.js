@@ -1,9 +1,9 @@
 const path = require('path');
-const { wqxXmlToJson } = require('../utils/jsonHelpers');
+const { csvToJson } = require('../utils/jsonHelpers');
 
 module.exports = {
-  up: (queryInterface) => {
-    const json = wqxXmlToJson(path.resolve(__dirname, './data/MonitoringLocationType.xml'));
+  up: async (queryInterface) => {
+    const json = await csvToJson(path.resolve(__dirname, './data/LocationTypes.csv'));
     return queryInterface.bulkInsert('RefLocationTypes', json);
   },
 

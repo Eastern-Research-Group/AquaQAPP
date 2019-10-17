@@ -21,6 +21,9 @@ module.exports = {
       sectionSort: {
         type: Sequelize.INTEGER,
       },
+      instructions: {
+        type: Sequelize.TEXT,
+      },
     });
   },
   down: (queryInterface) => {

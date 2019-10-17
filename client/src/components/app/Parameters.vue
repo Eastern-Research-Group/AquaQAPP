@@ -1,78 +1,56 @@
 <template>
   <div>
-    <label class="label is-size-4">Parameters</label>
     <Tabs :tabs="getWaterTypes()">
       <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
         <div :key="waterType.id" class="columns tab-content">
-          <div class="column is-two-thirds">
-            <div class="columns">
-              <div class="column is-10">
-                <p>Suggested parameters for {{ waterType.name }} water based on selected concerns</p>
-                <div
-                  v-if="getFilteredParams(suggestedParams, waterType.name).length"
-                  class="field checkboxes-container"
-                >
-                  <div
-                    v-for="param in getFilteredParams(suggestedParams, waterType.name)"
-                    class="field"
-                    :key="param.id"
-                  >
-                    <input
-                      class="is-checkradio is-info"
-                      :id="param.id"
-                      type="checkbox"
-                      :value="param.id"
-                      :checked="isChecked(param.id)"
-                      @change="$emit('updateData', $event, paramQuestion)"
-                    />
-                    <label :for="param.id">{{ param.label }}</label>
-                  </div>
-                </div>
-                <div v-else class="field checkboxes-container">
-                  <i>There are no suggested parameters based on selected concerns</i>
-                </div>
-              </div>
-              <div class="column arrows is-hidden-mobile">
-                <span class="fas fa-angle-double-right is-size-3 "></span>
+          <div class="column is-8 param-inputs">
+            <p>Suggested parameters for {{ waterType.name }} water based on selected concerns</p>
+            <div v-if="getFilteredParams(suggestedParams, waterType.name).length" class="field checkboxes-container">
+              <div v-for="param in getFilteredParams(suggestedParams, waterType.name)" class="field" :key="param.id">
+                <input
+                  class="is-checkradio is-info"
+                  :id="param.id"
+                  type="checkbox"
+                  :value="param.id"
+                  :checked="isChecked(param.id)"
+                  @change="$emit('updateData', $event, paramQuestion)"
+                />
+                <label :for="param.id">{{ param.label }}</label>
               </div>
             </div>
-            <div class="columns">
-              <div class="column is-10">
-                <p>All other parameters for {{ waterType.name }} water</p>
-                <div v-if="getFilteredParams(allParams, waterType.name).length" class="field checkboxes-container">
-                  <div v-for="param in getFilteredParams(allParams, waterType.name)" class="field" :key="param.id">
-                    <input
-                      class="is-checkradio is-info"
-                      :id="param.id"
-                      type="checkbox"
-                      :value="param.id"
-                      :checked="isChecked(param.id)"
-                      @change="$emit('updateData', $event, paramQuestion)"
-                    />
-                    <label :for="param.id">{{ param.label }}</label>
-                  </div>
-                </div>
-                <div v-else class="field checkboxes-container">
-                  <i>There are no other parameters for {{ waterType.name }} water</i>
-                </div>
-              </div>
-              <div class="column arrows is-hidden-mobile">
-                <span class="fas fa-angle-double-right is-size-3 "></span>
+            <div v-else class="field checkboxes-container">
+              <i>There are no suggested parameters based on selected concerns</i>
+            </div>
+            <p>All other parameters for {{ waterType.name }} water</p>
+            <div v-if="getFilteredParams(allParams, waterType.name).length" class="field checkboxes-container">
+              <div v-for="param in getFilteredParams(allParams, waterType.name)" class="field" :key="param.id">
+                <input
+                  class="is-checkradio is-info"
+                  :id="param.id"
+                  type="checkbox"
+                  :value="param.id"
+                  :checked="isChecked(param.id)"
+                  @change="$emit('updateData', $event, paramQuestion)"
+                />
+                <label :for="param.id">{{ param.label }}</label>
               </div>
             </div>
-            <div class="columns">
-              <div class="column is-10">
-                <div class="field">
-                  <p>Other</p>
-                  <input ref="otherInput" class="input" type="text" @keyup.enter="updateParams($event)" />
-                </div>
+            <div v-else class="field checkboxes-container">
+              <i>There are no other parameters for {{ waterType.name }} water</i>
+            </div>
+            <label for="otherParam">Other</label>
+            <div class="field has-addons">
+              <div class="control other-input">
+                <input ref="otherInput" id="otherParam" class="input" type="text" />
               </div>
-              <div class="column arrows is-hidden-mobile">
-                <span class="fas fa-angle-double-right is-size-3 "></span>
+              <div class="control">
+                <button @click="updateParams" class="button is-success">
+                  Add
+                </button>
               </div>
             </div>
           </div>
-          <div class="column is-one-third">
+          <div class="column is-4">
             <p class="has-text-centered">Selected</p>
             <div class="box selected-parameters">
               <ul>
@@ -185,8 +163,10 @@ export default {
     isChecked(paramId) {
       return this.selectedParams.indexOf(paramId.toString()) > -1;
     },
-    updateParams(e) {
-      this.$emit('updateData', e, this.paramQuestion);
+    updateParams() {
+      // Need to manually set event object based on input value
+      const event = { target: { value: this.$refs.otherInput[0].value } };
+      this.$emit('updateData', event, this.paramQuestion);
       this.$refs.otherInput[0].value = '';
     },
   },
@@ -223,6 +203,14 @@ export default {
 
 .box {
   margin: 0.5rem 0;
+}
+
+.param-inputs {
+  padding-right: 2rem;
+}
+
+.other-input {
+  width: 100%;
 }
 
 .param-label {

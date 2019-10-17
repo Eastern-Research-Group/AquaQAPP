@@ -1,6 +1,5 @@
 <template>
   <div class="clear">
-    <label class="label is-size-4">Secondary Data</label>
     <Table
       :columns="columns"
       :rows="rows"

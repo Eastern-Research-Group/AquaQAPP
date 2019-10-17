@@ -43,7 +43,7 @@
 
           <div
             class="field"
-            v-for="question in currentQuestions.filter(
+            v-for="(question, index) in currentQuestions.filter(
               (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
             )"
             :key="question.id"
@@ -51,7 +51,8 @@
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
               <label class="label is-size-4">{{ question.questionLabel }}</label>
-              <p v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions" />
+              <!-- only display instructions under first question label, since it is for the whole seciton -->
+              <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
               <input
                 v-if="question.dataEntryType === 'text'"
                 class="input"
@@ -147,9 +148,12 @@
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
           </div>
-          <div v-for="customSection in customSections" :key="customSection.component">
+          <div v-if="customSection">
+            <label class="label is-size-4">
+              {{ currentSection.sectionLabel }}
+            </label>
+            <p class="instructions content" v-html="currentSection.instructions"></p>
             <component
-              v-if="customSection.label === currentSection.sectionLabel"
               :is="customSection.component"
               :questions="currentQuestions"
               :pendingData="pendingData"
@@ -270,6 +274,9 @@ export default {
         });
       }
       return concerns;
+    },
+    customSection() {
+      return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
     },
   },
   async mounted() {
@@ -532,11 +539,13 @@ export default {
   margin-top: 1em;
 }
 
+.instructions {
+  margin-bottom: 1.25rem;
+}
+
 textarea {
   resize: vertical;
   height: 8em;
-  margin-top: 1em;
-  margin-bottom: 1em;
 }
 
 .right {
