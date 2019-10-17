@@ -103,11 +103,13 @@
       @onDelete="deleteLocationData"
       :disabled="disabled"
       :message="
-        disabled
-          ? `${
+        (disabledAll &&
+          shouldDeleteAll &&
+          `One or more locations are associated with one or more selected parameters that must be removed before deleting all locations.`) ||
+          (disabled &&
+            `${
               selectedLocation['Location Name']
-            } is associated with one or more selected parameters that must be removed before deleting this location.`
-          : `Are you sure you want to delete ${shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']}?`
+            } is associated with one or more selected parameters that must be removed before deleting this location.`)
       "
     />
   </div>
@@ -156,6 +158,7 @@ export default {
       ],
       isFormIncomplete: false,
       disabled: false,
+      disabledAll: false,
     };
   },
   computed: {
@@ -194,11 +197,12 @@ export default {
             filteredParams.push(param);
           }
         });
-        console.log(location);
         if (location['Water Type'] === 'Fresh' && !!filteredParams.find((p) => p.waterType === 'Freshwater')) {
           this.disabled = true;
+          this.disabledAll = true;
         } else if (location['Water Type'] === 'Salt' && !!filteredParams.find((p) => p.waterType === 'Saltwater')) {
           this.disabled = true;
+          this.disabledAll = true;
         }
       }
     },
@@ -358,7 +362,11 @@ export default {
         this.shouldDeleteAll = false;
         this.shouldDeleteSingle = true;
         this.onDisableDelete(this.selectedLocation);
+      } else if (this.disabledAll) {
+        this.disabled = true;
+        this.shouldDeleteAll = true;
       } else {
+        this.disabledAll = false;
         this.shouldDeleteSingle = false;
         this.shouldDeleteAll = true;
       }
