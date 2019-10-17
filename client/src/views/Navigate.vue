@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="navigate-container">
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
@@ -503,6 +503,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.navigate-container {
+  margin-top: 2rem;
+}
+
 .menu {
   border-right: 1px solid #00b0e6;
 }
