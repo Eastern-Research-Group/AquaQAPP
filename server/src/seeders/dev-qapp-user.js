@@ -198,7 +198,7 @@ module.exports = {
       },
       {
         questionId: 41,
-        value: '6',
+        value: '1',
         valueId: 1,
       },
       {
