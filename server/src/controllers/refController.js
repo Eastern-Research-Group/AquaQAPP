@@ -11,6 +11,7 @@ module.exports = {
   async concerns(req, res) {
     try {
       const concerns = await RefConcern.findAll({
+        order: [['concernSort', 'ASC']],
         include: [
           {
             model: RefParameter,
