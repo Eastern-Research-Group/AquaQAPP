@@ -92,8 +92,12 @@ html {
   height: 100%;
 }
 
+.is-checkradio[type=checkbox].is-block, .is-checkradio[type=radio].is-block {
+    display: block !important;
+}
+
 button, a, input, .switch .checkbox {
-  &:focus, &:focus + .slider {
+  &:focus, &:focus + .slider, &:focus + label {
     box-shadow: none !important;
     outline: 2px dotted #aeb0b5 !important;
   }
