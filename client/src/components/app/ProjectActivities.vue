@@ -1,6 +1,5 @@
 <template>
   <div class="clear">
-    <label class="label is-size-4">Project Activities and Schedule</label>
     <Table
       class="activities"
       :columns="columns"

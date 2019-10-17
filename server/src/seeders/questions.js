@@ -182,8 +182,7 @@ module.exports = {
       sectionNumber: '4',
       questionName: 'problemDefinition',
       questionLabel: 'Problem Definition',
-      dataEntryInstructions:
-        'State the specific environmental problem to be investigated. Include sufficient background information to provide a historical and scientific perspective for the current project.',
+      dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'largeText',
       maxLength: '4000',
@@ -359,7 +358,7 @@ module.exports = {
       sectionNumber: '8',
       questionName: 'waterConcerns',
       questionLabel: 'Water Quality Concerns',
-      dataEntryInstructions: 'Select all that apply.',
+      dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'checkboxBtn',
       maxLength: '100',
