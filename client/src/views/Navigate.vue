@@ -291,7 +291,7 @@ export default {
     await this.$store.dispatch('structure/getSections');
     this.$store.dispatch('structure/getQuestions');
     // Fetch lookup reference data
-    this.$store.dispatch('ref/getData');
+    await this.$store.dispatch('ref/getData');
 
     // Fetch latest qapp data
     try {
