@@ -142,6 +142,7 @@ export default {
       qappId: (state) => state.qapp.id,
     }),
     ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales']),
+    ...mapState('structure', ['sections']),
     ...mapGetters('qapp', ['qappData']),
     ...mapGetters('structure', ['parametersQuestionId']),
   },
@@ -226,6 +227,8 @@ export default {
       const questionIds = this.questions.map((q) => q.id);
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
       this.refreshData();
+      const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
+      this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
       this.shouldShowDelete = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;

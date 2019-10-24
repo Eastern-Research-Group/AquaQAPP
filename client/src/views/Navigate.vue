@@ -204,6 +204,7 @@ import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
 import isEqual from 'lodash/isEqual';
 import uniqBy from 'lodash/uniqBy';
+import sortBy from 'lodash/sortBy';
 // Custom section components - these are used in the "customSections" loop above
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
@@ -243,6 +244,7 @@ export default {
       sectionNotAvailableMessage: '',
       dataError: null,
       shouldDisplayConcernsWarning: false,
+      previousParameters: [],
     };
   },
   computed: {
@@ -328,6 +330,9 @@ export default {
           this.hasSaved = true;
         }
 
+        if (this.currentSection.sectionName === 'parameters') {
+          this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(',').map(Number));
+        }
         // Set Google Analytics event for changing sections (mark each section as a page view)
         gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
         gtag('event', 'page_view');
@@ -426,6 +431,11 @@ export default {
       );
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
+      const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
+      const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(',').map(Number));
+      if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
+        this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
+      }
       if (this.pendingSection) {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
