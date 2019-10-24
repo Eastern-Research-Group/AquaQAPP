@@ -285,36 +285,6 @@ module.exports = {
         value: 'Procedure',
         valueId: 1,
       },
-      {
-        questionId: 53,
-        value: 'Source',
-        valueId: 1,
-      },
-      {
-        questionId: 54,
-        value: 'Beach',
-        valueId: 1,
-      },
-      {
-        questionId: 55,
-        value: 'Chloride',
-        valueId: 1,
-      },
-      {
-        questionId: 56,
-        value: 'Sample Design',
-        valueId: 1,
-      },
-      {
-        questionId: 57,
-        value: 'Northeast',
-        valueId: 1,
-      },
-      {
-        questionId: 58,
-        value: 'https://google.com',
-        valueId: 1,
-      },
     ];
     const records = qappDataRecords.map((record) => ({
       ...record,
@@ -329,7 +299,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 14; i += 1) {
+    for (let i = 1; i < 13; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,

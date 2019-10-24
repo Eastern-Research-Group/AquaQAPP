@@ -212,7 +212,6 @@ import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
 import SampleDesign from '@/components/app/SampleDesign';
 import RecordHandlingProcedures from '@/components/app/RecordHandlingProcedures';
-import SecondaryData from '@/components/app/SecondaryData';
 
 export default {
   components: {
@@ -231,7 +230,6 @@ export default {
     LoadingIndicator,
     SampleDesign,
     RecordHandlingProcedures,
-    SecondaryData,
   },
   data() {
     return {
