@@ -30,7 +30,6 @@ const state = {
     { component: 'ProjectActivities', label: 'Project Activities' },
     { component: 'SampleDesign', label: 'Sample Design' },
     { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
-    { component: 'SecondaryData', label: 'Secondary Data' },
   ],
 };
 

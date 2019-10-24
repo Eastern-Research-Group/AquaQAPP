@@ -109,15 +109,6 @@ module.exports = {
       instructions:
         'Use the "Add" button to populate the table below. In the pop-up window, identify each step involved in record and data handling, and describe the procedures that will be followed. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
     });
-    records.push({
-      sectionNumber: '13',
-      sectionLevel: '1',
-      sectionLabel: 'Secondary Data',
-      sectionName: 'secondaryData',
-      sectionSort: 13,
-      instructions:
-        'Use the "Add" button to populate the table below with any secondary or external data sources consulted while planning this project. Complete the fields in the pop-up window for each secondary data source.',
-    });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({
       ...record,
