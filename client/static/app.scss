@@ -92,6 +92,7 @@ html {
 .is-checkradio[type='radio'] {
   opacity: 0;
   width: 0;
+  position: fixed;
 }
 
 .is-checkradio[type=checkbox].is-block, .is-checkradio[type=radio].is-block {
