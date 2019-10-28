@@ -20,6 +20,7 @@
     "@fortawesome/fontawesome-free": "^5.0.13",
     "@websanova/vue-auth": "^2.21.14-beta",
     "axios": "^0.18.1",
+    "babel-polyfill": "^6.26.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
