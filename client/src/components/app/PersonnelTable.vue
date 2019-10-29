@@ -248,7 +248,11 @@ export default {
       // Check that all non-checkbox questions have been filled out before submitting
       this.isFormIncomplete = false;
       this.questions.forEach((q) => {
-        if (q.dataEntryType !== 'checkbox' && (!this.pendingData[q.id] || !this.pendingData[q.id].length)) {
+        if (
+          q.dataEntryType !== 'checkbox' &&
+          q.dataEntryType !== 'singleCheckbox' &&
+          (!this.pendingData[q.id] || !this.pendingData[q.id].length)
+        ) {
           this.isFormIncomplete = true;
         }
       });
