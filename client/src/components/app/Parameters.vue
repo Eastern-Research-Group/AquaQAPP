@@ -166,6 +166,12 @@ export default {
             name: 'Marine',
           };
         }
+        if (v === 'Fresh') {
+          return {
+            id: v,
+            name: 'Fresh Water',
+          };
+        }
         return {
           id: v,
           name: v,
