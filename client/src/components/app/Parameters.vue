@@ -159,10 +159,18 @@ export default {
     getWaterTypes() {
       let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
       waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
-      return waterTypes.map((v) => ({
-        id: v,
-        name: v,
-      }));
+      return waterTypes.map((v) => {
+        if (v === 'Salt') {
+          return {
+            id: v,
+            name: 'Marine',
+          };
+        }
+        return {
+          id: v,
+          name: v,
+        };
+      });
     },
     isChecked(paramId) {
       return this.selectedParams.indexOf(paramId.toString()) > -1;
