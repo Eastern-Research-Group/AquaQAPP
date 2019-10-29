@@ -9,12 +9,12 @@ module.exports = {
     records.push({
       code: 'EUTRO',
       label: 'Eutrophication (Nutrients)',
-      concernSort: 4,
+      concernSort: 3,
     });
     records.push({
       code: 'ILLCONN',
       label: 'Illicit Connections',
-      concernSort: 6,
+      concernSort: 5,
     });
     records.push({
       code: 'GENBENTHIC',
@@ -24,27 +24,22 @@ module.exports = {
     records.push({
       code: 'ALGAL',
       label: 'Harmful Algal Blooms (HABs) (Algal Toxins)',
-      concernSort: 5,
+      concernSort: 4,
     });
     records.push({
       code: 'STORMWTR',
       label: 'Stormwater',
-      concernSort: 8,
+      concernSort: 7,
     });
     records.push({
       code: 'REC',
       label: 'Recreation (Swimming and/or Boating)',
-      concernSort: 7,
-    });
-    records.push({
-      code: 'ACID',
-      label: 'Acidification',
-      concernSort: 3,
+      concernSort: 6,
     });
     records.push({
       code: 'OTH',
       label: 'Other',
-      concernSort: 9,
+      concernSort: 8,
     });
     return queryInterface.bulkInsert('RefConcerns', records);
   },
