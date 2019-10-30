@@ -329,7 +329,7 @@ export default {
         }
 
         if (this.currentSection.sectionName === 'parameters') {
-          this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(',').map(Number));
+          this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
         }
         // Set Google Analytics event for changing sections (mark each section as a page view)
         gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
@@ -430,7 +430,7 @@ export default {
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
       const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-      const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(',').map(Number));
+      const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
       if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
         this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
       }
@@ -455,7 +455,7 @@ export default {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
-      } else if (this.currentSection.sectionLabel === 'Sample Design' && !this.qappData[this.parametersQuestionId]) {
+      } else if (this.currentSection.sectionLabel === 'Sampling Design' && !this.qappData[this.parametersQuestionId]) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
       }

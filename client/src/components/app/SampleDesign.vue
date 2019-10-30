@@ -5,7 +5,7 @@
       :rows="rows"
       :shouldHaveActionsCol="true"
       :shouldHaveGlobalActions="true"
-      noDataMessage="No sample design information has been added for selected parameters."
+      noDataMessage="No sampling design information has been added for selected parameters."
       @onEdit="onEdit"
       @onDelete="onDelete"
       @onAdd="onAddInfo"
@@ -14,7 +14,7 @@
       v-if="isEnteringInfo"
       :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Sample Design Information' : 'Add Sample Design Information'"
+      :title="shouldShowEdit ? 'Edit Sampling Design Information' : 'Add Sampling Design Information'"
     >
       <form ref="form" @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
@@ -78,11 +78,11 @@
     </SideNav>
     <DeleteWarning
       v-if="shouldShowDelete"
-      title="Delete Sample Design Information"
+      title="Delete Sampling Design Information"
       :itemLabel="
         shouldDeleteAll
-          ? 'all sample design information'
-          : `sample design information for ${selectedRow.parameterLabel}`
+          ? 'all sampling design information'
+          : `sampling design information for ${selectedRow.parameterLabel}`
       "
       @close="() => (shouldShowDelete = false)"
       @onDelete="deleteData"
@@ -263,6 +263,15 @@ export default {
 
       Object.keys(sampleDesign).forEach((sampleDesignId) => {
         const row = sampleDesign[sampleDesignId];
+        if (Array.isArray(row.Parameter)) {
+          const otherParam = row.Parameter[0];
+          row.Parameter = row.Parameter.reduce((obj, item) => {
+            item = otherParam;
+            obj.label = item;
+            obj.id = item;
+            return obj;
+          }, {});
+        }
         this.rows.push({
           ...row,
           parameterLabel: row.Parameter.label,
@@ -276,11 +285,22 @@ export default {
     },
     getParameters() {
       const params = [];
-      const selectedParams = this.qappData[this.parametersQuestionId];
-      if (selectedParams) {
+      const selectedParameters = this.qappData[this.parametersQuestionId];
+
+      if (selectedParameters) {
+        const paramIds = selectedParameters.split(',');
         this.parameters.forEach((param) => {
-          if (selectedParams.split(',').indexOf(param.id.toString()) > -1) {
+          if (paramIds.indexOf(param.id.toString()) > -1) {
             params.push(param);
+          }
+        });
+
+        paramIds.forEach((param) => {
+          if (isNaN(param)) { // eslint-disable-line
+            params.push({
+              id: param,
+              label: param,
+            });
           }
         });
       }
