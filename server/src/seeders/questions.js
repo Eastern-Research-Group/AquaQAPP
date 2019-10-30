@@ -621,7 +621,7 @@ module.exports = {
     records.push({
       sectionNumber: '13',
       questionName: 'sampleDesign',
-      questionLabel: 'Sample Design',
+      questionLabel: 'Sampling Design',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'text',

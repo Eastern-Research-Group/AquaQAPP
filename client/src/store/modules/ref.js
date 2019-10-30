@@ -11,16 +11,18 @@ const state = {
   parameters: [],
   samplingMethodologies: [],
   locationRationales: [
-    'Spatial coverage of waterbody',
+    'Accessibility considerations',
+    'Capacity (funding or staffing)',
     'Feature of interest',
-    'Regulatory requirement',
     'Proximity to impact or suspected pollution source',
-    'Capacity (funding or staffing) Replication of previous sampling efforts (e.g. by DEP or EPA)',
+    'Regulatory requirement',
+    ' Replication of previous sampling efforts (e.g. by DEP or EPA)',
+    'Spatial coverage of waterbody',
   ],
   sampleNumRationales: [
-    'Random or probabilistic',
-    'Accessibility considerations',
+    'Capacity (funding or staffing)',
     'Proximity to potential pollutant source',
+    'Random or probabilistic spatial coverage',
     'Replication of previous sampling efforts (e.g. by DEP or EPA)',
   ],
   customSections: [
@@ -28,7 +30,7 @@ const state = {
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
     { component: 'ProjectActivities', label: 'Project Activities' },
-    { component: 'SampleDesign', label: 'Sample Design' },
+    { component: 'SampleDesign', label: 'Sampling Design' },
     { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
   ],
 };
