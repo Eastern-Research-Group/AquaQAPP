@@ -6,32 +6,16 @@ module.exports = {
       label: 'Project Manager',
     });
     records.push({
-      code: 'MPC',
-      label: 'Monitoring Program Coordinator',
+      code: 'QAM',
+      label: 'QA Manager',
     });
     records.push({
-      code: 'PQAO',
-      label: 'Program Quality Assurance Officer',
+      code: 'FC',
+      label: 'Field Coordinator',
     });
     records.push({
-      code: 'PFC',
-      label: 'Project Field Coordinator',
-    });
-    records.push({
-      code: 'PLC',
-      label: 'Project Lab Coordinator',
-    });
-    records.push({
-      code: 'DMC',
-      label: 'Data Management Coordinator',
-    });
-    records.push({
-      code: 'TAC',
-      label: 'Technical Advisory Committee',
-    });
-    records.push({
-      code: 'VOL',
-      label: 'Volunteers',
+      code: 'DM',
+      label: 'Data Manager',
     });
     return queryInterface.bulkInsert('RefRoles', records);
   },
