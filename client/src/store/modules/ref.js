@@ -50,13 +50,13 @@ const actions = {
     commit('SET_REF', { ref: 'roles', data: roles.data.map((role) => role.label) });
 
     const locationTypes = await axios.get('api/location-types');
-    commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data });
+    commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data.map((location) => location.label) });
 
     const collectionMethods = await axios.get('api/collection-methods');
     commit('SET_REF', { ref: 'collectionMethods', data: collectionMethods.data });
 
     const coordRefSystems = await axios.get('api/coord-ref-systems');
-    commit('SET_REF', { ref: 'coordRefSystems', data: coordRefSystems.data });
+    commit('SET_REF', { ref: 'coordRefSystems', data: coordRefSystems.data.map((c) => c.label) });
 
     const parameters = await axios.get('api/parameters');
     commit('SET_REF', { ref: 'parameters', data: parameters.data });

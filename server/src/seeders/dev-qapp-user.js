@@ -198,7 +198,7 @@ module.exports = {
       },
       {
         questionId: 41,
-        value: '1',
+        value: 'Estuary',
         valueId: 1,
       },
       {
@@ -208,7 +208,7 @@ module.exports = {
       },
       {
         questionId: 43,
-        value: '3',
+        value: 'NAD83',
         valueId: 1,
       },
       {

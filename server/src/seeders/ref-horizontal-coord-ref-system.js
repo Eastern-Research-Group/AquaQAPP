@@ -1,10 +1,23 @@
-const path = require('path');
-const { wqxXmlToJson } = require('../utils/jsonHelpers');
-
 module.exports = {
   up: (queryInterface) => {
-    const json = wqxXmlToJson(path.resolve(__dirname, './data/HorizontalReferenceDatum.xml'));
-    return queryInterface.bulkInsert('RefHorizontalCoordRefSystems', json);
+    const records = [];
+    records.push({
+      code: 'NAD83',
+      label: 'NAD83',
+    });
+    records.push({
+      code: 'WGS84',
+      label: 'WGS84',
+    });
+    records.push({
+      code: 'OTH',
+      label: 'Other',
+    });
+    records.push({
+      code: 'UKN',
+      label: 'Unknown',
+    });
+    return queryInterface.bulkInsert('RefHorizontalCoordRefSystems', records);
   },
 
   down: (queryInterface) => queryInterface.bulkDelete('RefHorizontalCoordRefSystems', null, {}),

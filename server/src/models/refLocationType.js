@@ -2,8 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const RefLocationType = sequelize.define(
     'RefLocationType',
     {
-      name: DataTypes.STRING,
-      description: DataTypes.TEXT,
+      code: DataTypes.STRING,
+      label: DataTypes.STRING,
     },
     {
       timestamps: false,
