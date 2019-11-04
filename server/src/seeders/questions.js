@@ -191,8 +191,8 @@ module.exports = {
     });
     records.push({
       sectionNumber: '5',
-      questionName: 'problemBackground',
-      questionLabel: 'Problem Background',
+      questionName: 'projectBackground',
+      questionLabel: 'Project Background',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'largeText',
