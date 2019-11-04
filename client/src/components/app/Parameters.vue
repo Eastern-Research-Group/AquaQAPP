@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     getFilteredParams(params, waterType) {
-      if (waterType === 'Fresh') {
+      if (waterType === 'Fresh Water') {
         return sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
       }
       // salt or brackish types are both indicated by the "salt" boolean column
