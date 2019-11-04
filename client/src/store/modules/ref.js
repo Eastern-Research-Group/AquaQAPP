@@ -6,7 +6,7 @@ const state = {
   locationTypes: [],
   collectionMethods: [],
   coordRefSystems: [],
-  waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Marine' }, { id: 'Brackish', name: 'Brackish' }],
+  waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Marine' }, { id: 'Estuarine', name: 'Estuarine' }],
   yesNo: [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }],
   parameters: [],
   samplingMethodologies: [],
