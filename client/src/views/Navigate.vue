@@ -328,7 +328,7 @@ export default {
           this.hasSaved = true;
         }
 
-        if (this.currentSection.sectionName === 'parameters') {
+        if (this.currentSection.sectionName === 'parameters' && this.qappData[this.parametersQuestionId]) {
           this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
         }
         // Set Google Analytics event for changing sections (mark each section as a page view)
@@ -429,10 +429,12 @@ export default {
       );
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
-      const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-      const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
-      if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
-        this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
+      if (this.qappData[this.parametersQuestionId]) {
+        const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
+        const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
+        if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
+          this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
+        }
       }
       if (this.pendingSection) {
         this.changeSection(this.pendingSection);
