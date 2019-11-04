@@ -40,8 +40,8 @@ module.exports = {
     records.push({
       sectionNumber: '5',
       sectionLevel: '1',
-      sectionLabel: 'Problem Background',
-      sectionName: 'problemBackground',
+      sectionLabel: 'Project Background',
+      sectionName: 'projectBackground',
       sectionSort: 5,
       instructions:
         'Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
