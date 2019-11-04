@@ -72,19 +72,30 @@
               v-model="pendingData[question.id]"
               :options="getConcerns()"
               :placeholder="`Select ${question.questionLabel}`"
-              :custom-label="question.refName === 'coordRefSystems' ? nameWithDesc : undefined"
               label="label"
               track-by="code"
               :multiple="true"
             ></multiselect>
             <multiselect
-              v-else-if="question.questionLabel !== 'Water Quality Concerns'"
+              v-else-if="
+                question.questionLabel !== 'Water Quality Concerns' &&
+                  question.refName !== 'coordRefSystems' &&
+                  question.refName !== 'locationTypes'
+              "
               v-model="pendingData[question.id]"
               :options="getOptions(question.refName)"
               :placeholder="`Select ${question.questionLabel}`"
-              :custom-label="question.refName === 'coordRefSystems' ? nameWithDesc : undefined"
               label="name"
               track-by="name"
+            ></multiselect>
+            <multiselect
+              v-else-if="
+                question.questionLabel !== 'Water Quality Concerns' &&
+                  (question.refName === 'coordRefSystems' || question.refName === 'locationTypes')
+              "
+              v-model="pendingData[question.id]"
+              :options="getOptions(question.refName)"
+              :placeholder="`Select ${question.questionLabel}`"
             ></multiselect>
           </div>
         </div>
@@ -218,10 +229,6 @@ export default {
       // get reference data array based on refName field in questions table
       return this[refName];
     },
-    nameWithDesc(option) {
-      // set custom label for coordRefSystems, since name is a code
-      return `${option.name} - ${option.description}`;
-    },
     onAddLocation(map) {
       this.selectedLocation = null;
       this.pendingData = {};
@@ -239,9 +246,6 @@ export default {
           // Set default metadata automatically when user selects location by map
           this.pendingData[getQuestionIdByName(this.questions, 'horizCollectionMethod')] = this.collectionMethods.find(
             (v) => v.id === 18
-          );
-          this.pendingData[getQuestionIdByName(this.questions, 'horizCoordinateSystem')] = this.coordRefSystems.find(
-            (v) => v.id === 16
           );
         });
       } else if (this.map) {
@@ -266,6 +270,8 @@ export default {
               locations[locationField.valueId][key] = this.concerns.filter(
                 (r) => locationField.value && locationField.value.indexOf(r.code) > -1
               );
+            } else if (question.refName === 'locationTypes' || question.refName === 'coordRefSystems') {
+              locations[locationField.valueId][key] = this[question.refName].find((r) => r === locationField.value);
             } else if (question.dataEntryType === 'select') {
               locations[locationField.valueId][key] = this[question.refName].find(
                 (r) => r.id === parseInt(locationField.value, 10)
