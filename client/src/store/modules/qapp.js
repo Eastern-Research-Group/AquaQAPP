@@ -99,6 +99,19 @@ const getters = {
           }
         });
       }
+
+      if (dataObj.projectOrganization) {
+        dataObj.projectOrganization.forEach((p) => {
+          let roleCodes = [];
+          if (p.roles.indexOf(',') > -1) {
+            roleCodes = p.roles.split(',');
+          } else {
+            roleCodes = [p.roles];
+          }
+          let roles = rootState.ref.roles.filter((r) => roleCodes.indexOf(r.code) > -1);
+          if (roles.length !== 0) p.roles = roles;
+        });
+      }
     });
 
     dataObj.dateGenerated = format(new Date(), 'MMMM do, yyyy');

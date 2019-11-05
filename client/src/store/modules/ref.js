@@ -47,7 +47,7 @@ const actions = {
     commit('SET_REF', { ref: 'concerns', data: concerns.data });
 
     const roles = await axios.get('api/roles');
-    commit('SET_REF', { ref: 'roles', data: roles.data.map((role) => role.label) });
+    commit('SET_REF', { ref: 'roles', data: roles.data });
 
     const locationTypes = await axios.get('api/location-types');
     commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data.map((location) => location.label) });
