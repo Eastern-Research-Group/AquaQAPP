@@ -108,7 +108,7 @@ const getters = {
           } else {
             roleCodes = [p.roles];
           }
-          let roles = rootState.ref.roles.filter((r) => roleCodes.indexOf(r.code) > -1);
+          const roles = rootState.ref.roles.filter((r) => roleCodes.indexOf(r.code) > -1);
           if (roles.length !== 0) p.roles = roles;
         });
       }
