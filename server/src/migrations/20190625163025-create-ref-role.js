@@ -13,6 +13,9 @@ module.exports = {
       label: {
         type: Sequelize.STRING,
       },
+      responsibilities: {
+        type: Sequelize.TEXT,
+      },
     });
   },
   down: (queryInterface) => {
