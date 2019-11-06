@@ -136,6 +136,7 @@
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import getQuestionIdByName from '@/utils/getQuestionIdByName';
+import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
@@ -172,8 +173,7 @@ export default {
       columns: [
         { key: 'Location ID', label: 'Location ID' },
         { key: 'Location Name', label: 'Location Name' },
-        { key: 'Location Latitude', label: 'Latitude' },
-        { key: 'Location Longitude', label: 'Longitude' },
+        { key: 'waterConcerns', label: 'Water Quality Concerns' },
       ],
       isFormIncomplete: false,
       disabled: false,
@@ -285,6 +285,12 @@ export default {
 
       Object.keys(locations).forEach((locationId) => {
         const monLoc = locations[locationId];
+
+        if (this.shouldShowConcerns() && !monLoc['Water Quality Concerns']) {
+          monLoc['Water Quality Concerns'] = this.getConcerns();
+        }
+        getLocationsTableConcerns(monLoc, this.getConcerns());
+
         this.markers.push({
           ...monLoc,
           valueId: locationId,
@@ -304,6 +310,8 @@ export default {
       if (this.markers.length) {
         newValueId = Math.max(...this.markers.map((marker) => marker.valueId)) + 1;
       }
+
+      getLocationsTableConcerns(mapData, this.getConcerns());
 
       // Markers array used to display pins and handle location data
       this.markers.push({

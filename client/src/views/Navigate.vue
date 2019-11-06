@@ -507,7 +507,7 @@ export default {
       this.shouldDisplayConcernsWarning = false;
     },
     triggerConcernsWarningModal(value) {
-      if (value === 'N' && !!this.qappData[this.concernsQuestionId]) {
+      if (value === 'N' && !!this.qappData[this.concernsQuestionId] && this.qappData[this.locationQuestionId]) {
         this.shouldDisplayConcernsWarning = true;
       }
     },
