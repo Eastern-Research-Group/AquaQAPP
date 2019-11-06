@@ -192,6 +192,11 @@ module.exports = {
         valueId: 1,
       },
       {
+        questionId: 39,
+        value: null,
+        valueId: 1,
+      },
+      {
         questionId: 40,
         value: 'Estuary',
         valueId: 1,
