@@ -392,6 +392,13 @@ export default {
     },
     hasUnsavedData() {
       if (this.hasSaved) return false;
+      if (this.currentSection.sectionLabel === 'Parameters') {
+        let currentParameters = [];
+        this.currentQuestions.forEach((q) => {
+          currentParameters = sortBy(this.pendingData[q.id].split(','));
+        });
+        return !isEqual(currentParameters, this.previousParameters);
+      }
       return this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length;
     },
     markComplete(sectionNumber) {
@@ -440,6 +447,7 @@ export default {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
       }
+      this.previousParameters = [];
     },
     isSectionNotAvailable() {
       /* User must have saved data for concerns before viewing locations section,
