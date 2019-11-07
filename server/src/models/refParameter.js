@@ -11,6 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       method: {
         type: DataTypes.STRING,
       },
+      waterType: {
+        type: DataTypes.STRING,
+      },
+      fresh: {
+        type: DataTypes.BOOLEAN,
+      },
+      salt: {
+        type: DataTypes.BOOLEAN,
+      },
+      monitoringCategory: {
+        type: DataTypes.STRING,
+      },
       units: {
         type: DataTypes.STRING,
       },
@@ -41,12 +53,6 @@ module.exports = (sequelize, DataTypes) => {
       mdl: {
         type: DataTypes.STRING,
       },
-      monitoringCategory: {
-        type: DataTypes.STRING,
-      },
-      labName: {
-        type: DataTypes.STRING,
-      },
       accuracyChecks: {
         type: DataTypes.STRING,
       },
@@ -59,6 +65,9 @@ module.exports = (sequelize, DataTypes) => {
       instrument: {
         type: DataTypes.STRING,
       },
+      typeOfInspection: {
+        type: DataTypes.STRING,
+      },
       calibrationFrequency: {
         type: DataTypes.STRING,
       },
@@ -68,7 +77,16 @@ module.exports = (sequelize, DataTypes) => {
       correctiveAction: {
         type: DataTypes.STRING,
       },
-      waterType: {
+      checkDescription: {
+        type: DataTypes.STRING,
+      },
+      frequency: {
+        type: DataTypes.STRING,
+      },
+      acceptanceCriteria: {
+        type: DataTypes.STRING,
+      },
+      correctiveActions: {
         type: DataTypes.STRING,
       },
     },

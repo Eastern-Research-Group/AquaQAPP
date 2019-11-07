@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const {
   RefConcern,
   RefRole,
@@ -19,6 +20,11 @@ module.exports = {
             as: 'parameters',
           },
         ],
+        where: {
+          code: {
+            [Op.not]: 'ACID',
+          },
+        },
       });
       res.send(concerns);
     } catch (err) {
