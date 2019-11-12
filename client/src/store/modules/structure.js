@@ -34,6 +34,9 @@ const getters = {
   sampleDesignQuestionId(state) {
     return getQuestionIdByName(state.questions, 'sampleParameter');
   },
+  paramsbyLocQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'parametersByLocation')
+  }
 };
 
 const mutations = {

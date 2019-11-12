@@ -187,12 +187,37 @@
           <Button label="Cancel" type="danger" @click.native="cancelYesNo" />
         </div>
       </Modal>
+      <Modal v-if="shouldDisplayParametersWarning" @close="closeParametersWarningModal" class="parametersWarningModal">
+        <div class="columns" v-if="shouldDisplayAddParameter">
+          <div class="column is-9">
+            <Alert
+              message="Would you like to add and associate all the new parameters to monitoring locations with the corresponding water type?"
+              type="warning"
+            />
+          </div>
+          <div class="column is-3">
+            <multiselect v-model="addParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
+          </div>
+        </div>
+        <div class="columns" v-if="shouldDisplayRemoveParameter">
+          <div class="column is-9">
+            <Alert
+                message="You've chosen to remove parameters that have already been associated with one or more monitoring locations, are you sure you want to delete those parameters?"
+                type="warning"
+            />
+          </div>
+          <div class="column is-3">
+            <multiselect v-model="removeParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
+          </div>
+        </div>
+      </Modal>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import Multiselect from 'vue-multiselect';
 import Alert from '@/components/shared/Alert';
 import Tip from '@/components/shared/Tip';
 import Button from '@/components/shared/Button';
@@ -212,6 +237,7 @@ import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
 import SampleDesign from '@/components/app/SampleDesign';
 import RecordHandlingProcedures from '@/components/app/RecordHandlingProcedures';
+import ParametersByLocation from '@/components/app/ParametersByLocation';
 
 export default {
   components: {
@@ -230,6 +256,8 @@ export default {
     LoadingIndicator,
     SampleDesign,
     RecordHandlingProcedures,
+    ParametersByLocation,
+    Multiselect,
   },
   data() {
     return {
@@ -243,6 +271,12 @@ export default {
       dataError: null,
       shouldDisplayConcernsWarning: false,
       previousParameters: [],
+      shouldDisplayParametersWarning: false,
+      yesNoOptions: ['Yes', 'No'],
+      removeParamValue: '',
+      addParamValue: '',
+      shouldDisplayAddParameter: false,
+      shouldDisplayRemoveParameter: false,
     };
   },
   computed: {
@@ -392,7 +426,7 @@ export default {
     },
     hasUnsavedData() {
       if (this.hasSaved) return false;
-      if (this.currentSection.sectionLabel === 'Parameters') {
+      if (this.currentSection.sectionLabel === 'Parameters' && this.qappData[this.parametersQuestionId]) {
         let currentParameters = [];
         this.currentQuestions.forEach((q) => {
           currentParameters = sortBy(this.pendingData[q.id].split(','));
@@ -440,14 +474,23 @@ export default {
         const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
         const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
         if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
+          this.shouldDisplayParametersWarning = true;
           this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
+          this.shouldDisplayAddParameter = false;
+          this.shouldDisplayRemoveParameter = false;
+          currentParameters.forEach((param) => {
+            if (this.previousParameters.indexOf(param) === -1) this.shouldDisplayAddParameter = true;
+          });
+          this.previousParameters.forEach((param) => {
+            if (currentParameters.indexOf(param) === -1) this.shouldDisplayRemoveParameter = true;
+          });
         }
       }
       if (this.pendingSection) {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
       }
-      this.previousParameters = [];
+      this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
     },
     isSectionNotAvailable() {
       /* User must have saved data for concerns before viewing locations section,
@@ -465,7 +508,11 @@ export default {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
-      } else if (this.currentSection.sectionLabel === 'Sampling Design' && !this.qappData[this.parametersQuestionId]) {
+      } else if (
+        (this.currentSection.sectionLabel === 'Sampling Design' ||
+          this.currentSection.sectionLabel === 'Parameters By Location') &&
+        !this.qappData[this.parametersQuestionId]
+      ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
       }
@@ -505,6 +552,9 @@ export default {
     },
     closeConcernsWarningModal() {
       this.shouldDisplayConcernsWarning = false;
+    },
+    closeParametersWarningModal() {
+      this.shouldDisplayParametersWarning = false;
     },
     triggerConcernsWarningModal(value) {
       if (value === 'N' && !!this.qappData[this.concernsQuestionId] && this.qappData[this.locationQuestionId]) {
@@ -606,5 +656,11 @@ textarea {
 
 .example-text {
   margin: 0.5em 0.5em 1em 0.5em;
+}
+</style>
+
+<style>
+.parametersWarningModal .modal-content{
+  width: 800px !important;
 }
 </style>

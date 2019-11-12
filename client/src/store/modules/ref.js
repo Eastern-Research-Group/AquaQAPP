@@ -32,6 +32,7 @@ const state = {
     { component: 'ProjectActivities', label: 'Project Activities' },
     { component: 'SampleDesign', label: 'Sampling Design' },
     { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
+    { component: 'ParametersByLocation', label: 'Parameters By Location' },
   ],
 };
 
