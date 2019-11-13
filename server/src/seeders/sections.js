@@ -97,7 +97,7 @@ module.exports = {
       sectionLabel: 'Parameters By Location',
       sectionName: 'parametersByLocation',
       sectionSort: 11,
-      instructions: ''
+      instructions: '',
     });
     records.push({
       sectionNumber: '12',

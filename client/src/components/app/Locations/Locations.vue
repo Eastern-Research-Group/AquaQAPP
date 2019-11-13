@@ -201,6 +201,7 @@ export default {
       'concernsDifferByLocQuestionId',
       'locConcernsQuestionId',
       'parametersQuestionId',
+      'waterTypeLocQuestionId',
     ]),
   },
   mounted() {
@@ -321,6 +322,10 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
+      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      this.pendingData.paramsByLocation =
+        (this.pendingData[this.waterTypeLocQuestionId] === 'Fresh' && 'Freshwater') ||
+        ((this.pendingData[this.waterTypeLocQuestionId] === 'Salt' || 'Brackish') && 'Saltwater');
       this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       // Close location side nav, clear inputs, and turn off click event for map

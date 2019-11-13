@@ -35,8 +35,11 @@ const getters = {
     return getQuestionIdByName(state.questions, 'sampleParameter');
   },
   paramsbyLocQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'parametersByLocation')
-  }
+    return getQuestionIdByName(state.questions, 'parametersByLocation');
+  },
+  waterTypeLocQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'waterType');
+  },
 };
 
 const mutations = {

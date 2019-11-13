@@ -187,11 +187,11 @@
           <Button label="Cancel" type="danger" @click.native="cancelYesNo" />
         </div>
       </Modal>
-      <Modal v-if="shouldDisplayParametersWarning" @close="closeParametersWarningModal" class="parametersWarningModal">
-        <div class="columns" v-if="shouldDisplayAddParameter">
+      <Modal v-if="shouldDisplayAddParameter" @close="closeAddParametersWarningModal" class="parametersWarningModal">
+        <div class="columns">
           <div class="column is-9">
             <Alert
-              message="Would you like to add and associate all the new parameters to monitoring locations with the corresponding water type?"
+              message="Would you like to associate all the new parameters to monitoring locations with the corresponding water type?"
               type="warning"
             />
           </div>
@@ -199,15 +199,31 @@
             <multiselect v-model="addParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
           </div>
         </div>
-        <div class="columns" v-if="shouldDisplayRemoveParameter">
+        <div class="columns">
+          <div class="column is-offset-10">
+            <Button label="Continue" type="success" @click.native="addRemoveParams" />
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        v-if="shouldDisplayRemoveParameter"
+        @close="closeRemoveParametersWarningModal"
+        class="parametersWarningModal"
+      >
+        <div class="columns">
           <div class="column is-9">
             <Alert
-                message="You've chosen to remove parameters that have already been associated with one or more monitoring locations, are you sure you want to delete those parameters?"
-                type="warning"
+              message="You've chosen to remove parameters that have already been associated with one or more monitoring locations, are you sure you want to delete those parameters?"
+              type="warning"
             />
           </div>
           <div class="column is-3">
             <multiselect v-model="removeParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-offset-10">
+            <Button label="Continue" type="success" @click.native="addRemoveParams" />
           </div>
         </div>
       </Modal>
@@ -277,6 +293,8 @@ export default {
       addParamValue: '',
       shouldDisplayAddParameter: false,
       shouldDisplayRemoveParameter: false,
+      addParamsArray: [],
+      removeParamsArray: [],
     };
   },
   computed: {
@@ -291,6 +309,7 @@ export default {
       'parametersQuestionId',
       'locConcernsQuestionId',
       'sampleDesignQuestionId',
+      'paramsbyLocQuestionId',
     ]),
     currentQuestions() {
       return this.questions
@@ -373,6 +392,8 @@ export default {
     discardChanges() {
       this.pendingData = {};
       this.shouldDisplayUnsavedWarning = false;
+      this.shouldDisplayAddParameter = false;
+      this.shouldDisplayRemoveParameter = false;
       this.changeSection(this.pendingSection);
       this.pendingSection = null;
     },
@@ -426,7 +447,11 @@ export default {
     },
     hasUnsavedData() {
       if (this.hasSaved) return false;
-      if (this.currentSection.sectionLabel === 'Parameters' && this.qappData[this.parametersQuestionId]) {
+      if (
+        this.currentSection.sectionLabel === 'Parameters' &&
+        this.qappData[this.parametersQuestionId] &&
+        this.pendingData[this.parametersQuestionId]
+      ) {
         let currentParameters = [];
         this.currentQuestions.forEach((q) => {
           currentParameters = sortBy(this.pendingData[q.id].split(','));
@@ -453,23 +478,42 @@ export default {
     async saveData(e, valueId = null, data) {
       // Wait for all data to be saved before setting hasSaved
       this.dataError = null;
-      await Promise.all(
-        this.currentQuestions.map(async (q) => {
-          await this.$store
-            .dispatch('qapp/save', {
-              qappId: this.$store.state.qapp.id,
-              questionId: q.id,
-              value: data ? data[q.id] : this.pendingData[q.id],
-              valueId,
-            })
-            .catch((error) => {
-              if (this.dataError === null) this.dataError = error.response.data.error;
-              else this.dataError += `<br/>${error.response.data.error}`;
-            });
-        })
-      );
+      this.addParamsArray = [];
+      this.removeParamsArray = [];
+
+      if (data && data.paramsByLocation) {
+        await this.$store
+          .dispatch('qapp/save', {
+            qappId: this.$store.state.qapp.id,
+            questionId: this.paramsbyLocQuestionId,
+            value: data.paramsByLocation,
+            valueId,
+          })
+          .catch((error) => {
+            if (this.dataError === null) this.dataError = error.response.data.error;
+            else this.dataError += `<br/>${error.response.data.error}`;
+          });
+      } else {
+        await Promise.all(
+          this.currentQuestions.map(async (q) => {
+            await this.$store
+              .dispatch('qapp/save', {
+                qappId: this.$store.state.qapp.id,
+                questionId: q.id,
+                value: data ? data[q.id] : this.pendingData[q.id],
+                valueId,
+              })
+              .catch((error) => {
+                if (this.dataError === null) this.dataError = error.response.data.error;
+                else this.dataError += `<br/>${error.response.data.error}`;
+              });
+          })
+        );
+      }
+
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
+
       if (this.qappData[this.parametersQuestionId]) {
         const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
         const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
@@ -479,14 +523,21 @@ export default {
           this.shouldDisplayAddParameter = false;
           this.shouldDisplayRemoveParameter = false;
           currentParameters.forEach((param) => {
-            if (this.previousParameters.indexOf(param) === -1) this.shouldDisplayAddParameter = true;
+            if (this.previousParameters.indexOf(param) === -1) {
+              this.shouldDisplayAddParameter = true;
+              this.addParamsArray.push(param);
+            }
           });
           this.previousParameters.forEach((param) => {
-            if (currentParameters.indexOf(param) === -1) this.shouldDisplayRemoveParameter = true;
+            if (currentParameters.indexOf(param) === -1) {
+              this.shouldDisplayRemoveParameter = true;
+              this.removeParamsArray.push(param);
+            }
           });
         }
       }
-      if (this.pendingSection) {
+
+      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
       }
@@ -553,8 +604,11 @@ export default {
     closeConcernsWarningModal() {
       this.shouldDisplayConcernsWarning = false;
     },
-    closeParametersWarningModal() {
-      this.shouldDisplayParametersWarning = false;
+    closeAddParametersWarningModal() {
+      this.shouldDisplayAddParameter = false;
+    },
+    closeRemoveParametersWarningModal() {
+      this.shouldDisplayRemoveParameter = false;
     },
     triggerConcernsWarningModal(value) {
       if (value === 'N' && !!this.qappData[this.concernsQuestionId] && this.qappData[this.locationQuestionId]) {
@@ -579,6 +633,80 @@ export default {
     cancelYesNo() {
       this.shouldDisplayConcernsWarning = false;
       this.pendingData[this.concernsDifferByLocQuestionId] = 'Y';
+    },
+    async addRemoveParams() {
+      this.dataError = null;
+
+      let filteredParams = [];
+      this.qappData[this.paramsbyLocQuestionId].forEach((paramByLoc) => {
+        if (paramByLoc.value !== 'Freshwater' || paramByLoc.value !== 'Saltwater') {
+          paramByLoc.value.split(',').forEach((param) => {
+            if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
+              filteredParams.push({
+                valueId: paramByLoc.valueId,
+                value: paramByLoc.value,
+                waterType: this.parameters.find((p) => p.id === parseInt(param, 10)).waterType,
+              });
+            }
+          });
+        }
+        if (paramByLoc.value === 'Freshwater' || paramByLoc.value === 'Saltwater') {
+          filteredParams.push({
+            valueId: paramByLoc.valueId,
+            value: '',
+            waterType: paramByLoc.value,
+          });
+        }
+      });
+
+      filteredParams = uniqBy(filteredParams, 'valueId');
+
+      if (this.addParamsArray.length !== 0 && this.addParamValue === 'Yes') {
+        this.addParamsArray.forEach((param) => {
+          filteredParams.forEach((filteredParam) => {
+            if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
+              filteredParam.value = filteredParam.value !== '' ? filteredParam.value + ',' + param : param;
+            }
+          });
+        });
+      }
+
+      if (this.removeParamsArray.length !== 0 && this.removeParamValue === 'Yes') {
+        this.removeParamsArray.forEach((param) => {
+          filteredParams.forEach((filteredParam) => {
+            if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
+              filteredParam.value = filteredParam.value
+                .split(',')
+                .filter((p) => p !== param)
+                .join(',');
+            }
+          });
+        });
+      }
+
+      if (this.addParamValue === 'Yes' || (this.removeParamValue === 'Yes' && filteredParams.length !== 0)) {
+        await this.$store
+          .dispatch('qapp/updateData', {
+            qappId: this.$store.state.qapp.id,
+            questionId: this.paramsbyLocQuestionId,
+            values: filteredParams,
+          })
+          .catch((error) => {
+            if (this.dataError === null) this.dataError = error.response.data.error;
+            else this.dataError += `<br/>${error.response.data.error}`;
+          });
+      }
+
+      if (this.addParamValue !== '') this.shouldDisplayAddParameter = false;
+      if (this.removeParamValue !== '') this.shouldDisplayRemoveParameter = false;
+
+      this.addParamValue = '';
+      this.removeParamValue = '';
+
+      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
+        this.changeSection(this.pendingSection);
+        this.pendingSection = null;
+      }
     },
   },
 };
@@ -660,7 +788,7 @@ textarea {
 </style>
 
 <style>
-.parametersWarningModal .modal-content{
+.parametersWarningModal .modal-content {
   width: 800px !important;
 }
 </style>

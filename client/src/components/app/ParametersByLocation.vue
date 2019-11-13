@@ -83,7 +83,6 @@
 import { mapState, mapGetters } from 'vuex';
 import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
-import Alert from '@/components/shared/Alert';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
@@ -97,7 +96,7 @@ export default {
       required: true,
     },
   },
-  components: { Alert, Button, SideNav, Table },
+  components: { Button, SideNav, Table },
   mixins: [unsavedChanges],
   data() {
     return {
