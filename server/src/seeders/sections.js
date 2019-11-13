@@ -94,18 +94,26 @@ module.exports = {
     records.push({
       sectionNumber: '11',
       sectionLevel: '1',
-      sectionLabel: 'Sampling Design',
-      sectionName: 'sampleDesign',
+      sectionLabel: 'Parameters By Location',
+      sectionName: 'parametersByLocation',
       sectionSort: 11,
-      instructions:
-        '<p>Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p><p><b>A row is required for every parameter selected. If a parameter is removed on the Parameters section make sure to remove its respective row in order to mark complete.</b></p>',
+      instructions: '',
     });
     records.push({
       sectionNumber: '12',
       sectionLevel: '1',
+      sectionLabel: 'Sampling Design',
+      sectionName: 'sampleDesign',
+      sectionSort: 12,
+      instructions:
+        '<p>Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p><p><b>A row is required for every parameter selected. If a parameter is removed on the Parameters section make sure to remove its respective row in order to mark complete.</b></p>',
+    });
+    records.push({
+      sectionNumber: '13',
+      sectionLevel: '1',
       sectionLabel: 'Record Handling Procedures',
       sectionName: 'recordHandling',
-      sectionSort: 12,
+      sectionSort: 13,
       instructions:
         'Use the "Add" button to populate the table below. In the pop-up window, identify each step involved in record and data handling, and describe the procedures that will be followed. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
     });

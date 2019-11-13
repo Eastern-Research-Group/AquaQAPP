@@ -8,7 +8,7 @@
               <th v-for="column in columns" :key="column.key">
                 {{ column.label }}
               </th>
-              <th v-if="shouldHaveActionsCol">
+              <th v-if="shouldHaveActionsCol || shouldHaveSingleAction">
                 Actions
               </th>
             </tr>
@@ -28,9 +28,9 @@
               <td v-for="column in columns" :key="column.key">
                 {{ row[column.key] }}
               </td>
-              <td v-if="shouldHaveActionsCol">
+              <td v-if="shouldHaveActionsCol || shouldHaveSingleAction">
                 <div class="field is-grouped">
-                  <div class="control">
+                  <div class="control" v-if="shouldHaveActionsCol || shouldHaveSingleAction === 'Edit'">
                     <Button
                       label="Edit"
                       type="primary"
@@ -39,7 +39,7 @@
                       @click.native="$emit('onEdit', row)"
                     />
                   </div>
-                  <div class="control">
+                  <div class="control" v-if="shouldHaveActionsCol || shouldHaveSingleAction === 'Delete'">
                     <Button
                       label="Delete"
                       type="danger"
@@ -88,6 +88,10 @@ export default {
     },
     shouldHaveGlobalActions: {
       type: Boolean,
+      required: false,
+    },
+    shouldHaveSingleAction: {
+      type: String,
       required: false,
     },
   },

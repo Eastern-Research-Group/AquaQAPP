@@ -216,72 +216,62 @@ module.exports = {
         value: '1,3',
       },
       {
-        questionId: 44,
+        questionId: 46,
         value: '1',
         valueId: 1,
       },
       {
-        questionId: 45,
+        questionId: 47,
         value: 12,
         valueId: 1,
       },
       {
-        questionId: 46,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
-        questionId: 47,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
         questionId: 48,
-        value: 'Frequently',
+        value: 'Rationale',
         valueId: 1,
       },
       {
         questionId: 49,
+        value: 'Rationale',
+        valueId: 1,
+      },
+      {
+        questionId: 50,
         value: 10,
         valueId: 1,
       },
       {
-        questionId: 44,
+        questionId: 46,
         value: '3',
         valueId: 2,
       },
       {
-        questionId: 45,
+        questionId: 47,
         value: 8,
         valueId: 2,
       },
       {
-        questionId: 46,
-        value: 'Rationale',
-        valueId: 2,
-      },
-      {
-        questionId: 47,
-        value: 'Rationale',
-        valueId: 2,
-      },
-      {
         questionId: 48,
-        value: 'Frequently',
+        value: 'Rationale',
         valueId: 2,
       },
       {
         questionId: 49,
-        value: 10,
+        value: 'Rationale',
         valueId: 2,
       },
       {
         questionId: 50,
+        value: 10,
+        valueId: 2,
+      },
+      {
+        questionId: 51,
         value: 'Record keeping',
         valueId: 1,
       },
       {
-        questionId: 51,
+        questionId: 52,
         value: 'Procedure',
         valueId: 1,
       },
@@ -299,7 +289,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 13; i += 1) {
+    for (let i = 1; i < 14; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,
