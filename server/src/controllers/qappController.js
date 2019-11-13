@@ -208,7 +208,9 @@ module.exports = {
       } else {
         Object.keys(req.body.values).forEach(async (qId) => {
           const datumFields = { qappId: req.body.qappId, questionId: qId, valueId: req.body.valueId };
-
+          const qappDatum = await QappDatum.findOne({
+            where: datumFields,
+          });
           await qappDatum.update({
             ...datumFields,
             value: req.body.values[qId],

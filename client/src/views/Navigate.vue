@@ -665,7 +665,7 @@ export default {
         this.addParamsArray.forEach((param) => {
           filteredParams.forEach((filteredParam) => {
             if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-              filteredParam.value = filteredParam.value !== '' ? filteredParam.value + ',' + param : param;
+              filteredParam.value = filteredParam.value !== '' ? `${filteredParam.value},${param}` : param;
             }
           });
         });
