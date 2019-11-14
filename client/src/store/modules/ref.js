@@ -6,21 +6,23 @@ const state = {
   locationTypes: [],
   collectionMethods: [],
   coordRefSystems: [],
-  waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Salt' }, { id: 'Brackish', name: 'Brackish' }],
+  waterTypes: [{ id: 'Fresh', name: 'Fresh' }, { id: 'Salt', name: 'Marine' }, { id: 'Estuarine', name: 'Estuarine' }],
   yesNo: [{ code: 'Y', label: 'Yes' }, { code: 'N', label: 'No' }],
   parameters: [],
   samplingMethodologies: [],
   locationRationales: [
-    'Spatial coverage of waterbody',
+    'Accessibility considerations',
+    'Capacity (funding or staffing)',
     'Feature of interest',
-    'Regulatory requirement',
     'Proximity to impact or suspected pollution source',
-    'Capacity (funding or staffing) Replication of previous sampling efforts (e.g. by DEP or EPA)',
+    'Regulatory requirement',
+    ' Replication of previous sampling efforts (e.g. by DEP or EPA)',
+    'Spatial coverage of waterbody',
   ],
   sampleNumRationales: [
-    'Random or probabilistic',
-    'Accessibility considerations',
+    'Capacity (funding or staffing)',
     'Proximity to potential pollutant source',
+    'Random or probabilistic spatial coverage',
     'Replication of previous sampling efforts (e.g. by DEP or EPA)',
   ],
   customSections: [
@@ -28,9 +30,9 @@ const state = {
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
     { component: 'ProjectActivities', label: 'Project Activities' },
-    { component: 'SampleDesign', label: 'Sample Design' },
+    { component: 'SampleDesign', label: 'Sampling Design' },
     { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
-    { component: 'SecondaryData', label: 'Secondary Data' },
+    { component: 'ParametersByLocation', label: 'Parameters By Location' },
   ],
 };
 
@@ -46,16 +48,16 @@ const actions = {
     commit('SET_REF', { ref: 'concerns', data: concerns.data });
 
     const roles = await axios.get('api/roles');
-    commit('SET_REF', { ref: 'roles', data: roles.data.map((role) => role.label) });
+    commit('SET_REF', { ref: 'roles', data: roles.data });
 
     const locationTypes = await axios.get('api/location-types');
-    commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data });
+    commit('SET_REF', { ref: 'locationTypes', data: locationTypes.data.map((location) => location.label) });
 
     const collectionMethods = await axios.get('api/collection-methods');
     commit('SET_REF', { ref: 'collectionMethods', data: collectionMethods.data });
 
     const coordRefSystems = await axios.get('api/coord-ref-systems');
-    commit('SET_REF', { ref: 'coordRefSystems', data: coordRefSystems.data });
+    commit('SET_REF', { ref: 'coordRefSystems', data: coordRefSystems.data.map((c) => c.label) });
 
     const parameters = await axios.get('api/parameters');
     commit('SET_REF', { ref: 'parameters', data: parameters.data });

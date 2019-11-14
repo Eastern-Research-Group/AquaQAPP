@@ -4,6 +4,7 @@
 html,
 body {
   height: 100%;
+  background-color: $blue;
 }
 
 #app {
@@ -35,7 +36,7 @@ html {
 
 .main-section {
   position: relative;
-
+  background-color: $blue;
   .title,
   .subtitle,
   .label {
@@ -52,6 +53,10 @@ html {
 
 .button.is-text {
   text-decoration: none !important;
+}
+
+.menu.column {
+  padding-left: 1px !important;
 }
 
 // form style overrides
@@ -88,6 +93,7 @@ html {
 .is-checkradio[type='radio'] {
   opacity: 0;
   width: 0;
+  position: fixed;
 }
 
 .is-checkradio[type=checkbox].is-block, .is-checkradio[type=radio].is-block {

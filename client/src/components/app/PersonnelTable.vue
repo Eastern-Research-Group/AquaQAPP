@@ -105,6 +105,8 @@
               :taggable="true"
               tag-placeholder="Add this as a new role"
               :placeholder="`Select roles, or type to add other roles`"
+              label="label"
+              track-by="code"
               @tag="addRole($event, question)"
             ></multiselect>
           </div>
@@ -248,7 +250,11 @@ export default {
       // Check that all non-checkbox questions have been filled out before submitting
       this.isFormIncomplete = false;
       this.questions.forEach((q) => {
-        if (q.dataEntryType !== 'checkbox' && (!this.pendingData[q.id] || !this.pendingData[q.id].length)) {
+        if (
+          q.dataEntryType !== 'checkbox' &&
+          q.dataEntryType !== 'singleCheckbox' &&
+          (!this.pendingData[q.id] || !this.pendingData[q.id].length)
+        ) {
           this.isFormIncomplete = true;
         }
       });
@@ -325,7 +331,11 @@ export default {
           const key = question.questionLabel;
           datum.forEach((personnelField) => {
             if (typeof personnel[personnelField.valueId] === 'undefined') personnel[personnelField.valueId] = {};
-            if (question.refName) {
+            if (question.refName === 'roles') {
+              personnel[personnelField.valueId][key] = this.roles.filter(
+                (r) => personnelField.value && personnelField.value.indexOf(r.code) > -1
+              );
+            } else if (question.refName && question.refName !== 'roles') {
               const ref = this[question.refName].find((r) => r.id === parseInt(personnelField.value, 10));
               if (ref) {
                 personnel[personnelField.valueId][key] = ref;
@@ -354,10 +364,10 @@ export default {
         if (this.pendingData[qId] !== null && typeof this.pendingData[qId] === 'object') {
           // if array, store comma separate list of codes
           if (Array.isArray(this.pendingData[qId])) {
-            const idArray = this.pendingData[qId].map((datum) => {
-              return datum.id || datum;
+            const codesArray = this.pendingData[qId].map((datum) => {
+              return datum.code;
             });
-            cleanedData[qId] = idArray.join(',');
+            cleanedData[qId] = codesArray.join(',');
           } else {
             cleanedData[qId] = this.pendingData[qId].id;
           }

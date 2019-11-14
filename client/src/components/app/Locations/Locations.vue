@@ -72,19 +72,30 @@
               v-model="pendingData[question.id]"
               :options="getConcerns()"
               :placeholder="`Select ${question.questionLabel}`"
-              :custom-label="question.refName === 'coordRefSystems' ? nameWithDesc : undefined"
               label="label"
               track-by="code"
               :multiple="true"
             ></multiselect>
             <multiselect
-              v-else-if="question.questionLabel !== 'Water Quality Concerns'"
+              v-else-if="
+                question.questionLabel !== 'Water Quality Concerns' &&
+                  question.refName !== 'coordRefSystems' &&
+                  question.refName !== 'locationTypes'
+              "
               v-model="pendingData[question.id]"
               :options="getOptions(question.refName)"
               :placeholder="`Select ${question.questionLabel}`"
-              :custom-label="question.refName === 'coordRefSystems' ? nameWithDesc : undefined"
               label="name"
               track-by="name"
+            ></multiselect>
+            <multiselect
+              v-else-if="
+                question.questionLabel !== 'Water Quality Concerns' &&
+                  (question.refName === 'coordRefSystems' || question.refName === 'locationTypes')
+              "
+              v-model="pendingData[question.id]"
+              :options="getOptions(question.refName)"
+              :placeholder="`Select ${question.questionLabel}`"
             ></multiselect>
           </div>
         </div>
@@ -125,6 +136,7 @@
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import getQuestionIdByName from '@/utils/getQuestionIdByName';
+import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
@@ -161,8 +173,7 @@ export default {
       columns: [
         { key: 'Location ID', label: 'Location ID' },
         { key: 'Location Name', label: 'Location Name' },
-        { key: 'Location Latitude', label: 'Latitude' },
-        { key: 'Location Longitude', label: 'Longitude' },
+        { key: 'waterConcerns', label: 'Water Quality Concerns' },
       ],
       isFormIncomplete: false,
       disabled: false,
@@ -190,6 +201,7 @@ export default {
       'concernsDifferByLocQuestionId',
       'locConcernsQuestionId',
       'parametersQuestionId',
+      'waterTypeLocQuestionId',
     ]),
   },
   mounted() {
@@ -218,10 +230,6 @@ export default {
       // get reference data array based on refName field in questions table
       return this[refName];
     },
-    nameWithDesc(option) {
-      // set custom label for coordRefSystems, since name is a code
-      return `${option.name} - ${option.description}`;
-    },
     onAddLocation(map) {
       this.selectedLocation = null;
       this.pendingData = {};
@@ -239,9 +247,6 @@ export default {
           // Set default metadata automatically when user selects location by map
           this.pendingData[getQuestionIdByName(this.questions, 'horizCollectionMethod')] = this.collectionMethods.find(
             (v) => v.id === 18
-          );
-          this.pendingData[getQuestionIdByName(this.questions, 'horizCoordinateSystem')] = this.coordRefSystems.find(
-            (v) => v.id === 16
           );
         });
       } else if (this.map) {
@@ -266,6 +271,8 @@ export default {
               locations[locationField.valueId][key] = this.concerns.filter(
                 (r) => locationField.value && locationField.value.indexOf(r.code) > -1
               );
+            } else if (question.refName === 'locationTypes' || question.refName === 'coordRefSystems') {
+              locations[locationField.valueId][key] = this[question.refName].find((r) => r === locationField.value);
             } else if (question.dataEntryType === 'select') {
               locations[locationField.valueId][key] = this[question.refName].find(
                 (r) => r.id === parseInt(locationField.value, 10)
@@ -279,6 +286,12 @@ export default {
 
       Object.keys(locations).forEach((locationId) => {
         const monLoc = locations[locationId];
+
+        if (this.shouldShowConcerns() && !monLoc['Water Quality Concerns']) {
+          monLoc['Water Quality Concerns'] = this.getConcerns();
+        }
+        getLocationsTableConcerns(monLoc, this.getConcerns());
+
         this.markers.push({
           ...monLoc,
           valueId: locationId,
@@ -299,6 +312,8 @@ export default {
         newValueId = Math.max(...this.markers.map((marker) => marker.valueId)) + 1;
       }
 
+      getLocationsTableConcerns(mapData, this.getConcerns());
+
       // Markers array used to display pins and handle location data
       this.markers.push({
         ...mapData,
@@ -307,6 +322,10 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
+      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      this.pendingData.paramsByLocation =
+        (this.pendingData[this.waterTypeLocQuestionId] === 'Fresh' && 'Freshwater') ||
+        ((this.pendingData[this.waterTypeLocQuestionId] === 'Salt' || 'Brackish') && 'Saltwater');
       this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       // Close location side nav, clear inputs, and turn off click event for map

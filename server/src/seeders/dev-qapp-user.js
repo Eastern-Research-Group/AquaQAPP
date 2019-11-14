@@ -48,7 +48,7 @@ module.exports = {
       },
       {
         questionId: 9,
-        value: 'Sampling',
+        value: 'PM',
         valueId: 1,
       },
       {
@@ -73,7 +73,7 @@ module.exports = {
       },
       {
         questionId: 14,
-        value: '(123) 456-7890',
+        value: '123-456-7890',
         valueId: 1,
       },
       {
@@ -83,24 +83,24 @@ module.exports = {
       },
       {
         questionId: 16,
+        value: 'Water quality decline',
+      },
+      {
+        questionId: 17,
+        value: 'Water quality has declined',
+      },
+      {
+        questionId: 18,
+        value: 'Project description',
+      },
+      {
+        questionId: 19,
         value: 'Sampling',
         valueId: 1,
       },
       {
-        questionId: 17,
-        value: 'Water quality decline',
-      },
-      {
-        questionId: 18,
-        value: 'Water quality has declined',
-      },
-      {
-        questionId: 19,
-        value: 'Project description',
-      },
-      {
         questionId: 20,
-        value: 'Sampling',
+        value: '',
         valueId: 1,
       },
       {
@@ -110,12 +110,12 @@ module.exports = {
       },
       {
         questionId: 22,
-        value: '',
+        value: 'X',
         valueId: 1,
       },
       {
         questionId: 23,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
@@ -125,12 +125,12 @@ module.exports = {
       },
       {
         questionId: 25,
-        value: '',
+        value: 'X',
         valueId: 1,
       },
       {
         questionId: 26,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
@@ -140,12 +140,12 @@ module.exports = {
       },
       {
         questionId: 28,
-        value: '',
+        value: 'X',
         valueId: 1,
       },
       {
         questionId: 29,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
@@ -155,79 +155,74 @@ module.exports = {
       },
       {
         questionId: 31,
-        value: '',
-        valueId: 1,
-      },
-      {
-        questionId: 32,
         value: 'X',
         valueId: 1,
       },
       {
-        questionId: 33,
+        questionId: 32,
         value: 'ACID,GENPHYS,REC',
       },
       {
-        questionId: 34,
+        questionId: 33,
         value: 'N',
       },
       {
-        questionId: 35,
+        questionId: 34,
         value: '12345',
         valueId: 1,
       },
       {
-        questionId: 36,
+        questionId: 35,
         value: 'Sampling Location',
         valueId: 1,
       },
       {
-        questionId: 37,
+        questionId: 36,
         value: '38.9072',
         valueId: 1,
       },
       {
-        questionId: 38,
+        questionId: 37,
         value: '-77.0369',
         valueId: 1,
       },
       {
-        questionId: 39,
+        questionId: 38,
         value: 'Fresh',
         valueId: 1,
       },
       {
+        questionId: 39,
+        value: null,
+        valueId: 1,
+      },
+      {
+        questionId: 40,
+        value: 'Estuary',
+        valueId: 1,
+      },
+      {
         questionId: 41,
-        value: '1',
+        value: '3',
         valueId: 1,
       },
       {
         questionId: 42,
-        value: '3',
+        value: 'NAD83',
         valueId: 1,
       },
       {
         questionId: 43,
-        value: '3',
-        valueId: 1,
-      },
-      {
-        questionId: 44,
         value: '1,3',
       },
       {
-        questionId: 45,
+        questionId: 46,
         value: '1',
         valueId: 1,
       },
       {
-        questionId: 46,
-        value: 12,
-        valueId: 1,
-      },
-      {
         questionId: 47,
-        value: 'Rationale',
+        value: 12,
         valueId: 1,
       },
       {
@@ -237,7 +232,7 @@ module.exports = {
       },
       {
         questionId: 49,
-        value: 'Frequently',
+        value: 'Rationale',
         valueId: 1,
       },
       {
@@ -246,18 +241,13 @@ module.exports = {
         valueId: 1,
       },
       {
-        questionId: 45,
+        questionId: 46,
         value: '3',
         valueId: 2,
       },
       {
-        questionId: 46,
-        value: 8,
-        valueId: 2,
-      },
-      {
         questionId: 47,
-        value: 'Rationale',
+        value: 8,
         valueId: 2,
       },
       {
@@ -267,7 +257,7 @@ module.exports = {
       },
       {
         questionId: 49,
-        value: 'Frequently',
+        value: 'Rationale',
         valueId: 2,
       },
       {
@@ -283,36 +273,6 @@ module.exports = {
       {
         questionId: 52,
         value: 'Procedure',
-        valueId: 1,
-      },
-      {
-        questionId: 53,
-        value: 'Source',
-        valueId: 1,
-      },
-      {
-        questionId: 54,
-        value: 'Beach',
-        valueId: 1,
-      },
-      {
-        questionId: 55,
-        value: 'Chloride',
-        valueId: 1,
-      },
-      {
-        questionId: 56,
-        value: 'Sample Design',
-        valueId: 1,
-      },
-      {
-        questionId: 57,
-        value: 'Northeast',
-        valueId: 1,
-      },
-      {
-        questionId: 58,
-        value: 'https://google.com',
         valueId: 1,
       },
     ];

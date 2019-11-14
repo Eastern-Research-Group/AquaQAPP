@@ -3,14 +3,15 @@ module.exports = {
     return queryInterface.createTable('RefHorizontalCoordRefSystems', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      code: {
         type: Sequelize.STRING,
       },
-      description: {
-        type: Sequelize.TEXT,
+      label: {
+        type: Sequelize.STRING,
       },
     });
   },

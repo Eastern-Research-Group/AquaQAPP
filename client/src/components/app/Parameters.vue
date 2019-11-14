@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     getFilteredParams(params, waterType) {
-      if (waterType === 'Fresh') {
+      if (waterType === 'Fresh Water') {
         return sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
       }
       // salt or brackish types are both indicated by the "salt" boolean column
@@ -159,10 +159,24 @@ export default {
     getWaterTypes() {
       let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
       waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
-      return waterTypes.map((v) => ({
-        id: v,
-        name: v,
-      }));
+      return waterTypes.map((v) => {
+        if (v === 'Salt') {
+          return {
+            id: v,
+            name: 'Marine',
+          };
+        }
+        if (v === 'Fresh') {
+          return {
+            id: v,
+            name: 'Fresh Water',
+          };
+        }
+        return {
+          id: v,
+          name: v,
+        };
+      });
     },
     isChecked(paramId) {
       return this.selectedParams.indexOf(paramId.toString()) > -1;

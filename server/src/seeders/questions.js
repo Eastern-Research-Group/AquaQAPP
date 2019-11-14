@@ -168,17 +168,6 @@ module.exports = {
       sectionQuestionSort: 13,
     });
     records.push({
-      sectionNumber: '3',
-      questionName: 'responsibilities',
-      questionLabel: 'Responsibilities',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '4096',
-      hasExamples: false,
-      sectionQuestionSort: 14,
-    });
-    records.push({
       sectionNumber: '4',
       questionName: 'problemDefinition',
       questionLabel: 'Problem Definition',
@@ -191,8 +180,8 @@ module.exports = {
     });
     records.push({
       sectionNumber: '5',
-      questionName: 'problemBackground',
-      questionLabel: 'Problem Background',
+      questionName: 'projectBackground',
+      questionLabel: 'Project Background',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'largeText',
@@ -496,6 +485,29 @@ module.exports = {
     });
     records.push({
       sectionNumber: '11',
+      questionLabel: 'Parameters By Location',
+      questionName: 'parametersByLocation',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: '',
+      maxLength: '255',
+      hasExamples: false,
+      sectionQuestionSort: 1,
+      refName: 'parameters by location',
+    });
+    records.push({
+      sectionNumber: '11',
+      questionLabel: 'Frequency',
+      questionName: 'frequency',
+      dataEntryInstructions: '',
+      dataEntryTip: '',
+      dataEntryType: 'largeText',
+      maxLength: '255',
+      hasExamples: false,
+      sectionQuestionSort: 2,
+    });
+    records.push({
+      sectionNumber: '12',
       questionLabel: 'Parameter',
       questionName: 'sampleParameter',
       dataEntryInstructions: '',
@@ -507,7 +519,7 @@ module.exports = {
       refName: 'parameters',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '12',
       questionLabel: 'Number of Sample Locations',
       questionName: 'numSampleLocations',
       dataEntryInstructions: '',
@@ -518,7 +530,7 @@ module.exports = {
       sectionQuestionSort: 2,
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '12',
       questionLabel: 'Site Location Rationale',
       questionName: 'locationRationale',
       dataEntryInstructions: '',
@@ -530,7 +542,7 @@ module.exports = {
       refName: 'locationRationales',
     });
     records.push({
-      sectionNumber: '11',
+      sectionNumber: '12',
       questionLabel: 'Rationale for Number of Samples',
       questionName: 'sampleNumRationale',
       dataEntryInstructions: '',
@@ -542,9 +554,9 @@ module.exports = {
       refName: 'sampleNumRationales',
     });
     records.push({
-      sectionNumber: '11',
-      questionLabel: 'Frequency',
-      questionName: 'frequency',
+      sectionNumber: '12',
+      questionLabel: 'Number/Type of QC Samples',
+      questionName: 'numQcSamples',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'largeText',
@@ -553,18 +565,7 @@ module.exports = {
       sectionQuestionSort: 5,
     });
     records.push({
-      sectionNumber: '11',
-      questionLabel: 'Number/Type of QC Samples',
-      questionName: 'numQcSamples',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '255',
-      hasExamples: false,
-      sectionQuestionSort: 6,
-    });
-    records.push({
-      sectionNumber: '12',
+      sectionNumber: '13',
       questionName: 'activity',
       questionLabel: 'Activity',
       dataEntryInstructions: '',
@@ -575,7 +576,7 @@ module.exports = {
       sectionQuestionSort: 1,
     });
     records.push({
-      sectionNumber: '12',
+      sectionNumber: '13',
       questionName: 'procedures',
       questionLabel: 'Procedures',
       dataEntryInstructions: '',
@@ -584,72 +585,6 @@ module.exports = {
       maxLength: '255',
       hasExamples: false,
       sectionQuestionSort: 2,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'dataSource',
-      questionLabel: 'Data Source',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '75',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'waterbodyType',
-      questionLabel: 'Waterbody Type',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '75',
-      hasExamples: false,
-      sectionQuestionSort: 2,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'sampleDataParams',
-      questionLabel: 'Sample Data Parameters',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '2000',
-      hasExamples: false,
-      sectionQuestionSort: 3,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'sampleDesign',
-      questionLabel: 'Sample Design',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '75',
-      hasExamples: false,
-      sectionQuestionSort: 4,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'geographicArea',
-      questionLabel: 'Geographic Area',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '75',
-      hasExamples: false,
-      sectionQuestionSort: 5,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'webDataLinks',
-      questionLabel: 'Web Data Links',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'largeText',
-      maxLength: '2000',
-      hasExamples: false,
-      sectionQuestionSort: 6,
     });
     // manually set ids so they always start at 1 (question ids are used when saving data so must be consistent)
     records = records.map((record, index) => ({

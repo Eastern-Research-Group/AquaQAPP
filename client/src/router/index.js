@@ -5,7 +5,6 @@ import Login from '@/views/Login';
 import Dashboard from '@/views/Dashboard';
 import Navigate from '@/views/Navigate';
 import Reset from '@/views/Reset';
-import Generate from '@/views/Generate';
 import PageNotFound from '@/views/PageNotFound';
 
 Vue.use(Router);
@@ -48,12 +47,6 @@ const router = new Router({
       path: '/navigate/:id',
       name: 'navigate',
       component: Navigate,
-      beforeEnter: guard,
-    },
-    {
-      path: '/generate/:id',
-      name: 'generate',
-      component: Generate,
       beforeEnter: guard,
     },
     {

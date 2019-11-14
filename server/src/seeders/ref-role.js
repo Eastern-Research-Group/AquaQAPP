@@ -4,34 +4,24 @@ module.exports = {
     records.push({
       code: 'PM',
       label: 'Project Manager',
+      responsibilities: 'Overall management of administrative and technical work of the monitoring program.',
     });
     records.push({
-      code: 'MPC',
-      label: 'Monitoring Program Coordinator',
+      code: 'QAM',
+      label: 'QA Manager',
+      responsibilities:
+        'Review of procedures and data generated including reports to ensure adherence to QAPP. Reports any problems to the Project Manager, and works with Project Manager to document and correct any deviations.',
     });
     records.push({
-      code: 'PQAO',
-      label: 'Program Quality Assurance Officer',
+      code: 'FC',
+      label: 'Field Coordinator',
+      responsibilities:
+        'Planning and coordination of all field monitoring. Includes technical oversight, preparation of field equipment, volunteer assignments and scheduling. Receives samples and delivers to the lab. Oversees proper sample handling/ preservation and chain of custody forms.',
     });
     records.push({
-      code: 'PFC',
-      label: 'Project Field Coordinator',
-    });
-    records.push({
-      code: 'PLC',
-      label: 'Project Lab Coordinator',
-    });
-    records.push({
-      code: 'DMC',
-      label: 'Data Management Coordinator',
-    });
-    records.push({
-      code: 'TAC',
-      label: 'Technical Advisory Committee',
-    });
-    records.push({
-      code: 'VOL',
-      label: 'Volunteers',
+      code: 'DM',
+      label: 'Data Manager',
+      responsibilities: 'Data collection, management, analysis and interpretation.',
     });
     return queryInterface.bulkInsert('RefRoles', records);
   },

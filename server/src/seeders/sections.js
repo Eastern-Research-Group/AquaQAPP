@@ -40,8 +40,8 @@ module.exports = {
     records.push({
       sectionNumber: '5',
       sectionLevel: '1',
-      sectionLabel: 'Problem Background',
-      sectionName: 'problemBackground',
+      sectionLabel: 'Project Background',
+      sectionName: 'projectBackground',
       sectionSort: 5,
       instructions:
         'Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
@@ -94,29 +94,28 @@ module.exports = {
     records.push({
       sectionNumber: '11',
       sectionLevel: '1',
-      sectionLabel: 'Sample Design',
-      sectionName: 'sampleDesign',
+      sectionLabel: 'Parameters By Location',
+      sectionName: 'parametersByLocation',
       sectionSort: 11,
-      instructions:
-        'Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+      instructions: '',
     });
     records.push({
       sectionNumber: '12',
       sectionLevel: '1',
-      sectionLabel: 'Record Handling Procedures',
-      sectionName: 'recordHandling',
+      sectionLabel: 'Sampling Design',
+      sectionName: 'sampleDesign',
       sectionSort: 12,
       instructions:
-        'Use the "Add" button to populate the table below. In the pop-up window, identify each step involved in record and data handling, and describe the procedures that will be followed. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        '<p>Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p><p><b>A row is required for every parameter selected. If a parameter is removed on the Parameters section make sure to remove its respective row in order to mark complete.</b></p>',
     });
     records.push({
       sectionNumber: '13',
       sectionLevel: '1',
-      sectionLabel: 'Secondary Data',
-      sectionName: 'secondaryData',
+      sectionLabel: 'Record Handling Procedures',
+      sectionName: 'recordHandling',
       sectionSort: 13,
       instructions:
-        'Use the "Add" button to populate the table below with any secondary or external data sources consulted while planning this project. Complete the fields in the pop-up window for each secondary data source.',
+        'Use the "Add" button to populate the table below. In the pop-up window, identify each step involved in record and data handling, and describe the procedures that will be followed. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
     });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({
