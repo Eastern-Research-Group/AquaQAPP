@@ -219,7 +219,7 @@ export default {
       }
 
       const enteredVal = {
-        code: `OTHER - ${value.replace(/,/gi, '')}`, // replace all commas in entered value, since we split stored values by comma
+        code: `${newValueId} - ${value.replace(/,/gi, '')}`, // replace all commas in entered value, since we split stored values by comma
         label: value.replace(/,/gi, ''),
         valueId: newValueId,
       };
@@ -244,10 +244,14 @@ export default {
       this.$set(this.pendingData, question.id, newVal);
     },
     onEdit(row) {
+      console.log(row);
+      this.otherRoles = [];
+      this.responsibilities = [];
       this.selectedPersonnel = row;
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
+
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
@@ -258,7 +262,13 @@ export default {
         this.isPrimaryContactDisabled = false;
       }
 
-      if (row.Responsibilities.length) {
+      if (row.Roles.length) {
+        row.Roles.forEach((role) => {
+          if (role.valueId) this.otherRoles.push(role);
+        });
+      }
+      if (row.Responsibilities && row.Responsibilities.length !== 0) {
+        this.responsibilities = row.Responsibilities;
         this.shouldDisplayResponsibilities = true;
       }
     },
@@ -278,6 +288,8 @@ export default {
       this.isEnteringInfo = true;
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
+      this.otherRoles = [];
+      this.responsibilities = [];
 
       if (this.rows.find((row) => row['Primary Contact'] === 'X')) {
         this.isPrimaryContactDisabled = true;
@@ -312,11 +324,28 @@ export default {
       }
     },
     async editPersonnelData() {
+      const filterIds = [];
+
+      this.pendingData[this.rolesQuestionId].forEach((role) => {
+        if (role.valueId) filterIds.push(role.valueId);
+      });
+
+      const filteredResp = [];
+
+      filterIds.forEach((valueId) => {
+        this.pendingData[this.responsibilitiesQuestionId].forEach((obj) => {
+          if (obj.valueId === valueId) filteredResp.push(obj);
+        });
+      });
+
+      this.$set(this.pendingData, this.responsibilitiesQuestionId, filteredResp);
+
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedPersonnel.valueId,
         values: this.cleanData(this.pendingData),
       });
+
       this.refreshPersonnelData();
       this.isEnteringInfo = false;
       this.shouldDisplayResponsibilities = false;
@@ -338,7 +367,6 @@ export default {
         valueId: newValueId,
       });
 
-      console.log(this.pendingData);
       this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       this.shouldDisplayResponsibilities = false;
@@ -374,10 +402,34 @@ export default {
           datum.forEach((personnelField) => {
             if (typeof personnel[personnelField.valueId] === 'undefined') personnel[personnelField.valueId] = {};
             if (question.refName === 'roles') {
-              personnel[personnelField.valueId][key] = this.roles.filter(
-                (r) => personnelField.value && personnelField.value.indexOf(r.code) > -1
-              );
-            } else if (question.refName && question.refName !== 'roles') {
+              const values = [];
+              personnelField.value.split(',').forEach((value) => {
+                if (value.includes(' - ')) {
+                  values.push({ code: value, label: value.slice(4), valueId: parseInt(value.slice(0, 1), 10) });
+                }
+                if (!value.includes(' - ')) {
+                  values.push(
+                    this.roles.find((r) => personnelField.value && personnelField.value.indexOf(r.code) > -1)
+                  );
+                }
+              });
+              personnel[personnelField.valueId][key] = values;
+            } else if (question.questionName === 'responsibilities') {
+              const newResponsibilities = [];
+
+              personnelField.value.split(',').forEach((pValue) => {
+                newResponsibilities.push({
+                  value: pValue.slice(1),
+                  valueId: parseInt(pValue.slice(0, 1), 10),
+                });
+              });
+
+              personnel[personnelField.valueId][key] = newResponsibilities;
+            } else if (
+              question.refName &&
+              question.refName !== 'roles' &&
+              question.questionName !== 'responsibilities'
+            ) {
               const ref = this[question.refName].find((r) => r.id === parseInt(personnelField.value, 10));
               if (ref) {
                 personnel[personnelField.valueId][key] = ref;
@@ -407,7 +459,7 @@ export default {
           // if array, store comma separate list of codes
           if (Array.isArray(this.pendingData[qId])) {
             const codesArray = this.pendingData[qId].map((datum) => {
-              return datum.code || datum.value;
+              return datum.code || `${datum.valueId}${datum.value}`;
             });
             cleanedData[qId] = codesArray.join(',');
           } else {
