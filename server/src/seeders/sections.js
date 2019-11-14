@@ -89,7 +89,7 @@ module.exports = {
       sectionName: 'parameters',
       sectionSort: 10,
       instructions:
-        '<p>Using the appropriate tab for freshwater and saltwater/brackish locations, select all parameters and analytical methods you plan to measure.</p><p>The first box below suggests a subset of parameters based on water quality concern(s) selected. The second box displays the full suite of available parameters. Note that parameters are paired with analytical methods, so take care to select the appropriate combination of parameter and method for your project. If you are measuring a parameter that is not listed, write the parameter name in the "Other" box and hit the enter key to move it to the "Selected" box. All selected parameters and methods appear in the "Selected" box to the right.</p><p>If you selected "General Environmental Health: Benthic" as a concern, you must also select temperature, conductivity or salinity, and dissolved oxygen as parameters on this screen.</p>',
+        '<p>Using the appropriate tab for freshwater and marine/estuarine locations, select all parameters and analytical methods you plan to measure.</p><p>The first box below suggests a subset of parameters based on water quality concern(s) selected. The second box displays the full suite of available parameters. Note that parameters are paired with analytical methods, so take care to select the appropriate combination of parameter and method for your project. If you are measuring a parameter that is not listed, write the parameter name in the “Other” box and hit the enter key to move it to the “Selected” box. All selected parameters and methods appear in the “Selected” box to the right.</p><ul><li>If you selected “General Environmental Health: Benthic” as a concern, you must also select temperature, conductivity or salinity, and dissolved oxygen as parameters on this screen.</li><li>If you selected “General Environmental Health: Benthic” and your location is marine, you must also select grab sample volume, sample penetration depth, and sediment texture as parameters on this screen.</li></ul>',
     });
     records.push({
       sectionNumber: '11',
@@ -97,7 +97,8 @@ module.exports = {
       sectionLabel: 'Parameters By Location',
       sectionName: 'parametersByLocation',
       sectionSort: 11,
-      instructions: '',
+      instructions:
+        '<p>The table below displays all sampling locations entered on the “Monitoring Locations” screen. Edit or delete existing rows of information by clicking the “Edit” or “Delete” buttons in each row of interest.</p><p>In the pop-up window, use the check boxes to the left of the parameter names to indicate whether a parameter is measured at that location. Indicate the site location rationale and frequency of sampling.</p>',
     });
     records.push({
       sectionNumber: '12',

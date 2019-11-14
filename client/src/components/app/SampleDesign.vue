@@ -44,7 +44,9 @@
             :id="`question${question.id}`"
             v-model="pendingData[question.id]"
             class="input"
-            :placeholder="`Enter ${question.questionLabel}`"
+            :placeholder="
+              `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
+            "
             :maxlength="question.maxLength"
             required
           ></textarea>
@@ -128,7 +130,7 @@ export default {
       columns: [
         {
           key: 'parameterLabel',
-          label: 'Parameter',
+          label: 'Parameter/Method',
         },
         {
           key: 'Number of Sample Locations',
