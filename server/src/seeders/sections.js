@@ -97,7 +97,8 @@ module.exports = {
       sectionLabel: 'Parameters By Location',
       sectionName: 'parametersByLocation',
       sectionSort: 11,
-      instructions: '',
+      instructions:
+        '<p>The table below displays all sampling locations entered on the “Monitoring Locations” screen. Edit or delete existing rows of information by clicking the “Edit” or “Delete” buttons in each row of interest.</p><p>In the pop-up window, use the check boxes to the left of the parameter names to indicate whether a parameter is measured at that location. Indicate the site location rationale and frequency of sampling.</p>',
     });
     records.push({
       sectionNumber: '12',
