@@ -13,10 +13,9 @@ module.exports = {
   authentication: {
     jwtSecret: process.env.JWT_SECRET || 'secret',
   },
-  service: process.env.SERVICE_PROVIDER || 'Gmail',
-  emailHost: process.env.EMAIL_HOST || 'smtp.mailgun.org',
-  emailPort: process.env.EMAIL_PORT || 587,
-  emailUser: process.env.EMAIL_USER || 'aqua.qapp@gmail.com',
-  emailPassword: process.env.EMAIL_PASSWORD || 'password',
+  emailHost: process.env.MAILGUN_SMTP_SERVER || 'smtp.mailgun.org',
+  emailPort: process.env.MAILGUN_SMTP_PORT || 587,
+  emailUser: process.env.MAILGUN_SMTP_LOGIN || 'aqua.qapp@gmail.com',
+  emailPassword: process.env.MAILGUN_SMTP_PASSWORD || 'password',
   baseUrl: process.env.BASE_URL || 'http://localhost:8080',
 };
