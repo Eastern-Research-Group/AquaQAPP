@@ -26,7 +26,7 @@
         />
         <div class="field" v-for="question in questions" :key="question.id">
           <label
-            v-if="['text', 'largeText', 'email', 'tel', 'select'].indexOf(question.dataEntryType) !== -1"
+            v-if="['text', 'email', 'tel', 'select'].indexOf(question.dataEntryType) !== -1"
             class="label"
             :for="`question${question.id}`"
             >{{ question.questionLabel }}</label
@@ -65,15 +65,6 @@
             oninput="this.setCustomValidity('')"
           />
           <small v-if="question.dataEntryType === 'tel'">Format: 123-456-7890</small>
-          <textarea
-            v-if="question.dataEntryType === 'largeText'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
-            class="input"
-            :placeholder="`Enter ${question.questionLabel}`"
-            :maxlength="question.maxLength"
-            required
-          ></textarea>
           <div class="field" v-if="question.dataEntryType === 'checkbox'">
             <input
               class="is-checkradio"
@@ -108,7 +99,27 @@
               label="label"
               track-by="code"
               @tag="addRole($event, question)"
+              @remove="removeRole($event, question)"
             ></multiselect>
+          </div>
+        </div>
+        <div class="field" v-for="role in otherRoles" :key="role.code">
+          <div class="field" v-for="question in questions" :key="question.id">
+            <label
+              v-if="['largeText'].indexOf(question.dataEntryType) !== -1 && shouldDisplayResponsibilities"
+              class="label"
+              :for="`question${question.id}${role.valueId}`"
+              >{{ role.label }} {{ question.questionLabel }}</label
+            >
+            <textarea
+              v-if="question.dataEntryType === 'largeText' && shouldDisplayResponsibilities"
+              :id="`question${question.id}${role.valueId}`"
+              v-model="pendingData[question.id][otherRoles.indexOf(role)].value"
+              class="input"
+              :placeholder="`Enter ${question.questionLabel}`"
+              :maxlength="question.maxLength"
+              required
+            ></textarea>
           </div>
         </div>
         <Button label="Save" :type="shouldShowEdit ? 'primary' : 'success'" submit />
@@ -161,8 +172,11 @@ export default {
       selectedPersonnel: null,
       isPrimaryContactDisabled: false,
       isFormIncomplete: false,
+      shouldDisplayResponsibilities: false,
       pendingData: {},
       rows: [],
+      otherRoles: [],
+      responsibilities: [],
       columns: [
         {
           key: 'Full Name of Personnel',
@@ -193,14 +207,36 @@ export default {
     }),
     ...mapState('ref', ['roles']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['rolesQuestionId']),
+    ...mapGetters('structure', ['rolesQuestionId', 'responsibilitiesQuestionId']),
   },
   mounted() {
     this.refreshPersonnelData();
   },
   methods: {
     addRole(value, question) {
-      const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
+      let newValueId = 1;
+      if (this.otherRoles.length) {
+        newValueId = Math.max(...this.otherRoles.map((role) => role.valueId)) + 1;
+      }
+
+      const enteredVal = {
+        code: `${newValueId} - ${value.replace(/,/gi, '')}`, // replace all commas in entered value, since we split stored values by comma
+        label: value.replace(/,/gi, ''),
+        valueId: newValueId,
+      };
+
+      const newResponsibility = {
+        value: '',
+        valueId: newValueId,
+      };
+
+      this.responsibilities.push(newResponsibility);
+
+      this.$set(this.pendingData, this.responsibilitiesQuestionId, this.responsibilities);
+
+      this.otherRoles.push(enteredVal);
+      this.shouldDisplayResponsibilities = true;
+
       let newVal = this.pendingData[question.id];
       // if values already exist for this question, push entered value into array, otherwise set as array
       if (newVal) newVal.push(enteredVal);
@@ -208,11 +244,20 @@ export default {
       // set pending data object to the new value
       this.$set(this.pendingData, question.id, newVal);
     },
+    removeRole(value, question) {
+      this.otherRoles = this.otherRoles.filter((role) => role.valueId !== value.valueId);
+      let filteredArray = [];
+      filteredArray = this.pendingData[this.responsibilitiesQuestionId].filter((r) => r.valueId !== value.valueId);
+      this.$set(this.pendingData, this.responsibilitiesQuestionId, filteredArray);
+    },
     onEdit(row) {
+      this.otherRoles = [];
+      this.responsibilities = [];
       this.selectedPersonnel = row;
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.id, row[q.questionLabel]);
       });
+
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
@@ -221,6 +266,16 @@ export default {
         this.isPrimaryContactDisabled = true;
       } else {
         this.isPrimaryContactDisabled = false;
+      }
+
+      if (row.Roles.length) {
+        row.Roles.forEach((role) => {
+          if (role.valueId) this.otherRoles.push(role);
+        });
+      }
+      if (row.Responsibilities && row.Responsibilities.length !== 0) {
+        this.responsibilities = row.Responsibilities;
+        this.shouldDisplayResponsibilities = true;
       }
     },
     onDelete(row) {
@@ -239,6 +294,8 @@ export default {
       this.isEnteringInfo = true;
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
+      this.otherRoles = [];
+      this.responsibilities = [];
 
       if (this.rows.find((row) => row['Primary Contact'] === 'X')) {
         this.isPrimaryContactDisabled = true;
@@ -278,8 +335,10 @@ export default {
         valueId: this.selectedPersonnel.valueId,
         values: this.cleanData(this.pendingData),
       });
+
       this.refreshPersonnelData();
       this.isEnteringInfo = false;
+      this.shouldDisplayResponsibilities = false;
     },
     addPersonnelData() {
       const personnelData = {};
@@ -300,6 +359,7 @@ export default {
 
       this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
+      this.shouldDisplayResponsibilities = false;
       this.isEnteringInfo = false;
       this.pendingData = {};
     },
@@ -332,10 +392,34 @@ export default {
           datum.forEach((personnelField) => {
             if (typeof personnel[personnelField.valueId] === 'undefined') personnel[personnelField.valueId] = {};
             if (question.refName === 'roles') {
-              personnel[personnelField.valueId][key] = this.roles.filter(
-                (r) => personnelField.value && personnelField.value.indexOf(r.code) > -1
-              );
-            } else if (question.refName && question.refName !== 'roles') {
+              const values = [];
+              personnelField.value.split(',').forEach((value) => {
+                if (value.includes(' - ')) {
+                  values.push({ code: value, label: value.slice(4), valueId: parseInt(value.slice(0, 1), 10) });
+                }
+                if (!value.includes(' - ')) {
+                  values.push(
+                    this.roles.find((r) => personnelField.value && personnelField.value.indexOf(r.code) > -1)
+                  );
+                }
+              });
+              personnel[personnelField.valueId][key] = values;
+            } else if (question.questionName === 'responsibilities') {
+              const newResponsibilities = [];
+
+              personnelField.value.split(',').forEach((pValue) => {
+                newResponsibilities.push({
+                  value: pValue.slice(1),
+                  valueId: parseInt(pValue.slice(0, 1), 10),
+                });
+              });
+
+              personnel[personnelField.valueId][key] = newResponsibilities;
+            } else if (
+              question.refName &&
+              question.refName !== 'roles' &&
+              question.questionName !== 'responsibilities'
+            ) {
               const ref = this[question.refName].find((r) => r.id === parseInt(personnelField.value, 10));
               if (ref) {
                 personnel[personnelField.valueId][key] = ref;
@@ -365,7 +449,7 @@ export default {
           // if array, store comma separate list of codes
           if (Array.isArray(this.pendingData[qId])) {
             const codesArray = this.pendingData[qId].map((datum) => {
-              return datum.code;
+              return datum.code || `${datum.valueId}${datum.value}`;
             });
             cleanedData[qId] = codesArray.join(',');
           } else {

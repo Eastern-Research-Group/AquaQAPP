@@ -22,7 +22,6 @@ export default {
     },
     saveChanges() {
       this.shouldDisplayUnsavedWarning = false;
-      console.log(this.$refs.form);
       if (!this.$refs.form.checkValidity()) {
         this.$refs.form.reportValidity();
         return;
