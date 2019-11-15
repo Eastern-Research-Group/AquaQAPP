@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const state = {
+  procedures: [],
   concerns: [],
   roles: [],
   locationTypes: [],
@@ -61,6 +62,9 @@ const actions = {
 
     const parameters = await axios.get('api/parameters');
     commit('SET_REF', { ref: 'parameters', data: parameters.data });
+
+    const procedures = await axios.get('api/procedures');
+    commit('SET_REF', { ref: 'procedures', data: procedures.data });
   },
 };
 

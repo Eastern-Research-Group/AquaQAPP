@@ -310,6 +310,7 @@ export default {
       'locConcernsQuestionId',
       'sampleDesignQuestionId',
       'paramsbyLocQuestionId',
+      'detailsQuestionId',
     ]),
     currentQuestions() {
       return this.questions
@@ -429,6 +430,9 @@ export default {
           tableParams = uniqBy(tableParams);
           hasEmptyFields = !isEqual(tableParams.sort(), selectedParams.sort());
         }
+      } else if (this.currentSection.sectionName === 'recordHandling') {
+        hasEmptyFields = true;
+        if (this.qappData[this.detailsQuestionId]) hasEmptyFields = this.qappData[this.detailsQuestionId].length < 5;
       } else {
         this.currentQuestions.forEach((q) => {
           if (

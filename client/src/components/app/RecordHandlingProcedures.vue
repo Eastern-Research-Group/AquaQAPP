@@ -2,57 +2,41 @@
   <div class="clear">
     <Table
       :columns="columns"
-      :rows="rows"
-      :shouldHaveActionsCol="true"
-      :shouldHaveGlobalActions="true"
-      noDataMessage="No record handling procedures have been added. Click the Add button to add procedures."
+      :rows="procedures"
+      shouldHaveSingleAction="Edit"
+      noDataMessage="No record handling procedures data found."
       @onEdit="onEdit"
-      @onDelete="onDelete"
-      @onAdd="onAddInfo"
     />
     <SideNav
       v-if="isEnteringInfo"
       :beforeClose="checkSidenavData"
       :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Record Handling Procedures' : 'Add Record Handling Procedures'"
+      title="Edit Record Handling Procedures"
     >
+      <div class="columns">
+        <div class="column is-3">
+          <p>Activity</p>
+        </div>
+        <div class="column is-9">
+          <p>{{ selectedRow.activity }}</p>
+        </div>
+      </div>
       <form ref="form" @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
-          <input
-            v-if="question.dataEntryType === 'text'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
-            class="input"
-            type="text"
-            :placeholder="`Enter ${question.questionLabel}`"
-            :maxlength="question.maxLength"
-            required
-          />
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
             v-model="pendingData[question.id]"
             class="input"
-            :placeholder="`Enter ${question.questionLabel}`"
+            :placeholder="`${selectedRow.placeholder}`"
             :maxlength="question.maxLength"
             required
           ></textarea>
         </div>
-        <Button
-          :label="shouldShowEdit ? 'Save' : 'Add and Save'"
-          :type="shouldShowEdit ? 'primary' : 'success'"
-          submit
-        />
+        <Button label="Save" type="primary" submit />
       </form>
     </SideNav>
-    <DeleteWarning
-      v-if="shouldShowDelete"
-      title="Delete Record Handling Procedures"
-      :itemLabel="shouldDeleteAll ? 'all record handling procedures' : `procedures for ${selectedRow.Activity}`"
-      @close="() => (shouldShowDelete = false)"
-      @onDelete="deleteData"
-    />
     <UnsavedWarning
       v-if="shouldDisplayUnsavedWarning"
       @onClose="() => (shouldDisplayUnsavedWarning = false)"
@@ -68,7 +52,6 @@ import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
-import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
   name: 'RecordHandlingProcedures',
@@ -78,7 +61,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning },
+  components: { Button, SideNav, Table },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -87,17 +70,17 @@ export default {
       shouldShowDelete: false,
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
+      isFormIncomplete: false,
       selectedRow: null,
       pendingData: {},
-      rows: [],
       columns: [
         {
-          key: 'Activity',
+          key: 'activity',
           label: 'Activity',
         },
         {
-          key: 'Procedures',
-          label: 'Procedures',
+          key: 'Details',
+          label: 'Details',
         },
       ],
     };
@@ -106,13 +89,16 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
+    ...mapState('ref', ['procedures']),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['detailsQuestionId']),
   },
   mounted() {
     this.refreshData();
   },
   methods: {
     onEdit(row) {
+      this.isFormIncomplete = false;
       this.selectedRow = row;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
@@ -122,34 +108,31 @@ export default {
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
     },
-    onDelete(row) {
-      this.shouldShowDelete = true;
-      if (row) {
-        this.selectedRow = row;
-        this.shouldDeleteAll = false;
-        this.shouldDeleteSingle = true;
-      } else {
-        this.shouldDeleteSingle = false;
-        this.shouldDeleteAll = true;
-      }
-    },
-    async onAddInfo() {
-      this.pendingData = {};
-      this.isEnteringInfo = true;
-      this.selectedRow = null;
-      this.shouldShowEdit = false;
-    },
     submitData() {
-      if (this.shouldShowEdit) {
-        this.editData();
-      } else {
+      this.isFormIncomplete = false;
+
+      this.questions.forEach((q) => {
+        if (!this.pendingData[q.id]) this.isFormIncomplete = true;
+      });
+
+      this.$nextTick().then(() => {
+        if (this.$refs.alert) this.$refs.alert.$el.focus();
+      });
+
+      if (
+        !this.isFormIncomplete &&
+        (!this.qappData[this.detailsQuestionId] ||
+          !this.qappData[this.detailsQuestionId].find((detail) => detail.valueId === this.selectedRow.id))
+      ) {
         this.addData();
+      } else {
+        this.editData();
       }
     },
     async editData() {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
-        valueId: this.selectedRow.valueId,
+        valueId: this.selectedRow.id,
         values: this.cleanData(this.pendingData),
       });
       this.refreshData();
@@ -157,44 +140,23 @@ export default {
     },
     addData() {
       const proceduresData = {};
-      this.questions.forEach((q) => {
-        proceduresData[q.questionLabel] = this.pendingData[q.id];
-      });
 
-      // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
-      let newValueId = 1;
-      if (this.rows.length) {
-        newValueId = Math.max(...this.rows.map((row) => row.valueId)) + 1;
-      }
-
-      this.rows.push({
-        ...proceduresData,
-        valueId: newValueId,
+      this.procedures.forEach((procedure) => {
+        if (procedure.id === this.selectedRow.id) {
+          this.questions.forEach((q) => {
+            proceduresData[q.questionLabel] = this.pendingData[q.id];
+            this.$set(this.selectedRow, 'Details', this.pendingData[q.id]);
+          });
+        }
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      this.$emit('saveData', null, this.selectedRow.id, this.cleanData(this.pendingData));
 
       this.isEnteringInfo = false;
       this.pendingData = {};
     },
-    async deleteData() {
-      let valueIds = [];
-      if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedRow.valueId];
-      } else {
-        valueIds = this.rows.map((r) => r.valueId);
-      }
-      const questionIds = this.questions.map((q) => q.id);
-      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
-      this.refreshData();
-      this.shouldShowDelete = false;
-      this.shouldDeleteSingle = false;
-      this.shouldDeleteAll = false;
-    },
     refreshData() {
-      this.rows = [];
-
       // Add rows to table if procedure data already exists
       const procedures = {};
 
@@ -213,15 +175,12 @@ export default {
 
       Object.keys(procedures).forEach((activityId) => {
         const row = procedures[activityId];
-        this.rows.push({
-          ...row,
-          valueId: activityId,
+        this.procedures.forEach((p) => {
+          if (p.id === parseInt(activityId, 10)) {
+            this.$set(p, 'Details', row.Details);
+          }
         });
       });
-    },
-    getOptions(refName) {
-      // get reference data array based on refName field in questions table
-      return this[refName];
     },
     cleanData() {
       // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
@@ -253,6 +212,6 @@ export default {
 }
 
 textarea {
-  height: 6em;
+  height: 7em;
 }
 </style>

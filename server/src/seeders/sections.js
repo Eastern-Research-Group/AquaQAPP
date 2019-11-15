@@ -116,7 +116,7 @@ module.exports = {
       sectionName: 'recordHandling',
       sectionSort: 13,
       instructions:
-        'Use the "Add" button to populate the table below. In the pop-up window, identify each step involved in record and data handling, and describe the procedures that will be followed. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        'The table below displays the five required activities related to record handling. The “Details” column contains guidance about the type of information that should be provided for each activity. Use the “Edit” button to populate the “Details” column for your monitoring project.',
     });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({
