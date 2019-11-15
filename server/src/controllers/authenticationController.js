@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const nodemailerSendGrid = require('nodemailer-sendgrid');
 const hbs = require('nodemailer-express-handlebars');
 const { Op } = require('sequelize');
 const { User } = require('../models');
@@ -11,14 +12,7 @@ function jwtSignUser(user) {
   return jwt.sign({ id: user.id, email: user.email }, config.authentication.jwtSecret, { expiresIn: ONE_WEEK });
 }
 
-const transporter = nodemailer.createTransport({
-  host: config.emailHost,
-  port: config.emailPort,
-  auth: {
-    user: config.emailUser,
-    pass: config.emailPassword,
-  },
-});
+const transporter = nodemailer.createTransport(nodemailerSendGrid({ apiKey: config.emailApiKey }));
 
 const handlebarsOptions = {
   viewEngine: {
@@ -90,7 +84,9 @@ module.exports = {
       const { email } = req.body;
       const user = await User.findOne({
         where: {
-          email,
+          email: {
+            [Op.iLike]: email,
+          },
         },
       });
 
@@ -124,7 +120,7 @@ module.exports = {
 
       const data = {
         to: updatedUserJson.email,
-        from: 'aqua.qapp@gmail.com',
+        from: 'admin@aquaqapp.com',
         template: 'forgot-password-email',
         subject: 'AquaQAPP Password Reset',
         context: {
@@ -187,7 +183,7 @@ module.exports = {
 
         const data = {
           to: updatedUser.email,
-          from: 'aqua.qapp@gmail.com',
+          from: 'admin@aquaqapp.com',
           template: 'reset-password-email',
           subject: 'Password Reset Confirmation',
           context: {
