@@ -244,7 +244,7 @@ export default {
       // set pending data object to the new value
       this.$set(this.pendingData, question.id, newVal);
     },
-    removeRole(value, question) {
+    removeRole(value) {
       this.otherRoles = this.otherRoles.filter((role) => role.valueId !== value.valueId);
       let filteredArray = [];
       filteredArray = this.pendingData[this.responsibilitiesQuestionId].filter((r) => r.valueId !== value.valueId);
