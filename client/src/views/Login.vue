@@ -86,7 +86,7 @@ export default {
       resetError: null,
       shouldShowReset: false,
       successMessage:
-        'If there is an account associated with this email, instructions for resetting your password have been sent.',
+        'If there is an account associated with this email, instructions for resetting your password have been sent. If you do not receive an email within five minutes, check your spam folder.',
       showSuccessMessage: false,
     };
   },

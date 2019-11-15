@@ -13,6 +13,7 @@ module.exports = {
   authentication: {
     jwtSecret: process.env.JWT_SECRET || 'secret',
   },
+  emailApiKey: process.env.SENDGRID_API_KEY || '',
   emailHost: process.env.MAILGUN_SMTP_SERVER || 'smtp.mailgun.org',
   emailPort: process.env.MAILGUN_SMTP_PORT || 587,
   emailUser: process.env.MAILGUN_SMTP_LOGIN || 'aqua.qapp@gmail.com',
