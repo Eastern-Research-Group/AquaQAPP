@@ -35,7 +35,7 @@ module.exports = {
       sectionName: 'problemDefinition',
       sectionSort: 4,
       instructions:
-        'State the specific environmental problem or challenge to be investigated by your project and identify contributing factors. Provide historical and scientific perspective such as local context or prior research that informs this project.',
+        'State the specific environmental problem, question, or threat to be investigated, and why the work needs to be done. Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
     });
     records.push({
       sectionNumber: '5',
@@ -44,7 +44,7 @@ module.exports = {
       sectionName: 'projectBackground',
       sectionSort: 5,
       instructions:
-        'Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
+        'Describe the history of the project or environmental problem, relevant previous studies, and how this project fills a data gap or complements existing information. If the project is related to other ongoing projects, it is important to show how and why it is related. Reference papers or studies that inspired your project, and describe any collaboration planned with others conducting related research or monitoring.',
     });
     records.push({
       sectionNumber: '6',
@@ -53,7 +53,7 @@ module.exports = {
       sectionName: 'projectDescription',
       sectionSort: 6,
       instructions:
-        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain plans for data interpretation and analysis.',
+        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain how your data will be used, including plans for data interpretation and analysis.',
     });
     records.push({
       sectionNumber: '7',
@@ -116,7 +116,7 @@ module.exports = {
       sectionName: 'recordHandling',
       sectionSort: 13,
       instructions:
-        'Use the "Add" button to populate the table below. In the pop-up window, identify each step involved in record and data handling, and describe the procedures that will be followed. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        'The table below displays the five required activities related to record handling. The “Details” column contains guidance about the type of information that should be provided for each activity. Use the “Edit” button to populate the “Details” column for your monitoring project.',
     });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({

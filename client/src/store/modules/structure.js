@@ -40,6 +40,12 @@ const getters = {
   waterTypeLocQuestionId(state) {
     return getQuestionIdByName(state.questions, 'waterType');
   },
+  responsibilitiesQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'responsibilities');
+  },
+  detailsQuestionId(state) {
+    return getQuestionIdByName(state.questions, 'details');
+  },
 };
 
 const mutations = {

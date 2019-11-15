@@ -82,25 +82,20 @@ module.exports = {
         valueId: 1,
       },
       {
-        questionId: 16,
+        questionId: 17,
         value: 'Water quality decline',
       },
       {
-        questionId: 17,
+        questionId: 18,
         value: 'Water quality has declined',
       },
       {
-        questionId: 18,
+        questionId: 19,
         value: 'Project description',
       },
       {
-        questionId: 19,
-        value: 'Sampling',
-        valueId: 1,
-      },
-      {
         questionId: 20,
-        value: '',
+        value: 'Sampling',
         valueId: 1,
       },
       {
@@ -110,12 +105,12 @@ module.exports = {
       },
       {
         questionId: 22,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 23,
-        value: '',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -125,12 +120,12 @@ module.exports = {
       },
       {
         questionId: 25,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 26,
-        value: '',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -140,12 +135,12 @@ module.exports = {
       },
       {
         questionId: 28,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 29,
-        value: '',
+        value: 'X',
         valueId: 1,
       },
       {
@@ -155,104 +150,104 @@ module.exports = {
       },
       {
         questionId: 31,
-        value: 'X',
+        value: '',
         valueId: 1,
       },
       {
         questionId: 32,
-        value: 'ACID,GENPHYS,REC',
+        value: 'X',
+        valueId: 1,
       },
       {
         questionId: 33,
-        value: 'N',
+        value: 'ACID,GENPHYS,REC',
       },
       {
         questionId: 34,
+        value: 'N',
+      },
+      {
+        questionId: 35,
         value: '12345',
         valueId: 1,
       },
       {
-        questionId: 35,
+        questionId: 36,
         value: 'Sampling Location',
         valueId: 1,
       },
       {
-        questionId: 36,
+        questionId: 37,
         value: '38.9072',
         valueId: 1,
       },
       {
-        questionId: 37,
+        questionId: 38,
         value: '-77.0369',
         valueId: 1,
       },
       {
-        questionId: 38,
+        questionId: 39,
         value: 'Fresh',
         valueId: 1,
       },
       {
-        questionId: 39,
+        questionId: 40,
         value: null,
         valueId: 1,
       },
       {
-        questionId: 40,
+        questionId: 41,
         value: 'Estuary',
         valueId: 1,
       },
       {
-        questionId: 41,
-        value: '3',
-        valueId: 1,
-      },
-      {
         questionId: 42,
-        value: 'NAD83',
+        value: '3',
         valueId: 1,
       },
       {
         questionId: 43,
+        value: 'NAD83',
+        valueId: 1,
+      },
+      {
+        questionId: 44,
         value: '1,3',
       },
       {
-        questionId: 46,
+        questionId: 47,
         value: '1',
         valueId: 1,
       },
       {
-        questionId: 47,
+        questionId: 48,
         value: 12,
         valueId: 1,
       },
       {
-        questionId: 48,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
         questionId: 49,
         value: 'Rationale',
         valueId: 1,
       },
       {
         questionId: 50,
+        value: 'Rationale',
+        valueId: 1,
+      },
+      {
+        questionId: 51,
         value: 10,
         valueId: 1,
       },
       {
-        questionId: 46,
+        questionId: 47,
         value: '3',
         valueId: 2,
       },
       {
-        questionId: 47,
-        value: 8,
-        valueId: 2,
-      },
-      {
         questionId: 48,
-        value: 'Rationale',
+        value: 8,
         valueId: 2,
       },
       {
@@ -262,18 +257,13 @@ module.exports = {
       },
       {
         questionId: 50,
-        value: 10,
+        value: 'Rationale',
         valueId: 2,
       },
       {
         questionId: 51,
-        value: 'Record keeping',
-        valueId: 1,
-      },
-      {
-        questionId: 52,
-        value: 'Procedure',
-        valueId: 1,
+        value: 10,
+        valueId: 2,
       },
     ];
     const records = qappDataRecords.map((record) => ({
