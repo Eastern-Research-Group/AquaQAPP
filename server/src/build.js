@@ -13,7 +13,6 @@ if (process.env.HEROKU_ENV === 'dev') {
   execSync('sequelize db:seed --seed ref-horizontal-collection-method');
   execSync('sequelize db:seed --seed ref-horizontal-coord-ref-system');
   execSync('sequelize db:seed --seed ref-location-types');
-  execSync('sequelize db:seed --seed ref-parameter-concerns');
   execSync('sequelize db:seed --seed ref-parameters');
   execSync('sequelize db:seed --seed ref-role');
   execSync('sequelize db:seed --seed sections');

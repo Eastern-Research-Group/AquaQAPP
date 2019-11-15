@@ -12,10 +12,10 @@ function jwtSignUser(user) {
 }
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  service: config.service,
+  host: config.emailHost,
+  port: config.emailPort,
   auth: {
-    user: config.email,
+    user: config.emailUser,
     pass: config.emailPassword,
   },
 });
