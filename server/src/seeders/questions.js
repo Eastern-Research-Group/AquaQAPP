@@ -577,19 +577,8 @@ module.exports = {
     });
     records.push({
       sectionNumber: '13',
-      questionName: 'activity',
-      questionLabel: 'Activity',
-      dataEntryInstructions: '',
-      dataEntryTip: '',
-      dataEntryType: 'text',
-      maxLength: '75',
-      hasExamples: false,
-      sectionQuestionSort: 1,
-    });
-    records.push({
-      sectionNumber: '13',
-      questionName: 'procedures',
-      questionLabel: 'Procedures',
+      questionName: 'details',
+      questionLabel: 'Details',
       dataEntryInstructions: '',
       dataEntryTip: '',
       dataEntryType: 'largeText',

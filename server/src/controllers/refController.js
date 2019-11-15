@@ -6,6 +6,7 @@ const {
   RefHorizontalCollectionMethod,
   RefHorizontalCoordRefSystem,
   RefParameter,
+  RefProcedure,
 } = require('../models');
 
 module.exports = {
@@ -85,6 +86,18 @@ module.exports = {
         ],
       });
       res.send(params);
+    } catch (err) {
+      res.status(400).send({
+        err: 'Data unavailable.',
+      });
+    }
+  },
+  async procedures(req, res) {
+    try {
+      const procedures = await RefProcedure.findAll({
+        order: [['procedureSort', 'ASC']],
+      });
+      res.send(procedures);
     } catch (err) {
       res.status(400).send({
         err: 'Data unavailable.',

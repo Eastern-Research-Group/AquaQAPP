@@ -265,16 +265,6 @@ module.exports = {
         value: 10,
         valueId: 2,
       },
-      {
-        questionId: 52,
-        value: 'Record keeping',
-        valueId: 1,
-      },
-      {
-        questionId: 53,
-        value: 'Procedure',
-        valueId: 1,
-      },
     ];
     const records = qappDataRecords.map((record) => ({
       ...record,
