@@ -35,7 +35,7 @@ module.exports = {
       sectionName: 'problemDefinition',
       sectionSort: 4,
       instructions:
-        'State the specific environmental problem or challenge to be investigated by your project and identify contributing factors. Provide historical and scientific perspective such as local context or prior research that informs this project.',
+        'State the specific environmental problem, question, or threat to be investigated, and why the work needs to be done. Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
     });
     records.push({
       sectionNumber: '5',
@@ -44,7 +44,7 @@ module.exports = {
       sectionName: 'projectBackground',
       sectionSort: 5,
       instructions:
-        'Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
+        'Describe the history of the project or environmental problem, relevant previous studies, and how this project fills a data gap or complements existing information. If the project is related to other ongoing projects, it is important to show how and why it is related. Reference papers or studies that inspired your project, and describe any collaboration planned with others conducting related research or monitoring.',
     });
     records.push({
       sectionNumber: '6',
@@ -53,7 +53,7 @@ module.exports = {
       sectionName: 'projectDescription',
       sectionSort: 6,
       instructions:
-        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain plans for data interpretation and analysis.',
+        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain how your data will be used, including plans for data interpretation and analysis.',
     });
     records.push({
       sectionNumber: '7',
