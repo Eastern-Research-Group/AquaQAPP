@@ -99,6 +99,7 @@
               label="label"
               track-by="code"
               @tag="addRole($event, question)"
+              @remove="removeRole($event, question)"
             ></multiselect>
           </div>
         </div>
@@ -243,8 +244,13 @@ export default {
       // set pending data object to the new value
       this.$set(this.pendingData, question.id, newVal);
     },
+    removeRole(value, question) {
+      this.otherRoles = this.otherRoles.filter((role) => role.valueId !== value.valueId);
+      let filteredArray = [];
+      filteredArray = this.pendingData[this.responsibilitiesQuestionId].filter((r) => r.valueId !== value.valueId);
+      this.$set(this.pendingData, this.responsibilitiesQuestionId, filteredArray);
+    },
     onEdit(row) {
-      console.log(row);
       this.otherRoles = [];
       this.responsibilities = [];
       this.selectedPersonnel = row;
@@ -324,22 +330,6 @@ export default {
       }
     },
     async editPersonnelData() {
-      const filterIds = [];
-
-      this.pendingData[this.rolesQuestionId].forEach((role) => {
-        if (role.valueId) filterIds.push(role.valueId);
-      });
-
-      const filteredResp = [];
-
-      filterIds.forEach((valueId) => {
-        this.pendingData[this.responsibilitiesQuestionId].forEach((obj) => {
-          if (obj.valueId === valueId) filteredResp.push(obj);
-        });
-      });
-
-      this.$set(this.pendingData, this.responsibilitiesQuestionId, filteredResp);
-
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedPersonnel.valueId,
