@@ -52,7 +52,21 @@ const getters = {
       const question = rootState.structure.questions.find((q) => q.id === datum.questionId);
       const sectionName = question ? question.section.sectionName : null;
       const key = question ? question.questionName : null;
-      if (datum.valueId) {
+
+      if (key && key === 'details' && datum.valueId) {
+        if (!dataObj[sectionName]) {
+          dataObj[sectionName] = [];
+        }
+        if (!dataObj[sectionName][datum.valueId]) {
+          dataObj[sectionName][datum.valueId] = {};
+        }
+        rootState.ref.procedures.forEach((procedure) => {
+          if (datum.valueId === procedure.id) {
+            dataObj[sectionName][datum.valueId][key] = datum.value;
+            dataObj[sectionName][datum.valueId].activity = procedure.activity;
+          }
+        });
+      } else if (datum.valueId && key && key !== 'details') {
         // if valueId exists, further format data into an array of objects split out by each valueId
         if (!dataObj[sectionName]) {
           dataObj[sectionName] = [];
@@ -108,8 +122,29 @@ const getters = {
           } else {
             roleCodes = [p.roles];
           }
-          const roles = rootState.ref.roles.filter((r) => roleCodes.indexOf(r.code) > -1);
-          if (roles.length !== 0) p.roles = roles;
+
+          const formattedRoles = [];
+
+          roleCodes.forEach((code) => {
+            if (code.includes(' - ')) {
+              p.responsibilities.split(',').forEach((resp) => {
+                if (code.slice(0, 1) === resp.slice(0, 1)) {
+                  formattedRoles.push({
+                    label: code.slice(4),
+                    responsibilities: resp.slice(1),
+                  });
+                }
+              });
+            }
+            if (!code.includes(' - ')) {
+              rootState.ref.roles.forEach((role) => {
+                if (role.code === code) {
+                  formattedRoles.push(role);
+                }
+              });
+            }
+          });
+          if (formattedRoles.length) p.roles = formattedRoles;
         });
       }
     });
