@@ -197,7 +197,7 @@ module.exports = {
       dataEntryTip: '',
       dataEntryType: 'largeText',
       maxLength: '4000',
-      hasExamples: false,
+      hasExamples: true,
       sectionQuestionSort: 1,
     });
     records.push({
@@ -208,7 +208,7 @@ module.exports = {
       dataEntryTip: '',
       dataEntryType: 'largeText',
       maxLength: '4000',
-      hasExamples: false,
+      hasExamples: true,
       sectionQuestionSort: 1,
     });
     records.push({
