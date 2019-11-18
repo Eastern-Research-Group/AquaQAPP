@@ -148,7 +148,7 @@ export default {
         },
         {
           key: 'December',
-          label: 'J',
+          label: 'D',
         },
       ],
     };
