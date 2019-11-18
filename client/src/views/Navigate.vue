@@ -378,7 +378,8 @@ export default {
         if (
           section.sectionLabel === 'Monitoring Locations' ||
           this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length === this.currentQuestions.length ||
-          section.sectionLabel === 'Project Organization/Personnel'
+          section.sectionLabel === 'Project Organization/Personnel' ||
+          section.sectionLabel === 'Parameters By Location'
         ) {
           this.hasSaved = true;
         }
@@ -546,7 +547,8 @@ export default {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
       }
-      this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
+      if (this.qappData[this.parametersQuestionId])
+        this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
     },
     isSectionNotAvailable() {
       /* User must have saved data for concerns before viewing locations section,
