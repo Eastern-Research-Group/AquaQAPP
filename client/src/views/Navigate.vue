@@ -377,7 +377,8 @@ export default {
          */
         if (
           section.sectionLabel === 'Monitoring Locations' ||
-          this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length === this.currentQuestions.length
+          this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length === this.currentQuestions.length ||
+          section.sectionLabel === 'Project Organization/Personnel'
         ) {
           this.hasSaved = true;
         }
