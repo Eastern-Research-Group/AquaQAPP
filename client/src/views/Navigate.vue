@@ -41,6 +41,15 @@
             :disabled="checkRequiredFields()"
           />
 
+          <label v-if="currentSection.sectionName === 'gettingStarted'" class="label is-size-4">{{
+            currentSection.sectionLabel
+          }}</label>
+          <p
+            v-if="currentSection.sectionName === 'gettingStarted'"
+            class="instructions content"
+            v-html="currentSection.instructions"
+          ></p>
+
           <div
             class="field"
             v-for="(question, index) in currentQuestions.filter(
