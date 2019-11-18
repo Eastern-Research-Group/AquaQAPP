@@ -143,14 +143,10 @@
                   "
                 >
                   <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
-                    <p :key="index" class="has-text-black example-text" ref="exampleText">
-                      {{ example.text }}
-                    </p>
+                    <p :key="index" class="has-text-black example-text" ref="exampleText" v-html="example.text"></p>
                   </template>
                 </Tabs>
-                <p v-else class="has-text-black example-text" ref="exampleText">
-                  {{ question.examples[0].text }}
-                </p>
+                <p v-else class="has-text-black example-text" ref="exampleText" v-html="question.examples[0].text"></p>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
@@ -797,5 +793,10 @@ textarea {
 <style>
 .parametersWarningModal .modal-content {
   width: 800px !important;
+}
+
+.example-text ul {
+  list-style: inherit;
+  margin-left: 45px;
 }
 </style>
