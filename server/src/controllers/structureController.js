@@ -3,7 +3,9 @@ const { Section, Question, Example } = require('../models');
 module.exports = {
   async sections(req, res) {
     try {
-      const sections = await Section.findAll({});
+      const sections = await Section.findAll({
+        order: [['sectionSort', 'ASC']],
+      });
       res.send(sections);
     } catch (err) {
       res.status(400).send({
