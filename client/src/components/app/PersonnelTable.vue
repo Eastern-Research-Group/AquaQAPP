@@ -308,9 +308,18 @@ export default {
       this.isFormIncomplete = false;
       this.questions.forEach((q) => {
         if (
+          this.responsibilities.length &&
           q.dataEntryType !== 'checkbox' &&
           q.dataEntryType !== 'singleCheckbox' &&
-          (!this.pendingData[q.id] || !this.pendingData[q.id].length)
+          !this.pendingData[q.id]
+        ) {
+          this.isFormIncomplete = true;
+        } else if (
+          !this.responsibilities.length &&
+          q.dataEntryType !== 'checkbox' &&
+          q.dataEntryType !== 'singleCheckbox' &&
+          !this.pendingData[q.id] &&
+          q.id !== this.responsibilitiesQuestionId
         ) {
           this.isFormIncomplete = true;
         }
@@ -323,9 +332,9 @@ export default {
         return;
       }
 
-      if (this.shouldShowEdit) {
+      if (!this.isFormIncomplete && this.shouldShowEdit) {
         this.editPersonnelData();
-      } else {
+      } else if (!this.isFormIncomplete) {
         this.addPersonnelData();
       }
     },
