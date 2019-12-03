@@ -389,9 +389,6 @@ export default {
           this.hasSaved = true;
         }
 
-        if (this.currentSection.sectionName === 'parameters' && this.qappData[this.parametersQuestionId]) {
-          this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
-        }
         // Set Google Analytics event for changing sections (mark each section as a page view)
         gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
         gtag('event', 'page_view');
@@ -492,6 +489,12 @@ export default {
       this.addParamsArray = [];
       this.removeParamsArray = [];
 
+      if (this.qappData[this.parametersQuestionId]) {
+        this.previousParameters = this.qappData[this.parametersQuestionId].split(',');
+      } else {
+        this.previousParameters = [];
+      }
+
       if (data && data.paramsByLocation) {
         await this.$store
           .dispatch('qapp/save', {
@@ -524,36 +527,46 @@ export default {
 
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
-
-      if (this.qappData[this.parametersQuestionId]) {
+      if (this.currentSection.sectionName === 'parameters' && this.qappData[this.parametersQuestionId]) {
+        this.shouldDisplayAddParameter = false;
+        this.shouldDisplayRemoveParameter = false;
         const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-        const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
-        if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
+        const currentParameters = this.qappData[this.parametersQuestionId].split(',');
+        if (!isEqual(currentParameters, this.previousParameters)) {
           this.shouldDisplayParametersWarning = true;
           this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
-          this.shouldDisplayAddParameter = false;
-          this.shouldDisplayRemoveParameter = false;
-          currentParameters.forEach((param) => {
-            if (this.previousParameters.indexOf(param) === -1) {
-              this.shouldDisplayAddParameter = true;
-              this.addParamsArray.push(param);
-            }
-          });
-          this.previousParameters.forEach((param) => {
-            if (currentParameters.indexOf(param) === -1) {
-              this.shouldDisplayRemoveParameter = true;
-              this.removeParamsArray.push(param);
-            }
-          });
+
+          if (this.previousParameters.length && currentParameters.length) {
+            currentParameters.forEach((param) => {
+              if (this.previousParameters.indexOf(param) === -1) {
+                this.shouldDisplayAddParameter = true;
+                this.addParamsArray.push(param);
+              }
+            });
+            this.previousParameters.forEach((param) => {
+              if (currentParameters.indexOf(param) === -1) {
+                this.shouldDisplayRemoveParameter = true;
+                this.removeParamsArray.push(param);
+              }
+            });
+          } else if (!this.previousParameters.length && currentParameters.length) {
+            this.shouldDisplayAddParameter = true;
+            this.addParamsArray = currentParameters;
+          }
         }
+      } else if (
+        !this.qappData[this.parametersQuestionId] &&
+        this.previousParameters &&
+        this.currentSection.sectionName === 'parameters'
+      ) {
+        this.shouldDisplayRemoveParameter = true;
+        this.removeParamsArray = this.previousParameters;
       }
 
       if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
       }
-      if (this.qappData[this.parametersQuestionId])
-        this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
     },
     isSectionNotAvailable() {
       /* User must have saved data for concerns before viewing locations section,
@@ -696,7 +709,13 @@ export default {
         });
       }
 
-      if (this.addParamValue === 'Yes' || (this.removeParamValue === 'Yes' && filteredParams.length !== 0)) {
+      filteredParams.forEach((param) => {
+        if (param.value === '') {
+          param.value = param.waterType;
+        }
+      });
+
+      if ((this.addParamValue === 'Yes' && filteredParams.length !== 0) || this.removeParamValue === 'Yes') {
         await this.$store
           .dispatch('qapp/updateData', {
             qappId: this.$store.state.qapp.id,
