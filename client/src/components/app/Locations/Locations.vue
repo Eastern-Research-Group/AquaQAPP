@@ -243,11 +243,6 @@ export default {
           this.isEnteringInfo = true;
           this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
           this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
-
-          // Set default metadata automatically when user selects location by map
-          this.pendingData[getQuestionIdByName(this.questions, 'horizCollectionMethod')] = this.collectionMethods.find(
-            (v) => v.id === 18
-          );
         });
       } else if (this.map) {
         this.map.off('click');
