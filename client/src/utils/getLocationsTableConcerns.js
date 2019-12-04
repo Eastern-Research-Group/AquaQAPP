@@ -1,5 +1,5 @@
 export default (object, getConcerns) => {
-  let concerns = [];
+  const concerns = [];
   if (object['Water Quality Concerns'] && object['Water Quality Concerns'].length !== 0) {
     object['Water Quality Concerns'].forEach((concern) => {
       concerns.push(concern.label);
@@ -9,5 +9,6 @@ export default (object, getConcerns) => {
       concerns.push(concern.label);
     });
   }
-  return object.waterConcerns = concerns.join(', ');
-}
+  object.waterConcerns = concerns.join(', ');
+  return object.waterConcerns;
+};

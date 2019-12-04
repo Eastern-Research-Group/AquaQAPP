@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import isEqual from 'lodash/isEqual';
 import UnsavedWarning from '@/components/shared/UnsavedWarning';
 
