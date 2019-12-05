@@ -300,6 +300,8 @@ export default {
       shouldDisplayRemoveParameter: false,
       addParamsArray: [],
       removeParamsArray: [],
+      paramSaveValueId: null,
+      paramSaveData: null,
     };
   },
   computed: {
@@ -507,6 +509,10 @@ export default {
             if (this.dataError === null) this.dataError = error.response.data.error;
             else this.dataError += `<br/>${error.response.data.error}`;
           });
+      } else if (this.currentSection.sectionName === 'parameters') {
+        this.paramSaveValueId = valueId;
+        this.paramSaveData = data;
+        this.checkParameters();
       } else {
         await Promise.all(
           this.currentQuestions.map(async (q) => {
@@ -527,11 +533,18 @@ export default {
 
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
-      if (this.currentSection.sectionName === 'parameters' && this.qappData[this.parametersQuestionId]) {
+
+      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
+        this.changeSection(this.pendingSection);
+        this.pendingSection = null;
+      }
+    },
+    checkParameters() {
+      if (this.pendingData[this.parametersQuestionId]) {
         this.shouldDisplayAddParameter = false;
         this.shouldDisplayRemoveParameter = false;
         const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-        const currentParameters = this.qappData[this.parametersQuestionId].split(',');
+        const currentParameters = this.pendingData[this.parametersQuestionId].split(',');
         if (!isEqual(currentParameters, this.previousParameters)) {
           this.shouldDisplayParametersWarning = true;
           this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
@@ -555,17 +568,12 @@ export default {
           }
         }
       } else if (
-        !this.qappData[this.parametersQuestionId] &&
+        !this.pendingData[this.parametersQuestionId] &&
         this.previousParameters &&
         this.currentSection.sectionName === 'parameters'
       ) {
         this.shouldDisplayRemoveParameter = true;
         this.removeParamsArray = this.previousParameters;
-      }
-
-      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
-        this.changeSection(this.pendingSection);
-        this.pendingSection = null;
       }
     },
     isSectionNotAvailable() {
@@ -662,81 +670,114 @@ export default {
     async addRemoveParams() {
       this.dataError = null;
 
-      let filteredParams = [];
-      this.qappData[this.paramsbyLocQuestionId].forEach((paramByLoc) => {
-        if (paramByLoc.value !== 'Freshwater' || paramByLoc.value !== 'Saltwater') {
-          paramByLoc.value.split(',').forEach((param) => {
-            if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
-              filteredParams.push({
-                valueId: paramByLoc.valueId,
-                value: paramByLoc.value,
-                waterType: this.parameters.find((p) => p.id === parseInt(param, 10)).waterType,
+      if (this.removeParamValue !== 'No' || this.addParamValue !== '') {
+        await Promise.all(
+          this.currentQuestions.map(async (q) => {
+            await this.$store
+              .dispatch('qapp/save', {
+                qappId: this.$store.state.qapp.id,
+                questionId: q.id,
+                value: this.paramSaveData ? this.paramSaveData[q.id] : this.pendingData[q.id],
+                valueId: this.paramSaveValueId,
+              })
+              .catch((error) => {
+                if (this.dataError === null) this.dataError = error.response.data.error;
+                else this.dataError += `<br/>${error.response.data.error}`;
               });
-            }
-          });
-        }
-        if (paramByLoc.value === 'Freshwater' || paramByLoc.value === 'Saltwater') {
-          filteredParams.push({
-            valueId: paramByLoc.valueId,
-            value: '',
-            waterType: paramByLoc.value,
-          });
-        }
-      });
-
-      filteredParams = uniqBy(filteredParams, 'valueId');
-
-      if (this.addParamsArray.length !== 0 && this.addParamValue === 'Yes') {
-        this.addParamsArray.forEach((param) => {
-          filteredParams.forEach((filteredParam) => {
-            if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-              filteredParam.value = filteredParam.value !== '' ? `${filteredParam.value},${param}` : param;
-            }
-          });
-        });
-      }
-
-      if (this.removeParamsArray.length !== 0 && this.removeParamValue === 'Yes') {
-        this.removeParamsArray.forEach((param) => {
-          filteredParams.forEach((filteredParam) => {
-            if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-              filteredParam.value = filteredParam.value
-                .split(',')
-                .filter((p) => p !== param)
-                .join(',');
-            }
-          });
-        });
-      }
-
-      filteredParams.forEach((param) => {
-        if (param.value === '') {
-          param.value = param.waterType;
-        }
-      });
-
-      if ((this.addParamValue === 'Yes' && filteredParams.length !== 0) || this.removeParamValue === 'Yes') {
-        await this.$store
-          .dispatch('qapp/updateData', {
-            qappId: this.$store.state.qapp.id,
-            questionId: this.paramsbyLocQuestionId,
-            values: filteredParams,
           })
-          .catch((error) => {
-            if (this.dataError === null) this.dataError = error.response.data.error;
-            else this.dataError += `<br/>${error.response.data.error}`;
+        );
+
+        let filteredParams = [];
+        this.qappData[this.paramsbyLocQuestionId].forEach((paramByLoc) => {
+          if (paramByLoc.value !== 'Freshwater' || paramByLoc.value !== 'Saltwater') {
+            paramByLoc.value.split(',').forEach((param) => {
+              if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
+                filteredParams.push({
+                  valueId: paramByLoc.valueId,
+                  value: paramByLoc.value,
+                  waterType: this.parameters.find((p) => p.id === parseInt(param, 10)).waterType,
+                });
+              }
+            });
+          }
+          if (paramByLoc.value === 'Freshwater' || paramByLoc.value === 'Saltwater') {
+            filteredParams.push({
+              valueId: paramByLoc.valueId,
+              value: '',
+              waterType: paramByLoc.value,
+            });
+          }
+        });
+
+        filteredParams = uniqBy(filteredParams, 'valueId');
+
+        if (this.addParamsArray.length !== 0 && this.addParamValue === 'Yes') {
+          this.addParamsArray.forEach((param) => {
+            filteredParams.forEach((filteredParam) => {
+              if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
+                filteredParam.value = filteredParam.value !== '' ? `${filteredParam.value},${param}` : param;
+              }
+            });
           });
-      }
+        }
 
-      if (this.addParamValue !== '') this.shouldDisplayAddParameter = false;
-      if (this.removeParamValue !== '') this.shouldDisplayRemoveParameter = false;
+        if (this.removeParamsArray.length !== 0 && this.removeParamValue === 'Yes') {
+          this.removeParamsArray.forEach((param) => {
+            filteredParams.forEach((filteredParam) => {
+              if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
+                filteredParam.value = filteredParam.value
+                  .split(',')
+                  .filter((p) => p !== param)
+                  .join(',');
+              }
+            });
+          });
+        }
 
-      this.addParamValue = '';
-      this.removeParamValue = '';
+        filteredParams.forEach((param) => {
+          if (param.value === '') {
+            param.value = param.waterType;
+          }
+        });
 
-      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
-        this.changeSection(this.pendingSection);
-        this.pendingSection = null;
+        if ((this.addParamValue === 'Yes' && filteredParams.length !== 0) || this.removeParamValue === 'Yes') {
+          await this.$store
+            .dispatch('qapp/updateData', {
+              qappId: this.$store.state.qapp.id,
+              questionId: this.paramsbyLocQuestionId,
+              values: filteredParams,
+            })
+            .catch((error) => {
+              if (this.dataError === null) this.dataError = error.response.data.error;
+              else this.dataError += `<br/>${error.response.data.error}`;
+            });
+        }
+
+        if (this.addParamValue !== '') this.shouldDisplayAddParameter = false;
+        if (this.removeParamValue !== '') this.shouldDisplayRemoveParameter = false;
+
+        // IE requires reload to avoid 403 error when applying parameters to Parameters By Location screen
+        if (
+          window.navigator.userAgent.indexOf('Firefox') === -1 &&
+          window.navigator.userAgent.indexOf('Chrome') === -1 &&
+          (this.addParamValue === 'Yes' || this.removeParamValue === 'Yes')
+        ) {
+          window.location.reload(true);
+        }
+
+        this.addParamValue = '';
+        this.removeParamValue = '';
+
+        if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
+          this.changeSection(this.pendingSection);
+          this.pendingSection = null;
+        }
+      } else {
+        this.shouldDisplayRemoveParameter = false;
+        this.shouldDisplayAddParameter = false;
+        this.removeParamValue = '';
+        this.addParamValue = '';
+        this.pendingData[this.parametersQuestionId] = this.qappData[this.parametersQuestionId];
       }
     },
   },
