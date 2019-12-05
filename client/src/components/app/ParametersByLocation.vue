@@ -322,4 +322,9 @@ export default {
 textarea {
   height: 4em;
 }
+
+//For IE 11
+legend {
+  color: white;
+}
 </style>

@@ -245,4 +245,9 @@ export default {
   color: $danger;
   cursor: pointer;
 }
+
+//for IE 11
+legend {
+  color: white;
+}
 </style>
