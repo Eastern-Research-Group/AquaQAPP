@@ -93,7 +93,11 @@ export default {
 
       // IE doesn't allow using a blob object directly as link href
       // instead it is necessary to use msSaveOrOpenBlob
-      if (window.navigator.appCodeName !== 'Mozilla' && window.navigator && window.navigator.msSaveOrOpenBlob) {
+      if (
+        window.navigator.userAgent.indexOf('Firefox') === -1 &&
+        window.navigator &&
+        window.navigator.msSaveOrOpenBlob
+      ) {
         window.navigator.msSaveOrOpenBlob(newBlob);
         return;
       }
