@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import '@/polyfills/reportValidity';
 import isEqual from 'lodash/isEqual';
 import UnsavedWarning from '@/components/shared/UnsavedWarning';
 
