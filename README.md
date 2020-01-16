@@ -1,30 +1,14 @@
-## Environments
+## AquaQAPP
 
-Production
+AquaQAPP is a web-based application that generates tailored Sampling and Analysis Plans (SAP) for water quality monitoring projects. It is designed to support citizen monitoring groups in the Commonwealth of Massachusetts by helping to improve the quality of citizen-generated water quality monitoring data. AquaQAPP was created by the Massachusetts Bays National Estuary Program in collaboration with Massachusetts Department of Environmental Protection (MassDEP) and the United States Environmental Protection Agency (EPA).
 
-- Build/Testing Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/master.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/master)
-- CNAME: https://aquaqapp.erg.com/ - (to be registered) 
-- Heroku: https://aquaqapp.herokuapp.com/
+## Production URL
 
-
-Development
-
-- Build/Testing Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/develop)
-- Heroku: [https://aquaqapp-dev.herokuapp.com/](https://aquaqapp-dev.herokuapp.com/)
-- user: TBD
-- password: TBD
-
-Staging
-
-- Build/Testing Status: [![CircleCI](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/staging.svg?style=svg&circle-token=95a7c34556c3dc5e845e873aa9d4b5ea748df5a5)](https://circleci.com/gh/Eastern-Research-Group/AquaQAPP/tree/staging) 
-- Heroku: https://aquaqapp-stage.herokuapp.com/
-- user: TBD
-- password: TBD
+https://aquaqapp.com
 
 ## Documentation
 
-For more information
-
-- [How to contriube changes to the project codebase](/docs/contribute.md)
-- [How to run the code locally](/docs/run-locally.md)
+- [How to set up a local development environment](/docs/run-locally.md)
+- [How to contribute changes to the project codebase](/docs/contribute.md)
+- [Code organization information](/docs/organization.md)
 - [Continuous build, testing and deployment pipeline information](/docs/devops.md)

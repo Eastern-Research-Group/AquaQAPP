@@ -1,12 +1,5 @@
+## Continuous Integration/Deployment
 
-For information about how to use the below pipeline, please refer to [contribute.md](/docs/contribute.md)
+CircleCI is used to run builds upon each merge to the develop, staging, and master branches. At the end of each build, the code is deployed to Heroku.
 
-&nbsp;
-&nbsp;
-
-**Continuous Build, Testing and Deployment Pipeline**
-
-&nbsp;
-&nbsp;
-
-![Continuous Build, Testing and Deployment Pipeline](/docs/diagrams/AquaQAPP%20DevOps%20Pipeline.png?raw=true "Continuous Build, Testing and Deployment Pipeline")
+![Continuous Deployment Pipeline](/docs/diagrams/AquaQAPP%20DevOps%20Pipeline.png?raw=true "Continuous Deployment Pipeline")
