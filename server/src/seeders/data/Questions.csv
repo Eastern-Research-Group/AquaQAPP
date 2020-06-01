@@ -1,0 +1,53 @@
+﻿id,sectionNumber,questionName,questionLabel,dataEntryInstructions,dataEntryTip,dataEntryType,maxLength,hasExamples,sectionQuestionSort,refName
+1,2,title,QAPP Title,,,text,255,FALSE,1,
+2,3,preparedBy,Prepared By,,,largeText,4000,FALSE,1,
+3,4,fullName,Full Name of Personnel,,,text,75,FALSE,1,
+4,4,titlePosition,Job Title,,,text,75,FALSE,2,
+5,4,distributionList,Include in distribution list?,,,checkbox,75,FALSE,3,
+6,4,approvalList,Include in the approval list?,,,checkbox,75,FALSE,4,
+7,4,primaryContact,Primary Contact,,,singleCheckbox,75,FALSE,5,
+8,4,organization,Organization Name,,,text,512,FALSE,6,
+9,4,roles,Roles,,,select,4000,FALSE,7,roles
+10,4,address,Address,,,text,4000,FALSE,8,
+11,4,city,City,,,text,1000,FALSE,9,
+12,4,state,State,,,text,1000,FALSE,10,
+13,4,zip,Zip,,,text,1000,FALSE,11,
+14,4,telephone,Telephone,,,tel,1000,FALSE,12,
+15,4,email,Email,,,email,1000,FALSE,13,
+16,4,responsibilities,Responsibilities,,,largeText,4096,FALSE,14,
+17,5,problemDefinition,Problem Definition,,,largeText,4000,TRUE,1,
+18,6,projectBackground,Project Background,,,largeText,4000,TRUE,1,
+19,7,projectDescription,Project Description,,,largeText,4000,TRUE,1,
+20,8,activity,Activity,,,largeText,4000,TRUE,1,
+21,8,january,January,,,checkbox,75,TRUE,2,
+22,8,february,February,,,checkbox,75,TRUE,3,
+23,8,march,March,,,checkbox,75,TRUE,4,
+24,8,april,April,,,checkbox,75,TRUE,5,
+25,8,may,May,,,checkbox,75,TRUE,6,
+26,8,june,June,,,checkbox,75,TRUE,7,
+27,8,july,July,,,checkbox,75,TRUE,8,
+28,8,august,August,,,checkbox,75,TRUE,9,
+29,8,september,September,,,checkbox,75,TRUE,10,
+30,8,october,October,,,checkbox,75,TRUE,11,
+31,8,november,November,,,checkbox,75,TRUE,12,
+32,8,december,December,,,checkbox,75,TRUE,13,
+33,9,waterConcerns,Water Quality Concerns,,,checkboxBtn,100,FALSE,1,concerns
+34,9,differByLocation,Do your water quality concerns differ by sampling location?,,,checkboxBtn,5,FALSE,2,yesNo
+35,10,locationId,Location ID,,,text,35,FALSE,1,
+36,10,locationName,Location Name,,,text,255,FALSE,2,
+37,10,locationLat,Location Latitude,,,text,12,FALSE,3,
+38,10,locationLong,Location Longitude,,,text,12,FALSE,4,
+39,10,waterType,Water Type,,,radio,255,FALSE,5,waterTypes
+40,10,mapWaterConcerns,Water Quality Concerns,,,select,255,FALSE,6,concerns
+41,10,locationType,Location Type,,,select,45,FALSE,7,locationTypes
+42,10,horizCollectionMethod,Horizontal Collection Method,,,select,150,FALSE,8,collectionMethods
+43,10,horizCoordinateSystem,Horizontal Coordinate Reference System,,,select,6,FALSE,9,coordRefSystems
+44,11,parameters,Parameters,,,,255,FALSE,1,parameters
+45,12,parametersByLocation,Parameters By Location,,,,255,FALSE,1,parameters by location
+46,12,frequency,Frequency,,,largeText,255,FALSE,2,
+47,13,sampleParameter,Parameter,,,select,255,FALSE,1,parameters
+48,13,numSampleLocations,Number of Sample Locations,,,number,4,FALSE,2,
+49,13,locationRationale,Site Location Rationale,,,select,2000,FALSE,3,locationRationales
+50,13,sampleNumRationale,Rationale for Number of Samples,,,select,2000,FALSE,4,sampleNumRationales
+51,13,numQcSamples,Number/Type of QC Samples,,,largeText,255,FALSE,5,
+52,14,details,Details,,,largeText,255,FALSE,2,
