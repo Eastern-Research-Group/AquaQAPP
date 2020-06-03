@@ -26,7 +26,7 @@ module.exports = {
       sectionName: 'preparedBy',
       sectionSort: 3,
       instructions:
-        'Enter the individual and/or organization responsible for preparing this QAPP. Note that this may be different from the person inputting information to AquaQAPP.',
+        'Enter the name and organizational affiliation of the person responsible for preparing the QAPP. Note that this may be different from the person inputting information to AquaQAPP.',
     });
     records.push({
       sectionNumber: '4',
