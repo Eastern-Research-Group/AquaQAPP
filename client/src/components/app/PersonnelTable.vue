@@ -184,7 +184,7 @@ export default {
         },
         {
           key: 'Job Title',
-          label: 'Title',
+          label: 'Role',
         },
         {
           key: 'Include in distribution list?',
