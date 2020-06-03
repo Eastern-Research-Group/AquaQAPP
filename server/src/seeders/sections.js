@@ -116,7 +116,7 @@ module.exports = {
       sectionName: 'sampleDesign',
       sectionSort: 13,
       instructions:
-        '<p>Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p><p><b>A row is required for every parameter selected. If a parameter is removed on the Parameters section make sure to remove its respective row in order to mark complete.</b></p>',
+        '<p>Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p><p><b>In the table below, a row is required for every parameter/method selected on the Parameters screen. If you remove a parameter/method from the Parameters screen, make sure it does not appear in the table below.</b></p>',
     });
     records.push({
       sectionNumber: '14',
