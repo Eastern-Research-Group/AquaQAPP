@@ -35,7 +35,7 @@ module.exports = {
       sectionName: 'projectOrganization',
       sectionSort: 4,
       instructions:
-        'Use the "Add" button to populate the table with information about project organization and personnel. Enter information in the pop-up window for all relevant personnel and associated organizations. Select appropriate role(s) from the drop-down menu. Note that only one person can be selected as the primary contact. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        'Use the "Add" button to populate the table with information about project organization and personnel. Enter information in the pop-up window for all relevant personnel and associated organizations. You must provide contacts for the Project Manager, QA Manager, Field Coordinator, and Data Manager roles. Note that only one person can be selected as the primary contact. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
     });
     records.push({
       sectionNumber: '5',
