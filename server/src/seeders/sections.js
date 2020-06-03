@@ -67,7 +67,7 @@ module.exports = {
     records.push({
       sectionNumber: '8',
       sectionLevel: '1',
-      sectionLabel: 'Project Activities',
+      sectionLabel: 'Project Schedule',
       sectionName: 'projectActivities',
       sectionSort: 8,
       instructions:
