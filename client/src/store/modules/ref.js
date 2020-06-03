@@ -31,7 +31,7 @@ const state = {
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
     { component: 'ProjectActivities', label: 'Project Activities' },
-    { component: 'SampleDesign', label: 'Sampling Design' },
+    { component: 'SampleDesign', label: 'Sampling Design Details' },
     { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
     { component: 'ParametersByLocation', label: 'Parameters By Location' },
   ],

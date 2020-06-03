@@ -112,7 +112,7 @@ module.exports = {
     records.push({
       sectionNumber: '13',
       sectionLevel: '1',
-      sectionLabel: 'Sampling Design',
+      sectionLabel: 'Sampling Design Details',
       sectionName: 'sampleDesign',
       sectionSort: 13,
       instructions:

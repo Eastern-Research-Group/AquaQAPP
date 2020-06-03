@@ -593,7 +593,7 @@ export default {
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
       } else if (
-        (this.currentSection.sectionLabel === 'Sampling Design' ||
+        (this.currentSection.sectionLabel === 'Sampling Design Details' ||
           this.currentSection.sectionLabel === 'Parameters By Location') &&
         !this.qappData[this.parametersQuestionId]
       ) {
