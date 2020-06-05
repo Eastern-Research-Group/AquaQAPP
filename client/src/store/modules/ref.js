@@ -30,7 +30,7 @@ const state = {
     { component: 'PersonnelTable', label: 'Project Organization/Personnel' },
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
-    { component: 'ProjectActivities', label: 'Project Activities' },
+    { component: 'ProjectActivities', label: 'Project Schedule' },
     { component: 'SampleDesign', label: 'Sampling Design' },
     { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
     { component: 'ParametersByLocation', label: 'Parameters By Location' },
