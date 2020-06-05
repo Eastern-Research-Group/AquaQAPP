@@ -71,7 +71,7 @@ module.exports = {
       sectionName: 'projectActivities',
       sectionSort: 8,
       instructions:
-        'The table below contains space to record the schedule of routine project tasks such as gathering equipment, training volunteers, conducting sampling activity, data analysis, and report writing. Use the "Add" button to populate the table below with an activity and check the month(s) during which each activity will occur. Note that this calendar is set up for activities to be repeated from one year to the next. In other words, you cannot assign different years to each activity. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        '<p>The table below contains space to record the schedule of routine project tasks such as gathering equipment, training volunteers, conducting sampling activity, data analysis, and report writing. Your project will likely have recurring and one-time activities. To indicate repeating activities, indicate the year that activity will take place in your project plan.</p><p>Use the "Add" button to populate the table below with an activity and check the month(s) during which each activity will occur. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
     });
     records.push({
       sectionNumber: '9',
