@@ -40,47 +40,47 @@ module.exports = {
     records.push({
       sectionNumber: '5',
       sectionLevel: '1',
-      sectionLabel: 'Problem Definition',
-      sectionName: 'problemDefinition',
+      sectionLabel: 'Water Quality Concerns',
+      sectionName: 'waterQualityConcerns',
       sectionSort: 5,
       instructions:
-        'State the specific environmental problem, question, or threat to be investigated, and why the work needs to be done. Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
+        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User’s Guide for more information about this requirement.',
     });
     records.push({
       sectionNumber: '6',
       sectionLevel: '1',
-      sectionLabel: 'Project Background',
-      sectionName: 'projectBackground',
+      sectionLabel: 'Problem Definition',
+      sectionName: 'problemDefinition',
       sectionSort: 6,
       instructions:
-        'Describe the history of the project or environmental problem, relevant previous studies, and how this project fills a data gap or complements existing information. If the project is related to other ongoing projects, it is important to show how and why it is related. Reference papers or studies that inspired your project, and describe any collaboration planned with others conducting related research or monitoring.',
+        'State the specific environmental problem, question, or threat to be investigated, and why the work needs to be done. Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
     });
     records.push({
       sectionNumber: '7',
       sectionLevel: '1',
-      sectionLabel: 'Project Description',
-      sectionName: 'projectDescription',
+      sectionLabel: 'Project Background',
+      sectionName: 'projectBackground',
       sectionSort: 7,
       instructions:
-        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain how your data will be used, including plans for data interpretation and analysis.',
+        'Describe the history of the project or environmental problem, relevant previous studies, and how this project fills a data gap or complements existing information. If the project is related to other ongoing projects, it is important to show how and why it is related. Reference papers or studies that inspired your project, and describe any collaboration planned with others conducting related research or monitoring.',
     });
     records.push({
       sectionNumber: '8',
       sectionLevel: '1',
-      sectionLabel: 'Project Schedule',
-      sectionName: 'projectActivities',
+      sectionLabel: 'Project Description',
+      sectionName: 'projectDescription',
       sectionSort: 8,
       instructions:
-        '<p>The table below contains space to record the schedule of routine project tasks such as gathering equipment, training volunteers, conducting sampling activity, data analysis, and report writing. Your project will likely have recurring and one-time activities. To indicate repeating activities, indicate the year that activity will take place in your project plan.</p><p>Use the "Add" button to populate the table below with an activity and check the month(s) during which each activity will occur. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
+        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain how your data will be used, including plans for data interpretation and analysis.',
     });
     records.push({
       sectionNumber: '9',
       sectionLevel: '1',
-      sectionLabel: 'Water Quality Concerns',
-      sectionName: 'waterQualityConcerns',
+      sectionLabel: 'Project Schedule',
+      sectionName: 'projectActivities',
       sectionSort: 9,
       instructions:
-        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User’s Guide for more information about this requirement.',
+        '<p>The table below contains space to record the schedule of routine project tasks such as gathering equipment, training volunteers, conducting sampling activity, data analysis, and report writing. Your project will likely have recurring and one-time activities. To indicate repeating activities, indicate the year that activity will take place in your project plan.</p><p>Use the "Add" button to populate the table below with an activity and check the month(s) during which each activity will occur. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
     });
     records.push({
       sectionNumber: '10',
