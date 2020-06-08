@@ -39,12 +39,12 @@
 38,10,locationLong,Location Longitude,,,text,12,FALSE,4,
 39,10,waterType,Water Type,,,radio,255,FALSE,5,waterTypes
 40,10,mapWaterConcerns,Water Quality Concerns,,,select,255,FALSE,6,concerns
-41,10,locationType,Location Type,,,select,45,FALSE,7,locationTypes
+41,10,locationType,Sample Type,,,select,45,FALSE,7,locationTypes
 42,10,horizCollectionMethod,Horizontal Collection Method,,,select,150,FALSE,8,collectionMethods
 43,10,horizCoordinateSystem,Horizontal Coordinate Reference System,,,select,6,FALSE,9,coordRefSystems
 44,11,parameters,Parameters,,,,255,FALSE,1,parameters
 45,12,parametersByLocation,Parameters By Location,,,,255,FALSE,1,parameters by location
-46,12,frequency,Frequency,,,largeText,255,FALSE,2,
+46,12,frequency,Frequency of Sampling,,,largeText,255,FALSE,2,
 47,13,sampleParameter,Parameter,,,select,255,FALSE,1,parameters
 48,13,numSampleLocations,Number of Sample Locations,,,number,4,FALSE,2,
 49,13,locationRationale,Site Location Rationale,,,select,2000,FALSE,3,locationRationales
