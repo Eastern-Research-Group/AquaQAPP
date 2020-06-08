@@ -80,7 +80,7 @@ module.exports = {
       sectionName: 'waterQualityConcerns',
       sectionSort: 9,
       instructions:
-        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User’s Guide for more information about this requirement. Note that your generated QAPP will not receive pre-approval by Massachusetts Department of Environmental Protection if "Other" is selected.',
+        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User’s Guide for more information about this requirement.',
     });
     records.push({
       sectionNumber: '10',
