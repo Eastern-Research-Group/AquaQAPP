@@ -114,7 +114,7 @@ module.exports = {
       sectionLevel: '1',
       sectionLabel: 'Sampling Design Details',
       sectionName: 'sampleDesign',
-      sectionSort: 13,
+      sectionSort: 14,
       instructions:
         '<p>Use the "Add" button to populate the table below for all parameters and methods. Complete the fields in the pop-up window. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p><p><b>In the table below, a row is required for every parameter/method selected on the Parameters screen. If you remove a parameter/method from the Parameters screen, make sure it does not appear in the table below.</b></p>',
     });
@@ -123,9 +123,17 @@ module.exports = {
       sectionLevel: '1',
       sectionLabel: 'Record Handling Procedures',
       sectionName: 'recordHandling',
-      sectionSort: 14,
+      sectionSort: 15,
       instructions:
         'The table below displays the five required activities related to record handling. The “Details” column contains guidance about the type of information that should be provided for each activity. Use the “Edit” button to populate the “Details” column for your monitoring project.',
+    });
+    records.push({
+      sectionNumber: '15',
+      sectionLevel: '1',
+      sectionLabel: 'Sampling Design Summary',
+      sectionName: 'sampleDesignSummary',
+      sectionSort: 13,
+      instructions: '',
     });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({

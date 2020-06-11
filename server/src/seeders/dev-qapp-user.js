@@ -221,16 +221,6 @@ module.exports = {
         valueId: 1,
       },
       {
-        questionId: 48,
-        value: 12,
-        valueId: 1,
-      },
-      {
-        questionId: 49,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
         questionId: 50,
         value: 'Rationale',
         valueId: 1,
@@ -247,13 +237,11 @@ module.exports = {
       },
       {
         questionId: 48,
-        value: 8,
-        valueId: 2,
+        value: 'Sample',
       },
       {
         questionId: 49,
         value: 'Rationale',
-        valueId: 2,
       },
       {
         questionId: 50,
@@ -279,7 +267,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 15; i += 1) {
+    for (let i = 1; i < 16; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,
