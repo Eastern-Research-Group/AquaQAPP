@@ -294,8 +294,7 @@ export default {
         });
 
         paramIds.forEach((param) => {
-          if (isNaN(param)) {
-            // eslint-disable-line
+          if (isNaN(param)) { // eslint-disable-line
             params.push({
               id: param,
               label: param,
