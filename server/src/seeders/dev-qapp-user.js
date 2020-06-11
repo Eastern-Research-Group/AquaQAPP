@@ -221,8 +221,8 @@ module.exports = {
         valueId: 1,
       },
       {
-        questionId: 50,
-        value: 'Rationale',
+        questionId: 48,
+        value: 12,
         valueId: 1,
       },
       {
@@ -237,7 +237,8 @@ module.exports = {
       },
       {
         questionId: 48,
-        value: 'Sample',
+        value: 8,
+        valueId: 2,
       },
       {
         questionId: 49,
@@ -245,13 +246,37 @@ module.exports = {
       },
       {
         questionId: 50,
-        value: 'Rationale',
-        valueId: 2,
+        value: 'Samples',
       },
       {
         questionId: 51,
         value: 10,
         valueId: 2,
+      },
+      {
+        questionId: 53,
+        value: 1,
+        valueId: 1,
+      },
+      {
+        questionId: 54,
+        value: 10,
+        valueId: 1,
+      },
+      {
+        questionId: 55,
+        value: 100,
+        valueId: 1,
+      },
+      {
+        questionId: 56,
+        value: 1000,
+        valueId: 1,
+      },
+      {
+        questionId: 57,
+        value: 10000,
+        valueId: 1,
       },
     ];
     const records = qappDataRecords.map((record) => ({
