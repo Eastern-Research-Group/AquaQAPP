@@ -132,10 +132,6 @@ export default {
           key: 'parameterLabel',
           label: 'Parameter/Method',
         },
-        {
-          key: 'Number of Sample Locations',
-          label: 'Number of Sample Locations',
-        },
       ],
     };
   },
@@ -298,7 +294,8 @@ export default {
         });
 
         paramIds.forEach((param) => {
-          if (isNaN(param)) { // eslint-disable-line
+          if (isNaN(param)) {
+            // eslint-disable-line
             params.push({
               id: param,
               label: param,
