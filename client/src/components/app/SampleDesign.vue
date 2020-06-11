@@ -132,10 +132,6 @@ export default {
           key: 'parameterLabel',
           label: 'Parameter/Method',
         },
-        {
-          key: 'Number of Sample Locations',
-          label: 'Number of Sample Locations',
-        },
       ],
     };
   },
