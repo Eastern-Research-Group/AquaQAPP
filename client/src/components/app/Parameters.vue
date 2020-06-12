@@ -169,7 +169,7 @@ export default {
         if (v === 'Fresh') {
           return {
             id: v,
-            name: 'Fresh Water',
+            name: 'Fresh',
           };
         }
         return {
