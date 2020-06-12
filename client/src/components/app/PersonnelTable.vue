@@ -183,8 +183,8 @@ export default {
           label: 'Name',
         },
         {
-          key: 'Job Title',
-          label: 'Title',
+          key: 'RolesList',
+          label: 'Roles',
         },
         {
           key: 'Include in distribution list?',
@@ -413,9 +413,8 @@ export default {
                 }
               });
               personnel[personnelField.valueId][key] = values;
-            } else if (question.questionName === 'responsibilities') {
+            } else if (question.questionName === 'responsibilities' && personnelField.value) {
               const newResponsibilities = [];
-
               personnelField.value.split(',').forEach((pValue) => {
                 newResponsibilities.push({
                   value: pValue.slice(1),
@@ -446,6 +445,7 @@ export default {
         const row = personnel[personnelId];
         this.rows.push({
           ...row,
+          RolesList: row.Roles.map((r) => r.label).join(', '),
           valueId: personnelId,
         });
       });
