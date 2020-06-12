@@ -46,6 +46,11 @@
 45,12,parametersByLocation,Parameters By Location,,,,255,FALSE,1,parameters by location
 46,12,frequency,Frequency of Sampling,,,largeText,255,FALSE,2,
 47,13,sampleParameter,Parameter,,,select,255,FALSE,1,parameters
-48,15,locationRationale,Site Location Rationale,,,largeText,2000,FALSE,3,
-49,15,sampleNumRationale,Rationale for Number of Samples,,,largeText,2000,FALSE,4,
-50,14,details,Details,,,largeText,255,FALSE,2,
+49,15,locationRationale,Site Location Rationale,,,largeText,2000,FALSE,3,
+50,15,sampleNumRationale,Rationale for Number of Samples,,,largeText,2000,FALSE,4,
+52,14,details,Details,,,largeText,255,FALSE,2,
+53,13,fieldDuplicates,Field Duplicates,,,number,6,FALSE,2
+54,13,fieldBlanks,Field Blanks,,,number,6,FALSE,3
+55,13,labDuplicates,Lab Duplicates,,,number,6,FALSE,4
+56,13,labBlanks,Lab Blanks,,,number,6,FALSE,5
+57,13,labSpikes,Lab Spikes,,,number,6,FALSE,6
