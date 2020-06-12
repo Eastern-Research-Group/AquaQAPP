@@ -46,6 +46,7 @@ module.exports = {
       });
       res.send(qappsWithSectionIds);
     } catch (err) {
+      console.error(err);
       res.status(400).send({
         err: 'Dashboard data unavailable.',
       });
@@ -76,6 +77,7 @@ module.exports = {
       updatedQapp.completedSections = updatedQapp.completedSections.map((s) => s.sectionId); // update to array of ids
       res.send(updatedQapp);
     } catch (err) {
+      console.error(err);
       res.status(400).send({
         err: 'Dashboard data unavailable.',
       });
@@ -157,37 +159,43 @@ module.exports = {
     }
   },
   async saveData(req, res) {
+    let qappId = null;
+    if (req.body.length) {
+      qappId = req.body[0].qappId;
+    }
     try {
-      const question = await Question.findOne({ where: { id: req.body.questionId } });
-      const error = checkFieldLength(question, req.body);
-      if (error !== null) {
-        res.status(400).send({ error });
-        return;
-      }
-
-      let qappDatum = '';
-
-      if (req.body.valueId === 'remove_all_concerns') {
-        qappDatum = await QappDatum.findAll({
-          where: { qappId: req.body.qappId, questionId: req.body.questionId },
-        });
-        qappDatum = await QappDatum.update({ value: req.body.value }, { where: { questionId: req.body.questionId } });
-      } else {
-        qappDatum = await QappDatum.findOne({
-          where: { qappId: req.body.qappId, questionId: req.body.questionId, valueId: req.body.valueId },
-        });
-        // check if record already exists with same qapp id and question id
-
-        // if record exists, update, otherwise create
-        if (qappDatum) {
-          qappDatum = await qappDatum.update(req.body);
-        } else {
-          qappDatum = await QappDatum.create(req.body);
+      req.body.forEach(async (datum) => {
+        const question = await Question.findOne({ where: { id: datum.questionId } });
+        const error = checkFieldLength(question, datum);
+        if (error !== null) {
+          res.status(400).send({ error });
+          return;
         }
-      }
+
+        let qappDatum = '';
+
+        if (datum.valueId === 'remove_all_concerns') {
+          qappDatum = await QappDatum.findAll({
+            where: { qappId: datum.qappId, questionId: datum.questionId },
+          });
+          qappDatum = await QappDatum.update({ value: datum.value }, { where: { questionId: datum.questionId } });
+        } else {
+          qappDatum = await QappDatum.findOne({
+            where: { qappId: datum.qappId, questionId: datum.questionId, valueId: datum.valueId },
+          });
+          // check if record already exists with same qapp id and question id
+
+          // if record exists, update, otherwise create
+          if (qappDatum) {
+            qappDatum = await qappDatum.update(datum);
+          } else {
+            qappDatum = await QappDatum.create(datum);
+          }
+        }
+      });
 
       // redirect to return latest QAPP with data
-      res.redirect(`/api/qapps/${req.body.qappId}`);
+      res.redirect(`/api/qapps/${qappId}`);
     } catch (err) {
       res.status(400).send({
         error: err.toString(),

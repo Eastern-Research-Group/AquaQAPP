@@ -478,8 +478,9 @@ export default {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
-          !this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
-          this.currentSection.sectionLabel === 'Parameters'
+          (!this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
+            this.currentSection.sectionLabel === 'Parameters') &&
+          this.currentQuestions.length
         ) {
           this.saveData();
         }
@@ -499,12 +500,14 @@ export default {
 
       if (data && data.paramsByLocation) {
         await this.$store
-          .dispatch('qapp/save', {
-            qappId: this.$store.state.qapp.id,
-            questionId: this.paramsbyLocQuestionId,
-            value: data.paramsByLocation,
-            valueId,
-          })
+          .dispatch('qapp/save', [
+            {
+              qappId: this.$store.state.qapp.id,
+              questionId: this.paramsbyLocQuestionId,
+              value: data.paramsByLocation,
+              valueId,
+            },
+          ])
           .catch((error) => {
             if (this.dataError === null) this.dataError = error.response.data.error;
             else this.dataError += `<br/>${error.response.data.error}`;
@@ -514,21 +517,15 @@ export default {
         this.paramSaveData = data;
         this.checkParameters();
       } else {
-        await Promise.all(
-          this.currentQuestions.map(async (q) => {
-            await this.$store
-              .dispatch('qapp/save', {
-                qappId: this.$store.state.qapp.id,
-                questionId: q.id,
-                value: data ? data[q.id] : this.pendingData[q.id],
-                valueId,
-              })
-              .catch((error) => {
-                if (this.dataError === null) this.dataError = error.response.data.error;
-                else this.dataError += `<br/>${error.response.data.error}`;
-              });
-          })
-        );
+        const allData = this.currentQuestions.map((q) => {
+          return {
+            qappId: this.$store.state.qapp.id,
+            questionId: q.id,
+            value: data ? data[q.id] : this.pendingData[q.id],
+            valueId,
+          };
+        });
+        await this.$store.dispatch('qapp/save', allData);
       }
 
       this.hasSaved = this.dataError === null;
@@ -652,12 +649,14 @@ export default {
       this.shouldDisplayConcernsWarning = false;
       this.dataError = null;
       await this.$store
-        .dispatch('qapp/save', {
-          qappId: this.$store.state.qapp.id,
-          questionId: this.locConcernsQuestionId,
-          value: null,
-          valueId: 'remove_all_concerns',
-        })
+        .dispatch('qapp/save', [
+          {
+            qappId: this.$store.state.qapp.id,
+            questionId: this.locConcernsQuestionId,
+            value: null,
+            valueId: 'remove_all_concerns',
+          },
+        ])
         .catch((error) => {
           if (this.dataError === null) this.dataError = error.response.data.error;
           else this.dataError += `<br/>${error.response.data.error}`;
@@ -674,12 +673,14 @@ export default {
         await Promise.all(
           this.currentQuestions.map(async (q) => {
             await this.$store
-              .dispatch('qapp/save', {
-                qappId: this.$store.state.qapp.id,
-                questionId: q.id,
-                value: this.paramSaveData ? this.paramSaveData[q.id] : this.pendingData[q.id],
-                valueId: this.paramSaveValueId,
-              })
+              .dispatch('qapp/save', [
+                {
+                  qappId: this.$store.state.qapp.id,
+                  questionId: q.id,
+                  value: this.paramSaveData ? this.paramSaveData[q.id] : this.pendingData[q.id],
+                  valueId: this.paramSaveValueId,
+                },
+              ])
               .catch((error) => {
                 if (this.dataError === null) this.dataError = error.response.data.error;
                 else this.dataError += `<br/>${error.response.data.error}`;

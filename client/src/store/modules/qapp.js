@@ -220,6 +220,7 @@ const actions = {
     });
     commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
   },
+  // Payload consists of array of objects with qappId, questionId, value, and valueId (valueId is optional)
   async save({ commit }, payload) {
     // TODO: implement error handling on each save
     commit('SET_IS_SAVING', true);
