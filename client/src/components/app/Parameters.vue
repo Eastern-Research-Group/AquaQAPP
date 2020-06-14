@@ -110,12 +110,11 @@ export default {
   computed: {
     ...mapState('ref', ['concerns', 'parameters', 'waterTypes']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['concernsQuestionId', 'locationWaterTypeQuestionId']),
     selectedConcernCodes() {
-      return this.qappData[this.concernsQuestionId].split(',');
+      return this.qappData.waterConcerns.split(',');
     },
     selectedParams() {
-      return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
+      return this.pendingData.parameters ? this.pendingData.parameters.split(',') : [];
     },
     sortedParams() {
       let sortedParams = [];
@@ -150,14 +149,14 @@ export default {
   },
   methods: {
     getFilteredParams(params, waterType) {
-      if (waterType === 'Fresh Water') {
+      if (waterType === 'Fresh') {
         return sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
       }
       // salt or brackish types are both indicated by the "salt" boolean column
       return sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
     },
     getWaterTypes() {
-      let waterTypes = this.qappData[this.locationWaterTypeQuestionId].map((v) => v.value);
+      let waterTypes = this.qappData.waterType.map((v) => v.value);
       waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
       return waterTypes.map((v) => {
         if (v === 'Salt') {

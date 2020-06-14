@@ -22,7 +22,7 @@
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="text"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -32,7 +32,7 @@
           <input
             v-if="question.dataEntryType === 'number'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="number"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -42,7 +42,7 @@
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             :placeholder="
               `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
@@ -53,7 +53,7 @@
           <div v-if="question.dataEntryType === 'select'">
             <Multiselect
               v-if="question.questionLabel === 'Parameter'"
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
               :options="getParameters()"
               :placeholder="`Select ${question.questionLabel}`"
               label="label"
@@ -61,7 +61,7 @@
             ></Multiselect>
             <Multiselect
               v-else
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
               :options="getOptions(question.refName)"
               :multiple="true"
               :taggable="true"
@@ -142,7 +142,6 @@ export default {
     ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales']),
     ...mapState('structure', ['sections']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['parametersQuestionId']),
   },
   mounted() {
     this.refreshData();
@@ -152,7 +151,7 @@ export default {
       this.selectedRow = row;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, row[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
@@ -194,7 +193,7 @@ export default {
     addData() {
       const sampleData = {};
       this.questions.forEach((q) => {
-        sampleData[q.questionLabel] = this.pendingData[q.id];
+        sampleData[q.questionLabel] = this.pendingData[q.questionName];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -283,7 +282,7 @@ export default {
     },
     getParameters() {
       const params = [];
-      const selectedParameters = this.qappData[this.parametersQuestionId];
+      const selectedParameters = this.qappData.parameters;
 
       if (selectedParameters) {
         const paramIds = selectedParameters.split(',');
@@ -326,7 +325,7 @@ export default {
     },
     addOther(value, question) {
       const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
-      let newVal = this.pendingData[question.id];
+      let newVal = this.pendingData[question.questionName];
       // if values already exist for this question, push entered value into array, otherwise set as array
       if (newVal) newVal.push(enteredVal);
       else newVal = [enteredVal];

@@ -69,7 +69,7 @@
                 type="text"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
@@ -80,7 +80,7 @@
                 type="tel"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
@@ -91,7 +91,7 @@
                 type="email"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
@@ -101,36 +101,10 @@
                 class="input"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               ></textarea>
-              <HoverText
-                v-if="question.refName === 'concerns' && locationConcerns.length"
-                hoverId="concernsInfo"
-                linkText="Why are some concerns disabled?"
-              >
-                There are monitoring locations associated with these concerns. You must delete these locations before
-                the concerns can be removed.
-              </HoverText>
-              <fieldset v-if="question.dataEntryType === 'checkboxBtn'">
-                <legend class="is-sr-only">{{ question.questionLabel }}</legend>
-                <div class="columns is-multiline">
-                  <CheckboxButton
-                    v-for="option in getOptions(question.refName)"
-                    :key="option.id"
-                    :id="option.code"
-                    :name="option.label"
-                    :isSingleSelect="question.refName === 'yesNo'"
-                    :singleSelectId="question.questionLabel"
-                    :value="option.code"
-                    :disabled="locationConcerns.indexOf(option.code) > -1"
-                    :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
-                    @check="updatePendingData($event, question)"
-                    @click.native="triggerConcernsWarningModal(option.code)"
-                  />
-                </div>
-              </fieldset>
               <div class="btn-container has-text-right">
                 <Button
                   class="example"
@@ -182,54 +156,14 @@
           <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
         </div>
       </Modal>
-      <Modal v-if="shouldDisplayConcernsWarning" @close="closeConcernsWarningModal">
-        <Alert
-          message="Selecting No will remove all selected concerns from existing monitoring locations."
-          type="warning"
-        />
+      <Modal v-if="shouldDisplayParamLocationWarning" @close="shouldDisplayParamLocationWarning = false">
+        <Alert type="warning">
+          You've chosen to remove parameters that have already been associated with one or more monitoring locations.
+          Are you sure you want to delete those parameters?
+        </Alert>
         <div class="btn-container">
-          <Button label="Continue" type="success" @click.native="removeConcerns" />
-          <Button label="Cancel" type="danger" @click.native="cancelYesNo" />
-        </div>
-      </Modal>
-      <Modal v-if="shouldDisplayAddParameter" @close="closeAddParametersWarningModal" class="parametersWarningModal">
-        <div class="columns">
-          <div class="column is-9">
-            <Alert
-              message="Would you like to associate all the new parameters to monitoring locations with the corresponding water type?"
-              type="warning"
-            />
-          </div>
-          <div class="column is-3">
-            <multiselect v-model="addParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column is-offset-10">
-            <Button label="Continue" type="success" @click.native="addRemoveParams" />
-          </div>
-        </div>
-      </Modal>
-      <Modal
-        v-if="shouldDisplayRemoveParameter"
-        @close="closeRemoveParametersWarningModal"
-        class="parametersWarningModal"
-      >
-        <div class="columns">
-          <div class="column is-9">
-            <Alert
-              message="You've chosen to remove parameters that have already been associated with one or more monitoring locations, are you sure you want to delete those parameters?"
-              type="warning"
-            />
-          </div>
-          <div class="column is-3">
-            <multiselect v-model="removeParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column is-offset-10">
-            <Button label="Continue" type="success" @click.native="addRemoveParams" />
-          </div>
+          <Button label="Continue and Save" type="success" @click.native="saveData" />
+          <Button label="Cancel" type="cancel" @click.native="shouldDisplayParamLocationWarning = false" />
         </div>
       </Modal>
     </div>
@@ -244,14 +178,15 @@ import Tip from '@/components/shared/Tip';
 import Button from '@/components/shared/Button';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
-import CheckboxButton from '@/components/shared/CheckboxButton';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
 import isEqual from 'lodash/isEqual';
 import uniqBy from 'lodash/uniqBy';
 import sortBy from 'lodash/sortBy';
+import difference from 'lodash/difference';
 // Custom section components - these are used in the "customSections" loop above
+import Concerns from '@/components/app/Concerns';
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
@@ -263,22 +198,22 @@ import ParametersByLocation from '@/components/app/ParametersByLocation';
 export default {
   components: {
     Alert,
-    Locations,
-    Tip,
     Button,
-    Tabs,
-    MarkComplete,
-    Parameters,
-    CheckboxButton,
-    PersonnelTable,
-    Modal,
+    Concerns,
     HoverText,
-    ProjectActivities,
     LoadingIndicator,
-    SampleDesign,
-    RecordHandlingProcedures,
-    ParametersByLocation,
+    Locations,
+    MarkComplete,
+    Modal,
     Multiselect,
+    Parameters,
+    PersonnelTable,
+    ProjectActivities,
+    ParametersByLocation,
+    RecordHandlingProcedures,
+    SampleDesign,
+    Tabs,
+    Tip,
   },
   data() {
     return {
@@ -290,35 +225,18 @@ export default {
       pendingSection: null,
       sectionNotAvailableMessage: '',
       dataError: null,
-      shouldDisplayConcernsWarning: false,
-      previousParameters: [],
       shouldDisplayParametersWarning: false,
       yesNoOptions: ['Yes', 'No'],
-      removeParamValue: '',
-      addParamValue: '',
-      shouldDisplayAddParameter: false,
-      shouldDisplayRemoveParameter: false,
-      addParamsArray: [],
-      removeParamsArray: [],
-      paramSaveValueId: null,
-      paramSaveData: null,
+      removedParamsWithLocations: [],
+      shouldDisplayParamLocationWarning: false,
     };
   },
   computed: {
     ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns', 'yesNo', 'customSections', 'parameters']),
+    ...mapState('ref', ['yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
-    ...mapGetters('structure', [
-      'concernsQuestionId',
-      'concernsDifferByLocQuestionId',
-      'locationQuestionId',
-      'parametersQuestionId',
-      'locConcernsQuestionId',
-      'sampleDesignQuestionId',
-      'paramsbyLocQuestionId',
-      'detailsQuestionId',
-    ]),
+    ...mapGetters('structure', ['getQuestionId']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -331,17 +249,6 @@ export default {
           }
           return 0;
         });
-    },
-    locationConcerns() {
-      let concerns = [];
-      if (this.qappData[this.locConcernsQuestionId]) {
-        this.qappData[this.locConcernsQuestionId].forEach((location) => {
-          if (location.value) {
-            concerns = concerns.concat(location.value.split(','));
-          }
-        });
-      }
-      return concerns;
     },
     customSection() {
       return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
@@ -384,7 +291,8 @@ export default {
          */
         if (
           section.sectionLabel === 'Monitoring Locations' ||
-          this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length === this.currentQuestions.length ||
+          this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
+            this.currentQuestions.length ||
           section.sectionLabel === 'Project Organization/Personnel' ||
           section.sectionLabel === 'Parameters By Location'
         ) {
@@ -399,26 +307,23 @@ export default {
     discardChanges() {
       this.pendingData = {};
       this.shouldDisplayUnsavedWarning = false;
-      this.shouldDisplayAddParameter = false;
-      this.shouldDisplayRemoveParameter = false;
       this.changeSection(this.pendingSection);
       this.pendingSection = null;
-    },
-    getOptions(refName) {
-      return this[refName];
     },
     updatePendingData(e, question) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
-        let dataArray = this.pendingData[question.id] ? this.pendingData[question.id].split(',') : [];
+        let dataArray = this.pendingData[question.questionName]
+          ? this.pendingData[question.questionName].split(',')
+          : [];
         if (dataArray.indexOf(e.target.value) > -1) {
           dataArray = dataArray.filter((val) => val !== e.target.value);
         } else {
           dataArray.push(e.target.value);
         }
-        this.$set(this.pendingData, question.id, dataArray.join(','));
+        this.$set(this.pendingData, question.questionName, dataArray.join(','));
       } else {
-        this.$set(this.pendingData, question.id, e.target.value);
+        this.$set(this.pendingData, question.questionName, e.target.value);
       }
     },
     checkRequiredFields() {
@@ -426,11 +331,11 @@ export default {
 
       if (this.currentSection.sectionName === 'sampleDesign') {
         hasEmptyFields = true;
-        let selectedParams = this.qappData[this.parametersQuestionId];
+        let selectedParams = this.qappData.parameters;
         selectedParams = selectedParams.split(',');
         let tableParams = [];
-        if (selectedParams.length > 0 && this.qappData[this.sampleDesignQuestionId]) {
-          this.qappData[this.sampleDesignQuestionId].forEach((param) => {
+        if (selectedParams.length > 0 && this.qappData.sampleParameter) {
+          this.qappData.sampleParameter.forEach((param) => {
             tableParams.push(param.value);
           });
           tableParams = uniqBy(tableParams);
@@ -438,16 +343,18 @@ export default {
         }
       } else if (this.currentSection.sectionName === 'recordHandling') {
         hasEmptyFields = true;
-        if (this.qappData[this.detailsQuestionId]) hasEmptyFields = this.qappData[this.detailsQuestionId].length < 5;
+        if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
       } else {
         this.currentQuestions.forEach((q) => {
           if (
-            (!this.pendingData[q.id] ||
-              (this.pendingData[q.id] &&
-                typeof this.pendingData[q.id] === 'string' &&
-                !this.pendingData[q.id].trim())) &&
-            (!this.qappData[q.id] ||
-              (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
+            (!this.pendingData[q.questionName] ||
+              (this.pendingData[q.questionName] &&
+                typeof this.pendingData[q.questionName] === 'string' &&
+                !this.pendingData[q.questionName].trim())) &&
+            (!this.qappData[q.questionName] ||
+              (this.qappData[q.questionName] &&
+                typeof this.qappData[q.questionName] === 'string' &&
+                !this.qappData[q.questionName].trim()))
           ) {
             hasEmptyFields = true;
           }
@@ -457,18 +364,7 @@ export default {
     },
     hasUnsavedData() {
       if (this.hasSaved) return false;
-      if (
-        this.currentSection.sectionLabel === 'Parameters' &&
-        this.qappData[this.parametersQuestionId] &&
-        this.pendingData[this.parametersQuestionId]
-      ) {
-        let currentParameters = [];
-        this.currentQuestions.forEach((q) => {
-          currentParameters = sortBy(this.pendingData[q.id].split(','));
-        });
-        return !isEqual(currentParameters, this.previousParameters);
-      }
-      return this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length;
+      return this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length;
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
@@ -479,7 +375,8 @@ export default {
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
           (!this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
-            this.currentSection.sectionLabel === 'Parameters') &&
+            this.currentSection.sectionLabel === 'Parameters' ||
+            this.currentSection.sectionLabel === 'Water Quality Concerns') &&
           this.currentQuestions.length
         ) {
           this.saveData();
@@ -489,88 +386,55 @@ export default {
     async saveData(e, valueId = null, data) {
       // Wait for all data to be saved before setting hasSaved
       this.dataError = null;
-      this.addParamsArray = [];
-      this.removeParamsArray = [];
 
-      if (this.qappData[this.parametersQuestionId]) {
-        this.previousParameters = this.qappData[this.parametersQuestionId].split(',');
-      } else {
-        this.previousParameters = [];
+      // If user is saving parameters section and has already selected parameters by location, check business logic rules
+      if (
+        this.currentSection.sectionLabel === 'Parameters' &&
+        this.qappData.parametersByLocation &&
+        !this.shouldDisplayParamLocationWarning &&
+        this.isUserRemovingLocationParameters()
+      ) {
+        this.shouldDisplayUnsavedWarning = false;
+        this.shouldDisplayParamLocationWarning = true;
+        return;
       }
 
-      if (data && data.paramsByLocation) {
-        await this.$store
-          .dispatch('qapp/save', [
-            {
+      const dataToSave = this.currentQuestions.map((q) => {
+        return {
+          qappId: this.$store.state.qapp.id,
+          questionId: q.id,
+          value: data ? data[q.questionName] : this.pendingData[q.questionName],
+          valueId,
+        };
+      });
+
+      // If user is removing parameters that are associated with locations, update parametersByLocation values to remove those parameters
+      if (this.removedParamsWithLocations.length) {
+        this.qappData.parametersByLocation.forEach((paramByLocValue) => {
+          const valArray = paramByLocValue.value.split(',');
+          // Filter function compares params to be deleted with existing parametersByLocation values
+          const newParamsByLocations = valArray.filter((val) => !this.removedParamsWithLocations.includes(val));
+          // If the arrays do not match, update dataToSave to include updated parametersByLocation values (with removed parameters)
+          if (newParamsByLocations.length !== valArray.filter) {
+            dataToSave.push({
               qappId: this.$store.state.qapp.id,
-              questionId: this.paramsbyLocQuestionId,
-              value: data.paramsByLocation,
-              valueId,
-            },
-          ])
-          .catch((error) => {
-            if (this.dataError === null) this.dataError = error.response.data.error;
-            else this.dataError += `<br/>${error.response.data.error}`;
-          });
-      } else if (this.currentSection.sectionName === 'parameters') {
-        this.paramSaveValueId = valueId;
-        this.paramSaveData = data;
-        this.checkParameters();
-      } else {
-        const allData = this.currentQuestions.map((q) => {
-          return {
-            qappId: this.$store.state.qapp.id,
-            questionId: q.id,
-            value: data ? data[q.id] : this.pendingData[q.id],
-            valueId,
-          };
+              questionId: this.getQuestionId('parametersByLocation'),
+              value: newParamsByLocations.join(','),
+              valueId: paramByLocValue.valueId,
+            });
+          }
         });
-        await this.$store.dispatch('qapp/save', allData);
+        this.shouldDisplayParamLocationWarning = false;
       }
+
+      await this.$store.dispatch('qapp/save', dataToSave);
 
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
 
-      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
+      if (this.pendingSection) {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
-      }
-    },
-    checkParameters() {
-      if (this.pendingData[this.parametersQuestionId]) {
-        this.shouldDisplayAddParameter = false;
-        this.shouldDisplayRemoveParameter = false;
-        const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-        const currentParameters = this.pendingData[this.parametersQuestionId].split(',');
-        if (!isEqual(currentParameters, this.previousParameters)) {
-          this.shouldDisplayParametersWarning = true;
-          this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
-
-          if (this.previousParameters.length && currentParameters.length) {
-            currentParameters.forEach((param) => {
-              if (this.previousParameters.indexOf(param) === -1) {
-                this.shouldDisplayAddParameter = true;
-                this.addParamsArray.push(param);
-              }
-            });
-            this.previousParameters.forEach((param) => {
-              if (currentParameters.indexOf(param) === -1) {
-                this.shouldDisplayRemoveParameter = true;
-                this.removeParamsArray.push(param);
-              }
-            });
-          } else if (!this.previousParameters.length && currentParameters.length) {
-            this.shouldDisplayAddParameter = true;
-            this.addParamsArray = currentParameters;
-          }
-        }
-      } else if (
-        !this.pendingData[this.parametersQuestionId] &&
-        this.previousParameters &&
-        this.currentSection.sectionName === 'parameters'
-      ) {
-        this.shouldDisplayRemoveParameter = true;
-        this.removeParamsArray = this.previousParameters;
       }
     },
     isSectionNotAvailable() {
@@ -580,19 +444,19 @@ export default {
       let sectionNotAvailable = false;
       if (
         this.currentSection.sectionLabel === 'Monitoring Locations' &&
-        (!this.qappData[this.concernsQuestionId] || !this.qappData[this.concernsDifferByLocQuestionId])
+        (!this.qappData.waterConcerns || !this.qappData.differByLocation)
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns section before completing this section';
-      } else if (this.currentSection.sectionLabel === 'Parameters' && !this.qappData[this.locationQuestionId]) {
+      } else if (this.currentSection.sectionLabel === 'Parameters' && !this.qappData.locationId) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
       } else if (
         (this.currentSection.sectionLabel === 'Sampling Design Details' ||
           this.currentSection.sectionLabel === 'Parameters By Location') &&
-        !this.qappData[this.parametersQuestionId]
+        !this.qappData.parameters
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
@@ -631,155 +495,20 @@ export default {
       this.shouldDisplayUnsavedWarning = false;
       this.pendingSection = null;
     },
-    closeConcernsWarningModal() {
-      this.shouldDisplayConcernsWarning = false;
-    },
-    closeAddParametersWarningModal() {
-      this.shouldDisplayAddParameter = false;
-    },
-    closeRemoveParametersWarningModal() {
-      this.shouldDisplayRemoveParameter = false;
-    },
-    triggerConcernsWarningModal(value) {
-      if (value === 'N' && !!this.qappData[this.concernsQuestionId] && this.qappData[this.locationQuestionId]) {
-        this.shouldDisplayConcernsWarning = true;
-      }
-    },
-    async removeConcerns() {
-      this.shouldDisplayConcernsWarning = false;
-      this.dataError = null;
-      await this.$store
-        .dispatch('qapp/save', [
-          {
-            qappId: this.$store.state.qapp.id,
-            questionId: this.locConcernsQuestionId,
-            value: null,
-            valueId: 'remove_all_concerns',
-          },
-        ])
-        .catch((error) => {
-          if (this.dataError === null) this.dataError = error.response.data.error;
-          else this.dataError += `<br/>${error.response.data.error}`;
-        });
-    },
-    cancelYesNo() {
-      this.shouldDisplayConcernsWarning = false;
-      this.pendingData[this.concernsDifferByLocQuestionId] = 'Y';
-    },
-    async addRemoveParams() {
-      this.dataError = null;
+    isUserRemovingLocationParameters() {
+      this.removedParamsWithLocations = [];
 
-      if (this.removeParamValue !== 'No' || this.addParamValue !== '') {
-        await Promise.all(
-          this.currentQuestions.map(async (q) => {
-            await this.$store
-              .dispatch('qapp/save', [
-                {
-                  qappId: this.$store.state.qapp.id,
-                  questionId: q.id,
-                  value: this.paramSaveData ? this.paramSaveData[q.id] : this.pendingData[q.id],
-                  valueId: this.paramSaveValueId,
-                },
-              ])
-              .catch((error) => {
-                if (this.dataError === null) this.dataError = error.response.data.error;
-                else this.dataError += `<br/>${error.response.data.error}`;
-              });
-          })
-        );
+      let allParamsByLocation = [];
+      this.qappData.parametersByLocation.forEach((valObject) => {
+        allParamsByLocation = allParamsByLocation.concat(valObject.value.split(','));
+      });
 
-        let filteredParams = [];
-        this.qappData[this.paramsbyLocQuestionId].forEach((paramByLoc) => {
-          if (paramByLoc.value !== 'Freshwater' || paramByLoc.value !== 'Saltwater') {
-            paramByLoc.value.split(',').forEach((param) => {
-              if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
-                filteredParams.push({
-                  valueId: paramByLoc.valueId,
-                  value: paramByLoc.value,
-                  waterType: this.parameters.find((p) => p.id === parseInt(param, 10)).waterType,
-                });
-              }
-            });
-          }
-          if (paramByLoc.value === 'Freshwater' || paramByLoc.value === 'Saltwater') {
-            filteredParams.push({
-              valueId: paramByLoc.valueId,
-              value: '',
-              waterType: paramByLoc.value,
-            });
-          }
-        });
+      // Use lodash difference function to get removed params (compare original qappData with pendingData arrays)
+      const removedParams = difference(this.qappData.parameters.split(','), this.pendingData.parameters.split(','));
 
-        filteredParams = uniqBy(filteredParams, 'valueId');
-
-        if (this.addParamsArray.length !== 0 && this.addParamValue === 'Yes') {
-          this.addParamsArray.forEach((param) => {
-            filteredParams.forEach((filteredParam) => {
-              if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-                filteredParam.value = filteredParam.value !== '' ? `${filteredParam.value},${param}` : param;
-              }
-            });
-          });
-        }
-
-        if (this.removeParamsArray.length !== 0 && this.removeParamValue === 'Yes') {
-          this.removeParamsArray.forEach((param) => {
-            filteredParams.forEach((filteredParam) => {
-              if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-                filteredParam.value = filteredParam.value
-                  .split(',')
-                  .filter((p) => p !== param)
-                  .join(',');
-              }
-            });
-          });
-        }
-
-        filteredParams.forEach((param) => {
-          if (param.value === '') {
-            param.value = param.waterType;
-          }
-        });
-
-        if ((this.addParamValue === 'Yes' && filteredParams.length !== 0) || this.removeParamValue === 'Yes') {
-          await this.$store
-            .dispatch('qapp/updateData', {
-              qappId: this.$store.state.qapp.id,
-              questionId: this.paramsbyLocQuestionId,
-              values: filteredParams,
-            })
-            .catch((error) => {
-              if (this.dataError === null) this.dataError = error.response.data.error;
-              else this.dataError += `<br/>${error.response.data.error}`;
-            });
-        }
-
-        if (this.addParamValue !== '') this.shouldDisplayAddParameter = false;
-        if (this.removeParamValue !== '') this.shouldDisplayRemoveParameter = false;
-
-        // IE requires reload to avoid 403 error when applying parameters to Parameters By Location screen
-        if (
-          window.navigator.userAgent.indexOf('Firefox') === -1 &&
-          window.navigator.userAgent.indexOf('Chrome') === -1 &&
-          (this.addParamValue === 'Yes' || this.removeParamValue === 'Yes')
-        ) {
-          window.location.reload(true);
-        }
-
-        this.addParamValue = '';
-        this.removeParamValue = '';
-
-        if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
-          this.changeSection(this.pendingSection);
-          this.pendingSection = null;
-        }
-      } else {
-        this.shouldDisplayRemoveParameter = false;
-        this.shouldDisplayAddParameter = false;
-        this.removeParamValue = '';
-        this.addParamValue = '';
-        this.pendingData[this.parametersQuestionId] = this.qappData[this.parametersQuestionId];
-      }
+      // Use filter function to determine is any selected params by location match with the params to be removed
+      this.removedParamsWithLocations = allParamsByLocation.filter((paramId) => removedParams.includes(paramId));
+      return this.removedParamsWithLocations.length;
     },
   },
 };
@@ -861,10 +590,6 @@ textarea {
 </style>
 
 <style>
-.parametersWarningModal .modal-content {
-  width: 800px !important;
-}
-
 .example-text ul {
   list-style: inherit;
   margin-left: 45px;

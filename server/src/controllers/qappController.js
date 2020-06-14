@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const { CompletedQappSection, Qapp, QappDatum, Question } = require('../models');
 
 function checkFieldLength(question, body) {
-  if (question.id !== body.questionId) return `Weird data condition - ${question.id} !== ${body.questionId}`;
+  if (question.id !== body.questionId) return `Data condition error - ${question.id} !== ${body.questionId}`;
 
   if (['text', 'email', 'tel', 'largeText'].indexOf(question.dataEntryType) !== -1) {
     if (body.value !== undefined) {
@@ -159,10 +159,7 @@ module.exports = {
     }
   },
   async saveData(req, res) {
-    let qappId = null;
-    if (req.body.length) {
-      qappId = req.body[0].qappId;
-    }
+    const { qappId } = req.body[0];
     try {
       req.body.forEach(async (datum) => {
         const question = await Question.findOne({ where: { id: datum.questionId } });
@@ -172,25 +169,16 @@ module.exports = {
           return;
         }
 
-        let qappDatum = '';
+        const qappDatum = await QappDatum.findOne({
+          where: { qappId: datum.qappId, questionId: datum.questionId, valueId: datum.valueId },
+        });
 
-        if (datum.valueId === 'remove_all_concerns') {
-          qappDatum = await QappDatum.findAll({
-            where: { qappId: datum.qappId, questionId: datum.questionId },
-          });
-          qappDatum = await QappDatum.update({ value: datum.value }, { where: { questionId: datum.questionId } });
+        // check if record already exists with same qapp id and question id
+        // if record exists, update, otherwise create
+        if (qappDatum) {
+          await qappDatum.update(datum);
         } else {
-          qappDatum = await QappDatum.findOne({
-            where: { qappId: datum.qappId, questionId: datum.questionId, valueId: datum.valueId },
-          });
-          // check if record already exists with same qapp id and question id
-
-          // if record exists, update, otherwise create
-          if (qappDatum) {
-            qappDatum = await qappDatum.update(datum);
-          } else {
-            qappDatum = await QappDatum.create(datum);
-          }
+          await QappDatum.create(datum);
         }
       });
 
@@ -219,10 +207,17 @@ module.exports = {
           const qappDatum = await QappDatum.findOne({
             where: datumFields,
           });
-          await qappDatum.update({
-            ...datumFields,
-            value: req.body.values[qId],
-          });
+          if (qappDatum) {
+            await qappDatum.update({
+              ...datumFields,
+              value: req.body.values[qId],
+            });
+          } else {
+            await QappDatum.create({
+              ...datumFields,
+              value: req.body.values[qId],
+            });
+          }
         });
       }
 

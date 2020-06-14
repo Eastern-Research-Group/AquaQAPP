@@ -27,7 +27,7 @@
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             :placeholder="`${selectedRow.placeholder}`"
             :maxlength="question.maxLength"
@@ -91,7 +91,6 @@ export default {
     }),
     ...mapState('ref', ['procedures']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['detailsQuestionId']),
   },
   mounted() {
     this.refreshData();
@@ -102,7 +101,7 @@ export default {
       this.selectedRow = row;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, row[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
@@ -112,7 +111,7 @@ export default {
       this.isFormIncomplete = false;
 
       this.questions.forEach((q) => {
-        if (!this.pendingData[q.id]) this.isFormIncomplete = true;
+        if (!this.pendingData[q.questionName]) this.isFormIncomplete = true;
       });
 
       this.$nextTick().then(() => {
@@ -121,8 +120,7 @@ export default {
 
       if (
         !this.isFormIncomplete &&
-        (!this.qappData[this.detailsQuestionId] ||
-          !this.qappData[this.detailsQuestionId].find((detail) => detail.valueId === this.selectedRow.id))
+        (!this.qappData.details || !this.qappData.details.find((detail) => detail.valueId === this.selectedRow.id))
       ) {
         this.addData();
       } else {
@@ -144,8 +142,8 @@ export default {
       this.procedures.forEach((procedure) => {
         if (procedure.id === this.selectedRow.id) {
           this.questions.forEach((q) => {
-            proceduresData[q.questionLabel] = this.pendingData[q.id];
-            this.$set(this.selectedRow, 'Details', this.pendingData[q.id]);
+            proceduresData[q.questionLabel] = this.pendingData[q.questionName];
+            this.$set(this.selectedRow, 'Details', this.pendingData[q.questionName]);
           });
         }
       });
