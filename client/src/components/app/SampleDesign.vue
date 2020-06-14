@@ -22,7 +22,7 @@
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="text"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -32,7 +32,7 @@
           <input
             v-if="question.dataEntryType === 'number'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="number"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -42,7 +42,7 @@
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             :placeholder="
               `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
@@ -53,7 +53,7 @@
           <div v-if="question.dataEntryType === 'select'">
             <Multiselect
               v-if="question.questionLabel === 'Parameter'"
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
               :options="getParameters()"
               :placeholder="`Select ${question.questionLabel}`"
               label="label"
@@ -61,7 +61,7 @@
             ></Multiselect>
             <Multiselect
               v-else
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
               :options="getOptions(question.refName)"
               :multiple="true"
               :taggable="true"
@@ -142,7 +142,6 @@ export default {
     ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales']),
     ...mapState('structure', ['sections']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['parametersQuestionId']),
   },
   mounted() {
     this.refreshData();
@@ -152,7 +151,7 @@ export default {
       this.selectedRow = row;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, row[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
@@ -194,7 +193,7 @@ export default {
     addData() {
       const sampleData = {};
       this.questions.forEach((q) => {
-        sampleData[q.questionLabel] = this.pendingData[q.id];
+        sampleData[q.questionLabel] = this.pendingData[q.questionName];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -238,9 +237,9 @@ export default {
       const sampleDesign = {};
 
       // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+      Object.keys(this.qappData).forEach((qName) => {
+        const datum = this.qappData[qName];
+        const question = this.questions.find((q) => q.questionName === qName);
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((field) => {
@@ -283,7 +282,7 @@ export default {
     },
     getParameters() {
       const params = [];
-      const selectedParameters = this.qappData[this.parametersQuestionId];
+      const selectedParameters = this.qappData.parameters;
 
       if (selectedParameters) {
         const paramIds = selectedParameters.split(',');
@@ -307,26 +306,26 @@ export default {
     cleanData() {
       // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
       const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qId) => {
-        if (typeof this.pendingData[qId] === 'object') {
+      Object.keys(this.pendingData).forEach((qName) => {
+        if (typeof this.pendingData[qName] === 'object') {
           // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qId])) {
-            const idArray = this.pendingData[qId].map((datum) => {
+          if (Array.isArray(this.pendingData[qName])) {
+            const idArray = this.pendingData[qName].map((datum) => {
               return datum.id || datum;
             });
-            cleanedData[qId] = idArray.join(',');
+            cleanedData[qName] = idArray.join(',');
           } else {
-            cleanedData[qId] = this.pendingData[qId].id;
+            cleanedData[qName] = this.pendingData[qName].id;
           }
         } else {
-          cleanedData[qId] = this.pendingData[qId];
+          cleanedData[qName] = this.pendingData[qName];
         }
       });
       return cleanedData;
     },
     addOther(value, question) {
       const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
-      let newVal = this.pendingData[question.id];
+      let newVal = this.pendingData[question.questionName];
       // if values already exist for this question, push entered value into array, otherwise set as array
       if (newVal) newVal.push(enteredVal);
       else newVal = [enteredVal];

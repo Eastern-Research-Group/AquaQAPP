@@ -18,7 +18,6 @@ passport.use(
             id: jwtPayload.id,
           },
         });
-        console.log(user);
         if (!user) {
           return done(new Error(), false);
         }

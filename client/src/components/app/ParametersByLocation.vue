@@ -39,7 +39,11 @@
                   :id="param.id"
                   type="checkbox"
                   :value="param.id"
-                  :checked="isChecked(param.id)"
+                  :checked="
+                    pendingData.parametersByLocation
+                      ? pendingData.parametersByLocation.split(',').includes(param.id.toString())
+                      : false
+                  "
                   @change="updateData($event, paramQuestion)"
                 />
                 <label :for="param.id">{{ param.label }}</label>
@@ -60,7 +64,7 @@
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             :placeholder="`Enter ${question.questionLabel}`"
             :maxlength="question.maxLength"
@@ -136,21 +140,9 @@ export default {
       'waterTypes',
     ]),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', [
-      'parametersQuestionId',
-      'concernsDifferByLocQuestionId',
-      'concernsQuestionId',
-      'paramsbyLocQuestionId',
-    ]),
     selectedParams() {
-      const selectedParams = this.qappData[this.parametersQuestionId].split(',');
-      const params = [];
-      selectedParams.forEach((param) => {
-        if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
-          params.push(this.parameters.find((p) => p.id === parseInt(param, 10)));
-        }
-      });
-      return params;
+      const selectedParams = this.qappData.parameters.split(',');
+      return this.parameters.filter((param) => selectedParams.includes(param.id.toString()));
     },
     checkedParams() {
       return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
@@ -158,57 +150,35 @@ export default {
   },
   methods: {
     refreshLocationData() {
-      this.locations = [];
-      // Add markers to map if location data already exists
-      const locations = {};
-      // Logic to loop through existing qapp data and set up markers to be used by leaflet map
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        let locationQuestions = this.$store.state.structure.questions.filter(
-          (q) => q.section.sectionLabel === 'Monitoring Locations'
-        );
-        const paramsByLocQuestions = this.$store.state.structure.questions.filter(
-          (q) => q.section.sectionLabel === 'Parameters By Location'
-        );
-        locationQuestions = locationQuestions.concat(paramsByLocQuestions);
-        const question = locationQuestions.find((q) => q.id === parseInt(qId, 10));
-        if (Array.isArray(datum) && question) {
-          const key = question.questionLabel;
-          datum.forEach((locationField) => {
-            if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
-            if (question.refName === 'concerns') {
-              locations[locationField.valueId][key] = this.concerns.filter(
-                (r) => locationField.value && locationField.value.indexOf(r.code) > -1
-              );
-            } else if (question.refName === 'locationTypes' || question.refName === 'coordRefSystems') {
-              locations[locationField.valueId][key] = this[question.refName].find((r) => r === locationField.value);
-            } else {
-              locations[locationField.valueId][key] = locationField.value;
-            }
-          });
-        }
-      });
-
-      Object.keys(locations).forEach((locationId) => {
-        const monLoc = locations[locationId];
-
-        if (this.shouldShowConcerns() && !monLoc['Water Quality Concerns']) {
-          monLoc['Water Quality Concerns'] = this.getConcerns();
-        }
-        getLocationsTableConcerns(monLoc, this.getConcerns());
-        this.locations.push({
-          ...monLoc,
-          valueId: locationId,
-          latLng: [parseFloat(monLoc['Location Latitude']), parseFloat(monLoc['Location Longitude'])],
+      const locationQuestions = this.$store.state.structure.questions.filter(
+        (q) => q.section.sectionLabel === 'Monitoring Locations'
+      );
+      const relevantQuestions = locationQuestions.concat(this.questions);
+      const locations = [];
+      this.qappData.locationId.forEach((val) => {
+        const location = { valueId: val.valueId };
+        relevantQuestions.forEach((q) => {
+          if (this.qappData[q.questionName]) {
+            const qappDataObject = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
+            location[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
+          }
         });
+        if (location['Water Quality Concerns']) {
+          const locationConcerns = this.concerns.filter((concern) =>
+            location['Water Quality Concerns'].split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        }
+        locations.push(location);
       });
+      this.locations = locations;
     },
     onEdit(location) {
       this.isFormIncomplete = false;
       this.selectedLocation = location;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, location[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, location[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
@@ -225,11 +195,11 @@ export default {
       return this.checkedParams.indexOf(paramId.toString()) > -1;
     },
     shouldShowConcerns() {
-      return this.qappData[this.concernsDifferByLocQuestionId] === 'Y';
+      return this.qappData.differByLocation === 'Y';
     },
-    getConcerns() {
+    getLocationConcerns() {
       const concerns = [];
-      const selectedConcerns = this.qappData[this.concernsQuestionId];
+      const selectedConcerns = this.qappData.waterConcerns;
       if (selectedConcerns) {
         this.concerns.forEach((concern) => {
           if (selectedConcerns.indexOf(concern.code) > -1) {
@@ -242,7 +212,8 @@ export default {
     submitData() {
       this.isFormIncomplete = false;
       this.questions.forEach((q) => {
-        if (!this.pendingData[q.id] && q.id !== this.paramsbyLocQuestionId) this.isFormIncomplete = true;
+        if (!this.pendingData[q.questionName] && q.questionName !== 'parametersByLocation')
+          this.isFormIncomplete = true;
       });
 
       this.$nextTick().then(() => {
@@ -251,8 +222,8 @@ export default {
 
       if (
         !this.isFormIncomplete &&
-        (!this.qappData[this.paramsbyLocQuestionId] ||
-          !this.qappData[this.paramsbyLocQuestionId].find((param) => param.valueId === this.selectedLocation.valueId))
+        (!this.qappData.parametersByLocation ||
+          !this.qappData.parametersByLocation.find((param) => param.valueId === this.selectedLocation.valueId))
       ) {
         this.addData();
       } else {
@@ -263,7 +234,7 @@ export default {
       this.locations.forEach((location) => {
         if (location.valueId === this.selectedLocation.valueId) {
           this.questions.forEach((q) => {
-            location[q.questionLabel] = this.pendingData[q.id];
+            location[q.questionLabel] = this.pendingData[q.questionName];
           });
         }
       });
@@ -284,16 +255,18 @@ export default {
     },
     updateData(e, question) {
       this.hasSaved = false;
-      if (question.refName) {
-        let dataArray = this.pendingData[question.id] ? this.pendingData[question.id].split(',') : [];
+      if (question.questionName === 'parametersByLocation') {
+        let dataArray = this.pendingData[question.questionName]
+          ? this.pendingData[question.questionName].split(',')
+          : [];
         if (dataArray.indexOf(e.target.value) > -1) {
           dataArray = dataArray.filter((val) => val !== e.target.value);
         } else {
           dataArray.push(e.target.value);
         }
-        this.$set(this.pendingData, question.id, dataArray.join(','));
+        this.$set(this.pendingData, question.questionName, dataArray.join(','));
       } else {
-        this.$set(this.pendingData, question.id, e.target.value);
+        this.$set(this.pendingData, question.questionName, e.target.value);
       }
     },
   },

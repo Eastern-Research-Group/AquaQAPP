@@ -34,7 +34,7 @@
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="text"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -44,7 +44,7 @@
           <input
             v-if="question.dataEntryType === 'email'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="email"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -54,7 +54,7 @@
           <input
             v-if="question.dataEntryType === 'tel'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="tel"
             :placeholder="`Enter ${question.questionLabel}`"
@@ -72,7 +72,7 @@
               type="checkbox"
               true-value="X"
               false-value=""
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
             />
             <label :for="question.id">{{ question.questionLabel }}</label>
           </div>
@@ -83,14 +83,14 @@
               type="checkbox"
               true-value="X"
               false-value=""
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
               :disabled="isPrimaryContactDisabled"
             />
             <label :for="question.id">{{ question.questionLabel }}</label>
           </div>
           <div v-if="question.dataEntryType === 'select'">
             <multiselect
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
               :options="roles"
               :multiple="true"
               :taggable="true"
@@ -114,7 +114,7 @@
             <textarea
               v-if="question.dataEntryType === 'largeText' && shouldDisplayResponsibilities"
               :id="`question${question.id}${role.valueId}`"
-              v-model="pendingData[question.id][otherRoles.indexOf(role)].value"
+              v-model="pendingData[question.questionName][otherRoles.indexOf(role)].value"
               class="input"
               :placeholder="`Enter ${question.questionLabel}`"
               :maxlength="question.maxLength"
@@ -183,8 +183,8 @@ export default {
           label: 'Name',
         },
         {
-          key: 'Job Title',
-          label: 'Title',
+          key: 'RolesList',
+          label: 'Roles',
         },
         {
           key: 'Include in distribution list?',
@@ -207,7 +207,6 @@ export default {
     }),
     ...mapState('ref', ['roles']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['rolesQuestionId', 'responsibilitiesQuestionId']),
   },
   mounted() {
     this.refreshPersonnelData();
@@ -232,12 +231,12 @@ export default {
 
       this.responsibilities.push(newResponsibility);
 
-      this.$set(this.pendingData, this.responsibilitiesQuestionId, this.responsibilities);
+      this.$set(this.pendingData, 'responsibilities', this.responsibilities);
 
       this.otherRoles.push(enteredVal);
       this.shouldDisplayResponsibilities = true;
 
-      let newVal = this.pendingData[question.id];
+      let newVal = this.pendingData[question.questionName];
       // if values already exist for this question, push entered value into array, otherwise set as array
       if (newVal) newVal.push(enteredVal);
       else newVal = [enteredVal];
@@ -247,7 +246,7 @@ export default {
     removeRole(value) {
       this.otherRoles = this.otherRoles.filter((role) => role.valueId !== value.valueId);
       let filteredArray = [];
-      filteredArray = this.pendingData[this.responsibilitiesQuestionId].filter((r) => r.valueId !== value.valueId);
+      filteredArray = this.pendingData.responsibilities.filter((r) => r.valueId !== value.valueId);
       this.$set(this.pendingData, this.responsibilitiesQuestionId, filteredArray);
     },
     onEdit(row) {
@@ -255,7 +254,7 @@ export default {
       this.responsibilities = [];
       this.selectedPersonnel = row;
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, row[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
 
       this.currentEditData = { ...this.pendingData };
@@ -311,15 +310,15 @@ export default {
           this.responsibilities.length &&
           q.dataEntryType !== 'checkbox' &&
           q.dataEntryType !== 'singleCheckbox' &&
-          !this.pendingData[q.id]
+          !this.pendingData[q.questionName]
         ) {
           this.isFormIncomplete = true;
         } else if (
           !this.responsibilities.length &&
           q.dataEntryType !== 'checkbox' &&
           q.dataEntryType !== 'singleCheckbox' &&
-          !this.pendingData[q.id] &&
-          q.id !== this.responsibilitiesQuestionId
+          !this.pendingData[q.questionName] &&
+          q.questionName !== 'responsibilities'
         ) {
           this.isFormIncomplete = true;
         }
@@ -352,7 +351,7 @@ export default {
     addPersonnelData() {
       const personnelData = {};
       this.questions.forEach((q) => {
-        personnelData[q.questionLabel] = this.pendingData[q.id];
+        personnelData[q.questionLabel] = this.pendingData[q.questionName];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -393,9 +392,9 @@ export default {
       const personnel = {};
 
       // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+      Object.keys(this.qappData).forEach((qName) => {
+        const datum = this.qappData[qName];
+        const question = this.questions.find((q) => q.questionName === qName);
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((personnelField) => {
@@ -413,9 +412,8 @@ export default {
                 }
               });
               personnel[personnelField.valueId][key] = values;
-            } else if (question.questionName === 'responsibilities') {
+            } else if (question.questionName === 'responsibilities' && personnelField.value) {
               const newResponsibilities = [];
-
               personnelField.value.split(',').forEach((pValue) => {
                 newResponsibilities.push({
                   value: pValue.slice(1),
@@ -446,6 +444,7 @@ export default {
         const row = personnel[personnelId];
         this.rows.push({
           ...row,
+          RolesList: row.Roles.map((r) => r.label).join(', '),
           valueId: personnelId,
         });
       });
@@ -453,19 +452,19 @@ export default {
     cleanData() {
       // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
       const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qId) => {
-        if (this.pendingData[qId] !== null && typeof this.pendingData[qId] === 'object') {
+      Object.keys(this.pendingData).forEach((qName) => {
+        if (this.pendingData[qName] !== null && typeof this.pendingData[qName] === 'object') {
           // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qId])) {
-            const codesArray = this.pendingData[qId].map((datum) => {
+          if (Array.isArray(this.pendingData[qName])) {
+            const codesArray = this.pendingData[qName].map((datum) => {
               return datum.code || `${datum.valueId}${datum.value}`;
             });
-            cleanedData[qId] = codesArray.join(',');
+            cleanedData[qName] = codesArray.join(',');
           } else {
-            cleanedData[qId] = this.pendingData[qId].id;
+            cleanedData[qName] = this.pendingData[qName].id;
           }
         } else {
-          cleanedData[qId] = this.pendingData[qId];
+          cleanedData[qName] = this.pendingData[qName];
         }
       });
       return cleanedData;

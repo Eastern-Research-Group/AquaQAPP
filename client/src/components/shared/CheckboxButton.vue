@@ -10,7 +10,7 @@
       :checked="checked"
       :disabled="disabled"
     />
-    <label :id="id" :for="id">{{ name }}</label>
+    <label :id="id" :for="id" :title="title">{{ name }}</label>
   </div>
 </template>
 
@@ -45,6 +45,10 @@ export default {
     },
     disabled: {
       type: Boolean,
+      required: false,
+    },
+    title: {
+      type: String,
       required: false,
     },
   },

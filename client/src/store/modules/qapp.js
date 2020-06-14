@@ -13,9 +13,18 @@ const state = {
 };
 
 const getters = {
-  qappData(state) {
+  data(state, getters, rootState) {
+    return state.data.map((datum) => {
+      const question = rootState.structure.questions.find((q) => q.id === datum.questionId);
+      return {
+        ...datum,
+        questionName: question ? question.questionName : '',
+      };
+    });
+  },
+  qappData(state, getters) {
     // make sure multiple-entry fields are sorted properly before placing in arrays
-    const sortedData = state.data.sort((a, b) => {
+    const sortedData = getters.data.sort((a, b) => {
       if (a.valueId < b.valueId) {
         return -1;
       }
@@ -27,12 +36,12 @@ const getters = {
     const data = {};
     // use questionId: value for single-entry fields, and questionId: [array of values] for multiple-entry
     sortedData.forEach((datum) => {
-      if (Array.isArray(data[datum.questionId])) {
-        data[datum.questionId].push({ valueId: datum.valueId, value: datum.value });
+      if (Array.isArray(data[datum.questionName])) {
+        data[datum.questionName].push({ valueId: datum.valueId, value: datum.value });
       } else if (datum.valueId) {
-        data[datum.questionId] = [{ valueId: datum.valueId, value: datum.value }];
+        data[datum.questionName] = [{ valueId: datum.valueId, value: datum.value }];
       } else {
-        data[datum.questionId] = datum.value;
+        data[datum.questionName] = datum.value;
       }
     });
     return data;
@@ -220,6 +229,7 @@ const actions = {
     });
     commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
   },
+  // Payload consists of array of objects with qappId, questionId, value, and valueId (valueId is optional)
   async save({ commit }, payload) {
     // TODO: implement error handling on each save
     commit('SET_IS_SAVING', true);
@@ -228,8 +238,20 @@ const actions = {
     commit('SET_CURRENT_QAPP', qappRes.data);
     commit('SET_IS_SAVING', false);
   },
-  async updateData({ commit }, payload) {
-    const qappRes = await axios.put('api/qapps/data', payload);
+  async updateData({ commit, rootGetters }, payload) {
+    const updatedValues = {};
+    let qappRes = {};
+    if (typeof payload.values === 'object') {
+      Object.keys(payload.values).forEach((questionName) => {
+        updatedValues[rootGetters['structure/getQuestionId'](questionName)] = payload.values[questionName];
+      });
+      qappRes = await axios.put('api/qapps/data', {
+        ...payload,
+        values: updatedValues,
+      });
+    } else {
+      qappRes = await axios.put('api/qapps/data', payload);
+    }
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
   async deleteData({ commit }, payload) {

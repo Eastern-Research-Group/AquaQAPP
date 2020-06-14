@@ -28,6 +28,7 @@ const state = {
   ],
   customSections: [
     { component: 'PersonnelTable', label: 'Project Organization/Personnel' },
+    { component: 'Concerns', label: 'Water Quality Concerns' },
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
     { component: 'ProjectActivities', label: 'Project Schedule' },

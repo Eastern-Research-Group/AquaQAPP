@@ -216,28 +216,23 @@ module.exports = {
         value: '1,3',
       },
       {
+        questionId: 45,
+        value: '1,3',
+        valueId: 1,
+      },
+      {
+        questionId: 46,
+        value: 'Frequent',
+        valueId: 1,
+      },
+      {
         questionId: 47,
         value: '1',
         valueId: 1,
       },
       {
-        questionId: 48,
-        value: 12,
-        valueId: 1,
-      },
-      {
-        questionId: 51,
-        value: 10,
-        valueId: 1,
-      },
-      {
         questionId: 47,
         value: '3',
-        valueId: 2,
-      },
-      {
-        questionId: 48,
-        value: 8,
         valueId: 2,
       },
       {
@@ -249,9 +244,29 @@ module.exports = {
         value: 'Samples',
       },
       {
-        questionId: 51,
-        value: 10,
+        questionId: 52,
+        value: 'Details',
+        valueId: 1,
+      },
+      {
+        questionId: 52,
+        value: 'Details',
         valueId: 2,
+      },
+      {
+        questionId: 52,
+        value: 'Details',
+        valueId: 3,
+      },
+      {
+        questionId: 52,
+        value: 'Details',
+        valueId: 4,
+      },
+      {
+        questionId: 52,
+        value: 'Details',
+        valueId: 5,
       },
       {
         questionId: 53,
@@ -277,6 +292,31 @@ module.exports = {
         questionId: 57,
         value: 10000,
         valueId: 1,
+      },
+      {
+        questionId: 53,
+        value: 1,
+        valueId: 2,
+      },
+      {
+        questionId: 54,
+        value: 10,
+        valueId: 2,
+      },
+      {
+        questionId: 55,
+        value: 100,
+        valueId: 2,
+      },
+      {
+        questionId: 56,
+        value: 1000,
+        valueId: 2,
+      },
+      {
+        questionId: 57,
+        value: 10000,
+        valueId: 2,
       },
     ];
     const records = qappDataRecords.map((record) => ({
