@@ -115,7 +115,6 @@
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
-import getQuestionIdByName from '@/utils/getQuestionIdByName';
 import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
