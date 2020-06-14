@@ -254,9 +254,9 @@ export default {
       const activity = {};
 
       // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+      Object.keys(this.qappData).forEach((qName) => {
+        const datum = this.qappData[qName];
+        const question = this.questions.find((q) => q.questionName === qName);
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((activityField) => {

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import getQuestionIdByName from '@/utils/getQuestionIdByName';
 
 const state = {
   sections: [],

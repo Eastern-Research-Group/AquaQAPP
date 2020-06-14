@@ -392,9 +392,9 @@ export default {
       const personnel = {};
 
       // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+      Object.keys(this.qappData).forEach((qName) => {
+        const datum = this.qappData[qName];
+        const question = this.questions.find((q) => q.questionName === qName);
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((personnelField) => {
@@ -452,19 +452,19 @@ export default {
     cleanData() {
       // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
       const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qId) => {
-        if (this.pendingData[qId] !== null && typeof this.pendingData[qId] === 'object') {
+      Object.keys(this.pendingData).forEach((qName) => {
+        if (this.pendingData[qName] !== null && typeof this.pendingData[qName] === 'object') {
           // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qId])) {
-            const codesArray = this.pendingData[qId].map((datum) => {
+          if (Array.isArray(this.pendingData[qName])) {
+            const codesArray = this.pendingData[qName].map((datum) => {
               return datum.code || `${datum.valueId}${datum.value}`;
             });
-            cleanedData[qId] = codesArray.join(',');
+            cleanedData[qName] = codesArray.join(',');
           } else {
-            cleanedData[qId] = this.pendingData[qId].id;
+            cleanedData[qName] = this.pendingData[qName].id;
           }
         } else {
-          cleanedData[qId] = this.pendingData[qId];
+          cleanedData[qName] = this.pendingData[qName];
         }
       });
       return cleanedData;
