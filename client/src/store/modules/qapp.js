@@ -13,41 +13,18 @@ const state = {
 };
 
 const getters = {
-  // qappData(state) {
-  //   // make sure multiple-entry fields are sorted properly before placing in arrays
-  //   const sortedData = state.data.sort((a, b) => {
-  //     if (a.valueId < b.valueId) {
-  //       return -1;
-  //     }
-  //     if (a.valueId > b.valueId) {
-  //       return 1;
-  //     }
-  //     return 0;
-  //   });
-  //   const data = {};
-  //   // use questionId: value for single-entry fields, and questionId: [array of values] for multiple-entry
-  //   sortedData.forEach((datum) => {
-  //     if (Array.isArray(data[datum.questionId])) {
-  //       data[datum.questionId].push({ valueId: datum.valueId, value: datum.value });
-  //     } else if (datum.valueId) {
-  //       data[datum.questionId] = [{ valueId: datum.valueId, value: datum.value }];
-  //     } else {
-  //       data[datum.questionId] = datum.value;
-  //     }
-  //   });
-  //   return data;
-  // },
-  dataNew(state, getters, rootState) {
-    return state.data.map((d) => {
+  data(state, getters, rootState) {
+    return state.data.map((datum) => {
+      const question = rootState.structure.questions.find((q) => q.id === datum.questionId);
       return {
-        ...d,
-        questionName: rootState.structure.questions.find((q) => q.id === d.questionId).questionName,
+        ...datum,
+        questionName: question ? question.questionName : '',
       };
     });
   },
   qappData(state, getters) {
     // make sure multiple-entry fields are sorted properly before placing in arrays
-    const sortedData = getters.dataNew.sort((a, b) => {
+    const sortedData = getters.data.sort((a, b) => {
       if (a.valueId < b.valueId) {
         return -1;
       }
