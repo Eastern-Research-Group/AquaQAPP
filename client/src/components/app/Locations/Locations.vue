@@ -115,7 +115,6 @@
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
-import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
@@ -242,13 +241,21 @@ export default {
           }
         });
         location.latLng = [parseFloat(location['Location Latitude']), parseFloat(location['Location Longitude'])];
+
+        // Populate concerns in Locations table (if concerns do not differ by location, use all selected concerns)
         if (location['Water Quality Concerns']) {
           const locationConcerns = this.concerns.filter((concern) =>
             location['Water Quality Concerns'].split(',').includes(concern.code)
           );
           location['Water Quality Concerns'] = locationConcerns;
           location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        } else {
+          const locationConcerns = this.concerns.filter((concern) =>
+            this.qappData.waterConcerns.split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
         }
+
         location['Horizontal Collection Method'] = this.collectionMethods.find(
           (m) => m.id === parseInt(location['Horizontal Collection Method'], 10)
         );
@@ -268,8 +275,6 @@ export default {
       if (this.markers.length) {
         newValueId = Math.max(...this.markers.map((marker) => marker.valueId)) + 1;
       }
-
-      getLocationsTableConcerns(mapData, this.getConcerns());
 
       // Markers array used to display pins and handle location data
       this.markers.push({
@@ -367,7 +372,7 @@ export default {
               return datum.code;
             });
             cleanedData[qName] = codesArray.join(',');
-          } else {
+          } else if (this.pendingData[qName]) {
             cleanedData[qName] = this.pendingData[qName].id;
           }
         } else {
