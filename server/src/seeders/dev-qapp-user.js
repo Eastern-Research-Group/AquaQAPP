@@ -203,7 +203,7 @@ module.exports = {
       },
       {
         questionId: 42,
-        value: '3',
+        value: '18',
         valueId: 1,
       },
       {

@@ -85,7 +85,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
@@ -196,18 +195,6 @@ export default {
     },
     shouldShowConcerns() {
       return this.qappData.differByLocation === 'Y';
-    },
-    getLocationConcerns() {
-      const concerns = [];
-      const selectedConcerns = this.qappData.waterConcerns;
-      if (selectedConcerns) {
-        this.concerns.forEach((concern) => {
-          if (selectedConcerns.indexOf(concern.code) > -1) {
-            concerns.push(concern);
-          }
-        });
-      }
-      return concerns;
     },
     submitData() {
       this.isFormIncomplete = false;

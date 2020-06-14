@@ -183,7 +183,6 @@ import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
 import isEqual from 'lodash/isEqual';
 import uniqBy from 'lodash/uniqBy';
-import sortBy from 'lodash/sortBy';
 import difference from 'lodash/difference';
 // Custom section components - these are used in the "customSections" loop above
 import Concerns from '@/components/app/Concerns';
