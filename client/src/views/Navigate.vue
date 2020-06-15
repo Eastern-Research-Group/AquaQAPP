@@ -25,16 +25,16 @@
       <section class="right column is-three-quarters">
         <Alert v-if="isSectionNotAvailable()" :message="this.sectionNotAvailableMessage" type="error" />
         <form v-else @submit.prevent>
-          <LoadingIndicator v-if="isSaving" message="Saving..." class="dark is-pulled-right" />
           <Button
-            :label="hasSaved ? 'Saved' : 'Save'"
             type="primary"
             class="aq-save-btn is-pulled-right"
             :disabled="hasSaved || checkRequiredFields()"
             :title="getSaveBtnHoverText()"
             @click.native="saveData"
-          />
-
+          >
+            {{ hasSaved ? 'Saved' : 'Save' }}
+            <LoadingIndicator v-if="isSaving" class="light" />
+          </Button>
           <MarkComplete
             @markComplete="markComplete(currentSection.sectionNumber)"
             :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"

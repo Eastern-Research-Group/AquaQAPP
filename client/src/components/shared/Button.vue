@@ -2,6 +2,7 @@
   <button :type="submit ? 'submit' : 'button'" :class="'button ' + getClass()">
     <span v-if="icon" :class="'fa fa-' + icon"></span>
     {{ label }}
+    <slot />
   </button>
 </template>
 
@@ -11,7 +12,6 @@ export default {
   props: {
     label: {
       type: String,
-      required: true,
     },
     type: {
       type: String,
