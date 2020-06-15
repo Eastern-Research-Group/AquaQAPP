@@ -1,7 +1,8 @@
 <template>
   <div class="loading">
     <div class="spinner"></div>
-    <div>{{ message }}</div>
+    <div v-if="message">{{ message }}</div>
+    <div v-else class="is-sr-only">Loading...</div>
   </div>
 </template>
 <script>
@@ -9,7 +10,7 @@ export default {
   props: {
     message: {
       type: String,
-      required: true,
+      required: false,
     },
   },
 };
@@ -20,10 +21,11 @@ export default {
 
 .loading {
   text-align: center !important;
+  line-height: 1;
 
   .spinner {
     display: inline-block;
-    margin: 10px;
+    margin-left: 10px;
     border: 13px solid $gray;
     border-top: 13px solid $lightBlue;
     border-radius: 50%;
@@ -34,6 +36,11 @@ export default {
 
   &.dark .spinner {
     border: 4px solid $darkBlue;
+    border-top: 4px solid $lightBlue;
+  }
+
+  &.light .spinner {
+    border: 4px solid #fff;
     border-top: 4px solid $lightBlue;
   }
 }
