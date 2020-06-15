@@ -10,6 +10,7 @@ const state = {
   doc: null,
   completedSections: [],
   isSaving: false,
+  isGenerating: false,
 };
 
 const getters = {
@@ -90,7 +91,8 @@ const getters = {
       } else if (key && key === 'parameters') {
         const paramIds = datum.value.split(',');
         paramIds.forEach((id) => {
-          if (isNaN(id)) { // eslint-disable-line
+          if (isNaN(id)) {
+            // eslint-disable-line
             // If id is not a number, that means it was entered by user as "Other". Place these in separate array
             if (!dataObj.otherParameters) dataObj.otherParameters = [];
             dataObj.otherParameters.push(id);
@@ -202,6 +204,9 @@ const mutations = {
   SET_IS_SAVING(state, value) {
     state.isSaving = value;
   },
+  SET_IS_GENERATING(state, value) {
+    state.isGenerating = value;
+  },
 };
 
 const actions = {
@@ -260,13 +265,14 @@ const actions = {
   },
   async generate({ commit, getters }) {
     console.log(getters.wordDocData);
+    commit('SET_IS_GENERATING', true);
     const doc = await axios({
       method: 'post',
       url: 'api/generate',
       responseType: 'arraybuffer',
       data: getters.wordDocData,
     });
-
+    commit('SET_IS_GENERATING', false);
     commit('SET_DOC', doc.data);
   },
 };
