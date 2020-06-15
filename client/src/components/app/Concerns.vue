@@ -30,7 +30,7 @@
           :value="option.code"
           :disabled="locationConcerns.indexOf(option.code) > -1"
           :checked="!!(pendingData.waterConcerns && pendingData.waterConcerns.indexOf(option.code) > -1)"
-          @check="$emit('updateData', $event, concernsQuestion)"
+          @check="updateConcern"
         />
       </div>
     </fieldset>
@@ -141,6 +141,28 @@ export default {
     },
     getOptions(refName) {
       return this[refName];
+    },
+    updateConcern(event) {
+      const checkedValue = event.target.value;
+
+      // Unchecking GEHPHYS unchecks GENBENTHIC
+      if (
+        checkedValue === 'GENPHYS' &&
+        this.pendingData.waterConcerns.includes('GENBENTHIC') &&
+        !event.target.checked
+      ) {
+        this.$emit('updateData', { target: { value: 'GENBENTHIC' } }, this.concernsQuestion);
+      }
+      // Checking GENBENTHIC unchecks GENPHYS
+      else if (
+        checkedValue === 'GENBENTHIC' &&
+        !this.pendingData.waterConcerns.includes('GENPHYS') &&
+        event.target.checked
+      ) {
+        this.$emit('updateData', { target: { value: 'GENPHYS' } }, this.concernsQuestion);
+      }
+
+      this.$emit('updateData', event, this.concernsQuestion);
     },
   },
 };
