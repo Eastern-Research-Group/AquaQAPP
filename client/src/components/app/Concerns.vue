@@ -26,12 +26,13 @@
           v-for="option in getOptions('concerns')"
           :key="option.id"
           :id="option.code"
-          :name="option.label"
           :value="option.code"
           :disabled="locationConcerns.indexOf(option.code) > -1"
           :checked="!!(pendingData.waterConcerns && pendingData.waterConcerns.indexOf(option.code) > -1)"
           @check="$emit('updateData', $event, concernsQuestion)"
-        />
+        >
+          <HoverText class="hover-text" :linkText="option.label">{{ option.description }}</HoverText>
+        </CheckboxButton>
       </div>
     </fieldset>
     <fieldset>
@@ -56,7 +57,8 @@
           "
           @check="$emit('updateData', $event, concernsDifferByLocationQuestion)"
           @click.native="triggerConcernsWarningModal(option.code)"
-        />
+        >
+        </CheckboxButton>
       </div>
     </fieldset>
   </div>
@@ -154,5 +156,12 @@ export default {
 
 .btn-container .button {
   margin-right: 1em;
+}
+.hover-text {
+  text-align: center;
+}
+
+.hover-text .hover-link {
+  border-bottom: none !important;
 }
 </style>

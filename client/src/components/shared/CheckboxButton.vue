@@ -10,7 +10,7 @@
       :checked="checked"
       :disabled="disabled"
     />
-    <label :id="id" :for="id" :title="title">{{ name }}</label>
+    <label :id="id" :for="id" :title="title">{{ name }}<slot></slot></label>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     isSingleSelect: {
       type: Boolean,
