@@ -10,6 +10,7 @@ const state = {
   doc: null,
   completedSections: [],
   isSaving: false,
+  isGenerating: false,
 };
 
 const getters = {
@@ -202,6 +203,9 @@ const mutations = {
   SET_IS_SAVING(state, value) {
     state.isSaving = value;
   },
+  SET_IS_GENERATING(state, value) {
+    state.isGenerating = value;
+  },
 };
 
 const actions = {
@@ -260,13 +264,14 @@ const actions = {
   },
   async generate({ commit, getters }) {
     console.log(getters.wordDocData);
+    commit('SET_IS_GENERATING', true);
     const doc = await axios({
       method: 'post',
       url: 'api/generate',
       responseType: 'arraybuffer',
       data: getters.wordDocData,
     });
-
+    commit('SET_IS_GENERATING', false);
     commit('SET_DOC', doc.data);
   },
 };

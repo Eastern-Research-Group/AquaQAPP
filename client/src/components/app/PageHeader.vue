@@ -45,7 +45,9 @@
                 @click.native="generateQapp"
                 :disabled="completedSections.length !== sections.length"
                 :title="getGenerateBtnHoverTxt()"
-              />
+              >
+                <LoadingIndicator v-if="isGenerating" class="light"
+              /></Button>
             </div>
           </div>
         </div>
@@ -57,17 +59,18 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Button from '@/components/shared/Button';
+import LoadingIndicator from '@/components/shared/LoadingIndicator';
 
 export default {
   props: ['userName'],
-  components: { Button },
+  components: { Button, LoadingIndicator },
   data() {
     return {
       isActive: false,
     };
   },
   computed: {
-    ...mapState('qapp', ['completedSections']),
+    ...mapState('qapp', ['completedSections', 'isGenerating']),
     ...mapState('structure', ['sections']),
   },
   methods: {
