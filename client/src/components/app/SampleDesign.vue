@@ -17,18 +17,28 @@
       :title="shouldShowEdit ? 'Edit Sampling Design Information' : 'Add Sampling Design Information'"
     >
       <form ref="form" @submit.prevent="submitData">
-        <div class="field" v-for="question in questions" :key="question.id">
+        <div class="columns">
+          <div class="column is-4">
+            <p>Parameter</p>
+            <p>Location ID</p>
+            <p>Location Name</p>
+            <p>Water Type</p>
+            <p>Concerns</p>
+          </div>
+          <div class="column is-8">
+            <p>{{ selectedRow.parameterLabel }}</p>
+            <p>{{ selectedRow['Location ID'] }}</p>
+            <p>{{ selectedRow['Location Name'] }}</p>
+            <p>{{ selectedRow['Water Type'] }}</p>
+            <p>{{ selectedRow.waterConcerns }}</p>
+          </div>
+        </div>
+        <div
+          class="field"
+          v-for="question in questions.filter((q) => q.questionLabel !== 'Parameter')"
+          :key="question.id"
+        >
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
-          <input
-            v-if="question.dataEntryType === 'text'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.questionName]"
-            class="input"
-            type="text"
-            :placeholder="`Enter ${question.questionLabel}`"
-            :maxlength="question.maxLength"
-            required
-          />
           <input
             v-if="question.dataEntryType === 'number'"
             :id="`question${question.id}`"
@@ -129,6 +139,10 @@ export default {
       rows: [],
       columns: [
         {
+          key: 'Location ID',
+          label: 'Location ID',
+        },
+        {
           key: 'parameterLabel',
           label: 'Parameter/Method',
         },
@@ -139,7 +153,7 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
-    ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales']),
+    ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales', 'concerns']),
     ...mapState('structure', ['sections']),
     ...mapGetters('qapp', ['qappData']),
   },
@@ -231,50 +245,44 @@ export default {
       this.shouldDeleteAll = false;
     },
     refreshData() {
-      this.rows = [];
+      const locationQuestions = this.$store.state.structure.questions.filter(
+        (q) => q.section.sectionLabel === 'Monitoring Locations'
+      );
+      const relevantQuestions = locationQuestions.concat(this.questions);
+      const rows = [];
+      this.qappData.locationId.forEach((val) => {
+        const location = { valueId: val.valueId };
+        relevantQuestions.forEach((q) => {
+          if (this.qappData[q.questionName]) {
+            const qappDataObject = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
+            location[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
+          }
+        });
+        if (location['Water Quality Concerns']) {
+          const locationConcerns = this.concerns.filter((concern) =>
+            location['Water Quality Concerns'].split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        } else {
+          const locationConcerns = this.concerns.filter((concern) =>
+            this.qappData.waterConcerns.split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        }
+        const paramsByLocation = this.qappData.parametersByLocation
+          .find((p) => {
+            return p.valueId === location.valueId;
+          })
+          .value.split(',');
 
-      // Add rows to table if sample data already exists
-      const sampleDesign = {};
-
-      // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qName) => {
-        const datum = this.qappData[qName];
-        const question = this.questions.find((q) => q.questionName === qName);
-        if (Array.isArray(datum) && question) {
-          const key = question.questionLabel;
-          datum.forEach((field) => {
-            if (typeof sampleDesign[field.valueId] === 'undefined') sampleDesign[field.valueId] = {};
-            if (question.refName) {
-              const ref = this[question.refName].find((r) => r.id === parseInt(field.value, 10));
-              if (ref) {
-                sampleDesign[field.valueId][key] = ref;
-              } else if (field.value) {
-                sampleDesign[field.valueId][key] = field.value.split(',');
-              }
-            } else {
-              sampleDesign[field.valueId][key] = field.value;
-            }
+        paramsByLocation.forEach((paramId) => {
+          const parameter = this.parameters.find((p) => {
+            return p.id === parseInt(paramId, 10);
           });
-        }
-      });
-
-      Object.keys(sampleDesign).forEach((sampleDesignId) => {
-        const row = sampleDesign[sampleDesignId];
-        if (Array.isArray(row.Parameter)) {
-          const otherParam = row.Parameter[0];
-          row.Parameter = row.Parameter.reduce((obj, item) => {
-            item = otherParam;
-            obj.label = item;
-            obj.id = item;
-            return obj;
-          }, {});
-        }
-        this.rows.push({
-          ...row,
-          parameterLabel: row.Parameter.label,
-          valueId: sampleDesignId,
+          rows.push({ ...location, parameterLabel: parameter.label });
         });
       });
+      this.rows = rows;
     },
     getOptions(refName) {
       // get reference data array based on refName field in questions table
@@ -293,7 +301,8 @@ export default {
         });
 
         paramIds.forEach((param) => {
-          if (isNaN(param)) { // eslint-disable-line
+          if (isNaN(param)) {
+            // eslint-disable-line
             params.push({
               id: param,
               label: param,
