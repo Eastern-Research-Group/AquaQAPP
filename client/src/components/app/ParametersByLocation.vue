@@ -184,12 +184,27 @@ export default {
       this.shouldShowEdit = true;
     },
     getFilteredParams(params, waterType) {
+      let filteredParams = [];
       if (waterType === 'Fresh') {
-        return sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
+        filteredParams = sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
+      } else {
+        // salt or brackish types are both indicated by the "salt" boolean column
+        filteredParams = sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
       }
-      // salt or brackish types are both indicated by the "salt" boolean column
-      return sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
+      // if an 'Other' parameter is entered, we check if it's not a number since all parameters in database are populated by a number
+      // this will push the entered 'Other' parameter into filteredParams to be displayed on the sidenav by checking if its NaN
+      this.qappData.parameters
+        .split(',')
+        .filter((p) => isNaN(p)) // eslint-disable-line
+        .forEach((p) =>
+          filteredParams.push({
+            id: p,
+            label: p,
+          })
+        );
+      return filteredParams;
     },
+
     isChecked(paramId) {
       return this.checkedParams.indexOf(paramId.toString()) > -1;
     },
