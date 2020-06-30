@@ -3,12 +3,10 @@
     <Table
       :columns="columns"
       :rows="rows"
-      :shouldHaveActionsCol="true"
-      :shouldHaveGlobalActions="true"
+      :shouldHaveSingleAction="'Edit'"
+      :shouldHaveGlobalActions="false"
       noDataMessage="No sampling design information has been added for selected parameters."
       @onEdit="onEdit"
-      @onDelete="onDelete"
-      @onAdd="onAddInfo"
     />
     <SideNav
       v-if="isEnteringInfo"
@@ -88,17 +86,6 @@
         />
       </form>
     </SideNav>
-    <DeleteWarning
-      v-if="shouldShowDelete"
-      title="Delete Sampling Design Information"
-      :itemLabel="
-        shouldDeleteAll
-          ? 'all sampling design information'
-          : `sampling design information for ${selectedRow.parameterLabel}`
-      "
-      @close="() => (shouldShowDelete = false)"
-      @onDelete="deleteData"
-    />
     <UnsavedWarning
       v-if="shouldDisplayUnsavedWarning"
       @onClose="() => (shouldDisplayUnsavedWarning = false)"
@@ -115,7 +102,6 @@ import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
-import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
   name: 'SampleDesign',
@@ -125,7 +111,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
+  components: { Button, SideNav, Table, Multiselect },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -171,23 +157,6 @@ export default {
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
     },
-    onDelete(row) {
-      this.shouldShowDelete = true;
-      if (row) {
-        this.selectedRow = row;
-        this.shouldDeleteAll = false;
-        this.shouldDeleteSingle = true;
-      } else {
-        this.shouldDeleteSingle = false;
-        this.shouldDeleteAll = true;
-      }
-    },
-    async onAddInfo() {
-      this.pendingData = {};
-      this.isEnteringInfo = true;
-      this.selectedRow = null;
-      this.shouldShowEdit = false;
-    },
     submitData() {
       if (this.shouldShowEdit) {
         this.editData();
@@ -228,22 +197,7 @@ export default {
       this.isEnteringInfo = false;
       this.pendingData = {};
     },
-    async deleteData() {
-      let valueIds = [];
-      if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedRow.valueId];
-      } else {
-        valueIds = this.rows.map((r) => r.valueId);
-      }
-      const questionIds = this.questions.map((q) => q.id);
-      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
-      this.refreshData();
-      const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-      this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
-      this.shouldShowDelete = false;
-      this.shouldDeleteSingle = false;
-      this.shouldDeleteAll = false;
-    },
+
     refreshData() {
       const locationQuestions = this.$store.state.structure.questions.filter(
         (q) => q.section.sectionLabel === 'Monitoring Locations'
@@ -274,12 +228,17 @@ export default {
             return p.valueId === location.valueId;
           })
           .value.split(',');
-
         paramsByLocation.forEach((paramId) => {
-          const parameter = this.parameters.find((p) => {
-            return p.id === parseInt(paramId, 10);
-          });
-          rows.push({ ...location, parameterLabel: parameter.label });
+          if (!isNaN(paramId)) {
+            const parameter = this.parameters.find((p) => {
+              if (p.id === parseInt(paramId, 10)) {
+                return p;
+              }
+            });
+            rows.push({ ...location, parameterLabel: parameter.label });
+          } else if (isNaN(paramId)) {
+            rows.push({ ...location, parameterLabel: paramId });
+          }
         });
       });
       this.rows = rows;
