@@ -24,6 +24,9 @@
         <div id="mainNav" :class="'navbar-menu burger' + (isActive ? ' is-active' : '')">
           <div class="navbar-end" v-if="!$auth.check()">
             <div class="navbar-item">
+              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+                <strong>Contact Us</strong>
+              </a>
               <router-link class="navbar-item" to="/">
                 <strong>Log In</strong>
               </router-link>
@@ -34,6 +37,9 @@
           </div>
           <div class="navbar-end" v-if="$auth.check()">
             <div class="navbar-item">
+              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+                <strong>Contact Us</strong>
+              </a>
               <a class="navbar-item" href="/users_guide.pdf" target="_blank">User Guide</a>
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
