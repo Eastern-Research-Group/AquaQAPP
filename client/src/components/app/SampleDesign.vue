@@ -33,7 +33,9 @@
         </div>
         <div
           class="field"
-          v-for="question in questions.filter((q) => q.questionLabel !== 'Parameter')"
+          v-for="question in questions.filter(
+            (q) => q.questionLabel !== 'Parameter' && q.questionLabel !== 'Sample Location ID'
+          )"
           :key="question.id"
         >
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>

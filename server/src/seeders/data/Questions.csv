@@ -54,3 +54,4 @@
 55,13,labDuplicates,Lab Duplicates,,,number,6,FALSE,4
 56,13,labBlanks,Lab Blanks,,,number,6,FALSE,5
 57,13,labSpikes,Lab Spikes,,,number,6,FALSE,6
+58,13,sampleLocationId,Sample Location ID,,,number,6,FALSE,7
