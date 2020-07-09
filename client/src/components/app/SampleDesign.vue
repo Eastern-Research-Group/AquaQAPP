@@ -33,7 +33,7 @@
         </div>
         <div
           class="field"
-          v-for="question in questions.filter((q) => q.questionLabel !== 'Parameter')"
+          v-for="question in questions.filter((q) => q.questionLabel !== 'Parameter' || '')"
           :key="question.id"
         >
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
@@ -45,7 +45,7 @@
             type="number"
             :placeholder="`Enter ${question.questionLabel}`"
             :maxlength="question.maxLength"
-            required
+            :required="question.questionLabel != 'Lab Duplicates' && question.questionLabel != 'Lab Blanks'"
           />
           <textarea
             v-if="question.dataEntryType === 'largeText'"
@@ -132,6 +132,14 @@ export default {
           key: 'parameterLabel',
           label: 'Parameter/Method',
         },
+        {
+          key: 'Lab Blanks',
+          label: 'Lab Blanks',
+        },
+        {
+          key: 'Lab Spikes',
+          label: 'Lab Spikes',
+        },
       ],
     };
   },
@@ -149,6 +157,7 @@ export default {
   methods: {
     onEdit(row) {
       this.selectedRow = row;
+      console.log(row);
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
@@ -202,16 +211,19 @@ export default {
       const locationQuestions = this.$store.state.structure.questions.filter(
         (q) => q.section.sectionLabel === 'Monitoring Locations'
       );
-      const relevantQuestions = locationQuestions.concat(this.questions);
+      // const relevantQuestions = locationQuestions.concat(this.questions);
       const rows = [];
+      let currentValueId = 1;
       this.qappData.locationId.forEach((val) => {
-        const location = { valueId: val.valueId };
-        relevantQuestions.forEach((q) => {
+        const location = {};
+        locationQuestions.forEach((q) => {
           if (this.qappData[q.questionName]) {
+            console.log(this.qappData[q.questionName]);
             const qappDataObject = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
             location[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
           }
         });
+
         if (location['Water Quality Concerns']) {
           const locationConcerns = this.concerns.filter((concern) =>
             location['Water Quality Concerns'].split(',').includes(concern.code)
@@ -223,21 +235,49 @@ export default {
           );
           location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
         }
+
         const paramsByLocation = this.qappData.parametersByLocation
           .find((p) => {
-            return p.valueId === location.valueId;
+            return p.valueId === val.valueId;
           })
           .value.split(',');
         paramsByLocation.forEach((paramId) => {
+          const parameterSampleData = { Parameter: paramId };
+          this.questions.forEach((q) => {
+            if (this.qappData[q.questionName]) {
+              const paramValueObject = this.qappData.sampleParameter.find((datum) => datum.value === paramId);
+              if (paramValueObject) {
+                const qappDataObject = this.qappData[q.questionName].find(
+                  (datum) => datum.valueId === paramValueObject.valueId
+                );
+                parameterSampleData[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
+              }
+            }
+          });
+          console.log(parameterSampleData);
           if (!isNaN(paramId)) {
             const parameter = this.parameters.find((p) => {
               if (p.id === parseInt(paramId, 10)) {
                 return p;
               }
             });
-            rows.push({ ...location, parameterLabel: parameter.label });
+            rows.push({
+              ...location,
+              'Sample Location ID': location['Location ID'],
+              ...parameterSampleData,
+              parameterLabel: parameter.label,
+              valueId: currentValueId,
+            });
+            currentValueId += 1;
           } else if (isNaN(paramId)) {
-            rows.push({ ...location, parameterLabel: paramId });
+            rows.push({
+              ...location,
+              'Sample Location ID': location['Location ID'],
+              ...parameterSampleData,
+              parameterLabel: paramId,
+              valueId: currentValueId,
+            });
+            currentValueId += 1;
           }
         });
       });
