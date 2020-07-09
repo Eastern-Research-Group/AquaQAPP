@@ -157,7 +157,6 @@ export default {
   methods: {
     onEdit(row) {
       this.selectedRow = row;
-      console.log(row);
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
@@ -218,7 +217,6 @@ export default {
         const location = {};
         locationQuestions.forEach((q) => {
           if (this.qappData[q.questionName]) {
-            console.log(this.qappData[q.questionName]);
             const qappDataObject = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
             location[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
           }
@@ -254,7 +252,6 @@ export default {
               }
             }
           });
-          console.log(parameterSampleData);
           if (!isNaN(paramId)) {
             const parameter = this.parameters.find((p) => {
               if (p.id === parseInt(paramId, 10)) {
