@@ -22,38 +22,35 @@
         </div>
 
         <div id="mainNav" :class="'navbar-menu burger' + (isActive ? ' is-active' : '')">
-          <div class="navbar-end" v-if="!$auth.check()">
+          <div class="navbar-end">
             <div class="navbar-item">
               <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
-              <router-link class="navbar-item" to="/">
-                <strong>Log In</strong>
-              </router-link>
-              <router-link class="navbar-item" to="/register">
-                <strong>Register</strong>
-              </router-link>
-            </div>
-          </div>
-          <div class="navbar-end" v-if="$auth.check()">
-            <div class="navbar-item">
-              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
-                <strong>Contact Us</strong>
-              </a>
-              <a class="navbar-item" href="/users_guide.pdf" target="_blank">User Guide</a>
-              <router-link class="navbar-item" to="/dashboard">
-                <strong>Dashboard</strong>
-              </router-link>
-              <Button
-                label="Generate QAPP"
-                type="success"
-                v-if="$route.name === 'navigate'"
-                @click.native="generateQapp"
-                :disabled="completedSections.length !== sections.length"
-                :title="getGenerateBtnHoverTxt()"
-              >
-                <LoadingIndicator v-if="isGenerating" class="light"
-              /></Button>
+              <div v-if="!$auth.check()">
+                <router-link class="navbar-item" to="/">
+                  <strong>Log In</strong>
+                </router-link>
+                <router-link class="navbar-item" to="/register">
+                  <strong>Register</strong>
+                </router-link>
+              </div>
+              <div v-if="$auth.check()">
+                <a class="navbar-item" href="/users_guide.pdf" target="_blank">User Guide</a>
+                <router-link class="navbar-item" to="/dashboard">
+                  <strong>Dashboard</strong>
+                </router-link>
+                <Button
+                  label="Generate QAPP"
+                  type="success"
+                  v-if="$route.name === 'navigate'"
+                  @click.native="generateQapp"
+                  :disabled="completedSections.length !== sections.length"
+                  :title="getGenerateBtnHoverTxt()"
+                >
+                  <LoadingIndicator v-if="isGenerating" class="light"
+                /></Button>
+              </div>
             </div>
           </div>
         </div>

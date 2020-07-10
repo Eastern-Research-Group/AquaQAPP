@@ -17,7 +17,7 @@
 16,4,responsibilities,Responsibilities,,,largeText,4096,FALSE,14,
 17,5,problemDefinition,Problem Definition,,,largeText,4000,TRUE,1,
 18,6,projectBackground,Project Background,,,largeText,4000,TRUE,1,
-19,7,projectDescription,Project Description,,,largeText,4000,TRUE,1,
+19,7,projectObjective,Project Objective,"Do you wish to increase public understanding of a problem, or inform education? Are you conducting a study to inform local action or answer a scientific research question? Do you expect your results to influence legal or regulatory decisions? What action levels or standards will be used to assess your monitoring results, and what action is expected once the results are compared to those metrics? One way to answer this is using 'If/then' statements, as shown in the example text.",,largeText,4000,TRUE,1,
 20,8,activity,Activity,,,largeText,4000,TRUE,1,
 21,8,january,January,,,checkbox,75,TRUE,2,
 22,8,february,February,,,checkbox,75,TRUE,3,
@@ -54,3 +54,7 @@
 55,13,labDuplicates,Lab Duplicates,,,number,6,FALSE,4
 56,13,labBlanks,Lab Blanks,,,number,6,FALSE,5
 57,13,labSpikes,Lab Spikes,,,number,6,FALSE,6
+58,7,projectStudyArea,Project Study Area,"What is the extent of the study area or project site? How are the number and distribution of sampling locations related to the water quality concern and project objectives?",,largeText,4000,FALSE,2,
+59,7,projectTimePeriod,Project Time Period,"Are your water quality concern or project objectives related to a particular season or time of year? How is your sampling frequency related to the project objectives?",,largeText,4000,FALSE,3,
+60,7,projectParameters,Project Parameters,"How are the selected parameters related to your water quality concern and project objectives? If any parameters will be measured by a laboratory, provide the name and certification number of the testing laboratory(ies). See Attachment 3 in the User Guide for guidance on how to select a laboratory.",,largeText,4000,FALSE,4,
+61,7,projectDataUsers,Project Data users,"Who will use the data, and for what purpose? What are your plans for sharing results with external entities?",,largeText,4000,FALSE,5,
