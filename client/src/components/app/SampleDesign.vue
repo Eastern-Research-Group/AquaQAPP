@@ -132,14 +132,6 @@ export default {
           key: 'parameterLabel',
           label: 'Parameter/Method',
         },
-        {
-          key: 'Lab Blanks',
-          label: 'Lab Blanks',
-        },
-        {
-          key: 'Lab Spikes',
-          label: 'Lab Spikes',
-        },
       ],
     };
   },
@@ -210,7 +202,7 @@ export default {
       const locationQuestions = this.$store.state.structure.questions.filter(
         (q) => q.section.sectionLabel === 'Monitoring Locations'
       );
-      // const relevantQuestions = locationQuestions.concat(this.questions);
+
       const rows = [];
       let currentValueId = 1;
       this.qappData.locationId.forEach((val) => {
@@ -252,12 +244,8 @@ export default {
               }
             }
           });
-          if (!isNaN(paramId)) {
-            const parameter = this.parameters.find((p) => {
-              if (p.id === parseInt(paramId, 10)) {
-                return p;
-              }
-            });
+          if (!Number.isNaN(paramId)) {
+            const parameter = this.parameters.find((p) => p.id === parseInt(paramId, 10));
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
@@ -266,7 +254,7 @@ export default {
               valueId: currentValueId,
             });
             currentValueId += 1;
-          } else if (isNaN(paramId)) {
+          } else if (Number.isNaN(paramId)) {
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
@@ -297,8 +285,7 @@ export default {
         });
 
         paramIds.forEach((param) => {
-          if (isNaN(param)) {
-            // eslint-disable-line
+          if (Number.isNaN(param)) {
             params.push({
               id: param,
               label: param,
