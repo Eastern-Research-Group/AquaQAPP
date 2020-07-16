@@ -117,7 +117,7 @@
               </div>
               <Modal v-if="shouldShowExample === question" @close="() => (shouldShowExample = null)">
                 <Tabs
-                  v-if="question.examples.length"
+                  v-if="question.examples.length > 1"
                   :tabs="
                     question.examples.map((example, index) => ({
                       id: `example${index}`,
@@ -131,7 +131,6 @@
                   </template>
                 </Tabs>
                 <p v-else class="has-text-black example-text" ref="exampleText" v-html="getExampleText(question)"></p>
-                <!-- <p v-else class="has-text-black example-text" ref="exampleText" v-html="question"></p> -->
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
@@ -256,8 +255,6 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.currentQuestions);
-
     // Fetch structure data from DB to generate sections and questions on the fly
     await this.$store.dispatch('structure/getSections');
     this.$store.dispatch('structure/getQuestions');
@@ -279,7 +276,6 @@ export default {
   },
   methods: {
     getExampleText(question) {
-      console.log(question);
       if (question.examples.length) {
         return question.examples[0].text;
       }
