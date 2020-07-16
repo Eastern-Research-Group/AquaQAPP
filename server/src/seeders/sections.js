@@ -70,8 +70,7 @@ module.exports = {
       sectionLabel: 'Project Description',
       sectionName: 'projectDescription',
       sectionSort: 8,
-      instructions:
-        'Describe the scope of the research and conditions that will be measured. Briefly describe the field or lab work that will be undertaken for your project and the type of data that will be collected. Explain how your data will be used, including plans for data interpretation and analysis.',
+      instructions: '',
     });
     records.push({
       sectionNumber: '8',

@@ -1,5 +1,6 @@
 <template>
   <div class="clear">
+    <Button label="Select All" type="primary" @click.native="selectAllParams"></Button>
     <Table :columns="columns" :rows="locations" shouldHaveSingleAction="Edit" @onEdit="onEdit" />
     <SideNav
       v-if="isEnteringInfo"
@@ -148,6 +149,18 @@ export default {
     },
   },
   methods: {
+    selectAllParams() {
+      let submit;
+      this.qappData.parameters.split(',').forEach((param) => {
+        if (!this.qappData.parametersByLocation[0].value.includes(param)) {
+          this.updateData({ target: { value: param } }, this.paramQuestion);
+          submit = true;
+        }
+      });
+      if (submit) {
+        this.submitData();
+      }
+    },
     refreshLocationData() {
       const locationQuestions = this.$store.state.structure.questions.filter(
         (q) => q.section.sectionLabel === 'Monitoring Locations'
@@ -221,7 +234,6 @@ export default {
       this.$nextTick().then(() => {
         if (this.$refs.alert) this.$refs.alert.$el.focus();
       });
-
       if (
         !this.isFormIncomplete &&
         (!this.qappData.parametersByLocation ||
