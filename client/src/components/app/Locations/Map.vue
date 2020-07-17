@@ -1,5 +1,13 @@
 <template>
-  <div class="map-container">
+  <div class="aq-map-container">
+    <div class="aq-map-add-btn">
+      <Button
+        :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
+        type="dark"
+        @click.native="$emit('onAddLocation', map)"
+      />
+      <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
+    </div>
     <LMap
       ref="map"
       :zoom="zoom"
@@ -128,9 +136,9 @@ export default {
 </script>
 
 <style lang="scss">
-.map-container {
+.aq-map-container {
   position: relative;
-  height: 400px;
+  height: 500px;
 }
 
 .aq-map-add-btn {
