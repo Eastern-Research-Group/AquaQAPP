@@ -95,6 +95,7 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
+              <span v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</span>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
@@ -110,11 +111,11 @@
                   class="example"
                   label="Example(s)"
                   type="dark"
-                  v-if="question.examples.length"
-                  @click.native="() => (shouldShowExample = true)"
+                  v-if="question.examples.length > 0"
+                  @click.native="() => (shouldShowExample = question)"
                 />
               </div>
-              <Modal v-if="shouldShowExample" @close="() => (shouldShowExample = false)">
+              <Modal v-if="shouldShowExample === question" @close="() => (shouldShowExample = null)">
                 <Tabs
                   v-if="question.examples.length > 1"
                   :tabs="
@@ -129,7 +130,7 @@
                     <p :key="index" class="has-text-black example-text" ref="exampleText" v-html="example.text"></p>
                   </template>
                 </Tabs>
-                <p v-else class="has-text-black example-text" ref="exampleText" v-html="question.examples[0].text"></p>
+                <p v-else class="has-text-black example-text" ref="exampleText" v-html="getExampleText(question)"></p>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
@@ -274,6 +275,12 @@ export default {
     }
   },
   methods: {
+    getExampleText(question) {
+      if (question.examples.length) {
+        return question.examples[0].text;
+      }
+      return '';
+    },
     changeSection(section) {
       this.dataError = null;
       if (this.hasUnsavedData()) {
