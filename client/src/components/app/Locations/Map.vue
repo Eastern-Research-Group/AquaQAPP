@@ -1,13 +1,5 @@
 <template>
-  <div class="aq-map-container">
-    <div class="aq-map-add-btn">
-      <Button
-        :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
-        type="dark"
-        @click.native="$emit('onAddLocation', map)"
-      />
-      <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
-    </div>
+  <div class="map-container">
     <LMap
       ref="map"
       :zoom="zoom"
@@ -16,7 +8,6 @@
       @update:center="centerUpdated"
       @update:bounds="boundsUpdated"
     >
-      <LTileLayer :url="url" />
       <template v-if="markers.length">
         <LMarker v-for="(marker, index) in markers" :key="index" :latLng="marker.latLng">
           <LPopup>
@@ -50,8 +41,9 @@
 
 <script>
 import Button from '@/components/shared/Button';
-import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet';
+import { LMap, LMarker, LPopup } from 'vue2-leaflet';
 import { Icon, featureGroup, marker } from 'leaflet';
+import * as esri from 'esri-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // required by vue2-leaflet library to fix icon issue
@@ -67,7 +59,6 @@ export default {
     LMap,
     LMarker,
     LPopup,
-    LTileLayer,
     Button,
   },
   props: {
@@ -116,15 +107,30 @@ export default {
   mounted() {
     // provide easier access to the leaflet map object
     this.map = this.$refs.map.mapObject;
+
+    // Add satellite imagery layer
+    esri
+      .tiledMapLayer({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+      })
+      .addTo(this.map);
+
+    esri
+      .tiledMapLayer({
+        url:
+          'https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Esri_Hydro_Reference_Overlay/MapServer',
+      })
+      .addTo(this.map);
+
     this.fitMapToMarkers();
   },
 };
 </script>
 
 <style lang="scss">
-.aq-map-container {
+.map-container {
   position: relative;
-  height: 500px;
+  height: 400px;
 }
 
 .aq-map-add-btn {
