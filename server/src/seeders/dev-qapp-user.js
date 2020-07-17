@@ -332,7 +332,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 16; i += 1) {
+    for (let i = 1; i < 17; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,
