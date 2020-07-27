@@ -39,7 +39,7 @@
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <info-header class="info-header" v-if="$auth.check()" />
+              <user-header class="user-header" v-if="$auth.check()" />
               <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
@@ -53,12 +53,12 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import InfoHeader from './InfoHeader';
+import UserHeader from './UserHeader';
 
 export default {
   props: ['userName'],
   components: {
-    InfoHeader,
+    UserHeader,
   },
   data() {
     return {

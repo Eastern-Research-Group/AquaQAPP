@@ -1,5 +1,5 @@
 <template>
-  <section class="info-header">
+  <section class="user-header">
     <div>
       <a
         role="button"
