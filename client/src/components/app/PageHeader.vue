@@ -42,16 +42,7 @@
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <Button
-                label="Generate QAPP"
-                type="success"
-                v-if="$route.name === 'navigate'"
-                @click.native="generateQapp"
-                :disabled="completedSections.length !== sections.length"
-                :title="getGenerateBtnHoverTxt()"
-              >
-                <LoadingIndicator v-if="isGenerating" class="light"
-              /></Button>
+              <info-header class="info-header" v-if="$auth.check()" />
             </div>
           </div>
         </div>
@@ -62,12 +53,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Button from '@/components/shared/Button';
-import LoadingIndicator from '@/components/shared/LoadingIndicator';
+import InfoHeader from './InfoHeader';
 
 export default {
   props: ['userName'],
-  components: { Button, LoadingIndicator },
+  components: {
+    InfoHeader,
+  },
   data() {
     return {
       isActive: false,
@@ -81,15 +73,6 @@ export default {
     ...mapActions('qapp', ['generate']),
     logout() {
       this.$auth.logout();
-    },
-    getGenerateBtnHoverTxt() {
-      if (this.completedSections.length !== this.sections.length)
-        return 'All sections must be marked complete before generating document.';
-      return null;
-    },
-    async generateQapp() {
-      await this.generate();
-      this.showFile(this.$store.state.qapp.doc);
     },
     showFile(blob) {
       // It is necessary to create a new blob object with mime-type explicitly set

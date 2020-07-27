@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div v-if="$auth.ready()" class="app-container">
-      <info-header class="info-header" v-if="$auth.check()" />
+      <!-- <info-header class="info-header" v-if="$auth.check()" /> -->
       <page-header class="page-header" />
       <main class="main-section section has-text-white">
         <progress-bar v-if="$route.name === 'navigate'" />

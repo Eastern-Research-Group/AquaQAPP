@@ -1,62 +1,50 @@
 <template>
   <section class="info-header">
-    <div class="container">
-      <nav class="navbar" role="navigation">
-        <div class="navbar-brand">
-          <a
-            role="button"
-            class="navbar-burger burger"
-            aria-label="menu"
-            aria-expanded="false"
-            data-target="infoNav"
-            @click="isActive = !isActive"
-          >
-            {{ $auth.user().name }}
-          </a>
-        </div>
+    <div>
+      <a
+        role="button"
+        class="tablet-nav navbar-link"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="infoNav"
+        @click="isActive = !isActive"
+      >
+        {{ $auth.user().name }}
+      </a>
 
-        <div id="infoNav" :class="'navbar-menu' + (isActive ? ' is-active' : '')" v-if="isActive">
-          <a class="navbar-item">
+      <div id="infoNav" :class="'tablet-nav navbar-menu' + (isActive ? ' is-active' : '')" v-if="isActive">
+        <a class="navbar-item">
+          Profile
+        </a>
+        <a class="navbar-item" @click="logout">
+          Log Out
+        </a>
+      </div>
+
+      <div class="navbar-item has-dropdown is-hoverable desktop-nav">
+        <a class="navbar-link">
+          {{ $auth.user().name }}
+        </a>
+
+        <div class="navbar-dropdown">
+          <a
+            class="navbar-item"
+            @click="
+              () => {
+                shouldShowProfile = true;
+                error = null;
+                showSuccessProfileMessage = false;
+              }
+            "
+          >
             Profile
           </a>
           <a class="navbar-item" @click="logout">
             Log Out
           </a>
         </div>
+      </div>
 
-        <div class="navbar-menu">
-          <div class="navbar-start">
-            <div class="navbar-item" v-if="title">
-              {{ title }}
-            </div>
-          </div>
-          <div class="navbar-end">
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link has-text-weight-semibold">
-                {{ $auth.user().name }}
-              </a>
-
-              <div class="navbar-dropdown">
-                <a
-                  class="navbar-item"
-                  @click="
-                    () => {
-                      shouldShowProfile = true;
-                      error = null;
-                      showSuccessProfileMessage = false;
-                    }
-                  "
-                >
-                  Profile
-                </a>
-                <a class="navbar-item" @click="logout">
-                  Log Out
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
       <SideNav
         v-if="shouldShowProfile"
         :handleClose="() => (shouldShowProfile = false)"
@@ -327,26 +315,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.info-header {
-  background-color: #e6e6e6;
-  font-size: 0.8em;
-  z-index: 50;
-
-  .navbar,
-  .navbar-brand,
-  .navbar-burger {
-    background-color: #e6e6e6;
-    padding: 0;
-    min-height: unset;
-    height: 2.5em;
-  }
-
-  .navbar-burger {
-    padding: 0.5em;
-  }
-}
-</style>
 
 <style lang="scss">
 @import '../../../static/variables';
@@ -355,5 +323,26 @@ export default {
 }
 .changePassword .modal-content {
   background: $darkBlue;
+}
+
+.tablet-nav {
+  display: none;
+}
+
+.navbar-menu {
+  padding: 0 0 0 0em;
+}
+
+.navbar-menu .is-active {
+  padding-left: 1em;
+}
+@media only screen and (max-width: 1088px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .tablet-nav {
+    display: inline-block;
+  }
 }
 </style>
