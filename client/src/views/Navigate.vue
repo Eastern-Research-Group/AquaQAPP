@@ -3,8 +3,8 @@
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
-        <ul class="menu-list">
-          <li v-for="section in sections" :key="section.id">
+        <ul class="menu-list disable-scrollbars">
+          <li v-for="section in sections" :key="section.id" :id="section.id">
             <button
               :class="
                 `button is-text has-text-white ${
@@ -283,6 +283,10 @@ export default {
     },
     changeSection(section) {
       this.dataError = null;
+      if (window.innerWidth <= 769) {
+        document.getElementById(section.id).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      }
+      console.log(section);
       if (this.hasUnsavedData()) {
         this.shouldDisplayUnsavedWarning = true;
         this.pendingSection = section;
@@ -592,6 +596,26 @@ textarea {
 
 .example-text {
   margin: 0.5em 0.5em 1em 0.5em;
+}
+
+@media only screen and (max-width: 769px) {
+  .is-one-quarter ul {
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+
+  .is-one-quarter li {
+    display: inline-block;
+  }
+
+  .disable-scrollbars {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent; /* Chrome/Safari/Webkit */
+    }
+  }
 }
 </style>
 
