@@ -170,7 +170,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .hover-warning {
   display: inline-block;
   margin-bottom: 1rem;

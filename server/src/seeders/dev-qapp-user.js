@@ -318,6 +318,38 @@ module.exports = {
         value: 10000,
         valueId: 2,
       },
+      {
+        questionId: 58,
+        value: 'Extent of Study Area',
+      },
+      {
+        questionId: 59,
+        value: 'Time of Study Area',
+      },
+      {
+        questionId: 60,
+        value: 'Parameters of Study Area',
+      },
+      {
+        questionId: 61,
+        value: 'Users of Study Area',
+      },
+      {
+        questionId: 62,
+        value: 'Explaining the problem',
+      },
+      {
+        questionId: 63,
+        value: 'Manage Data',
+      },
+      {
+        questionId: 64,
+        value: 'Data Handling',
+      },
+      {
+        questionId: 65,
+        value: 'Management Requirements',
+      },
     ];
     const records = qappDataRecords.map((record) => ({
       ...record,
@@ -332,7 +364,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 16; i += 1) {
+    for (let i = 1; i < 17; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,

@@ -23,34 +23,26 @@
 
         <div id="mainNav" :class="'navbar-menu burger' + (isActive ? ' is-active' : '')">
           <div class="navbar-end">
-            <div class="navbar-item">
+            <div class="navbar-item" v-if="!$auth.check()">
+              <router-link class="navbar-item" to="/">
+                <strong>Log In</strong>
+              </router-link>
+              <router-link class="navbar-item" to="/register">
+                <strong>Register</strong>
+              </router-link>
               <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
-              <div v-if="!$auth.check()">
-                <router-link class="navbar-item" to="/">
-                  <strong>Log In</strong>
-                </router-link>
-                <router-link class="navbar-item" to="/register">
-                  <strong>Register</strong>
-                </router-link>
-              </div>
-              <div v-if="$auth.check()">
-                <a class="navbar-item" href="/users_guide.pdf" target="_blank">User Guide</a>
-                <router-link class="navbar-item" to="/dashboard">
-                  <strong>Dashboard</strong>
-                </router-link>
-                <Button
-                  label="Generate QAPP"
-                  type="success"
-                  v-if="$route.name === 'navigate'"
-                  @click.native="generateQapp"
-                  :disabled="completedSections.length !== sections.length"
-                  :title="getGenerateBtnHoverTxt()"
-                >
-                  <LoadingIndicator v-if="isGenerating" class="light"
-                /></Button>
-              </div>
+            </div>
+            <div class="navbar-item" v-if="$auth.check()">
+              <a class="navbar-item" href="/users_guide.pdf" target="_blank">User Guide</a>
+              <router-link class="navbar-item" to="/dashboard">
+                <strong>Dashboard</strong>
+              </router-link>
+              <user-header class="user-header" v-if="$auth.check()" />
+              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+                <strong>Contact Us</strong>
+              </a>
             </div>
           </div>
         </div>
@@ -61,12 +53,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Button from '@/components/shared/Button';
-import LoadingIndicator from '@/components/shared/LoadingIndicator';
+import UserHeader from './UserHeader';
 
 export default {
   props: ['userName'],
-  components: { Button, LoadingIndicator },
+  components: {
+    UserHeader,
+  },
   data() {
     return {
       isActive: false,
@@ -80,15 +73,6 @@ export default {
     ...mapActions('qapp', ['generate']),
     logout() {
       this.$auth.logout();
-    },
-    getGenerateBtnHoverTxt() {
-      if (this.completedSections.length !== this.sections.length)
-        return 'All sections must be marked complete before generating document.';
-      return null;
-    },
-    async generateQapp() {
-      await this.generate();
-      this.showFile(this.$store.state.qapp.doc);
     },
     showFile(blob) {
       // It is necessary to create a new blob object with mime-type explicitly set
