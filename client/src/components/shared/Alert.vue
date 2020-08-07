@@ -5,6 +5,7 @@
       <span v-if="isMessageHTML" class="alert-message has-text-weight-semibold" :is="contentComp"></span>
       <span v-else-if="!message" class="alert-message has-text-weight-semibold"><slot /></span>
       <span v-else class="alert-message has-text-weight-semibold">{{ message }}</span>
+      <slot />
     </div>
   </div>
 </template>
@@ -26,6 +27,10 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    fadeOut: {
+      type: Boolean,
+      required: false,
     },
   },
   computed: {
