@@ -28,10 +28,6 @@ export default {
       required: false,
       default: false,
     },
-    fadeOut: {
-      type: Boolean,
-      required: false,
-    },
   },
   computed: {
     contentComp() {

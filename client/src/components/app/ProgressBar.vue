@@ -41,15 +41,6 @@ export default {
     ...mapGetters('qapp', ['progress', 'title']),
     ...mapState('qapp', ['completedSections', 'isGenerating', 'generateError']),
     ...mapState('structure', ['sections']),
-    // autoCloseError() {
-    //   if (this.generateError) {
-    //     setTimeout(() => (this.$store.dispatch('qapp/updateGenerateError', false)), 4000); //eslint-disable-line
-    //   }
-    //   return this.generateError;
-    // },
-  },
-  async mounted() {
-    await this.$store.dispatch('qapp/updateGenerateError');
   },
   methods: {
     ...mapActions('qapp', ['generate']),
