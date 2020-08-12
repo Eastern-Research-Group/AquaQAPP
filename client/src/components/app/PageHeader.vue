@@ -35,6 +35,7 @@
               </a>
             </div>
             <div class="navbar-item" v-if="$auth.check()">
+              <a class="navbar-item" href="/users_guide.pdf" target="_blank">Quick Start Guide</a>
               <a class="navbar-item" href="/users_guide.pdf" target="_blank">User Guide</a>
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
