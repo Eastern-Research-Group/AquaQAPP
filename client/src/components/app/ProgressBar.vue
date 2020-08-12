@@ -19,6 +19,11 @@
             <LoadingIndicator v-if="isGenerating" class="light i-block"
           /></Button>
         </div>
+        <Alert v-if="generateError" message="Generation of QAPP failed, please try again" type="error">
+          <button @click="$store.dispatch('qapp/updateGenerateError', false)" class="close-alert">
+            x
+          </button>
+        </Alert>
       </div>
     </div>
   </section>
@@ -28,12 +33,13 @@
 import { mapGetters, mapState, mapActions } from 'vuex';
 import Button from '@/components/shared/Button';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
+import Alert from '@/components/shared/Alert';
 
 export default {
-  components: { Button, LoadingIndicator },
+  components: { Button, LoadingIndicator, Alert },
   computed: {
     ...mapGetters('qapp', ['progress', 'title']),
-    ...mapState('qapp', ['completedSections', 'isGenerating']),
+    ...mapState('qapp', ['completedSections', 'isGenerating', 'generateError']),
     ...mapState('structure', ['sections']),
   },
   methods: {
@@ -45,7 +51,9 @@ export default {
     },
     async generateQapp() {
       await this.generate();
-      this.showFile(this.$store.state.qapp.doc);
+      if (!this.generateError) {
+        this.showFile(this.$store.state.qapp.doc);
+      }
     },
   },
 };
@@ -75,5 +83,29 @@ export default {
 .progress {
   margin: 0 0 0 0 !important;
   width: 10em;
+}
+
+.message.is-danger {
+  background-color: #f9dede;
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  right: 0;
+}
+
+.close-alert {
+  outline: none;
+  border: none;
+  background: none;
+  font-size: 1em;
+  font-weight: bold;
+  opacity: 0.5;
+  color: rgb(205, 9, 48);
+  padding-left: 3em;
+  cursor: pointer;
+}
+
+.close-alert:hover {
+  opacity: 1;
 }
 </style>
