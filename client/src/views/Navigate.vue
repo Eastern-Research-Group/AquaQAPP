@@ -466,12 +466,27 @@ export default {
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
+      } else if (
+        this.currentSection.sectionLabel === 'Sampling Design Details' &&
+        !this.qappData.parametersByLocation
+      ) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage =
+          'You must complete the Parameters By Location section before completing this section';
       }
       return sectionNotAvailable;
     },
     getSaveBtnHoverText() {
-      if (this.currentSection.sectionLabel === 'Monitoring Locations') {
-        return 'Location data are automatically saved upon adding, editing, or deleting.';
+      const tableSections = [
+        'Project Organization/Personnel',
+        'Project Schedule',
+        'Monitoring Location',
+        'Parameters By Location',
+        'Sampling Design Details',
+        'Record Handling Procedures',
+      ];
+      if (tableSections.indexOf(this.currentSection.sectionLabel) > -1) {
+        return 'Data are automatically saved upon adding, editing, or deleting.';
       }
       if (this.checkRequiredFields()) {
         return 'You must complete all required fields before saving.';

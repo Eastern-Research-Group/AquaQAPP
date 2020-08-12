@@ -245,7 +245,7 @@ const actions = {
   async updateData({ commit, rootGetters }, payload) {
     const updatedValues = {};
     let qappRes = {};
-    if (typeof payload.values === 'object') {
+    if (!Array.isArray(payload.values) && typeof payload.values === 'object') {
       Object.keys(payload.values).forEach((questionName) => {
         updatedValues[rootGetters['structure/getQuestionId'](questionName)] = payload.values[questionName];
       });

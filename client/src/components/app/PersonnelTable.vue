@@ -362,6 +362,7 @@ export default {
 
       this.rows.push({
         ...personnelData,
+        RolesList: personnelData.Roles.map((r) => r.label).join(', '),
         valueId: newValueId,
       });
 
@@ -404,11 +405,8 @@ export default {
               personnelField.value.split(',').forEach((value) => {
                 if (value.includes(' - ')) {
                   values.push({ code: value, label: value.slice(4), valueId: parseInt(value.slice(0, 1), 10) });
-                }
-                if (!value.includes(' - ')) {
-                  values.push(
-                    this.roles.find((r) => personnelField.value && personnelField.value.indexOf(r.code) > -1)
-                  );
+                } else {
+                  values.push(this.roles.find((r) => r.code === value));
                 }
               });
               personnel[personnelField.valueId][key] = values;

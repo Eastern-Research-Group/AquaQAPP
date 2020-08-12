@@ -197,9 +197,18 @@ module.exports = {
           const qappDatum = await QappDatum.findOne({
             where: { qappId: req.body.qappId, questionId: req.body.questionId, valueId: datum.valueId },
           });
-          await qappDatum.update({
-            value: datum.value,
-          });
+          if (qappDatum) {
+            await qappDatum.update({
+              value: datum.value,
+            });
+          } else {
+            await QappDatum.create({
+              qappId: req.body.qappId,
+              questionId: req.body.questionId,
+              valueId: datum.valueId,
+              value: datum.value,
+            });
+          }
         });
       } else {
         Object.keys(req.body.values).forEach(async (qId) => {
