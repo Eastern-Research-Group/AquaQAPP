@@ -3,7 +3,9 @@
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
-        <ul class="menu-list disable-scrollbars">
+        <div v-if="currentNavPosition" class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
+        <div class="overlay-start"><i class="fas fa-arrow-circle-left arrow-left"></i></div>
+        <ul ref="navScroll" class="menu-list disable-scrollbars">
           <li v-for="section in sections" :key="section.id" :id="section.id">
             <button
               :class="
@@ -237,6 +239,13 @@ export default {
     ...mapState('ref', ['yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
     ...mapGetters('structure', ['getQuestionId']),
+    currentNavPosition() {
+      console.log('navScroll');
+      console.log(this.$refs);
+      console.log(this.$refs.navScroll);
+      return true;
+    },
+    // return (20 / 100) * this.$refs.navScroll.scrollWidth - this.$refs.navScroll.clientWidth;
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -598,6 +607,12 @@ textarea {
   margin: 0.5em 0.5em 1em 0.5em;
 }
 
+@media only screen and (max-width: 890px) {
+  .menu {
+    border-right: none;
+  }
+}
+
 @media only screen and (max-width: 769px) {
   .is-one-quarter ul {
     overflow-x: scroll;
@@ -616,6 +631,50 @@ textarea {
       background: transparent; /* Chrome/Safari/Webkit */
     }
   }
+}
+
+.overlay-end {
+  position: absolute;
+  // width: 6em;
+  width: 1em;
+  height: 100%;
+  // background: linear-gradient(90deg, rgba(2, 0, 36, 0) 1%, rgba(22, 80, 172, 1) 50%);
+  right: 0;
+  top: 0;
+  z-index: 1;
+  text-align: right;
+}
+
+.overlay-start {
+  position: absolute;
+  // width: 6em;
+  width: 1em;
+  height: 100%;
+  // background: linear-gradient(90deg, rgba(22, 80, 172, 1) 50%, rgba(2, 0, 36, 0) 100%);
+  left: 0;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+}
+
+.is-one-quarter {
+  position: relative;
+}
+
+.arrow-right {
+  opacity: 0.5;
+  position: relative;
+  // top: 47%;
+  transform: translateY(-50%);
+  padding-right: 1em;
+}
+
+.arrow-left {
+  opacity: 0.5;
+  position: relative;
+  // top: 47%;
+  transform: translateY(-50%);
+  padding-left: 1em;
 }
 </style>
 
