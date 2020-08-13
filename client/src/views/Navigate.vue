@@ -41,9 +41,9 @@
             :disabled="checkRequiredFields()"
           />
 
-          <label v-if="currentSection.sectionName === 'gettingStarted'" class="label is-size-4">{{
-            currentSection.sectionLabel
-          }}</label>
+          <h2 class="label is-size-4">
+            {{ currentSection.sectionLabel }}
+          </h2>
           <p
             v-if="currentSection.sectionName === 'gettingStarted'"
             class="instructions content"
@@ -59,9 +59,18 @@
           >
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
-              <label :for="`question${question.id}`" class="label is-size-4">{{ question.questionLabel }}</label>
+              <label
+                v-if="question.questionLabel !== currentSection.sectionLabel"
+                :for="`question${question.id}`"
+                class="label is-size-5"
+                >{{ question.questionLabel }}</label
+              >
               <!-- only display instructions under first question label, since it is for the whole seciton -->
-              <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
+              <p
+                v-if="index === 0 && currentSection.instructions"
+                class="instructions content"
+                v-html="currentSection.instructions"
+              ></p>
               <input
                 v-if="question.dataEntryType === 'text'"
                 :id="`question${question.id}`"
@@ -136,9 +145,6 @@
             </div>
           </div>
           <div v-if="customSection">
-            <h2 class="label is-size-4">
-              {{ currentSection.sectionLabel }}
-            </h2>
             <p class="instructions content" v-html="currentSection.instructions"></p>
             <component
               :is="customSection.component"
