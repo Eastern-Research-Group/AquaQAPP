@@ -174,7 +174,7 @@ export default {
       return this.questions;
     },
     selectedLocationHasParameters() {
-      if (!this.selectedLocation) return false;
+      if (!this.selectedLocation || !this.qappData.parametersByLocation) return false;
 
       const paramsByLocationDatum = this.qappData.parametersByLocation.find(
         (p) => p.valueId === this.selectedLocation.valueId
@@ -183,6 +183,7 @@ export default {
       return false;
     },
     anyLocationHasParameters() {
+      if (!this.qappData.parametersByLocation) return false;
       let hasParams = false;
       this.markers.forEach((marker) => {
         if (this.qappData.parametersByLocation.find((p) => p.valueId === marker.valueId)) {

@@ -229,6 +229,14 @@ export default {
       yesNoOptions: ['Yes', 'No'],
       removedParamsWithLocations: [],
       shouldDisplayParamLocationWarning: false,
+      tableSections: [
+        'Project Organization/Personnel',
+        'Project Schedule',
+        'Monitoring Location',
+        'Parameters By Location',
+        'Sampling Design Details',
+        'Record Handling Procedures',
+      ],
     };
   },
   computed: {
@@ -292,15 +300,13 @@ export default {
         // Set initial pending data based on existing qapp data
         this.pendingData = Object.assign({}, this.qappData);
         /*
-         * Locations are automatically saved upon adding or editing, so hasSaved will always be true
+         * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
          */
         if (
-          section.sectionLabel === 'Monitoring Locations' ||
+          this.tableSections.indexOf(section.sectionLabel) > -1 ||
           this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
-            this.currentQuestions.length ||
-          section.sectionLabel === 'Project Organization/Personnel' ||
-          section.sectionLabel === 'Parameters By Location'
+            this.currentQuestions.length
         ) {
           this.hasSaved = true;
         }
@@ -477,15 +483,7 @@ export default {
       return sectionNotAvailable;
     },
     getSaveBtnHoverText() {
-      const tableSections = [
-        'Project Organization/Personnel',
-        'Project Schedule',
-        'Monitoring Location',
-        'Parameters By Location',
-        'Sampling Design Details',
-        'Record Handling Procedures',
-      ];
-      if (tableSections.indexOf(this.currentSection.sectionLabel) > -1) {
+      if (this.tableSections.indexOf(this.currentSection.sectionLabel) > -1) {
         return 'Data are automatically saved upon adding, editing, or deleting.';
       }
       if (this.checkRequiredFields()) {

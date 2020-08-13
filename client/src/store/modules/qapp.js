@@ -11,6 +11,7 @@ const state = {
   completedSections: [],
   isSaving: false,
   isGenerating: false,
+  generateError: false,
 };
 
 const getters = {
@@ -206,9 +207,15 @@ const mutations = {
   SET_IS_GENERATING(state, value) {
     state.isGenerating = value;
   },
+  SET_GENERATE_ERROR(state, value) {
+    state.generateError = value;
+  },
 };
 
 const actions = {
+  async updateGenerateError({ commit }, boolean) {
+    commit('SET_GENERATE_ERROR', boolean);
+  },
   async get({ commit }, id) {
     commit('CLEAR_CURRENT_QAPP', []);
     commit('SET_IS_FETCHING', true);
@@ -265,14 +272,22 @@ const actions = {
   async generate({ commit, getters }) {
     console.log(getters.wordDocData);
     commit('SET_IS_GENERATING', true);
-    const doc = await axios({
-      method: 'post',
-      url: 'api/generate',
-      responseType: 'arraybuffer',
-      data: getters.wordDocData,
-    });
-    commit('SET_IS_GENERATING', false);
-    commit('SET_DOC', doc.data);
+    commit('SET_GENERATE_ERROR', false);
+    try {
+      const doc = await axios({
+        method: 'post',
+        url: 'api/generate',
+        responseType: 'arraybuffer',
+        data: getters.wordDocData,
+      });
+      commit('SET_GENERATE_ERROR', false);
+      commit('SET_IS_GENERATING', false);
+      commit('SET_DOC', doc.data);
+    } catch (error) {
+      commit('SET_GENERATE_ERROR', true);
+      commit('SET_IS_GENERATING', false);
+      console.log(Object.keys(error), error.message);
+    }
   },
 };
 
