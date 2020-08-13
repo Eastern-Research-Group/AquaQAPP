@@ -51,7 +51,7 @@
           ></p>
 
           <div
-            class="field"
+            class="field field-padding-bottom"
             v-for="(question, index) in currentQuestions.filter(
               (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
             )"
@@ -612,15 +612,13 @@ textarea {
 .example-text {
   margin: 0.5em 0.5em 1em 0.5em;
 }
-</style>
 
-<style>
 .example-text ul {
   list-style: inherit;
   margin-left: 45px;
 }
 
-.field:not(:last-child) {
+.field-padding-bottom:not(:last-child) {
   margin-bottom: 2.25rem;
 }
 </style>
