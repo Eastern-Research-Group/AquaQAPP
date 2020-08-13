@@ -176,6 +176,11 @@ export default {
             location['Water Quality Concerns'].split(',').includes(concern.code)
           );
           location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        } else {
+          const locationConcerns = this.concerns.filter((concern) =>
+            this.qappData.waterConcerns.split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
         }
         locations.push(location);
       });
