@@ -66,7 +66,11 @@
                 >{{ question.questionLabel }}</label
               >
               <!-- only display instructions under first question label, since it is for the whole seciton -->
-              <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
+              <p
+                v-if="index === 0 && currentSection.instructions"
+                class="instructions content"
+                v-html="currentSection.instructions"
+              ></p>
               <input
                 v-if="question.dataEntryType === 'text'"
                 :id="`question${question.id}`"
