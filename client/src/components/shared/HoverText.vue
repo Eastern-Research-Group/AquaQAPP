@@ -37,7 +37,7 @@ export default {
   .hover-info {
     //  Positioning
     position: absolute;
-    bottom: 100%;
+    top: 125%;
     left: 0;
     font-weight: normal;
 
@@ -63,7 +63,7 @@ export default {
     &::after {
       //  Positioning
       position: absolute;
-      top: 100%;
+      bottom: 100%;
       left: 20%;
 
       //  Box-model
@@ -72,8 +72,7 @@ export default {
       //  Typography
       border-width: 5px;
       border-style: solid;
-      border-color: #fff transparent transparent transparent;
-
+      border-color: transparent transparent #fff transparent;
       //  Visual
       //  Misc
       content: ' ';

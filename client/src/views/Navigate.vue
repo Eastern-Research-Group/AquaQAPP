@@ -104,7 +104,7 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
-              <span v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</span>
+              <p class="instructions" v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</p>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
@@ -618,5 +618,9 @@ textarea {
 .example-text ul {
   list-style: inherit;
   margin-left: 45px;
+}
+
+.field:not(:last-child) {
+  margin-bottom: 2.25rem;
 }
 </style>
