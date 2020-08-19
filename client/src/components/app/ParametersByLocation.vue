@@ -26,15 +26,8 @@
         <fieldset>
           <legend>Selected {{ selectedLocation['Water Type'] }} Parameters</legend>
           <div class="border-container">
-            <div
-              v-if="getFilteredParams(selectedParams, selectedLocation['Water Type']).length"
-              class="field checkboxes-container"
-            >
-              <div
-                v-for="param in getFilteredParams(selectedParams, selectedLocation['Water Type'])"
-                class="field"
-                :key="param.id"
-              >
+            <div v-if="getFilteredParams().length" class="field checkboxes-container">
+              <div v-for="param in getFilteredParams()" class="field" :key="param.id">
                 <input
                   class="is-checkradio is-info"
                   :id="param.id"
@@ -108,7 +101,7 @@ export default {
       isEnteringInfo: false,
       shouldShowEdit: false,
       isFormIncomplete: false,
-      selectedLocation: null,
+      selectedLocation: {},
       locations: [],
       pendingData: {},
       columns: [
@@ -144,22 +137,25 @@ export default {
       const selectedParams = this.qappData.parameters.split(',');
       return this.parameters.filter((param) => selectedParams.includes(param.id.toString()));
     },
-    checkedParams() {
-      return this.pendingData[this.paramQuestion.id] ? this.pendingData[this.paramQuestion.id].split(',') : [];
-    },
   },
   methods: {
-    selectAllParams() {
-      let submit;
-      this.qappData.parameters.split(',').forEach((param) => {
-        if (!this.qappData.parametersByLocation[0].value.includes(param)) {
-          this.updateData({ target: { value: param } }, this.paramQuestion);
-          submit = true;
-        }
+    async selectAllParams() {
+      const updatedValues = this.locations.map((location) => {
+        this.selectedLocation = location;
+        return {
+          valueId: location.valueId,
+          value: this.getFilteredParams()
+            .map((p) => p.id)
+            .join(','),
+        };
       });
-      if (submit) {
-        this.submitData();
-      }
+      this.selectedLocation = {};
+      await this.$store.dispatch('qapp/updateData', {
+        qappId: this.qappId,
+        questionId: this.paramQuestion.id,
+        values: updatedValues,
+      });
+      this.refreshLocationData();
     },
     refreshLocationData() {
       const locationQuestions = this.$store.state.structure.questions.filter(
@@ -180,6 +176,11 @@ export default {
             location['Water Quality Concerns'].split(',').includes(concern.code)
           );
           location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        } else {
+          const locationConcerns = this.concerns.filter((concern) =>
+            this.qappData.waterConcerns.split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
         }
         locations.push(location);
       });
@@ -196,7 +197,9 @@ export default {
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
     },
-    getFilteredParams(params, waterType) {
+    getFilteredParams() {
+      const params = this.selectedParams;
+      const waterType = this.selectedLocation['Water Type'];
       let filteredParams = [];
       if (waterType === 'Fresh') {
         filteredParams = sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
@@ -216,13 +219,6 @@ export default {
           })
         );
       return filteredParams;
-    },
-
-    isChecked(paramId) {
-      return this.checkedParams.indexOf(paramId.toString()) > -1;
-    },
-    shouldShowConcerns() {
-      return this.qappData.differByLocation === 'Y';
     },
     submitData() {
       this.isFormIncomplete = false;

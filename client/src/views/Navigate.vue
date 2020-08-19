@@ -3,9 +3,9 @@
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
-        <div v-if="currentNavPosition" class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
+        <div class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
         <div class="overlay-start"><i class="fas fa-arrow-circle-left arrow-left"></i></div>
-        <ul ref="navScroll" class="menu-list disable-scrollbars">
+        <ul class="menu-list disable-scrollbars">
           <li v-for="section in sections" :key="section.id" :id="section.id">
             <button
               :class="
@@ -43,9 +43,9 @@
             :disabled="checkRequiredFields()"
           />
 
-          <label v-if="currentSection.sectionName === 'gettingStarted'" class="label is-size-4">{{
-            currentSection.sectionLabel
-          }}</label>
+          <h2 class="label is-size-4">
+            {{ currentSection.sectionLabel }}
+          </h2>
           <p
             v-if="currentSection.sectionName === 'gettingStarted'"
             class="instructions content"
@@ -53,7 +53,7 @@
           ></p>
 
           <div
-            class="field"
+            class="field field-padding-bottom"
             v-for="(question, index) in currentQuestions.filter(
               (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
             )"
@@ -61,9 +61,18 @@
           >
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
-              <label :for="`question${question.id}`" class="label is-size-4">{{ question.questionLabel }}</label>
+              <label
+                v-if="question.questionLabel !== currentSection.sectionLabel"
+                :for="`question${question.id}`"
+                class="label is-size-5"
+                >{{ question.questionLabel }}</label
+              >
               <!-- only display instructions under first question label, since it is for the whole seciton -->
-              <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
+              <p
+                v-if="index === 0 && currentSection.instructions"
+                class="instructions content"
+                v-html="currentSection.instructions"
+              ></p>
               <input
                 v-if="question.dataEntryType === 'text'"
                 :id="`question${question.id}`"
@@ -97,7 +106,7 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
-              <span v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</span>
+              <p class="instructions" v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</p>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
@@ -138,9 +147,6 @@
             </div>
           </div>
           <div v-if="customSection">
-            <h2 class="label is-size-4">
-              {{ currentSection.sectionLabel }}
-            </h2>
             <p class="instructions content" v-html="currentSection.instructions"></p>
             <component
               :is="customSection.component"
@@ -231,6 +237,14 @@ export default {
       yesNoOptions: ['Yes', 'No'],
       removedParamsWithLocations: [],
       shouldDisplayParamLocationWarning: false,
+      tableSections: [
+        'Project Organization/Personnel',
+        'Project Schedule',
+        'Monitoring Location',
+        'Parameters By Location',
+        'Sampling Design Details',
+        'Record Handling Procedures',
+      ],
     };
   },
   computed: {
@@ -239,13 +253,6 @@ export default {
     ...mapState('ref', ['yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
     ...mapGetters('structure', ['getQuestionId']),
-    currentNavPosition() {
-      console.log('navScroll');
-      console.log(this.$refs);
-      console.log(this.$refs.navScroll);
-      return true;
-    },
-    // return (20 / 100) * this.$refs.navScroll.scrollWidth - this.$refs.navScroll.clientWidth;
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -305,15 +312,13 @@ export default {
         // Set initial pending data based on existing qapp data
         this.pendingData = Object.assign({}, this.qappData);
         /*
-         * Locations are automatically saved upon adding or editing, so hasSaved will always be true
+         * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
          */
         if (
-          section.sectionLabel === 'Monitoring Locations' ||
+          this.tableSections.indexOf(section.sectionLabel) > -1 ||
           this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
-            this.currentQuestions.length ||
-          section.sectionLabel === 'Project Organization/Personnel' ||
-          section.sectionLabel === 'Parameters By Location'
+            this.currentQuestions.length
         ) {
           this.hasSaved = true;
         }
@@ -479,12 +484,19 @@ export default {
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
+      } else if (
+        this.currentSection.sectionLabel === 'Sampling Design Details' &&
+        !this.qappData.parametersByLocation
+      ) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage =
+          'You must complete the Parameters By Location section before completing this section';
       }
       return sectionNotAvailable;
     },
     getSaveBtnHoverText() {
-      if (this.currentSection.sectionLabel === 'Monitoring Locations') {
-        return 'Location data are automatically saved upon adding, editing, or deleting.';
+      if (this.tableSections.indexOf(this.currentSection.sectionLabel) > -1) {
+        return 'Data are automatically saved upon adding, editing, or deleting.';
       }
       if (this.checkRequiredFields()) {
         return 'You must complete all required fields before saving.';
@@ -607,6 +619,20 @@ textarea {
   margin: 0.5em 0.5em 1em 0.5em;
 }
 
+.example-text ul {
+  list-style: inherit;
+  margin-left: 45px;
+}
+
+.field-padding-bottom:not(:last-child) {
+  margin-bottom: 2.25rem;
+}
+
+.overlay-end,
+.overlay-start {
+  display: none;
+}
+
 @media only screen and (max-width: 890px) {
   .menu {
     border-right: none;
@@ -614,6 +640,44 @@ textarea {
 }
 
 @media only screen and (max-width: 769px) {
+  .is-one-quarter {
+    position: relative;
+  }
+
+  .overlay-end {
+    display: block;
+    position: absolute;
+    width: 1em;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    text-align: right;
+  }
+
+  .overlay-start {
+    display: block;
+    position: absolute;
+    width: 1em;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    text-align: left;
+  }
+
+  .arrow-right {
+    opacity: 0.5;
+    position: relative;
+    transform: translateY(-50%);
+    padding-right: 1em;
+  }
+
+  .arrow-left {
+    opacity: 0.5;
+    position: relative;
+    transform: translateY(-50%);
+    padding-left: 1em;
+  }
+
   .is-one-quarter ul {
     overflow-x: scroll;
     white-space: nowrap;
@@ -624,63 +688,12 @@ textarea {
   }
 
   .disable-scrollbars {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     &::-webkit-scrollbar {
       width: 0px;
-      background: transparent; /* Chrome/Safari/Webkit */
+      background: transparent;
     }
   }
-}
-
-.overlay-end {
-  position: absolute;
-  // width: 6em;
-  width: 1em;
-  height: 100%;
-  // background: linear-gradient(90deg, rgba(2, 0, 36, 0) 1%, rgba(22, 80, 172, 1) 50%);
-  right: 0;
-  top: 0;
-  z-index: 1;
-  text-align: right;
-}
-
-.overlay-start {
-  position: absolute;
-  // width: 6em;
-  width: 1em;
-  height: 100%;
-  // background: linear-gradient(90deg, rgba(22, 80, 172, 1) 50%, rgba(2, 0, 36, 0) 100%);
-  left: 0;
-  top: 0;
-  z-index: 1;
-  text-align: left;
-}
-
-.is-one-quarter {
-  position: relative;
-}
-
-.arrow-right {
-  opacity: 0.5;
-  position: relative;
-  // top: 47%;
-  transform: translateY(-50%);
-  padding-right: 1em;
-}
-
-.arrow-left {
-  opacity: 0.5;
-  position: relative;
-  // top: 47%;
-  transform: translateY(-50%);
-  padding-left: 1em;
-}
-</style>
-
-<style>
-.example-text ul {
-  list-style: inherit;
-  margin-left: 45px;
 }
 </style>

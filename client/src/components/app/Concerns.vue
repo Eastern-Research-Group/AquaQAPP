@@ -146,9 +146,16 @@ export default {
     },
     updateConcern(event) {
       const checkedValue = event.target.value;
-
+      // Checks to see if 'waterConcerns' exists as an empty AquaQAPP wwill not have 'waterConcerns' until an item is selected
+      if (!('waterConcerns' in this.pendingData) && (checkedValue === 'GENPHYS' || checkedValue === 'GENBENTHIC')) {
+        if (checkedValue === 'GENPHYS' && !event.target.checked) {
+          this.$emit('updateData', { target: { value: 'GENBENTHIC' } }, this.concernsQuestion);
+        } else if (checkedValue === 'GENBENTHIC' && event.target.checked) {
+          this.$emit('updateData', { target: { value: 'GENPHYS' } }, this.concernsQuestion);
+        }
+      }
       // Unchecking GEHPHYS unchecks GENBENTHIC
-      if (
+      else if (
         checkedValue === 'GENPHYS' &&
         this.pendingData.waterConcerns.includes('GENBENTHIC') &&
         !event.target.checked

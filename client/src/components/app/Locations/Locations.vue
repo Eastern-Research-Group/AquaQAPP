@@ -174,7 +174,7 @@ export default {
       return this.questions;
     },
     selectedLocationHasParameters() {
-      if (!this.selectedLocation) return false;
+      if (!this.selectedLocation || !this.qappData.parametersByLocation) return false;
 
       const paramsByLocationDatum = this.qappData.parametersByLocation.find(
         (p) => p.valueId === this.selectedLocation.valueId
@@ -183,6 +183,7 @@ export default {
       return false;
     },
     anyLocationHasParameters() {
+      if (!this.qappData.parametersByLocation) return false;
       let hasParams = false;
       this.markers.forEach((marker) => {
         if (this.qappData.parametersByLocation.find((p) => p.valueId === marker.valueId)) {
@@ -229,38 +230,45 @@ export default {
         this.map.off('click');
       }
     },
+    getLocationConcerns(location) {
+      if (Array.isArray(location['Water Quality Concerns'])) {
+        return location['Water Quality Concerns'].map((c) => c.label).join(', ');
+      }
+      if (location['Water Quality Concerns']) {
+        const locationConcerns = this.concerns.filter((concern) =>
+          location['Water Quality Concerns'].split(',').includes(concern.code)
+        );
+        location['Water Quality Concerns'] = locationConcerns;
+        return locationConcerns.map((c) => c.label).join(', ');
+      }
+      const locationConcerns = this.concerns.filter((concern) =>
+        this.qappData.waterConcerns.split(',').includes(concern.code)
+      );
+      return locationConcerns.map((c) => c.label).join(', ');
+    },
     refreshLocationData() {
       const locations = [];
-      this.qappData.locationId.forEach((val) => {
-        const location = { valueId: val.valueId };
-        this.questions.forEach((q) => {
-          if (this.qappData[q.questionName]) {
-            location[q.questionLabel] = this.qappData[q.questionName].find(
-              (datum) => datum.valueId === val.valueId
-            ).value;
-          }
+      if (this.qappData.locationId) {
+        this.qappData.locationId.forEach((val) => {
+          const location = { valueId: val.valueId };
+          this.questions.forEach((q) => {
+            if (this.qappData[q.questionName]) {
+              location[q.questionLabel] = this.qappData[q.questionName].find(
+                (datum) => datum.valueId === val.valueId
+              ).value;
+            }
+          });
+          location.latLng = [parseFloat(location['Location Latitude']), parseFloat(location['Location Longitude'])];
+
+          // Populate concerns in Locations table (if concerns do not differ by location, use all selected concerns)
+          location.waterConcerns = this.getLocationConcerns(location);
+
+          location['Horizontal Collection Method'] = this.collectionMethods.find(
+            (m) => m.id === parseInt(location['Horizontal Collection Method'], 10)
+          );
+          locations.push(location);
         });
-        location.latLng = [parseFloat(location['Location Latitude']), parseFloat(location['Location Longitude'])];
-
-        // Populate concerns in Locations table (if concerns do not differ by location, use all selected concerns)
-        if (location['Water Quality Concerns']) {
-          const locationConcerns = this.concerns.filter((concern) =>
-            location['Water Quality Concerns'].split(',').includes(concern.code)
-          );
-          location['Water Quality Concerns'] = locationConcerns;
-          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
-        } else {
-          const locationConcerns = this.concerns.filter((concern) =>
-            this.qappData.waterConcerns.split(',').includes(concern.code)
-          );
-          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
-        }
-
-        location['Horizontal Collection Method'] = this.collectionMethods.find(
-          (m) => m.id === parseInt(location['Horizontal Collection Method'], 10)
-        );
-        locations.push(location);
-      });
+      }
       this.markers = locations;
     },
     addLocationData() {
@@ -280,6 +288,7 @@ export default {
       this.markers.push({
         ...mapData,
         latLng: [this.pendingData.locationLat, this.pendingData.locationLong],
+        waterConcerns: this.getLocationConcerns(mapData),
         valueId: newValueId,
       });
 
