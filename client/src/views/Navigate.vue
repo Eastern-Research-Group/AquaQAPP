@@ -302,7 +302,6 @@ export default {
       if (window.innerWidth <= 769) {
         document.getElementById(section.id).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
-      console.log(section);
       if (this.hasUnsavedData()) {
         this.shouldDisplayUnsavedWarning = true;
         this.pendingSection = section;
