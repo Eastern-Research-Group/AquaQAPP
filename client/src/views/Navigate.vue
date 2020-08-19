@@ -3,8 +3,10 @@
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
-        <ul class="menu-list">
-          <li v-for="section in sections" :key="section.id">
+        <div class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
+        <div class="overlay-start"><i class="fas fa-arrow-circle-left arrow-left"></i></div>
+        <ul class="menu-list disable-scrollbars">
+          <li v-for="section in sections" :key="section.id" :id="section.id">
             <button
               :class="
                 `button is-text has-text-white ${
@@ -297,6 +299,9 @@ export default {
     },
     changeSection(section) {
       this.dataError = null;
+      if (window.innerWidth <= 769) {
+        document.getElementById(section.id).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      }
       if (this.hasUnsavedData()) {
         this.shouldDisplayUnsavedWarning = true;
         this.pendingSection = section;
@@ -620,5 +625,74 @@ textarea {
 
 .field-padding-bottom:not(:last-child) {
   margin-bottom: 2.25rem;
+}
+
+.overlay-end,
+.overlay-start {
+  display: none;
+}
+
+@media only screen and (max-width: 890px) {
+  .menu {
+    border-right: none;
+  }
+}
+
+@media only screen and (max-width: 769px) {
+  .is-one-quarter {
+    position: relative;
+  }
+
+  .overlay-end {
+    display: block;
+    position: absolute;
+    width: 1em;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    text-align: right;
+  }
+
+  .overlay-start {
+    display: block;
+    position: absolute;
+    width: 1em;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    text-align: left;
+  }
+
+  .arrow-right {
+    opacity: 0.5;
+    position: relative;
+    transform: translateY(-50%);
+    padding-right: 1em;
+  }
+
+  .arrow-left {
+    opacity: 0.5;
+    position: relative;
+    transform: translateY(-50%);
+    padding-left: 1em;
+  }
+
+  .is-one-quarter ul {
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+
+  .is-one-quarter li {
+    display: inline-block;
+  }
+
+  .disable-scrollbars {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  }
 }
 </style>
