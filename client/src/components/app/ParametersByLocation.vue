@@ -134,8 +134,11 @@ export default {
     ]),
     ...mapGetters('qapp', ['qappData']),
     selectedParams() {
-      const selectedParams = this.qappData.parameters.split(',');
+      const selectedParams = this.qappData.parameters ? this.qappData.parameters.split(',') : [];
       return this.parameters.filter((param) => selectedParams.includes(param.id.toString()));
+    },
+    otherParameters() {
+      return this.qappData.otherParameters ? JSON.parse(this.qappData.otherParameters) : [];
     },
   },
   methods: {
@@ -203,21 +206,18 @@ export default {
       let filteredParams = [];
       if (waterType === 'Fresh') {
         filteredParams = sortBy(params.filter((p) => p.waterType === 'Freshwater'), [(p) => p.parameter.toLowerCase()]);
+        // Add other parameters that have water type of "Fresh"
+        filteredParams.push(
+          ...this.otherParameters.filter((p) => p.waterType === 'Fresh').map((p) => ({ id: p.name, label: p.name }))
+        );
       } else {
         // salt or brackish types are both indicated by the "salt" boolean column
         filteredParams = sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
-      }
-      // if an 'Other' parameter is entered, we check if it's not a number since all parameters in database are populated by a number
-      // this will push the entered 'Other' parameter into filteredParams to be displayed on the sidenav by checking if its NaN
-      this.qappData.parameters
-        .split(',')
-        .filter((p) => isNaN(p)) // eslint-disable-line
-        .forEach((p) =>
-          filteredParams.push({
-            id: p,
-            label: p,
-          })
+        // Add other parameters that have water type of "Salt"
+        filteredParams.push(
+          ...this.otherParameters.filter((p) => p.waterType === 'Salt').map((p) => ({ id: p.name, label: p.name }))
         );
+      }
       return filteredParams;
     },
     submitData() {

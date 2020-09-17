@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Tabs :tabs="getWaterTypes()" ref="paramTabs">
-      <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
+    <Tabs :tabs="waterTypes" ref="paramTabs">
+      <template v-for="waterType in waterTypes" v-slot:[waterType.id]>
         <div :key="waterType.id" class="columns tab-content">
           <div class="column is-8 param-inputs">
             <fieldset>
@@ -119,6 +119,28 @@ export default {
   computed: {
     ...mapState('ref', ['concerns', 'parameters', 'waterTypes']),
     ...mapGetters('qapp', ['qappData']),
+    waterTypes() {
+      let waterTypes = this.qappData.waterType.map((v) => v.value);
+      waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
+      return waterTypes.map((v) => {
+        if (v === 'Salt') {
+          return {
+            id: v,
+            name: 'Marine',
+          };
+        }
+        if (v === 'Fresh') {
+          return {
+            id: v,
+            name: 'Fresh',
+          };
+        }
+        return {
+          id: v,
+          name: v,
+        };
+      });
+    },
     selectedConcernCodes() {
       return this.qappData.waterConcerns.split(',');
     },
@@ -173,37 +195,10 @@ export default {
       // salt or brackish types are both indicated by the "salt" boolean column
       return sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
     },
-    getWaterTypes() {
-      let waterTypes = this.qappData.waterType.map((v) => v.value);
-      waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
-      return waterTypes.map((v) => {
-        if (v === 'Salt') {
-          return {
-            id: v,
-            name: 'Marine',
-          };
-        }
-        if (v === 'Fresh') {
-          return {
-            id: v,
-            name: 'Fresh',
-          };
-        }
-        return {
-          id: v,
-          name: v,
-        };
-      });
-    },
     isChecked(paramId) {
       return this.selectedParams.indexOf(paramId.toString()) > -1;
     },
     addOtherParam() {
-      // If no "other" params have been entered, set to an empty array
-      if (!this.pendingData.otherParameters) {
-        this.$set(this.pendingData, 'otherParameters', []);
-      }
-
       // Store the param value as a parsable JSON string with param name and current water type (both value and current tab are accessed via $refs)
       const paramValue = { name: this.otherInputValue, waterType: this.$refs.paramTabs.activeTabId };
       const otherParams = [...this.otherParamsArray];

@@ -49,37 +49,6 @@
             :maxlength="question.maxLength"
             :required="question.questionLabel != 'Lab Duplicates' && question.questionLabel != 'Lab Blanks'"
           />
-          <textarea
-            v-if="question.dataEntryType === 'largeText'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.questionName]"
-            class="input"
-            :placeholder="
-              `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
-            "
-            :maxlength="question.maxLength"
-            required
-          ></textarea>
-          <div v-if="question.dataEntryType === 'select'">
-            <Multiselect
-              v-if="question.questionLabel === 'Parameter'"
-              v-model="pendingData[question.questionName]"
-              :options="getParameters()"
-              :placeholder="`Select ${question.questionLabel}`"
-              label="label"
-              track-by="id"
-            ></Multiselect>
-            <Multiselect
-              v-else
-              v-model="pendingData[question.questionName]"
-              :options="getOptions(question.refName)"
-              :multiple="true"
-              :taggable="true"
-              tag-placeholder="Add as other rationale"
-              placeholder="Select rationale, or type to specify other rationale"
-              @tag="addOther($event, question)"
-            ></Multiselect>
-          </div>
         </div>
         <Button
           :label="shouldShowEdit ? 'Save' : 'Add and Save'"
@@ -246,17 +215,17 @@ export default {
               }
             }
           });
-          if (!Number.isNaN(paramId)) {
+          if (!Number.isNaN(Number(paramId))) {
             const parameter = this.parameters.find((p) => p.id === parseInt(paramId, 10));
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
               ...parameterSampleData,
-              parameterLabel: parameter.label,
+              parameterLabel: parameter ? parameter.label : paramId, // Add fallback to paramId in case user entered number as "other" parameter
               valueId: currentValueId,
             });
             currentValueId += 1;
-          } else if (Number.isNaN(paramId)) {
+          } else if (Number.isNaN(Number(paramId))) {
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
@@ -269,33 +238,6 @@ export default {
         });
       });
       this.rows = rows;
-    },
-    getOptions(refName) {
-      // get reference data array based on refName field in questions table
-      return this[refName];
-    },
-    getParameters() {
-      const params = [];
-      const selectedParameters = this.qappData.parameters;
-
-      if (selectedParameters) {
-        const paramIds = selectedParameters.split(',');
-        this.parameters.forEach((param) => {
-          if (paramIds.indexOf(param.id.toString()) > -1) {
-            params.push(param);
-          }
-        });
-
-        paramIds.forEach((param) => {
-          if (Number.isNaN(param)) {
-            params.push({
-              id: param,
-              label: param,
-            });
-          }
-        });
-      }
-      return params;
     },
     cleanData() {
       // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db

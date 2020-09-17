@@ -315,11 +315,15 @@ export default {
         /*
          * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
+         * Parameters section has "otherParameters" question which is not required, so there is special logic for this case
          */
         if (
           this.tableSections.indexOf(section.sectionLabel) > -1 ||
           this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
-            this.currentQuestions.length
+            this.currentQuestions.length ||
+          (section.sectionName === 'parameters' &&
+            this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
+              this.currentQuestions.length - 1)
         ) {
           this.hasSaved = true;
         }
@@ -354,21 +358,12 @@ export default {
     checkRequiredFields() {
       let hasEmptyFields = false;
 
-      if (this.currentSection.sectionName === 'sampleDesign') {
-        hasEmptyFields = true;
-        let selectedParams = this.qappData.parameters;
-        selectedParams = selectedParams.split(',');
-        let tableParams = [];
-        if (selectedParams.length > 0 && this.qappData.sampleParameter) {
-          this.qappData.sampleParameter.forEach((param) => {
-            tableParams.push(param.value);
-          });
-          tableParams = uniqBy(tableParams);
-          hasEmptyFields = !isEqual(tableParams.sort(), selectedParams.sort());
-        }
-      } else if (this.currentSection.sectionName === 'recordHandling') {
+      if (this.currentSection.sectionName === 'recordHandling') {
         hasEmptyFields = true;
         if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
+      } else if (this.currentSection.sectionName === 'parameters') {
+        // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
+        if (!this.pendingData.parameters && !this.pendingData.otherParameters) hasEmptyFields = true;
       } else {
         this.currentQuestions.forEach((q) => {
           if (
@@ -481,7 +476,7 @@ export default {
       } else if (
         (this.currentSection.sectionLabel === 'Sampling Design Details' ||
           this.currentSection.sectionLabel === 'Parameters By Location') &&
-        !this.qappData.parameters
+        (!this.qappData.parameters && !this.qappData.otherParameters)
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
