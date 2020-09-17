@@ -6,7 +6,7 @@
         <div class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
         <div class="overlay-start"><i class="fas fa-arrow-circle-left arrow-left"></i></div>
         <ul class="menu-list disable-scrollbars">
-          <li v-for="section in sections" :key="section.id" :id="section.id">
+          <li v-for="section in sections" :key="section.id" :id="`section${section.id}`">
             <button
               :class="
                 `button is-text has-text-white ${
@@ -300,7 +300,9 @@ export default {
     changeSection(section) {
       this.dataError = null;
       if (window.innerWidth <= 769) {
-        document.getElementById(section.id).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        document
+          .getElementById(`section${section.id}`)
+          .scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
       if (this.hasUnsavedData()) {
         this.shouldDisplayUnsavedWarning = true;
