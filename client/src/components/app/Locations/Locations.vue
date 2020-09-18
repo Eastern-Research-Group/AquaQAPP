@@ -253,9 +253,8 @@ export default {
           const location = { valueId: val.valueId };
           this.questions.forEach((q) => {
             if (this.qappData[q.questionName]) {
-              location[q.questionLabel] = this.qappData[q.questionName].find(
-                (datum) => datum.valueId === val.valueId
-              ).value;
+              const valueObj = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
+              location[q.questionLabel] = valueObj ? valueObj.value : '';
             }
           });
           location.latLng = [parseFloat(location['Location Latitude']), parseFloat(location['Location Longitude'])];
@@ -353,15 +352,20 @@ export default {
       this.isEnteringInfo = false;
     },
     onDelete(location) {
-      this.selectedLocation = location;
+      if (location) {
+        this.shouldDeleteSingle = true;
+        this.selectedLocation = location;
+      } else {
+        this.shouldDeleteAll = true;
+      }
       this.shouldDisplayDeleteWarning = true;
     },
     async deleteLocationData() {
       let valueIds = [];
-      if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedLocation.valueId];
-      } else {
+      if (this.shouldDeleteAll) {
         valueIds = this.markers.map((m) => m.valueId);
+      } else {
+        valueIds = [this.selectedLocation.valueId];
       }
       const questionIds = this.questions.map((q) => q.id);
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });

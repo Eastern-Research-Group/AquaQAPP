@@ -6,7 +6,7 @@
         <div class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
         <div class="overlay-start"><i class="fas fa-arrow-circle-left arrow-left"></i></div>
         <ul class="menu-list disable-scrollbars">
-          <li v-for="section in sections" :key="section.id" :id="section.id">
+          <li v-for="section in sections" :key="section.id" :id="`section${section.id}`">
             <button
               :class="
                 `button is-text has-text-white ${
@@ -190,8 +190,6 @@ import MarkComplete from '@/components/shared/MarkComplete';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
-import isEqual from 'lodash/isEqual';
-import uniqBy from 'lodash/uniqBy';
 import difference from 'lodash/difference';
 // Custom section components - these are used in the "customSections" loop above
 import Concerns from '@/components/app/Concerns';
@@ -300,7 +298,9 @@ export default {
     changeSection(section) {
       this.dataError = null;
       if (window.innerWidth <= 769) {
-        document.getElementById(section.id).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        document
+          .getElementById(`section${section.id}`)
+          .scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
       if (this.hasUnsavedData()) {
         this.shouldDisplayUnsavedWarning = true;
@@ -313,11 +313,15 @@ export default {
         /*
          * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
+         * Parameters section has "otherParameters" question which is not required, so there is special logic for this case
          */
         if (
           this.tableSections.indexOf(section.sectionLabel) > -1 ||
           this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
-            this.currentQuestions.length
+            this.currentQuestions.length ||
+          (section.sectionName === 'parameters' &&
+            this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
+              this.currentQuestions.length - 1)
         ) {
           this.hasSaved = true;
         }
@@ -353,20 +357,18 @@ export default {
       let hasEmptyFields = false;
 
       if (this.currentSection.sectionName === 'sampleDesign') {
-        hasEmptyFields = true;
-        let selectedParams = this.qappData.parameters;
-        selectedParams = selectedParams.split(',');
-        let tableParams = [];
-        if (selectedParams.length > 0 && this.qappData.sampleParameter) {
-          this.qappData.sampleParameter.forEach((param) => {
-            tableParams.push(param.value);
-          });
-          tableParams = uniqBy(tableParams);
-          hasEmptyFields = !isEqual(tableParams.sort(), selectedParams.sort());
-        }
+        // Make sure sample design details have saved entries for all parameters by all locations
+        const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value.split(',').length;
+        }, 0);
+        // Use labDuplicates count to confirm as it is the first sample design question and is required
+        hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
       } else if (this.currentSection.sectionName === 'recordHandling') {
         hasEmptyFields = true;
         if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
+      } else if (this.currentSection.sectionName === 'parameters') {
+        // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
+        if (!this.pendingData.parameters && !this.pendingData.otherParameters) hasEmptyFields = true;
       } else {
         this.currentQuestions.forEach((q) => {
           if (
@@ -479,7 +481,7 @@ export default {
       } else if (
         (this.currentSection.sectionLabel === 'Sampling Design Details' ||
           this.currentSection.sectionLabel === 'Parameters By Location') &&
-        !this.qappData.parameters
+        (!this.qappData.parameters && !this.qappData.otherParameters)
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
@@ -533,8 +535,18 @@ export default {
         allParamsByLocation = allParamsByLocation.concat(valObject.value.split(','));
       });
 
-      // Use lodash difference function to get removed params (compare original qappData with pendingData arrays)
-      const removedParams = difference(this.qappData.parameters.split(','), this.pendingData.parameters.split(','));
+      const params = this.qappData.parameters || [];
+      const otherParams = this.qappData.otherParameters
+        ? JSON.parse(this.qappData.otherParameters).map((p) => p.name)
+        : [];
+
+      const pendingParams = this.pendingData.parameters || [];
+      const pendingOtherParams = this.pendingData.otherParameters
+        ? JSON.parse(this.pendingData.otherParameters).map((p) => p.name)
+        : [];
+
+      // Use lodash difference function to get removed params (compare original qappData with pendingData arrays for both parameters and otherParameters)
+      const removedParams = difference(params, pendingParams).concat(difference(otherParams, pendingOtherParams));
 
       // Use filter function to determine is any selected params by location match with the params to be removed
       this.removedParamsWithLocations = allParamsByLocation.filter((paramId) => removedParams.includes(paramId));

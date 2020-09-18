@@ -92,16 +92,12 @@ const getters = {
       } else if (key && key === 'parameters') {
         const paramIds = datum.value.split(',');
         paramIds.forEach((id) => {
-          if (isNaN(id)) { // eslint-disable-line
-            // If id is not a number, that means it was entered by user as "Other". Place these in separate array
-            if (!dataObj.otherParameters) dataObj.otherParameters = [];
-            dataObj.otherParameters.push(id);
-          } else {
-            // Otherwise, find the full parameter data object and store in "parameters" array
-            if (!dataObj[key]) dataObj[key] = [];
-            dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
-          }
+          // find the full parameter data object and store in "parameters" array
+          if (!dataObj[key]) dataObj[key] = [];
+          dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
         });
+      } else if (key && key === 'otherParameters') {
+        dataObj[key] = datum.value ? JSON.parse(datum.value) : [];
       } else if (key) {
         dataObj[key] = datum.value;
       }

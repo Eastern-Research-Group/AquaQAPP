@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Tabs :tabs="getWaterTypes()">
-      <template v-for="waterType in getWaterTypes()" v-slot:[waterType.id]>
+    <Tabs :tabs="waterTypes" ref="paramTabs">
+      <template v-for="waterType in waterTypes" v-slot:[waterType.id]>
         <div :key="waterType.id" class="columns tab-content">
           <div class="column is-8 param-inputs">
             <fieldset>
@@ -10,13 +10,13 @@
                 <div v-for="param in getFilteredParams(suggestedParams, waterType.name)" class="field" :key="param.id">
                   <input
                     class="is-checkradio is-info"
-                    :id="param.id"
+                    :id="`param${param.id}`"
                     type="checkbox"
                     :value="param.id"
                     :checked="isChecked(param.id)"
                     @change="$emit('updateData', $event, paramQuestion)"
                   />
-                  <label :for="param.id">{{ param.label }}</label>
+                  <label :for="`param${param.id}`">{{ param.label }}</label>
                 </div>
               </div>
               <div v-else class="field checkboxes-container">
@@ -42,13 +42,29 @@
                 <i>There are no other parameters for {{ waterType.name }} water</i>
               </div>
             </fieldset>
-            <label for="otherParam">Other parameters</label>
+            <label for="otherParam"
+              >Other parameters
+              <HoverText :icon="true" hoverId="otherParamInfo">
+                The parameter entered will be associated with the current tab's water type ({{ waterType.name }})
+              </HoverText>
+            </label>
             <div class="field has-addons">
               <div class="control other-input">
-                <input ref="otherInput" id="otherParam" class="input" type="text" />
+                <input id="otherParam" v-model="otherInputValue" class="input" type="text" />
               </div>
               <div class="control">
-                <button @click="updateParams" class="button is-success">
+                <button
+                  @click="addOtherParam"
+                  class="button is-success"
+                  :disabled="isOtherInputDisabled"
+                  :title="
+                    !otherInputValue
+                      ? 'You must enter a parameter name before adding.'
+                      : isOtherInputDisabled
+                      ? 'You cannot have two parameters with the same name.'
+                      : ''
+                  "
+                >
                   Add
                 </button>
               </div>
@@ -58,22 +74,16 @@
             <p class="has-text-centered">Selected</p>
             <div class="box selected-parameters">
               <ul>
-                <li
-                  v-for="param in sortedParams"
-                  :key="param.id || param.parameter"
-                  class="param-label has-text-weight-semibold"
-                >
+                <li v-for="param in sortedParams" :key="param.id" class="param-label has-text-weight-semibold">
                   {{ param.label || `${param.parameter} - OTHER` }}
                   <span
                     class="fa fa-times"
-                    @click="
-                      $emit(
-                        'updateData',
-                        { target: { value: param.id ? param.id.toString() : param.parameter } },
-                        paramQuestion
-                      )
-                    "
+                    @click="$emit('updateData', { target: { value: param.id.toString() } }, paramQuestion)"
                   ></span>
+                </li>
+                <li v-for="param in otherSortedParams" :key="param.name" class="param-label has-text-weight-semibold">
+                  {{ `${param.name} - OTHER` }}
+                  <span class="fa fa-times" @click="clearOtherParam(param)"></span>
                 </li>
               </ul>
             </div>
@@ -86,6 +96,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import HoverText from '@/components/shared/HoverText';
 import Tabs from '@/components/shared/Tabs';
 import sortBy from 'lodash/sortBy';
 
@@ -101,15 +112,39 @@ export default {
       required: true,
     },
   },
-  components: { Tabs },
+  components: { HoverText, Tabs },
   data() {
     return {
       paramQuestion: this.questions[0],
+      otherParamQuestion: this.questions[1],
+      otherInputValue: '',
     };
   },
   computed: {
     ...mapState('ref', ['concerns', 'parameters', 'waterTypes']),
     ...mapGetters('qapp', ['qappData']),
+    waterTypes() {
+      let waterTypes = this.qappData.waterType.map((v) => v.value);
+      waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
+      return waterTypes.map((v) => {
+        if (v === 'Salt') {
+          return {
+            id: v,
+            name: 'Marine',
+          };
+        }
+        if (v === 'Fresh') {
+          return {
+            id: v,
+            name: 'Fresh',
+          };
+        }
+        return {
+          id: v,
+          name: v,
+        };
+      });
+    },
     selectedConcernCodes() {
       return this.qappData.waterConcerns.split(',');
     },
@@ -121,12 +156,19 @@ export default {
       this.selectedParams.forEach((param) => {
         if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
           sortedParams.push(this.parameters.find((p) => p.id === parseInt(param, 10)));
-        } else {
-          sortedParams.push({ parameter: param });
         }
       });
       sortedParams = sortBy(sortedParams, [(p) => p.parameter.toLowerCase()]);
       return sortedParams;
+    },
+    otherParamsArray() {
+      return this.pendingData.otherParameters ? JSON.parse(this.pendingData.otherParameters) : [];
+    },
+    otherSortedParams() {
+      return sortBy(this.otherParamsArray, [(p) => p.name.toLowerCase()]);
+    },
+    isOtherInputDisabled() {
+      return this.otherInputValue && this.otherParamsArray.find((p) => p.name === this.otherInputValue);
     },
     suggestedParams() {
       const params = [];
@@ -155,36 +197,24 @@ export default {
       // salt or brackish types are both indicated by the "salt" boolean column
       return sortBy(params.filter((p) => p.waterType === 'Saltwater'), [(p) => p.parameter.toLowerCase()]);
     },
-    getWaterTypes() {
-      let waterTypes = this.qappData.waterType.map((v) => v.value);
-      waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
-      return waterTypes.map((v) => {
-        if (v === 'Salt') {
-          return {
-            id: v,
-            name: 'Marine',
-          };
-        }
-        if (v === 'Fresh') {
-          return {
-            id: v,
-            name: 'Fresh',
-          };
-        }
-        return {
-          id: v,
-          name: v,
-        };
-      });
-    },
     isChecked(paramId) {
       return this.selectedParams.indexOf(paramId.toString()) > -1;
     },
-    updateParams() {
-      // Need to manually set event object based on input value
-      const event = { target: { value: this.$refs.otherInput[0].value } };
-      this.$emit('updateData', event, this.paramQuestion);
-      this.$refs.otherInput[0].value = '';
+    addOtherParam() {
+      // Store the param value as a parsable JSON string with param name and current water type (both value and current tab are accessed via $refs)
+      // Replace any commas as they could break logic in future sections
+      const paramValue = { name: this.otherInputValue.replace(/,/g, ' '), waterType: this.$refs.paramTabs.activeTabId };
+      const otherParams = [...this.otherParamsArray];
+      otherParams.push(paramValue);
+      this.$emit('updateData', { target: { value: JSON.stringify(otherParams) } }, this.otherParamQuestion);
+
+      // Clear input value
+      this.otherInputValue = '';
+    },
+    clearOtherParam(param) {
+      let otherParams = [...this.otherParamsArray];
+      otherParams = otherParams.filter((p) => JSON.stringify(p) !== JSON.stringify(param));
+      this.$emit('updateData', { target: { value: JSON.stringify(otherParams) } }, this.otherParamQuestion);
     },
   },
 };

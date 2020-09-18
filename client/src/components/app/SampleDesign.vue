@@ -60,26 +60,6 @@
             :maxlength="question.maxLength"
             required
           ></textarea>
-          <div v-if="question.dataEntryType === 'select'">
-            <Multiselect
-              v-if="question.questionLabel === 'Parameter'"
-              v-model="pendingData[question.questionName]"
-              :options="getParameters()"
-              :placeholder="`Select ${question.questionLabel}`"
-              label="label"
-              track-by="id"
-            ></Multiselect>
-            <Multiselect
-              v-else
-              v-model="pendingData[question.questionName]"
-              :options="getOptions(question.refName)"
-              :multiple="true"
-              :taggable="true"
-              tag-placeholder="Add as other rationale"
-              placeholder="Select rationale, or type to specify other rationale"
-              @tag="addOther($event, question)"
-            ></Multiselect>
-          </div>
         </div>
         <Button
           :label="shouldShowEdit ? 'Save' : 'Add and Save'"
@@ -99,7 +79,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import Multiselect from 'vue-multiselect';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
@@ -113,7 +92,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, Multiselect },
+  components: { Button, SideNav, Table },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -170,7 +149,7 @@ export default {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedRow.valueId,
-        values: this.cleanData(this.pendingData),
+        values: this.pendingData,
       });
       this.refreshData();
       this.isEnteringInfo = false;
@@ -194,7 +173,7 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      this.$emit('saveData', null, newValueId, this.pendingData);
 
       this.isEnteringInfo = false;
       this.pendingData = {};
@@ -246,17 +225,17 @@ export default {
               }
             }
           });
-          if (!Number.isNaN(paramId)) {
+          if (!Number.isNaN(Number(paramId))) {
             const parameter = this.parameters.find((p) => p.id === parseInt(paramId, 10));
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
               ...parameterSampleData,
-              parameterLabel: parameter.label,
+              parameterLabel: parameter ? parameter.label : paramId, // Add fallback to paramId in case user entered number as "other" parameter
               valueId: currentValueId,
             });
             currentValueId += 1;
-          } else if (Number.isNaN(paramId)) {
+          } else if (Number.isNaN(Number(paramId))) {
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
@@ -269,53 +248,6 @@ export default {
         });
       });
       this.rows = rows;
-    },
-    getOptions(refName) {
-      // get reference data array based on refName field in questions table
-      return this[refName];
-    },
-    getParameters() {
-      const params = [];
-      const selectedParameters = this.qappData.parameters;
-
-      if (selectedParameters) {
-        const paramIds = selectedParameters.split(',');
-        this.parameters.forEach((param) => {
-          if (paramIds.indexOf(param.id.toString()) > -1) {
-            params.push(param);
-          }
-        });
-
-        paramIds.forEach((param) => {
-          if (Number.isNaN(param)) {
-            params.push({
-              id: param,
-              label: param,
-            });
-          }
-        });
-      }
-      return params;
-    },
-    cleanData() {
-      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
-      const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qName) => {
-        if (typeof this.pendingData[qName] === 'object') {
-          // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qName])) {
-            const idArray = this.pendingData[qName].map((datum) => {
-              return datum.id || datum;
-            });
-            cleanedData[qName] = idArray.join(',');
-          } else {
-            cleanedData[qName] = this.pendingData[qName].id;
-          }
-        } else {
-          cleanedData[qName] = this.pendingData[qName];
-        }
-      });
-      return cleanedData;
     },
     addOther(value, question) {
       const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma

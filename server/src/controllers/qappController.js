@@ -161,6 +161,7 @@ module.exports = {
   async saveData(req, res) {
     const { qappId } = req.body[0];
     try {
+      const promises = [];
       req.body.forEach(async (datum) => {
         const question = await Question.findOne({ where: { id: datum.questionId } });
         const error = checkFieldLength(question, datum);
@@ -176,14 +177,17 @@ module.exports = {
         // check if record already exists with same qapp id and question id
         // if record exists, update, otherwise create
         if (qappDatum) {
-          await qappDatum.update(datum);
+          promises.push(qappDatum.update(datum));
         } else {
-          await QappDatum.create(datum);
+          promises.push(QappDatum.create(datum));
         }
       });
+      // await all update/create statements before redirecting to qapp with data endpoint
+      await Promise.all(promises);
 
       // redirect to return latest QAPP with data
-      res.redirect(`/api/qapps/${qappId}`);
+      // need to set negligible timeout in order for the sequelize associations to be ready on the redirect
+      setTimeout(() => res.redirect(`/api/qapps/${qappId}`), 10);
     } catch (err) {
       res.status(400).send({
         error: err.toString(),
