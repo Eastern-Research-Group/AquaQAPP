@@ -17,7 +17,8 @@
             <LoadingIndicator v-if="isGenerating" class="light i-block"
           /></Button>
         </div>
-        <Alert v-if="generateError" message="Generation of QAPP failed, please try again" type="error">
+        <Alert v-if="generateError" type="error">
+          Generation of QAPP failed, please try again
           <button @click="$store.dispatch('qapp/updateGenerateError', false)" class="close-alert">
             x
           </button>
@@ -52,6 +53,36 @@ export default {
       if (!this.generateError) {
         this.showFile(this.$store.state.qapp.doc);
       }
+    },
+    showFile(blob) {
+      // It is necessary to create a new blob object with mime-type explicitly set
+      // otherwise only Chrome works like it should
+      const newBlob = new Blob([blob], {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      });
+
+      // IE doesn't allow using a blob object directly as link href
+      // instead it is necessary to use msSaveOrOpenBlob
+      if (
+        window.navigator.userAgent.indexOf('Firefox') === -1 &&
+        window.navigator &&
+        window.navigator.msSaveOrOpenBlob
+      ) {
+        window.navigator.msSaveOrOpenBlob(newBlob);
+        return;
+      }
+
+      // For other browsers:
+      // Create a link pointing to the ObjectURL containing the blob.
+      const data = window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = data;
+      link.download = 'test.docx';
+      link.click();
+      setTimeout(function firefoxDelay() {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(data);
+      }, 100);
     },
   },
 };
