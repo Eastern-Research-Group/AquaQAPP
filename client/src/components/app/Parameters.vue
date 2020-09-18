@@ -58,7 +58,11 @@
                   class="button is-success"
                   :disabled="isOtherInputDisabled"
                   :title="
-                    isOtherInputDisabled ? 'You cannot have two parameters with the same name and water type.' : ''
+                    !otherInputValue
+                      ? 'You must enter a parameter name before adding.'
+                      : isOtherInputDisabled
+                      ? 'You cannot have two parameters with the same name.'
+                      : ''
                   "
                 >
                   Add
@@ -164,9 +168,7 @@ export default {
       return sortBy(this.otherParamsArray, [(p) => p.name.toLowerCase()]);
     },
     isOtherInputDisabled() {
-      return !!this.otherParamsArray.find(
-        (p) => p.name === this.otherInputValue && p.waterType === this.$refs.paramTabs.activeTabId
-      );
+      return this.otherInputValue && this.otherParamsArray.find((p) => p.name === this.otherInputValue);
     },
     suggestedParams() {
       const params = [];
@@ -200,7 +202,8 @@ export default {
     },
     addOtherParam() {
       // Store the param value as a parsable JSON string with param name and current water type (both value and current tab are accessed via $refs)
-      const paramValue = { name: this.otherInputValue, waterType: this.$refs.paramTabs.activeTabId };
+      // Replace any commas as they could break logic in future sections
+      const paramValue = { name: this.otherInputValue.replace(/,/g, ' '), waterType: this.$refs.paramTabs.activeTabId };
       const otherParams = [...this.otherParamsArray];
       otherParams.push(paramValue);
       this.$emit('updateData', { target: { value: JSON.stringify(otherParams) } }, this.otherParamQuestion);

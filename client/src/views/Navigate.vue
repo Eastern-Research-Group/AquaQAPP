@@ -190,8 +190,6 @@ import MarkComplete from '@/components/shared/MarkComplete';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
-import isEqual from 'lodash/isEqual';
-import uniqBy from 'lodash/uniqBy';
 import difference from 'lodash/difference';
 // Custom section components - these are used in the "customSections" loop above
 import Concerns from '@/components/app/Concerns';
@@ -358,7 +356,14 @@ export default {
     checkRequiredFields() {
       let hasEmptyFields = false;
 
-      if (this.currentSection.sectionName === 'recordHandling') {
+      if (this.currentSection.sectionName === 'sampleDesign') {
+        // Make sure sample design details have saved entries for all parameters by all locations
+        const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value.split(',').length;
+        }, 0);
+        // Use labDuplicates count to confirm as it is the first sample design question and is required
+        hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+      } else if (this.currentSection.sectionName === 'recordHandling') {
         hasEmptyFields = true;
         if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
       } else if (this.currentSection.sectionName === 'parameters') {
@@ -530,8 +535,18 @@ export default {
         allParamsByLocation = allParamsByLocation.concat(valObject.value.split(','));
       });
 
-      // Use lodash difference function to get removed params (compare original qappData with pendingData arrays)
-      const removedParams = difference(this.qappData.parameters.split(','), this.pendingData.parameters.split(','));
+      const params = this.qappData.parameters || [];
+      const otherParams = this.qappData.otherParameters
+        ? JSON.parse(this.qappData.otherParameters).map((p) => p.name)
+        : [];
+
+      const pendingParams = this.pendingData.parameters || [];
+      const pendingOtherParams = this.pendingData.otherParameters
+        ? JSON.parse(this.pendingData.otherParameters).map((p) => p.name)
+        : [];
+
+      // Use lodash difference function to get removed params (compare original qappData with pendingData arrays for both parameters and otherParameters)
+      const removedParams = difference(params, pendingParams).concat(difference(otherParams, pendingOtherParams));
 
       // Use filter function to determine is any selected params by location match with the params to be removed
       this.removedParamsWithLocations = allParamsByLocation.filter((paramId) => removedParams.includes(paramId));

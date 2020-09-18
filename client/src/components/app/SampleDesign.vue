@@ -49,6 +49,17 @@
             :maxlength="question.maxLength"
             :required="question.questionLabel != 'Lab Duplicates' && question.questionLabel != 'Lab Blanks'"
           />
+          <textarea
+            v-if="question.dataEntryType === 'largeText'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.questionName]"
+            class="input"
+            :placeholder="
+              `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
+            "
+            :maxlength="question.maxLength"
+            required
+          ></textarea>
         </div>
         <Button
           :label="shouldShowEdit ? 'Save' : 'Add and Save'"
@@ -68,7 +79,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import Multiselect from 'vue-multiselect';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
@@ -82,7 +92,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, Multiselect },
+  components: { Button, SideNav, Table },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -139,7 +149,7 @@ export default {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedRow.valueId,
-        values: this.cleanData(this.pendingData),
+        values: this.pendingData,
       });
       this.refreshData();
       this.isEnteringInfo = false;
@@ -163,7 +173,7 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      this.$emit('saveData', null, newValueId, this.pendingData);
 
       this.isEnteringInfo = false;
       this.pendingData = {};
@@ -238,26 +248,6 @@ export default {
         });
       });
       this.rows = rows;
-    },
-    cleanData() {
-      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
-      const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qName) => {
-        if (typeof this.pendingData[qName] === 'object') {
-          // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qName])) {
-            const idArray = this.pendingData[qName].map((datum) => {
-              return datum.id || datum;
-            });
-            cleanedData[qName] = idArray.join(',');
-          } else {
-            cleanedData[qName] = this.pendingData[qName].id;
-          }
-        } else {
-          cleanedData[qName] = this.pendingData[qName];
-        }
-      });
-      return cleanedData;
     },
     addOther(value, question) {
       const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
