@@ -106,7 +106,7 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
-              <p class="instructions" v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</p>
+              <p class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></p>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
