@@ -46,15 +46,11 @@
           <h2 class="label is-size-4">
             {{ currentSection.sectionLabel }}
           </h2>
-          <p
-            v-if="currentSection.sectionName === 'gettingStarted'"
-            class="instructions content"
-            v-html="currentSection.instructions"
-          ></p>
+          <p class="instructions content" v-html="currentSection.instructions"></p>
 
           <div
             class="field field-padding-bottom"
-            v-for="(question, index) in currentQuestions.filter(
+            v-for="question in currentQuestions.filter(
               (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
             )"
             :key="question.id"
@@ -68,11 +64,11 @@
                 >{{ question.questionLabel }}</label
               >
               <!-- only display instructions under first question label, since it is for the whole seciton -->
-              <p
-                v-if="index === 0 && currentSection.instructions"
+              <!-- <p
+                v-if="index !== 0 && currentSection.instructions"
                 class="instructions content"
                 v-html="currentSection.instructions"
-              ></p>
+              ></p> -->
               <input
                 v-if="question.dataEntryType === 'text'"
                 :id="`question${question.id}`"
@@ -106,7 +102,7 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
-              <p class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></p>
+              <p class="instructions" v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</p>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
@@ -147,7 +143,7 @@
             </div>
           </div>
           <div v-if="customSection">
-            <p class="instructions content" v-html="currentSection.instructions"></p>
+            <!-- <p class="instructions content" v-html="currentSection.instructions"></p> -->
             <component
               :is="customSection.component"
               :questions="currentQuestions"
