@@ -48,7 +48,7 @@
 47,13,sampleParameter,Parameter,,,select,255,FALSE,1,parameters
 49,15,dataQualityObjectives,Data Quality Objectives,"Succinctly describe what you seek to accomplish through your monitoring program.",,largeText,2000,TRUE,1,
 50,15,samplingDesignOverview,Sampling Design Overview,"Outline the ""story"" of your monitoring effort. Include the type of sample (e.g., water sample or <i>in situ</i>), number of samples, time of year and duration of the monitoring effort, the basis for the monitoring locations (i.e., statistical representation of the water body or pinpointing pollutant sources), and who will collect and analyze the samples.",,largeText,2000,TRUE,2,
-51,15,samplingDesignOverview,Sampling Rationale,"Describe how and why you chose sampling locations, and how you determined the number of samples to be collected. Relate this information to your project objective (which you provided on the Project Description screen).",,largeText,2000,TRUE,3,
+51,15,samplingRationale,Sampling Rationale,"Describe how and why you chose sampling locations, and how you determined the number of samples to be collected. Relate this information to your project objective (which you provided on the Project Description screen).",,largeText,2000,TRUE,3,
 52,14,details,Details,,,largeText,255,FALSE,2,
 53,13,fieldDuplicates,Field Duplicates,,,number,6,FALSE,2
 54,13,fieldBlanks,Field Blanks,,,number,6,FALSE,3
