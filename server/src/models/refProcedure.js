@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       activity: DataTypes.STRING,
       placeholder: DataTypes.TEXT,
+      detailsLabel: DataTypes.TEXT,
       procedureSort: DataTypes.INTEGER,
     },
     {

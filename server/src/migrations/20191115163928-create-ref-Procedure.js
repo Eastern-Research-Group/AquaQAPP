@@ -13,6 +13,9 @@ module.exports = {
       placeholder: {
         type: Sequelize.TEXT,
       },
+      detailsLabel: {
+        type: Sequelize.TEXT,
+      },
       procedureSort: {
         type: Sequelize.INTEGER,
       },
