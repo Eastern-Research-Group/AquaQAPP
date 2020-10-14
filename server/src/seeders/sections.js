@@ -53,7 +53,7 @@ module.exports = {
       sectionName: 'problemDefinition',
       sectionSort: 6,
       instructions:
-        'State the specific environmental problem, question, or threat to be investigated, and why the work needs to be done. Explain the ways in which the problem studied by your project presents a challenge to the environment and/or human health. Describe the purpose of collecting your data and identify the organization(s) that will use it.',
+        'Use the following prompt to describe the environmental problem or challenge to be explored by the monitoring program.',
     });
     records.push({
       sectionNumber: '6',
@@ -62,7 +62,7 @@ module.exports = {
       sectionName: 'projectBackground',
       sectionSort: 7,
       instructions:
-        'Describe the history of the project or environmental problem, relevant previous studies, and how this project fills a data gap or complements existing information. If the project is related to other ongoing projects, it is important to show how and why it is related. Reference papers or studies that inspired your project, and describe any collaboration planned with others conducting related research or monitoring.',
+        'Use the follow prompts to describe the history of the project or environmental problem and relevant previous studies.',
     });
     records.push({
       sectionNumber: '7',
@@ -88,7 +88,7 @@ module.exports = {
       sectionName: 'monitoringLocations',
       sectionSort: 10,
       instructions:
-        '<p>Add monitoring locations in one of two ways:</p><ul><li>Using the Map tab, click "Add Location" and then click on the field site on the map. Complete the fields in the pop-up window to provide details about each field site.</li><li>Using the Locations tab, click the "Add" button to add a field site. Complete the fields in the pop-up window to provide details about each field site.</li></ul><p>Monitoring locations will appear on both tabs once added. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
+        '<p>Add monitoring locations in one of two ways:</p><ul><li>Using the Map tab, click "Add Location" and then click on the field site on the map. Complete the fields in the pop-up window to provide details about each field site.</li><li>Using the List tab, click the "Add" button to add a field site. Complete the fields in the pop-up window to provide details about each field site.</li></ul><p>Monitoring locations will appear on both tabs once added. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
     });
     records.push({
       sectionNumber: '11',
@@ -140,7 +140,7 @@ module.exports = {
       sectionLabel: 'Data Management',
       sectionName: 'dataManagement',
       sectionSort: 16,
-      instructions: '',
+      instructions: 'Use the following prompts to describe the data management processes used throughout the project.',
     });
     // manually set ids so they always start at 1 (section ids are used when marking complete so must be consistent)
     records = records.map((record, index) => ({

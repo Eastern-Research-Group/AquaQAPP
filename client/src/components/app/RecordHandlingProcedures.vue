@@ -23,7 +23,7 @@
       </div>
       <form ref="form" @submit.prevent="submitData">
         <div class="field" v-for="question in questions" :key="question.id">
-          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
+          <label class="label" :for="`question${question.id}`">{{ selectedRow.detailsLabel }}</label>
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
