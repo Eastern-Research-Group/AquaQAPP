@@ -564,10 +564,6 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-a:visited {
-  color: rgb(255, 255, 255);
-}
-
 .navigate-container {
   margin-top: 2rem;
 }
