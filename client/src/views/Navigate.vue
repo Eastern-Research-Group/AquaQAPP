@@ -551,8 +551,23 @@ export default {
   },
 };
 </script>
+<style>
+.getting-started-link {
+  color: rgb(255, 255, 255);
+}
+.getting-started-link:visited {
+  color: rgb(255, 255, 255);
+}
+.getting-started-link:hover {
+  color: rgb(255, 255, 255);
+}
+</style>
 
 <style lang="scss" scoped>
+a:visited {
+  color: rgb(255, 255, 255);
+}
+
 .navigate-container {
   margin-top: 2rem;
 }
