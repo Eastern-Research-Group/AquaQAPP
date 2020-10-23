@@ -4,6 +4,7 @@
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <router-link class="navbar-item is-size-5" to="/">
+            <img class="logo" alt="AquaQAPP Logo" src="../../assets/aquaqapp-logo-small.png" />
             <h1>AquaQAPP</h1>
           </router-link>
 
@@ -82,6 +83,9 @@ export default {
 <style>
 h1 {
   font-weight: bold;
+}
+.logo {
+  padding-right: 0.5em;
 }
 .page-header {
   background-color: #fff;
