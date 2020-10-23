@@ -713,5 +713,9 @@ textarea {
       background: transparent;
     }
   }
+
+  .right {
+    padding-left: 0.75rem;
+  }
 }
 </style>
