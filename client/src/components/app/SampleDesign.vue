@@ -111,7 +111,7 @@ export default {
         },
         {
           key: 'parameterLabel',
-          label: 'Parameter/Method',
+          label: 'Parameter',
         },
       ],
     };
