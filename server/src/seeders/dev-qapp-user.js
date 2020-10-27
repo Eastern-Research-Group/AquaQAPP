@@ -244,6 +244,10 @@ module.exports = {
         value: 'Samples',
       },
       {
+        questionId: 50,
+        value: 'Rationale',
+      },
+      {
         questionId: 52,
         value: 'Details',
         valueId: 1,
@@ -349,6 +353,18 @@ module.exports = {
       {
         questionId: 65,
         value: 'Management Requirements',
+      },
+      {
+        questionId: 67,
+        value: 'Scientific efforts',
+      },
+      {
+        questionId: 68,
+        value: 'Data gaps',
+      },
+      {
+        questionId: 69,
+        value: 'Reasoning',
       },
     ];
     const records = qappDataRecords.map((record) => ({
