@@ -7,8 +7,157 @@ module.exports = {
       sectionLabel: 'Getting Started',
       sectionName: 'gettingStarted',
       sectionSort: 1,
-      instructions:
-        '<p>This screen provides information about the following topics. Click on the title in the bulleted list below to navigate directly to that section.</p><ul><li><a class="getting-started-link" href="#scope">Scope of AquaQAPP</a></li><li><a class="getting-started-link" href="#before">Before You Start</a></li><li><a class="getting-started-link" href="#navigating">Navigating AquaQAPP</a></li><li><a class="getting-started-link" href="#help">Helpful Resources</a></li><li><a class="getting-started-link" href="#data">Data Usage</a></li></ul><p><b id="scope">Scope of AquaQAPP</b></p><p>AquaQAPP is a web-based application created by the Massachusetts Bays National Estuary Partnership (MassBays) in collaboration with Massachusetts Department of Environmental Protection (MassDEP) and the United States Environmental Protection Agency (EPA), and developed by Eastern Research Group, Inc., with funding from MassDEP and EPA (EPA Grants No. OS-83941701-0 and CE-00A00621-0). AquaQAPP generates tailored Quality Assurance Project Plans (QAPPs) for marine and freshwater water quality and benthic monitoring efforts in the Commonwealth of Massachusetts and is intended to assist volunteer monitoring programs in collecting quality-assured data. AquaQAPP supports monitoring projects that incorporate:</p><ul><li>Basic water quality monitoring parameters for rivers and streams. </li><li>Basic water quality monitoring parameters for marine and estuarine waters.</li><li>Benthic monitoring and habitat assessment for wadeable rivers and streams.</li><li>Benthic monitoring and characterization in marine or estuarine waters.</li></ul><p>AquaQAPP does not currently support parameters associated with concerns such as wetlands assessment, marine debris, or toxics (e.g., heavy metals, pesticides, PCBs, PAHs). While you may use AquaQAPP to create a QAPP that includes sampling for these and other parameters, this requires incorporation of additional sections into the generated QAPP and submission to MassDEP for approval before beginning work on the project. (See Data Usage for more detail on this, below.)</p><p><b id="before">Before You Start</b></p><p>Before developing your QAPP using AquaQAPP, it will be helpful to assemble the following information:</p><ul><li>Contact information for the following personnel in the organization coordinating the monitoring project: Project Manager, QA Manager, Field Coordinator, and Data Manager.</li><li>Contact information for the individual who will serve as the primary contact for the project.</li><li>The environmental concern(s) that prompted your project.</li><li>The data quality objectives for your project.</li><li>Geographical information for each field site (either latitude and longitude or the ability to identify sites on a map)</li><li>The water type at all field sites (freshwater, estuarine/brackish, or marine).</li></ul><p><p>AquaQAPP will suggest monitoring parameters based on your environmental concern; if you already know which parameters your program will focus on, you should also have in hand:</p><ul><li>A list of parameters you plan to measure.</li><li>Instruments or equipment that will be used to measure in situ parameters.</li><li>Laboratory name(s) and information from the lab(s) regarding analytical methods that will be used for samples sent to the laboratory.</li></ul></p><p>Section 2 of the User Guide includes a complete list of items to gather before starting the application. In addition, attachments to the User Guide focus on Selecting a Laboratory, Determining your Data Quality Objectives, and Selecting Monitoring Locations.</p><b id="navigating">Navigating AquaQAPP</b></p><p>AquaQAPP functions like a wizard that uses user-provided content to generate a custom QAPP. As you proceed through the AquaQAPP screens, you will be prompted to enter information about your project.</p><p>Click on the section titles in the left-hand column to move between screens. As you add information to each screen, save your work by clicking the blue “Save” button in the upper-right corner before navigating away from the screen. Note that you need to fill out all information in pop-up windows before they can be saved.</p><p>Mark each screen as complete by clicking the “Mark as Complete” button in upper-right corner. AquaQAPP will automatically save your work when marked as complete. A green checkmark will appear next to the section title if successfully saved.</p><p>You may develop your QAPP over multiple sessions; just log in and select your QAPP in progress. When you’ve finished entering information, generate a QAPP by clicking the green “Generate QAPP” button at the top right of the screen. AquaQAPP will generate a QAPP as a Microsoft Word document. For the QAPP to be complete, you will need to edit that document to complete a few tables and ensure the details reflect your program plan. The printed QAPP will also include a cover sheet prompting you to attach relevant maps, documents, and forms. The latter are available on MassBays’ website (<a class="getting-started-link" target="_blank" href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project">https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a>).</p><p><b id="help">Helpful Resources</b></p><p>For detailed information about using AquaQAPP and guidance for selecting analytical methods, please refer to the <b>User Guide</b>.<p><b>Standard Operating Procedures</b> for sampling methods referenced in AquaQAPP are available on MassBays’ website (<a class="getting-started-link" target="_blank" href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project">https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a>). These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based monitoring programs in Massachusetts waters.</p></p><p><b id="data">Data Usage</b></p><p>When you use AquaQAPP to document and plan for collection of quality-assured data, the generated QAPP is considered pre-approved by MassDEP and deemed acceptable by EPA, and agency review is not required prior to sampling. This pre-approval is valid so long as samples are collected and analyzed in strict accordance with the QAPP generated by the application. While the generated QAPP is provided as a Microsoft Word document to enable minor editing, it should not be significantly altered from the original output. “Not significantly altered” means that the user has not made or will not make changes to sample collection protocols, analytical methods, or other substantive content included in the generated QAPP. Where new or revised methods, additional parameters, or other substantial changes are included beyond the content generated by AquaQAPP, and a stated objective of the monitoring effort is to submit the resulting data to MassDEP, QAPP review is required prior to implementation. See the User Guide for information on submitting a modified QAPP for approval.</p><p>You might consider uploading your data to EPA’s Water Quality eXchange (WQX), to make the data available to others through online portals and viewers (for example, the How’s My Waterway application available at <a class="getting-started-link" target="_blank" href="https://www.epa.gov/waterdata/hows-my-waterway">https://www.epa.gov/waterdata/hows-my-waterway</a>).</p><p>MassBays is especially interested in any monitoring data in the coastal watersheds of Ipswich Bay, Massachusetts Bay, and Cape Cod Bay, and provides support to groups working in these areas to design and implement monitoring programs, and share data via WQX. For more, visit <a class="getting-started-link" target="_blank" href="https://www.mass.gov/service-details/monitoring-coordinators-network">https://www.mass.gov/service-details/monitoring-coordinators-network</a>.</p>',
+      instructions: `
+        <div class="getting-started">
+          <p id="gettingStarted">
+            This screen provides information about the following topics. Click on the title in the bulleted list below to
+            navigate directly to that section.
+          </p>
+          <ul>
+            <li><a class="getting-started-link" href="#scope">Scope of AquaQAPP</a></li>
+            <li><a class="getting-started-link" href="#before">Before You Start</a></li>
+            <li><a class="getting-started-link" href="#navigating">Navigating AquaQAPP</a></li>
+            <li><a class="getting-started-link" href="#help">Helpful Resources</a></li>
+            <li><a class="getting-started-link" href="#data">Data Usage</a></li>
+          </ul>
+          <p><strong id="scope">Scope of AquaQAPP</strong></p>
+          <p>
+            AquaQAPP is a web-based application created by the Massachusetts Bays National Estuary Partnership (MassBays) in
+            collaboration with Massachusetts Department of Environmental Protection (MassDEP) and the United States
+            Environmental Protection Agency (EPA), and developed by Eastern Research Group, Inc., with funding from MassDEP
+            and EPA (EPA Grants No. OS-83941701-0 and CE-00A00621-0). AquaQAPP generates tailored Quality Assurance Project
+            Plans (QAPPs) for marine and freshwater water quality and benthic monitoring efforts in the Commonwealth of
+            Massachusetts and is intended to assist volunteer monitoring programs in collecting quality-assured data. AquaQAPP
+            supports monitoring projects that incorporate:
+          </p>
+          <ul>
+            <li>Basic water quality monitoring parameters for rivers and streams.</li>
+            <li>Basic water quality monitoring parameters for marine and estuarine waters.</li>
+            <li>Benthic monitoring and habitat assessment for wadeable rivers and streams.</li>
+            <li>Benthic monitoring and characterization in marine or estuarine waters.</li>
+          </ul>
+          <p>
+            AquaQAPP does not currently support parameters associated with concerns such as wetlands assessment, marine
+            debris, or toxics (e.g., heavy metals, pesticides, PCBs, PAHs). While you may use AquaQAPP to create a QAPP that
+            includes sampling for these and other parameters, this requires incorporation of additional sections into the
+            generated QAPP and submission to MassDEP for approval before beginning work on the project. (See Data Usage for
+            more detail on this, below.)
+          </p>
+          <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
+          <p><strong id="before">Before You Start</strong></p>
+          <p>Before developing your QAPP using AquaQAPP, it will be helpful to assemble the following information:</p>
+          <ul>
+            <li>
+              Contact information for the following personnel in the organization coordinating the monitoring project: Project
+              Manager, QA Manager, Field Coordinator, and Data Manager.
+            </li>
+            <li>Contact information for the individual who will serve as the primary contact for the project.</li>
+            <li>The environmental concern(s) that prompted your project.</li>
+            <li>The data quality objectives for your project.</li>
+            <li>
+              Geographical information for each field site (either latitude and longitude or the ability to identify sites on
+              a map).
+            </li>
+            <li>The water type at all field sites (freshwater, estuarine/brackish, or marine).</li>
+          </ul>
+          <div>
+          <p>
+            AquaQAPP will suggest monitoring parameters based on your environmental concern; if you already know which
+            parameters your program will focus on, you should also have in hand:
+          </p>
+          <ul>
+            <li>A list of parameters you plan to measure.</li>
+            <li>Instruments or equipment that will be used to measure in situ parameters.</li>
+            <li>
+              Laboratory name(s) and information from the lab(s) regarding analytical methods that will be used for samples
+              sent to the laboratory.
+            </li>
+          </ul>
+          <p>
+            Section 2 of the User Guide includes a complete list of items to gather before starting the application. In
+            addition, attachments to the User Guide focus on Selecting a Laboratory, Determining your Data Quality Objectives,
+            and Selecting Monitoring Locations.
+          </p>
+          <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
+          <strong id="navigating">Navigating AquaQAPP</strong>
+          <p>
+            AquaQAPP functions like a wizard that uses user-provided content to generate a custom QAPP. As you proceed through
+            the AquaQAPP screens, you will be prompted to enter information about your project.
+          </p>
+          <p>
+            Click on the section titles in the left-hand column to move between screens. As you add information to each
+            screen, save your work by clicking the blue “Save” button in the upper-right corner before navigating away from
+            the screen. Note that you need to fill out all information in pop-up windows before they can be saved.
+          </p>
+          <p>
+            Mark each screen as complete by clicking the “Mark as Complete” button in upper-right corner. AquaQAPP will
+            automatically save your work when marked as complete. A green checkmark will appear next to the section title if
+            successfully saved.
+          </p>
+          <p>
+            You may develop your QAPP over multiple sessions; just log in and select your QAPP in progress. When you’ve
+            finished entering information, generate a QAPP by clicking the green “Generate QAPP” button at the top right of
+            the screen. AquaQAPP will generate a QAPP as a Microsoft Word document. For the QAPP to be complete, you will need
+            to edit that document to complete a few tables and ensure the details reflect your program plan. The printed QAPP
+            will also include a cover sheet prompting you to attach relevant maps, documents, and forms. The latter are
+            available on MassBays’ website (<a
+              class="getting-started-link"
+              target="_blank"
+              href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
+              >https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
+            >).
+          </p>
+          <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
+          <p><strong id="help">Helpful Resources</strong></p>
+          <p>
+            For detailed information about using AquaQAPP and guidance for selecting analytical methods, please refer to the
+            <strong>User Guide</strong>.
+          </p>
+          <p>
+            <strong>Standard Operating Procedures</strong> for sampling methods referenced in AquaQAPP are available on
+            MassBays’ website (<a
+              class="getting-started-link"
+              target="_blank"
+              href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
+              >https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
+            >). These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based monitoring
+            programs in Massachusetts waters.
+          </p>
+          <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
+          <p><strong id="data">Data Usage</strong></p>
+          <p>
+            When you use AquaQAPP to document and plan for collection of quality-assured data, the generated QAPP is
+            considered pre-approved by MassDEP and deemed acceptable by EPA, and agency review is not required prior to
+            sampling. This pre-approval is valid so long as samples are collected and analyzed in strict accordance with the
+            QAPP generated by the application. While the generated QAPP is provided as a Microsoft Word document to enable
+            minor editing, it should not be significantly altered from the original output. “Not significantly altered” means
+            that the user has not made or will not make changes to sample collection protocols, analytical methods, or other
+            substantive content included in the generated QAPP. Where new or revised methods, additional parameters, or other
+            substantial changes are included beyond the content generated by AquaQAPP, and a stated objective of the
+            monitoring effort is to submit the resulting data to MassDEP, QAPP review is required prior to implementation. See
+            the User Guide for information on submitting a modified QAPP for approval.
+          </p>
+          <p>
+            You might consider uploading your data to EPA’s Water Quality eXchange (WQX), to make the data available to others
+            through online portals and viewers (for example, the How’s My Waterway application available at
+            <a class="getting-started-link" target="_blank" href="https://www.epa.gov/waterdata/hows-my-waterway"
+              >https://www.epa.gov/waterdata/hows-my-waterway</a
+            >).
+          </p>
+          <p>
+            MassBays is especially interested in any monitoring data in the coastal watersheds of Ipswich Bay, Massachusetts
+            Bay, and Cape Cod Bay, and provides support to groups working in these areas to design and implement monitoring
+            programs, and share data via WQX. For more, visit
+            <a
+              class="getting-started-link"
+              target="_blank"
+              href="https://www.mass.gov/service-details/monitoring-coordinators-network"
+              >https://www.mass.gov/service-details/monitoring-coordinators-network</a
+            >.
+          </p>
+          <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
+        </div>
+      `,
     });
     records.push({
       sectionNumber: '2',
@@ -44,7 +193,7 @@ module.exports = {
       sectionName: 'waterQualityConcerns',
       sectionSort: 5,
       instructions:
-        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User’s Guide for more information about this requirement.',
+        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User Guide for more information about this requirement, and hover over each box below to see a description of the concern.',
     });
     records.push({
       sectionNumber: '5',
@@ -62,7 +211,7 @@ module.exports = {
       sectionName: 'projectBackground',
       sectionSort: 7,
       instructions:
-        'Use the follow prompts to describe the history of the project or environmental problem and relevant previous studies.',
+        'Use the following prompts to describe the history of the project or environmental problem and relevant previous studies.',
     });
     records.push({
       sectionNumber: '7',
@@ -79,7 +228,7 @@ module.exports = {
       sectionName: 'projectActivities',
       sectionSort: 9,
       instructions:
-        '<p>The table below contains space to record the schedule of routine project tasks such as gathering equipment, training volunteers, conducting sampling activity, data analysis, and report writing. Your project will likely have recurring and one-time activities. To indicate repeating activities, indicate the year that activity will take place in your project plan.</p><p>Use the "Add" button to populate the table below with an activity and check the month(s) during which each activity will occur. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
+        '<p>The table below contains space to record the schedule of routine project tasks such as gathering equipment, training volunteers, conducting sampling activity, analyzing data, and writing reports. Your project will likely have recurring and one-time activities. To indicate repeating activities, indicate the year that activity will take place in your project plan.</p><p>Use the "Add" button to populate the table below with an activity and check the month(s) during which each activity will occur. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
     });
     records.push({
       sectionNumber: '10',
@@ -88,7 +237,7 @@ module.exports = {
       sectionName: 'monitoringLocations',
       sectionSort: 10,
       instructions:
-        '<p>Add monitoring locations in one of two ways:</p><ul><li>Using the Map tab, click "Add Location" and then click on the field site on the map. Complete the fields in the pop-up window to provide details about each field site.</li><li>Using the List tab, click the "Add" button to add a field site. Complete the fields in the pop-up window to provide details about each field site.</li></ul><p>Monitoring locations will appear on both tabs once added. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.</p>',
+        '<p>Add monitoring locations in one of two ways:</p><ul><li>Using the Map tab, click "Add Location" and then click on the field site on the map. Complete the fields in the pop-up window to provide details about each field site.</li><li>Using the List tab, click the "Add" button to add a field site. Complete the fields in the pop-up window to provide details about each field site.</li></ul><p>Monitoring locations will appear on both tabs once added. Edit or delete existing rows of information by clicking the “Edit” or “Delete” buttons in each row of interest on the List tab.</p>',
     });
     records.push({
       sectionNumber: '11',
@@ -106,7 +255,7 @@ module.exports = {
       sectionName: 'parametersByLocation',
       sectionSort: 12,
       instructions:
-        '<p>The table below displays all sampling locations entered on the "Monitoring Locations" screen. Click the "Edit" button in each row of interest to open a pop-up window, then use the check boxes to the left of the parameter names to indicate whether a parameter is measured at that location.</p>',
+        '<p>The table below displays all sampling locations entered on the Monitoring Locations screen. Click the "Edit" button in each row of interest to open a pop-up window, then use the check boxes to the left of the parameter names to indicate whether a parameter is measured at that location. Click the “Select All” button to automatically check all parameter names for all sampling locations in the table.</p>',
     });
     records.push({
       sectionNumber: '13',
@@ -124,7 +273,7 @@ module.exports = {
       sectionName: 'recordHandling',
       sectionSort: 15,
       instructions:
-        'The table below displays the five required activities related to record handling. The “Details” column contains guidance about the type of information that should be provided for each activity. Use the “Edit” button to populate the “Details” column for your monitoring project.',
+        'The table below displays the five required activities related to record handling. Use the “Edit” button to populate the “Details” column with a brief description of relevant activities for your monitoring project.',
     });
     records.push({
       sectionNumber: '15',

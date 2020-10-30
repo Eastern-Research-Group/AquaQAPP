@@ -102,7 +102,7 @@
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
-              <p class="instructions" v-if="question.dataEntryInstructions">{{ question.dataEntryInstructions }}</p>
+              <p class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></p>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
@@ -116,7 +116,7 @@
               <div class="btn-container has-text-right">
                 <Button
                   class="example"
-                  label="Example(s)"
+                  label="Example"
                   type="dark"
                   v-if="question.examples.length > 0"
                   @click.native="() => (shouldShowExample = question)"
@@ -551,15 +551,27 @@ export default {
   },
 };
 </script>
-<style>
-.getting-started-link {
-  color: rgb(255, 255, 255);
-}
-.getting-started-link:visited {
-  color: rgb(255, 255, 255);
-}
-.getting-started-link:hover {
-  color: rgb(255, 255, 255);
+<style lang="scss">
+.getting-started {
+  a,
+  strong {
+    color: #fff;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+
+    &:hover {
+      color: whitesmoke;
+    }
+  }
+
+  .top-of-page {
+    display: block;
+    text-align: right;
+    font-size: 0.9rem;
+  }
 }
 </style>
 
