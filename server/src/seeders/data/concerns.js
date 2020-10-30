@@ -27,7 +27,7 @@ module.exports.default = [
     id: 4,
     code: 'GENBENTHIC',
     label: 'General Environmental Health: Benthic',
-    description: 'Sampling that focuses on properties of the sediment and/or the organisms that live in or on it',
+    description: 'Sampling that focuses on properties of the sediment and/or the organisms that live in or on it.',
     concernSort: 2,
   },
   {
@@ -35,7 +35,7 @@ module.exports.default = [
     code: 'ALGAL',
     label: 'Harmful Algal Blooms (HABs) (Algal Toxins)',
     description:
-      'Sampling that focuses on algal growth and/or blooms, including causes (i.e., nutrients) and effects (i.e., algal toxins',
+      'Sampling that focuses on algal growth and/or blooms, including causes (i.e., nutrients) and effects (i.e., algal toxins).',
     concernSort: 5,
   },
   {
