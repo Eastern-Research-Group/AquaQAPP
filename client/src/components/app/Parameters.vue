@@ -71,17 +71,48 @@
             </div>
           </div>
           <div class="column is-4">
-            <p class="has-text-centered">Selected</p>
+            <p class="has-text-centered">Selected Parameters</p>
             <div class="box selected-parameters">
-              <ul>
-                <li v-for="param in sortedParams" :key="param.id" class="param-label has-text-weight-semibold">
+              <ul class="selected-param-group">
+                <p class="selected-param-header">Fresh Parameters</p>
+                <li
+                  v-for="param in sortedParams.filter((p) => p.waterType === 'Freshwater')"
+                  :key="param.id"
+                  class="param-label has-text-weight-semibold"
+                >
                   {{ param.label || `${param.parameter} - OTHER` }}
                   <span
                     class="fa fa-times"
                     @click="$emit('updateData', { target: { value: param.id.toString() } }, paramQuestion)"
                   ></span>
                 </li>
-                <li v-for="param in otherSortedParams" :key="param.name" class="param-label has-text-weight-semibold">
+                <li
+                  v-for="param in otherSortedParams.filter((p) => p.waterType === 'Fresh')"
+                  :key="param.name"
+                  class="param-label has-text-weight-semibold"
+                >
+                  {{ `${param.name} - OTHER` }}
+                  <span class="fa fa-times" @click="clearOtherParam(param)"></span>
+                </li>
+              </ul>
+              <ul class="selected-param-group bottom">
+                <p class="selected-param-header">Marine/Estuarine Parameters</p>
+                <li
+                  v-for="param in sortedParams.filter((p) => p.waterType === 'Saltwater')"
+                  :key="param.id"
+                  class="param-label has-text-weight-semibold"
+                >
+                  {{ param.label || `${param.parameter} - OTHER` }}
+                  <span
+                    class="fa fa-times"
+                    @click="$emit('updateData', { target: { value: param.id.toString() } }, paramQuestion)"
+                  ></span>
+                </li>
+                <li
+                  v-for="param in otherSortedParams.filter((p) => p.waterType !== 'Fresh')"
+                  :key="param.name"
+                  class="param-label has-text-weight-semibold"
+                >
                   {{ `${param.name} - OTHER` }}
                   <span class="fa fa-times" @click="clearOtherParam(param)"></span>
                 </li>
@@ -225,6 +256,23 @@ export default {
 
 .selected-parameters {
   height: 95% !important;
+  max-height: 475px;
+}
+
+.selected-param-group {
+  height: 50%;
+  padding-bottom: 0.5rem;
+  overflow: auto;
+
+  &.bottom {
+    border-top: 2px solid $blue;
+    padding-top: 0.5rem;
+  }
+}
+
+.selected-param-header {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
 }
 
 .arrows {
@@ -265,6 +313,7 @@ export default {
 }
 
 .param-label {
+  font-size: 0.95rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
