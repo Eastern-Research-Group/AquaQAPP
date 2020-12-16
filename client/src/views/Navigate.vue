@@ -358,7 +358,12 @@ export default {
           return accumulator + currentValue.value.split(',').length;
         }, 0);
         // Use labDuplicates count to confirm as it is the first sample design question and is required
-        hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+        // Make sure labDuplicates exists in qappData before checking length to avoid error
+        if (!this.qappData.labDuplicates) {
+          hasEmptyFields = true;
+        } else {
+          hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+        }
       } else if (this.currentSection.sectionName === 'recordHandling') {
         hasEmptyFields = true;
         if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
