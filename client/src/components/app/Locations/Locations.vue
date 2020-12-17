@@ -53,6 +53,18 @@
             :placeholder="`Enter ${question.questionLabel}`"
             required
           />
+          <input
+            v-if="question.dataEntryType === 'number'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.questionName]"
+            class="input"
+            type="number"
+            min="-180"
+            max="180"
+            step="0.000001"
+            :placeholder="`Enter ${question.questionLabel}`"
+            required
+          />
           <template v-if="question.dataEntryType === 'radio'">
             <template v-for="(option, index) in getOptions(question.refName)">
               <input

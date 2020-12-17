@@ -35,8 +35,8 @@
 34,9,differByLocation,Do your water quality concerns differ by sampling location?,,,checkboxBtn,5,FALSE,2,yesNo
 35,10,locationId,Location ID,,,text,35,FALSE,1,
 36,10,locationName,Location Name,,,text,255,FALSE,2,
-37,10,locationLat,Location Latitude,,,text,12,FALSE,3,
-38,10,locationLong,Location Longitude,,,text,12,FALSE,4,
+37,10,locationLat,Location Latitude,,,number,12,FALSE,3,
+38,10,locationLong,Location Longitude,,,number,12,FALSE,4,
 39,10,waterType,Water Type,,,radio,255,FALSE,5,waterTypes
 40,10,mapWaterConcerns,Water Quality Concerns,,,select,255,FALSE,6,concerns
 41,10,locationType,Sample Type,,,select,45,FALSE,7,locationTypes
