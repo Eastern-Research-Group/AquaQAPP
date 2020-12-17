@@ -1,14 +1,35 @@
 const uuidv4 = require('uuid/v4');
 const { Op } = require('sequelize');
-const { CompletedQappSection, Qapp, QappDatum, Question } = require('../models');
+const { CompletedQappSection, Qapp, QappDatum, Question, Section } = require('../models');
 
-function checkFieldLength(question, body) {
+async function markSectionIncomplete(qappId, sectionId) {
+  await CompletedQappSection.destroy({
+    where: { qappId, sectionId },
+  });
+  const sections = await CompletedQappSection.findAll({
+    where: { qappId },
+  });
+  return sections;
+}
+
+async function checkFieldLength(question, body) {
   if (question.id !== body.questionId) return `Data condition error - ${question.id} !== ${body.questionId}`;
 
   if (['text', 'email', 'tel', 'largeText'].indexOf(question.dataEntryType) !== -1) {
     if (body.value !== undefined) {
       const size = body.value.length;
-      if (size === 0) return `${question.questionLabel} is required.`;
+      if (size === 0) {
+        // If a question is blank but section has already been marked complete, make sure to un-mark as complete
+        const questionSection = await Section.findOne({ where: { sectionNumber: question.sectionNumber } });
+        if (questionSection) {
+          try {
+            await markSectionIncomplete(body.qappId, questionSection.id);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+        // return `${question.questionLabel} is required.`
+      }
       if (size > question.maxLength)
         return `${question.questionLabel} is too long. Maximum length is ${question.maxLength}.`;
     }
@@ -86,7 +107,7 @@ module.exports = {
   async store(req, res) {
     try {
       const question = await Question.findOne({ where: { questionName: 'title' } });
-      const error = checkFieldLength(question, req.body);
+      const error = await checkFieldLength(question, req.body);
       if (error !== null) {
         res.status(400).send({ error });
         return;
@@ -164,7 +185,7 @@ module.exports = {
       const promises = [];
       req.body.forEach(async (datum) => {
         const question = await Question.findOne({ where: { id: datum.questionId } });
-        const error = checkFieldLength(question, datum);
+        const error = await checkFieldLength(question, datum);
         if (error !== null) {
           res.status(400).send({ error });
           return;
@@ -185,9 +206,12 @@ module.exports = {
       // await all update/create statements before redirecting to qapp with data endpoint
       await Promise.all(promises);
 
+      // Reload QAPP instance to ensure all associations are up to date
+      const qapp = await Qapp.findByPk(qappId);
+      await qapp.reload();
+
       // redirect to return latest QAPP with data
-      // need to set negligible timeout in order for the sequelize associations to be ready on the redirect
-      setTimeout(() => res.redirect(`/api/qapps/${qappId}`), 10);
+      res.redirect(`/api/qapps/${qappId}`);
     } catch (err) {
       res.status(400).send({
         error: err.toString(),
@@ -274,12 +298,7 @@ module.exports = {
   },
   async deleteCompletedSection(req, res) {
     try {
-      await CompletedQappSection.destroy({
-        where: { qappId: req.body.qappId, sectionId: req.body.sectionId },
-      });
-      const sections = await CompletedQappSection.findAll({
-        where: { qappId: req.body.qappId },
-      });
+      const sections = await markSectionIncomplete(req.body.qappId, req.body.sectionId);
       res.send(sections);
     } catch (err) {
       res.status(400).send({
