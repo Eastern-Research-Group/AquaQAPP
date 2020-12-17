@@ -91,7 +91,7 @@
           <div v-if="question.dataEntryType === 'select'">
             <multiselect
               v-model="pendingData[question.questionName]"
-              :options="roles"
+              :options="combinedRoles"
               :multiple="true"
               :taggable="true"
               tag-placeholder="Add this as a new role"
@@ -102,24 +102,20 @@
               @remove="removeRole($event, question)"
             ></multiselect>
           </div>
-        </div>
-        <div class="field" v-for="role in otherRoles" :key="role.code">
-          <div class="field" v-for="question in questions" :key="question.id">
-            <label
-              v-if="['largeText'].indexOf(question.dataEntryType) !== -1 && shouldDisplayResponsibilities"
-              class="label"
-              :for="`question${question.id}${role.valueId}`"
-              >{{ role.label }} {{ question.questionLabel }}</label
-            >
-            <textarea
-              v-if="question.dataEntryType === 'largeText' && shouldDisplayResponsibilities"
-              :id="`question${question.id}${role.valueId}`"
-              v-model="pendingData[question.questionName][otherRoles.indexOf(role)].value"
-              class="input"
-              :placeholder="`Enter ${question.questionLabel}`"
-              :maxlength="question.maxLength"
-              required
-            ></textarea>
+          <div v-if="question.questionName === 'roles'" class="other-roles-container">
+            <div class="field" v-for="role in otherRoles" :key="role.code">
+              <label class="label" :for="`question${getQuestionId('responsibilities')}${role.valueId}`">
+                {{ role.label }} Responsibilities
+              </label>
+              <textarea
+                :id="`question${getQuestionId('responsibilities')}${role.valueId}`"
+                v-model="pendingData.responsibilities[otherRoles.indexOf(role)].value"
+                class="input"
+                placeholder="Enter Responsibilities"
+                :maxlength="4000"
+                required
+              ></textarea>
+            </div>
           </div>
         </div>
         <Button label="Save" :type="shouldShowEdit ? 'primary' : 'success'" submit />
@@ -176,7 +172,6 @@ export default {
       pendingData: {},
       rows: [],
       otherRoles: [],
-      responsibilities: [],
       columns: [
         {
           key: 'Full Name of Personnel',
@@ -207,6 +202,10 @@ export default {
     }),
     ...mapState('ref', ['roles']),
     ...mapGetters('qapp', ['qappData']),
+    ...mapGetters('structure', ['getQuestionId']),
+    combinedRoles() {
+      return this.roles.concat(this.otherRoles);
+    },
   },
   mounted() {
     this.refreshPersonnelData();
@@ -229,9 +228,8 @@ export default {
         valueId: newValueId,
       };
 
-      this.responsibilities.push(newResponsibility);
-
-      this.$set(this.pendingData, 'responsibilities', this.responsibilities);
+      if (!this.pendingData.responsibilities) this.pendingData.responsibilities = [];
+      this.$set(this.pendingData.responsibilities, this.pendingData.responsibilities.length, newResponsibility);
 
       this.otherRoles.push(enteredVal);
       this.shouldDisplayResponsibilities = true;
@@ -241,17 +239,17 @@ export default {
       if (newVal) newVal.push(enteredVal);
       else newVal = [enteredVal];
       // set pending data object to the new value
-      this.$set(this.pendingData, question.id, newVal);
+      this.$set(this.pendingData, question.questionName, newVal);
     },
     removeRole(value) {
       this.otherRoles = this.otherRoles.filter((role) => role.valueId !== value.valueId);
-      let filteredArray = [];
-      filteredArray = this.pendingData.responsibilities.filter((r) => r.valueId !== value.valueId);
-      this.$set(this.pendingData, this.responsibilitiesQuestionId, filteredArray);
+      if (this.pendingData.responsibilities && this.pendingData.responsibilities.length) {
+        const responsibilitiesArray = this.pendingData.responsibilities.filter((r) => r.valueId !== value.valueId);
+        this.$set(this.pendingData, 'responsibilities', responsibilitiesArray);
+      }
     },
     onEdit(row) {
       this.otherRoles = [];
-      this.responsibilities = [];
       this.selectedPersonnel = row;
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
@@ -273,7 +271,6 @@ export default {
         });
       }
       if (row.Responsibilities && row.Responsibilities.length !== 0) {
-        this.responsibilities = row.Responsibilities;
         this.shouldDisplayResponsibilities = true;
       }
     },
@@ -294,7 +291,6 @@ export default {
       this.selectedPersonnel = null;
       this.shouldShowEdit = false;
       this.otherRoles = [];
-      this.responsibilities = [];
 
       if (this.rows.find((row) => row['Primary Contact'] === 'X')) {
         this.isPrimaryContactDisabled = true;
@@ -307,22 +303,21 @@ export default {
       this.isFormIncomplete = false;
       this.questions.forEach((q) => {
         if (
-          this.responsibilities.length &&
           q.dataEntryType !== 'checkbox' &&
           q.dataEntryType !== 'singleCheckbox' &&
+          q.questionName !== 'responsibilities' &&
           !this.pendingData[q.questionName]
-        ) {
-          this.isFormIncomplete = true;
-        } else if (
-          !this.responsibilities.length &&
-          q.dataEntryType !== 'checkbox' &&
-          q.dataEntryType !== 'singleCheckbox' &&
-          !this.pendingData[q.questionName] &&
-          q.questionName !== 'responsibilities'
         ) {
           this.isFormIncomplete = true;
         }
       });
+      // Check that a responsibility has been entered for each "other" role
+      if (
+        (this.pendingData.roles && !this.pendingData.roles.length) ||
+        (this.otherRoles.length && this.otherRoles.length !== this.pendingData.responsibilities.length)
+      ) {
+        this.isFormIncomplete = true;
+      }
       // nextTick waits until Alert is now displayed (based on its v-if), and then sets focus to the alert
       if (this.isFormIncomplete) {
         this.$nextTick().then(() => {
@@ -442,7 +437,7 @@ export default {
         const row = personnel[personnelId];
         this.rows.push({
           ...row,
-          RolesList: row.Roles.map((r) => r.label).join(', '),
+          RolesList: row.Roles ? row.Roles.map((r) => r.label).join(', ') : '',
           valueId: personnelId,
         });
       });
@@ -478,5 +473,9 @@ export default {
 
 textarea {
   height: 6em;
+}
+
+.other-roles-container {
+  margin: 0.75rem 0 0 0.75rem;
 }
 </style>
