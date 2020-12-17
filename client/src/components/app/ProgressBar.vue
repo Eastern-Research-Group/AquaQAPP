@@ -1,8 +1,8 @@
 <template>
   <section class="progress-bar">
-    <div class="container has-text-white progress-flex" style="justify-content: space-between;">
-      <div v-if="title" class="i-block">QAPP Title: {{ title }}</div>
-      <div v-if="progress" class="progress-flex">
+    <div v-if="title" class="container has-text-white progress-flex" style="justify-content: space-between;">
+      <div class="i-block">QAPP Title: {{ title }}</div>
+      <div class="progress-flex">
         <div class="i-block">Project Progress: {{ progress }}%</div>
         <progress class="progress is-success i-block padding-x-1" :value="progress" max="100">{{ progress }}%</progress>
         <div class="i-block padding-x-1">
