@@ -258,6 +258,10 @@ module.exports = {
         });
       }
 
+      // Reload QAPP instance to ensure all associations are up to date
+      const qapp = await Qapp.findByPk(req.body.qappId);
+      await qapp.reload();
+
       // redirect to return latest QAPP with data
       res.redirect(303, `/api/qapps/${req.body.qappId}`);
     } catch (err) {
@@ -275,6 +279,11 @@ module.exports = {
           questionId: { [Op.or]: req.body.questionIds },
         },
       });
+
+      // Reload QAPP instance to ensure all associations are up to date
+      const qapp = await Qapp.findByPk(req.body.qappId);
+      await qapp.reload();
+
       // redirect to return latest QAPP with data
       res.redirect(303, `/api/qapps/${req.body.qappId}`);
     } catch (err) {

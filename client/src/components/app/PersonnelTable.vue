@@ -247,8 +247,13 @@ export default {
         const responsibilitiesArray = this.pendingData.responsibilities.filter((r) => r.valueId !== value.valueId);
         this.$set(this.pendingData, 'responsibilities', responsibilitiesArray);
       }
+      // If all other roles are cleared, clear all responsibilities
+      if (!this.otherRoles.length) {
+        this.$set(this.pendingData, 'responsibilities', []);
+      }
     },
     onEdit(row) {
+      this.isFormIncomplete = false;
       this.otherRoles = [];
       this.selectedPersonnel = row;
       this.questions.forEach((q) => {
@@ -286,6 +291,7 @@ export default {
       }
     },
     async onAddInfo() {
+      this.isFormIncomplete = false;
       this.pendingData = {};
       this.isEnteringInfo = true;
       this.selectedPersonnel = null;
