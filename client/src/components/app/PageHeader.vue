@@ -31,7 +31,7 @@
               <router-link class="navbar-item" to="/register">
                 <strong>Register</strong>
               </router-link>
-              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+              <a href="mailto:pamela.dibona@mass.gov;jill.carr@mass.gov;aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
             </div>
@@ -42,7 +42,7 @@
                 <strong>Dashboard</strong>
               </router-link>
               <user-header class="user-header" v-if="$auth.check()" />
-              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+              <a href="mailto:pamela.dibona@mass.gov;jill.carr@mass.gov;aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
             </div>
