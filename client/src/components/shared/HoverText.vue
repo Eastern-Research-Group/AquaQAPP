@@ -1,6 +1,9 @@
 <template>
   <span class="hover-info-container" tabindex="0" @keyup.esc="blur">
-    <span v-if="!icon" class="hover-link" :aria-describedby="hoverId">{{ linkText }}</span>
+    <span v-if="!icon" class="hover-link" :aria-describedby="hoverId">
+      {{ linkText }}
+      <slot name="linkContent" />
+    </span>
     <i v-if="icon" class="fa fa-info-circle" :aria-describedby="hoverId"></i>
     <span class="hover-info" role="tooltip" :id="hoverId" :style="customStyle">
       <slot />
