@@ -87,7 +87,9 @@ module.exports = {
           <p>
             Click on the section titles in the left-hand column to move between screens. As you add information to each
             screen, save your work by clicking the blue “Save” button in the upper-right corner before navigating away from
-            the screen. Note that you need to fill out all information in pop-up windows before they can be saved.
+            the screen. Note that you need to fill out all information in pop-up windows before they can be saved. Screens do
+            not need to be completed in order. You may decide to edit your entries on the Project Description screen after
+            completing the Parameters screen, for example.
           </p>
           <p>
             Mark each screen as complete by clicking the “Mark as Complete” button in upper-right corner. AquaQAPP will
@@ -219,7 +221,8 @@ module.exports = {
       sectionLabel: 'Project Description',
       sectionName: 'projectDescription',
       sectionSort: 8,
-      instructions: '',
+      instructions:
+        'Use the following prompts to describe the work to be performed, the type of data you plan to collect, the methods to be used to collect the data, and the decisions you plan to make based on those data.',
     });
     records.push({
       sectionNumber: '8',
@@ -281,7 +284,8 @@ module.exports = {
       sectionLabel: 'Sampling Design Summary',
       sectionName: 'sampleDesignSummary',
       sectionSort: 13,
-      instructions: '',
+      instructions:
+        'Use the following prompts to describe how your sampling plan will meet the project objectives (as described on the Project Description screen).',
     });
     records.push({
       sectionNumber: '16',
