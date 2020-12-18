@@ -22,17 +22,20 @@
     <fieldset class="field">
       <legend class="is-sr-only">{{ concernsQuestion.label }}</legend>
       <div class="columns is-multiline">
-        <CheckboxButton
-          v-for="option in getOptions('concerns')"
-          :key="option.id"
-          :id="option.code"
-          :value="option.code"
-          :disabled="locationConcerns.indexOf(option.code) > -1"
-          :checked="!!(pendingData.waterConcerns && pendingData.waterConcerns.indexOf(option.code) > -1)"
-          @check="updateConcern"
-        >
-          <HoverText class="hover-text" :linkText="option.label">{{ option.description }}</HoverText>
-        </CheckboxButton>
+        <HoverText v-for="option in getOptions('concerns')" :key="option.id" class="hover-text column is-one-third">
+          <template #linkContent>
+            <CheckboxButton
+              :id="option.code"
+              :value="option.code"
+              :disabled="locationConcerns.indexOf(option.code) > -1"
+              :checked="!!(pendingData.waterConcerns && pendingData.waterConcerns.indexOf(option.code) > -1)"
+              @check="updateConcern"
+            >
+              {{ option.label }}
+            </CheckboxButton>
+          </template>
+          {{ option.description }}
+        </HoverText>
       </div>
     </fieldset>
     <fieldset>
@@ -177,20 +180,32 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .hover-warning {
   display: inline-block;
   margin-bottom: 1rem;
 }
 
-.btn-container .button {
-  margin-right: 1em;
-}
-.hover-text {
-  text-align: center;
-}
+::v-deep {
+  .btn-container .button {
+    margin-right: 1em;
+  }
 
-.hover-text .hover-link {
-  border-bottom: none !important;
+  .hover-text {
+    text-align: center;
+  }
+
+  .hover-text .hover-link {
+    border-bottom: none !important;
+  }
+
+  .hover-text .is-one-third {
+    width: auto;
+    padding: 0;
+  }
+
+  .hover-text .hover-info {
+    top: 85%;
+  }
 }
 </style>

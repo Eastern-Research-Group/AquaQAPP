@@ -31,7 +31,7 @@
               <router-link class="navbar-item" to="/register">
                 <strong>Register</strong>
               </router-link>
-              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+              <a href="mailto:pamela.dibona@mass.gov;jill.carr@mass.gov;aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
             </div>
@@ -42,7 +42,7 @@
                 <strong>Dashboard</strong>
               </router-link>
               <user-header class="user-header" v-if="$auth.check()" />
-              <a href="mailto:pamela.dibona@state.ma.us;jillian.carr@mass.gov;Aquaqapp@erg.com" class="navbar-item">
+              <a href="mailto:pamela.dibona@mass.gov;jill.carr@mass.gov;aquaqapp@erg.com" class="navbar-item">
                 <strong>Contact Us</strong>
               </a>
             </div>
@@ -80,7 +80,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 h1 {
   font-weight: bold;
 }
@@ -92,7 +92,30 @@ h1 {
   background-color: #fff;
   font-weight: bold;
 }
-.generate-btn {
-  padding: 0 0.5em;
+
+.navbar-burger {
+  height: 3.75rem;
+
+  span {
+    height: 3px;
+    width: 20px;
+
+    &:nth-child(1) {
+      top: calc(50% - 7px);
+    }
+
+    &:nth-child(3) {
+      top: calc(50% + 5px);
+    }
+  }
+
+  &.is-active span {
+    &:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    &:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+  }
 }
 </style>

@@ -30,7 +30,7 @@
           <Button
             type="primary"
             class="aq-save-btn is-pulled-right"
-            :disabled="hasSaved || checkRequiredFields()"
+            :disabled="hasSaved || !hasUnsavedData"
             :title="getSaveBtnHoverText()"
             @click.native="saveData"
           >
@@ -40,7 +40,7 @@
           <MarkComplete
             @markComplete="markComplete(currentSection.sectionNumber)"
             :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
-            :disabled="checkRequiredFields()"
+            :disabled="!(currentSection.id && completedSections.indexOf(currentSection.id) > -1) && hasEmptyFields"
           />
 
           <h2 class="label is-size-4">
@@ -134,10 +134,20 @@
                   "
                 >
                   <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
-                    <p :key="index" class="has-text-black example-text" ref="exampleText" v-html="example.text"></p>
+                    <p
+                      :key="index"
+                      class="has-text-black example-text content"
+                      ref="exampleText"
+                      v-html="example.text"
+                    ></p>
                   </template>
                 </Tabs>
-                <p v-else class="has-text-black example-text" ref="exampleText" v-html="getExampleText(question)"></p>
+                <p
+                  v-else
+                  class="has-text-black example-text content"
+                  ref="exampleText"
+                  v-html="getExampleText(question)"
+                ></p>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
@@ -221,7 +231,7 @@ export default {
     return {
       currentSection: {},
       shouldShowExample: false,
-      hasSaved: false,
+      hasSaved: true,
       pendingData: {},
       shouldDisplayUnsavedWarning: false,
       pendingSection: null,
@@ -263,6 +273,49 @@ export default {
     customSection() {
       return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
     },
+    hasEmptyFields() {
+      let hasEmptyFields = false;
+
+      if (this.currentSection.sectionName === 'sampleDesign') {
+        // Make sure sample design details have saved entries for all parameters by all locations
+        const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value.split(',').length;
+        }, 0);
+        // Use labDuplicates count to confirm as it is the first sample design question and is required
+        // Make sure labDuplicates exists in qappData before checking length to avoid error
+        if (!this.qappData.labDuplicates) {
+          hasEmptyFields = true;
+        } else {
+          hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+        }
+      } else if (this.currentSection.sectionName === 'recordHandling') {
+        hasEmptyFields = true;
+        if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
+      } else if (this.currentSection.sectionName === 'parameters') {
+        // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
+        if (!this.pendingData.parameters && !this.pendingData.otherParameters) hasEmptyFields = true;
+      } else {
+        this.currentQuestions.forEach((q) => {
+          if (
+            (!this.pendingData[q.questionName] ||
+              (this.pendingData[q.questionName] &&
+                typeof this.pendingData[q.questionName] === 'string' &&
+                !this.pendingData[q.questionName].trim())) &&
+            (!this.qappData[q.questionName] ||
+              (this.qappData[q.questionName] &&
+                typeof this.qappData[q.questionName] === 'string' &&
+                !this.qappData[q.questionName].trim()))
+          ) {
+            hasEmptyFields = true;
+          }
+        });
+      }
+      return hasEmptyFields;
+    },
+    hasUnsavedData() {
+      if (this.hasSaved) return false;
+      return this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length;
+    },
   },
   async mounted() {
     // Fetch structure data from DB to generate sections and questions on the fly
@@ -284,7 +337,21 @@ export default {
       this.getFirstUncompletedSectionIndex();
     }
   },
+  created() {
+    window.addEventListener('beforeunload', this.preventReloadIfUnsaved);
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.preventReloadIfUnsaved);
+  },
   methods: {
+    preventReloadIfUnsaved(e) {
+      if (this.hasUnsavedData) {
+        const confirmationMessage = 'You have unsaved changes. If you leave before saving, your changes will be lost.';
+        e.returnValue = confirmationMessage;
+        return confirmationMessage;
+      }
+      return undefined;
+    },
     getExampleText(question) {
       if (question.examples.length) {
         return question.examples[0].text;
@@ -298,11 +365,10 @@ export default {
           .getElementById(`section${section.id}`)
           .scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
-      if (this.hasUnsavedData()) {
+      if (this.hasUnsavedData) {
         this.shouldDisplayUnsavedWarning = true;
         this.pendingSection = section;
       } else {
-        this.hasSaved = false;
         this.currentSection = section;
         // Set initial pending data based on existing qapp data
         this.pendingData = Object.assign({}, this.qappData);
@@ -348,44 +414,6 @@ export default {
       } else {
         this.$set(this.pendingData, question.questionName, e.target.value);
       }
-    },
-    checkRequiredFields() {
-      let hasEmptyFields = false;
-
-      if (this.currentSection.sectionName === 'sampleDesign') {
-        // Make sure sample design details have saved entries for all parameters by all locations
-        const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue.value.split(',').length;
-        }, 0);
-        // Use labDuplicates count to confirm as it is the first sample design question and is required
-        hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
-      } else if (this.currentSection.sectionName === 'recordHandling') {
-        hasEmptyFields = true;
-        if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
-      } else if (this.currentSection.sectionName === 'parameters') {
-        // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
-        if (!this.pendingData.parameters && !this.pendingData.otherParameters) hasEmptyFields = true;
-      } else {
-        this.currentQuestions.forEach((q) => {
-          if (
-            (!this.pendingData[q.questionName] ||
-              (this.pendingData[q.questionName] &&
-                typeof this.pendingData[q.questionName] === 'string' &&
-                !this.pendingData[q.questionName].trim())) &&
-            (!this.qappData[q.questionName] ||
-              (this.qappData[q.questionName] &&
-                typeof this.qappData[q.questionName] === 'string' &&
-                !this.qappData[q.questionName].trim()))
-          ) {
-            hasEmptyFields = true;
-          }
-        });
-      }
-      return hasEmptyFields;
-    },
-    hasUnsavedData() {
-      if (this.hasSaved) return false;
-      return this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length;
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
@@ -495,7 +523,7 @@ export default {
       if (this.tableSections.indexOf(this.currentSection.sectionLabel) > -1) {
         return 'Data are automatically saved upon adding, editing, or deleting.';
       }
-      if (this.checkRequiredFields()) {
+      if (this.hasEmptyFields) {
         return 'You must complete all required fields before saving.';
       }
       return null;
@@ -607,6 +635,10 @@ export default {
 
 .instructions {
   margin-bottom: 1.25rem;
+
+  strong {
+    color: #fff;
+  }
 }
 
 textarea {

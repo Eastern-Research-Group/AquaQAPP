@@ -11,7 +11,11 @@ const state = {
 const getters = {
   getQuestionId(state) {
     return (questionName) => {
-      return state.questions.find((q) => q.questionName === questionName).id;
+      const question = state.questions.find((q) => q.questionName === questionName);
+      if (question) {
+        return state.questions.find((q) => q.questionName === questionName).id;
+      }
+      return 0;
     };
   },
 };

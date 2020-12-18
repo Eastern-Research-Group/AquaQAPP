@@ -28,24 +28,33 @@ module.exports = {
             and EPA (EPA Grants No. OS-83941701-0 and CE-00A00621-0). AquaQAPP generates tailored Quality Assurance Project
             Plans (QAPPs) for marine and freshwater water quality and benthic monitoring efforts in the Commonwealth of
             Massachusetts and is intended to assist volunteer monitoring programs in collecting quality-assured data. AquaQAPP
-            supports monitoring projects that incorporate:
+            may be used for projects set outside of Massachusetts; we suggest consulting with your state’s agency for guidance
+            on approval of the generated QAPP. AquaQAPP supports monitoring projects that incorporate:
           </p>
           <ul>
             <li>Basic water quality monitoring parameters for rivers and streams.</li>
             <li>Basic water quality monitoring parameters for marine and estuarine waters.</li>
-            <li>Benthic monitoring and habitat assessment for wadeable rivers and streams.</li>
-            <li>Benthic monitoring and characterization in marine or estuarine waters.</li>
+            <li>Benthic invertebrates and sediment analysis for wadeable rivers and streams.</li>
+            <li>Benthic invertebrates and sediment characterization in marine or estuarine waters.</li>
           </ul>
           <p>
+            AquaQAPP uses the following USGS salinity-based definitions to distinguish among the three water types: fresh
+            water is less than 1,000 ppm, estuarine waters range from 1,000 ppm 30,000 ppm, and marine water contains more
+            than 30,000 ppm dissolved salts.
+          </p>
+          <p>
             AquaQAPP does not currently support parameters associated with concerns such as wetlands assessment, marine
-            debris, or toxics (e.g., heavy metals, pesticides, PCBs, PAHs). While you may use AquaQAPP to create a QAPP that
-            includes sampling for these and other parameters, this requires incorporation of additional sections into the
-            generated QAPP and submission to MassDEP for approval before beginning work on the project. (See Data Usage for
-            more detail on this, below.)
+            debris, contaminants of emerging concern, or toxics (e.g., heavy metals, pesticides, PCBs, PAHs). While you may
+            use AquaQAPP to create a QAPP that includes sampling for these and other parameters, this requires incorporation
+            of additional sections into the generated QAPP and submission to MassDEP for approval before beginning work on the
+            project. (See Data Usage for more detail on this, below.)
           </p>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
           <p><strong id="before">Before You Start</strong></p>
-          <p>Before developing your QAPP using AquaQAPP, it will be helpful to assemble the following information:</p>
+          <p>
+            Before developing your QAPP using AquaQAPP, you might want to review the User Guide. It will also be helpful to
+            assemble the following information:
+          </p>
           <ul>
             <li>
               Contact information for the following personnel in the organization coordinating the monitoring project: Project
@@ -87,7 +96,9 @@ module.exports = {
           <p>
             Click on the section titles in the left-hand column to move between screens. As you add information to each
             screen, save your work by clicking the blue “Save” button in the upper-right corner before navigating away from
-            the screen. Note that you need to fill out all information in pop-up windows before they can be saved.
+            the screen. Note that you need to fill out all information in pop-up windows before they can be saved. Screens do
+            not need to be completed in order. You may decide to edit your entries on the Project Description screen after
+            completing the Parameters screen, for example.
           </p>
           <p>
             Mark each screen as complete by clicking the “Mark as Complete” button in upper-right corner. AquaQAPP will
@@ -109,20 +120,26 @@ module.exports = {
           </p>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
           <p><strong id="help">Helpful Resources</strong></p>
-          <p>
-            For detailed information about using AquaQAPP and guidance for selecting analytical methods, please refer to the
-            <strong>User Guide</strong>.
-          </p>
-          <p>
-            <strong>Standard Operating Procedures</strong> for sampling methods referenced in AquaQAPP are available on
-            MassBays’ website (<a
-              class="getting-started-link"
-              target="_blank"
-              href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
-              >https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
-            >). These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based monitoring
-            programs in Massachusetts waters.
-          </p>
+          <ul>
+            <li>
+              For detailed information about using AquaQAPP and guidance for selecting analytical methods, please refer to the
+              <strong>User Guide</strong>.
+            </li>
+            <li>
+              <strong>Standard Operating Procedures</strong> for sampling methods referenced in AquaQAPP are available on
+              MassBays’ website (<a
+                class="getting-started-link"
+                target="_blank"
+                href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
+                >https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
+              >). These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based
+              monitoring programs in Massachusetts waters.
+            </li>
+            <li>
+              Forms and form templates to accompany the QAPP are available in an Excel workbook on MassBays’ website. You will
+              be prompted to add relevant forms to your generated QAPP.
+            </li>
+          </ul>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
           <p><strong id="data">Data Usage</strong></p>
           <p>
@@ -142,7 +159,10 @@ module.exports = {
             through online portals and viewers (for example, the How’s My Waterway application available at
             <a class="getting-started-link" target="_blank" href="https://www.epa.gov/waterdata/hows-my-waterway"
               >https://www.epa.gov/waterdata/hows-my-waterway</a
-            >).
+            >). You can learn more about WQX at
+            <a href="https://www.epa.gov/waterdata/water-quality-data-upload-wqx">
+              https://www.epa.gov/waterdata/water-quality-data-upload-wqx
+            </a>.
           </p>
           <p>
             MassBays is especially interested in any monitoring data in the coastal watersheds of Ipswich Bay, Massachusetts
@@ -184,7 +204,7 @@ module.exports = {
       sectionName: 'projectOrganization',
       sectionSort: 4,
       instructions:
-        'Use the "Add" button to populate the table with information about project organization and personnel. Enter information in the pop-up window for all relevant personnel and associated organizations. You must provide contacts for the Project Manager, QA Manager, Field Coordinator, and Data Manager roles. Note that only one person can be selected as the primary contact. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        'Use the "Add" button to populate the table with information about project organization and personnel. Enter information in the pop-up window for all relevant personnel and associated organizations. You must provide names and contact information for the Project Manager, QA Manager, Field Coordinator, and Data Manager roles. The same person may fill more than one role; only one person can serve as the primary contact. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
     });
     records.push({
       sectionNumber: '9',
@@ -193,7 +213,7 @@ module.exports = {
       sectionName: 'waterQualityConcerns',
       sectionSort: 5,
       instructions:
-        'Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. If you are selecting the "General Environmental Health: Benthic" you must also select the "General Environmental Health: Physical/Chemical Water Quality" concern. See the User Guide for more information about this requirement, and hover over each box below to see a description of the concern.',
+        '<p>Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. Hover over each box below to see a description of the concern. AquaQAPP will suggest parameters based on the concerns you select here; you will also have the opportunity to select additional monitoring parameters on the Parameters screen.</p><p>If you are selecting the "General Environmental Health: Benthic," AquaQAPP will automatically select the "General Environmental Health: Physical/Chemical Water Quality" concern, per MassDEP requirements.</p>',
     });
     records.push({
       sectionNumber: '5',
@@ -219,7 +239,8 @@ module.exports = {
       sectionLabel: 'Project Description',
       sectionName: 'projectDescription',
       sectionSort: 8,
-      instructions: '',
+      instructions:
+        'Use the following prompts to describe the work to be performed, the type of data you plan to collect, the methods to be used to collect the data, and the decisions you plan to make based on those data.',
     });
     records.push({
       sectionNumber: '8',
@@ -245,8 +266,37 @@ module.exports = {
       sectionLabel: 'Parameters',
       sectionName: 'parameters',
       sectionSort: 11,
-      instructions:
-        '<p> Using the appropriate tab for freshwater and marine/estuarine locations, select all parameters and analytical methods you plan to measure. </p> <p> The first box displays suggested parameters based on your selected water type(s) and concern(s). The middle box contains all parameters available in AquaQAPP. To select a parameter, click on the checkbox in the same row. This will move the parameter to the “Selected” box on the right-hand side of the screen, which displays all parameters that will be included in the generated QAPP. Note that parameters are paired with analytical methods, so take care to select the appropriate combination of parameter and method for your project. </p> <p> The "Other parameters" text box at the bottom of the screen provides space to enter any parameters not listed. If your organization intends to submit data to MassDEP and you enter an "other" parameter, please note that MassDEP will need to review the generated QAPP before you can implement it. </p> <p> <b><i>If you are conducting benthic monitoring</i></b> (i.e., your concerns include “General Environmental Health: Benthic”), additional measurements are necessary to provide context for your findings. Manually select the following parameters from the lists on this page: </p> <ul> <li>For benthic sampling in wadeable streams, select temperature, conductivity, and dissolved oxygen.</li> <li> For benthic sampling in estuarine or marine waters, select sample penetration depth, sediment volume, sediment texture, temperature, salinity, and dissolved oxygen. </li> </ul> ',
+      instructions: `
+        <p>
+          Using the appropriate tab for freshwater and marine/estuarine locations, select all parameters you plan to measure.
+        </p>
+        <p>
+          The first box displays suggested parameters based on your selected water type(s) and concern(s). The middle box
+          contains all parameters available in AquaQAPP. To select a parameter, click on the checkbox in the same row. This
+          will move the parameter to the “Selected” box on the right-hand side of the screen, which displays all parameters
+          that will be included in the generated QAPP. Note that parameters are paired with analytical or sample collection
+          methods, so take care to select the appropriate combination of parameter and method for your project.
+        </p>
+        <p>
+          The "Other parameters" text box at the bottom of the screen provides space to enter any parameters not listed. If
+          your organization intends to submit data to MassDEP and you enter an "other" parameter, please note that MassDEP
+          will need to review the generated QAPP before you can implement it.
+        </p>
+        <p>
+          <strong class="has-text-white"><i>If you are conducting benthic monitoring</i></strong> (i.e., your concerns include “General Environmental
+          Health: Benthic”), additional measurements are necessary to provide context for your findings. Manually select the
+          following parameters from the lists on this page:
+        </p>
+        <ul>
+          <li>
+            For benthic sampling in wadeable streams, select temperature, conductivity, and dissolved oxygen.
+          </li>
+          <li>
+            For benthic sampling in estuarine or marine waters, select sample penetration depth, sediment volume, sediment
+            texture, temperature, salinity, and dissolved oxygen.
+          </li>
+        </ul>
+      `,
     });
     records.push({
       sectionNumber: '12',
@@ -281,7 +331,8 @@ module.exports = {
       sectionLabel: 'Sampling Design Summary',
       sectionName: 'sampleDesignSummary',
       sectionSort: 13,
-      instructions: '',
+      instructions:
+        'Use the following prompts to describe how your sampling plan will meet the project objectives (as described on the Project Description screen).',
     });
     records.push({
       sectionNumber: '16',

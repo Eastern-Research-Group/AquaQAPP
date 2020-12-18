@@ -18,7 +18,7 @@
         <div class="column is-8">
           <p>{{ selectedLocation['Location ID'] }}</p>
           <p>{{ selectedLocation['Location Name'] }}</p>
-          <p>{{ selectedLocation['Water Type'] }}</p>
+          <p>{{ selectedLocation['Water Type'].replace('Salt', 'Marine') }}</p>
           <p>{{ selectedLocation.waterConcerns }}</p>
         </div>
       </div>
