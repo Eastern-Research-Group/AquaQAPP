@@ -134,10 +134,20 @@
                   "
                 >
                   <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
-                    <p :key="index" class="has-text-black example-text" ref="exampleText" v-html="example.text"></p>
+                    <p
+                      :key="index"
+                      class="has-text-black example-text content"
+                      ref="exampleText"
+                      v-html="example.text"
+                    ></p>
                   </template>
                 </Tabs>
-                <p v-else class="has-text-black example-text" ref="exampleText" v-html="getExampleText(question)"></p>
+                <p
+                  v-else
+                  class="has-text-black example-text content"
+                  ref="exampleText"
+                  v-html="getExampleText(question)"
+                ></p>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
@@ -625,6 +635,10 @@ export default {
 
 .instructions {
   margin-bottom: 1.25rem;
+
+  strong {
+    color: #fff;
+  }
 }
 
 textarea {
