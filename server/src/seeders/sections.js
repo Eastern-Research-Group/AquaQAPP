@@ -123,7 +123,8 @@ module.exports = {
           <ul>
             <li>
               For detailed information about using AquaQAPP and guidance for selecting analytical methods, please refer to the
-              <strong>User Guide</strong>.
+              <strong>User Guide</strong>. It can be accessed via links on the top navigation bar as well as via the
+              <span class="fa fa-info-circle"></span> links on each screen.
             </li>
             <li>
               <strong>Standard Operating Procedures</strong> for sampling methods referenced in AquaQAPP are available on
@@ -136,8 +137,8 @@ module.exports = {
               monitoring programs in Massachusetts waters.
             </li>
             <li>
-              Forms and form templates to accompany the QAPP are available in an Excel workbook on MassBays’ website. You will
-              be prompted to add relevant forms to your generated QAPP.
+              <strong>Forms and form templates</strong> to accompany the QAPP are available in an Excel workbook on MassBays’
+              website. You will be prompted to add relevant forms to your generated QAPP.
             </li>
           </ul>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>

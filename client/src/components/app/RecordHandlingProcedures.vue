@@ -29,7 +29,6 @@
             :id="`question${question.id}`"
             v-model="pendingData[question.questionName]"
             class="input"
-            :placeholder="`Enter ${selectedRow.activity}`"
             :maxlength="question.maxLength"
             required
           ></textarea>

@@ -54,9 +54,6 @@
             :id="`question${question.id}`"
             v-model="pendingData[question.questionName]"
             class="input"
-            :placeholder="
-              `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
-            "
             :maxlength="question.maxLength"
             required
           ></textarea>
