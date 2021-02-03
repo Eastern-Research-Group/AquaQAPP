@@ -155,6 +155,7 @@ const getters = {
         });
       }
     });
+    dataObj.otherParameters = dataObj.otherParameters || [];
 
     dataObj.dateGenerated = format(new Date(), 'MMMM do, yyyy');
 

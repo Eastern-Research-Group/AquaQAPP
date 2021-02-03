@@ -298,6 +298,11 @@ module.exports = {
         valueId: 1,
       },
       {
+        questionId: 71,
+        value: '12345',
+        valueId: 1,
+      },
+      {
         questionId: 53,
         value: 1,
         valueId: 2,
@@ -320,6 +325,11 @@ module.exports = {
       {
         questionId: 57,
         value: 10000,
+        valueId: 2,
+      },
+      {
+        questionId: 71,
+        value: '12345',
         valueId: 2,
       },
       {

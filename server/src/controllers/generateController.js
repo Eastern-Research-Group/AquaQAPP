@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
   async generate(req, res) {
     try {
-      const file = await fs.readFileSync(path.resolve('server/src/templates/MassBays-AquaQAPP-MasterQAPP.docx'));
+      const file = fs.readFileSync(path.resolve('server/src/templates/MasterQAPP_version4_coded_01262021.docx'));
       const buffer = await createReport({
         template: file,
         output: 'buffer',
@@ -15,7 +15,6 @@ module.exports = {
       res.type('application/octet-stream');
       res.set('Content-Type', 'application/octet-stream');
       res.header('Content-type', 'application/octet-stream');
-      res.header('Content-disposition', 'inline; filename=SectionA.docx');
 
       res.write(buffer, 'binary');
       return res.status(200).end(null, 'binary');

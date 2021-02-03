@@ -77,7 +77,7 @@ export default {
       const data = window.URL.createObjectURL(newBlob);
       const link = document.createElement('a');
       link.href = data;
-      link.download = 'test.docx';
+      link.download = `${this.title}.docx`;
       link.click();
       setTimeout(function firefoxDelay() {
         // For Firefox it is necessary to delay revoking the ObjectURL
