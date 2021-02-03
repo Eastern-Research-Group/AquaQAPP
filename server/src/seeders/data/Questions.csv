@@ -66,5 +66,5 @@
 67,6,projectBackgroundScientificEfforts,Previous Scientific Efforts,Describe previous scientific efforts to investigate the problem. Include any relevant findings identified as part of this research.,,largeText,4000,TRUE,2,
 68,6,projectBackgroundGaps,Data Gaps,What data gaps will be addressed by the planned project? How will the project complement existing data or information (if applicable)?,,largeText,4000,TRUE,3,
 69,6,projectBackgroundExplain,Explanation,Explain why your group in particular is undertaking the project.,,largeText,4000,TRUE,4,
-70,15,dataQualityIndicators,Data Quality Indicators,"Describe how you define acceptable data quality for each parameter in your project in terms of Precision, Accuracy, Representativeness, Comparability, and Completeness.",,largeText,4000,TRUE,4,
+70,15,dataQualityIndicators,Data Quality Indicators,"Describe how you define acceptable data quality for your project in terms of Precision, Accuracy, Representativeness, Comparability, and Completeness.",,largeText,4000,TRUE,4,
 71,13,sampleLocationId,Sample Location ID,,,text,1000,FALSE,8,
