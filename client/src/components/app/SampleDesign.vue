@@ -204,11 +204,10 @@ export default {
           location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
         }
 
-        const paramsByLocation = this.qappData.parametersByLocation
-          .find((p) => {
-            return p.valueId === val.valueId;
-          })
-          .value.split(',');
+        const paramsByLocationObj = this.qappData.parametersByLocation.find((p) => {
+          return p.valueId === val.valueId;
+        });
+        const paramsByLocation = paramsByLocationObj ? paramsByLocationObj.value.split(',') : [];
         paramsByLocation.forEach((paramId) => {
           const parameterSampleData = { Parameter: paramId };
           this.questions.forEach((q) => {
