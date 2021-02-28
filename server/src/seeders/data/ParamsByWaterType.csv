@@ -15,41 +15,41 @@
 14,Dissolved oxygen - DO meter,Dissolved oxygen,DO meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
 15,Dissolved oxygen - multi-parameter probe meter,Dissolved oxygen,Multi-parameter probe meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
 16,Dissolved oxygen - multi-parameter probe meter,Dissolved oxygen,Multi-parameter probe meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
-17,E. coli - EPA 1603,E. coli,EPA 1603,Freshwater,TRUE,FALSE,Freshwater Water Quality
-18,E. coli - SM 9223-B,E. coli,SM 9223-B,Freshwater,TRUE,FALSE,Freshwater Water Quality
-19,Enterococci - EPA 1600,Enterococci,EPA 1600,Saltwater,FALSE,TRUE,Saltwater Water Quality
-20,Enterococci - SM 9230,Enterococci,SM 9230,Saltwater,FALSE,TRUE,Saltwater Water Quality
-21,Sediment volume - Sediment grab samples,Sediment volume,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
-22,Grain size - Sediment grab samples,Grain size,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
-23,Infauna - Sediment grab samples,Infauna,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
-24,Macroinvertebrates - Kick sampling,Macroinvertebrates,Kick sampling,Freshwater,TRUE,FALSE,Freshwater Benthic
-25,Macroinvertebrates - Rock baskets,Macroinvertebrates,Rock baskets,Freshwater,TRUE,FALSE,Freshwater Benthic
-26,Microcystins - EPA 544,Microcystins,EPA 544,Freshwater,TRUE,FALSE,Freshwater Water Quality
-27,Microcystins - EPA 544,Microcystins,EPA 544,Saltwater,FALSE,TRUE,Saltwater Water Quality
-28,Microcystins - EPA 546,Microcystins,EPA 546,Freshwater,TRUE,FALSE,Freshwater Water Quality
-29,Microcystins - EPA 546,Microcystins,EPA 546,Saltwater,FALSE,TRUE,Saltwater Water Quality
-30,Microcystins - in situ,Microcystins,in situ,Freshwater,TRUE,FALSE,Freshwater Water Quality
-31,Microcystins - in situ,Microcystins,in situ,Saltwater,FALSE,TRUE,Saltwater Water Quality
-32,Nitrate-Nitrite-N - EPA 353.2,Nitrate-Nitrite-N,EPA 353.2,Freshwater,TRUE,FALSE,Freshwater Water Quality
-33,Nitrate-Nitrite-N - EPA 353.2,Nitrate-Nitrite-N,EPA 353.2,Saltwater,FALSE,TRUE,Saltwater Water Quality
-34,Nitrate-Nitrite-N - SM 4500-NO3,Nitrate-Nitrite-N,SM 4500-NO3,Freshwater,TRUE,FALSE,Freshwater Water Quality
-35,Nitrate-Nitrite-N - SM 4500-NO3,Nitrate-Nitrite-N,SM 4500-NO3,Saltwater,FALSE,TRUE,Saltwater Water Quality
-36,Orthophosphate - EPA 365.5,Orthophosphate,EPA 365.5,Freshwater,TRUE,FALSE,Freshwater Water Quality
-37,Orthophosphate - EPA 365.5,Orthophosphate,EPA 365.5,Saltwater,FALSE,TRUE,Saltwater Water Quality
-38,Orthophosphate - SM 4500-P,Orthophosphate,SM 4500-P,Freshwater,TRUE,FALSE,Freshwater Water Quality
-39,Orthophosphate - SM 4500-P,Orthophosphate,SM 4500-P,Saltwater,FALSE,TRUE,Saltwater Water Quality
-40,Orthophosphate - USGS 1-4650-03,Orthophosphate,USGS 1-4650-03,Freshwater,TRUE,FALSE,Freshwater Water Quality
-41,Orthophosphate - USGS 1-4650-03,Orthophosphate,USGS 1-4650-03,Saltwater,FALSE,TRUE,Saltwater Water Quality
-42,Oxygen saturation - DO meter,Oxygen saturation,DO meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
-43,Oxygen saturation - multi-parameter probe meter,Oxygen saturation,Multi-parameter probe meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
-44,pH - multi-parameter probe meter,pH,Multi-parameter probe meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
-45,pH - multi-parameter probe meter,pH,Multi-parameter probe meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
-46,pH - pH meter,pH,pH meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
-47,pH - pH meter,pH,pH meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
-48,Salinity - multi-parameter probe meter,Salinity,Multi-parameter probe meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
-49,Salinity - salinity meter,Salinity,Salinity meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
-50,Sample penetration depth - Sediment grab samples,Sample penetration depth,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
-51,Sediment texture - Sediment grab samples,Sediment texture,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
+17,Dissolved oxygen - SM 4500-O,Dissolved oxygen,SM 4500-O,Freshwater,TRUE,FALSE,Freshwater Water Quality
+18,Dissolved oxygen - SM 4500-O,Dissolved oxygen,SM 4500-O,Saltwater,FALSE,TRUE,Saltwater Water Quality
+19,E. coli - EPA 1603,E. coli,EPA 1603,Freshwater,TRUE,FALSE,Freshwater Water Quality
+20,E. coli - SM 9223-B,E. coli,SM 9223-B,Freshwater,TRUE,FALSE,Freshwater Water Quality
+21,Enterococci - EPA 1600,Enterococci,EPA 1600,Saltwater,FALSE,TRUE,Saltwater Water Quality
+22,Enterococci - SM 9230,Enterococci,SM 9230,Saltwater,FALSE,TRUE,Saltwater Water Quality
+23,Grain size - Sediment grab samples,Grain size,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
+24,Infauna - Sediment grab samples,Infauna,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
+25,Macroinvertebrates - Kick sampling,Macroinvertebrates,Kick sampling,Freshwater,TRUE,FALSE,Freshwater Benthic
+26,Macroinvertebrates - Rock baskets,Macroinvertebrates,Rock baskets,Freshwater,TRUE,FALSE,Freshwater Benthic
+27,Microcystins - EPA 546 or ELISA-ADDA,Microcystins,EPA 546 or ELISA-ADDA,Freshwater,TRUE,FALSE,Freshwater Water Quality
+28,Microcystins - EPA 546 or ELISA-ADDA,Microcystins,EPA 546 or ELISA-ADDA,Saltwater,FALSE,TRUE,Saltwater Water Quality
+29,Microcystins - in situ,Microcystins,in situ,Freshwater,TRUE,FALSE,Freshwater Water Quality
+30,Microcystins - in situ,Microcystins,in situ,Saltwater,FALSE,TRUE,Saltwater Water Quality
+31,Nitrate-Nitrite-N - EPA 353.2,Nitrate-Nitrite-N,EPA 353.2,Freshwater,TRUE,FALSE,Freshwater Water Quality
+32,Nitrate-Nitrite-N - EPA 353.2,Nitrate-Nitrite-N,EPA 353.2,Saltwater,FALSE,TRUE,Saltwater Water Quality
+33,Nitrate-Nitrite-N - SM 4500-NO3,Nitrate-Nitrite-N,SM 4500-NO3,Freshwater,TRUE,FALSE,Freshwater Water Quality
+34,Nitrate-Nitrite-N - SM 4500-NO3,Nitrate-Nitrite-N,SM 4500-NO3,Saltwater,FALSE,TRUE,Saltwater Water Quality
+35,Orthophosphate - EPA 365.5,Orthophosphate,EPA 365.5,Freshwater,TRUE,FALSE,Freshwater Water Quality
+36,Orthophosphate - EPA 365.5,Orthophosphate,EPA 365.5,Saltwater,FALSE,TRUE,Saltwater Water Quality
+37,Orthophosphate - SM 4500-P,Orthophosphate,SM 4500-P,Freshwater,TRUE,FALSE,Freshwater Water Quality
+38,Orthophosphate - SM 4500-P,Orthophosphate,SM 4500-P,Saltwater,FALSE,TRUE,Saltwater Water Quality
+39,Orthophosphate - USGS 1-4650-03,Orthophosphate,USGS 1-4650-03,Freshwater,TRUE,FALSE,Freshwater Water Quality
+40,Orthophosphate - USGS 1-4650-03,Orthophosphate,USGS 1-4650-03,Saltwater,FALSE,TRUE,Saltwater Water Quality
+41,Oxygen saturation - DO meter,Oxygen saturation,DO meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
+42,Oxygen saturation - multi-parameter probe meter,Oxygen saturation,Multi-parameter probe meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
+43,pH - multi-parameter probe meter,pH,Multi-parameter probe meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
+44,pH - multi-parameter probe meter,pH,Multi-parameter probe meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
+45,pH - pH meter,pH,pH meter,Freshwater,TRUE,FALSE,Freshwater Water Quality
+46,pH - pH meter,pH,pH meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
+47,Salinity - multi-parameter probe meter,Salinity,Multi-parameter probe meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
+48,Salinity - salinity meter,Salinity,Salinity meter,Saltwater,FALSE,TRUE,Saltwater Water Quality
+49,Sample penetration depth - Sediment grab samples,Sample penetration depth,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
+50,Sediment texture - Sediment grab samples,Sediment texture,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
+51,Sediment volume - Sediment grab samples,Sediment volume,Sediment grab samples,Saltwater,FALSE,TRUE,Saltwater Benthic
 52,Station depth - in situ,Station depth,in situ,Freshwater,TRUE,FALSE,Freshwater Water Quality
 53,Station depth - in situ,Station depth,in situ,Saltwater,FALSE,TRUE,Saltwater Water Quality
 54,Stream characteristics - Physical habitat assessment,Stream characteristics,Physical habitat assessment,Freshwater,TRUE,FALSE,Freshwater Benthic

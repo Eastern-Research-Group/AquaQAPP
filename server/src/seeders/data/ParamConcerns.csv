@@ -27,6 +27,10 @@ Dissolved oxygen - multi-parameter probe meter,General Environmental Health: Phy
 Dissolved oxygen - multi-parameter probe meter,Eutrophication (Nutrients)
 Dissolved oxygen - multi-parameter probe meter,General Environmental Health: Physical/Chemical Water Quality
 Dissolved oxygen - multi-parameter probe meter,Eutrophication (Nutrients)
+Dissolved oxygen - SM 4500-O,General Environmental Health: Physical/Chemical Water Quality
+Dissolved oxygen - SM 4500-O,Eutrophication (Nutrients)
+Dissolved oxygen - SM 4500-O,General Environmental Health: Physical/Chemical Water Quality
+Dissolved oxygen - SM 4500-O,Eutrophication (Nutrients)
 E. coli - EPA 1603,General Environmental Health: Physical/Chemical Water Quality
 E. coli - EPA 1603,Recreation (Swimming and/or Boating)
 E. coli - EPA 1603,Stormwater
@@ -48,10 +52,8 @@ Grain size - Sediment grab samples,General Environmental Health: Benthic
 Infauna - Sediment grab samples,General Environmental Health: Benthic
 Macroinvertebrates - Kick sampling,General Environmental Health: Benthic
 Macroinvertebrates - Rock baskets,General Environmental Health: Benthic
-Microcystins - EPA 544,Harmful Algal Blooms (HABs) (Algal Toxins)
-Microcystins - EPA 544,Harmful Algal Blooms (HABs) (Algal Toxins)
-Microcystins - EPA 546,Harmful Algal Blooms (HABs) (Algal Toxins)
-Microcystins - EPA 546,Harmful Algal Blooms (HABs) (Algal Toxins)
+Microcystins - EPA 546 or ELISA-ADDA,Harmful Algal Blooms (HABs) (Algal Toxins)
+Microcystins - EPA 546 or ELISA-ADDA,Harmful Algal Blooms (HABs) (Algal Toxins)
 Microcystins - in situ,Harmful Algal Blooms (HABs) (Algal Toxins)
 Microcystins - in situ,Harmful Algal Blooms (HABs) (Algal Toxins)
 Nitrate-Nitrite-N - EPA 353.2,Eutrophication (Nutrients)
