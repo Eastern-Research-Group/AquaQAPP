@@ -278,16 +278,15 @@ export default {
 
       if (this.currentSection.sectionName === 'sampleDesign') {
         // Make sure sample design details have saved entries for all parameters by all locations
-        // const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
-        //   return accumulator + currentValue.value.split(',').length;
-        // }, 0);
+        const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value.split(',').length;
+        }, 0);
         // Use labDuplicates count to confirm as it is the first sample design question and is required
         // Make sure labDuplicates exists in qappData before checking length to avoid error
         if (!this.qappData.labDuplicates) {
           hasEmptyFields = true;
         } else {
-          hasEmptyFields = false;
-          // hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+          hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
         }
       } else if (this.currentSection.sectionName === 'recordHandling') {
         hasEmptyFields = true;

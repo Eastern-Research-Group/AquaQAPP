@@ -110,6 +110,30 @@ export default {
           key: 'parameterLabel',
           label: 'Parameter',
         },
+        {
+          key: 'Field Duplicates',
+          label: 'Field Duplicates',
+        },
+        {
+          key: 'Field Blanks',
+          label: 'Field Blanks',
+        },
+        {
+          key: 'Lab Duplicates',
+          label: 'Lab Duplicates',
+        },
+        {
+          key: 'Lab Blanks',
+          label: 'Lab Blanks',
+        },
+        {
+          key: 'Lab Spikes',
+          label: 'Lab Spikes',
+        },
+        {
+          key: 'Frequency of Sampling',
+          label: 'Frequency of Sampling',
+        },
       ],
     };
   },
@@ -131,6 +155,8 @@ export default {
       this.questions.forEach((q) => {
         this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
+      // Manually set sampleParameter to the row.Parameter value to fix bug where multiple locations have the same parameter
+      this.$set(this.pendingData, 'sampleParameter', row.Parameter);
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
@@ -212,12 +238,22 @@ export default {
           const parameterSampleData = { Parameter: paramId };
           this.questions.forEach((q) => {
             if (this.qappData[q.questionName]) {
-              const paramValueObject = this.qappData.sampleParameter.find((datum) => datum.value === paramId);
-              if (paramValueObject) {
-                const qappDataObject = this.qappData[q.questionName].find(
-                  (datum) => datum.valueId === paramValueObject.valueId
+              const paramValueArray = this.qappData.sampleParameter.filter((datum) => datum.value === paramId);
+
+              if (paramValueArray.length) {
+                const sampleLocationIdObject = this.qappData.sampleLocationId.find(
+                  (datum) =>
+                    datum.value === location['Location ID'] &&
+                    paramValueArray.map((p) => p.valueId).includes(datum.valueId)
                 );
+                const qappDataObject = sampleLocationIdObject
+                  ? this.qappData[q.questionName].find((datum) => datum.valueId === sampleLocationIdObject.valueId)
+                  : null;
                 parameterSampleData[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
+
+                // Manually enter location id and parameter id based on current location and parameter - avoids bugs with multiple locations with same params
+                parameterSampleData['Sample Location ID'] = location['Location ID'];
+                parameterSampleData.Parameter = paramId;
               }
             }
           });
