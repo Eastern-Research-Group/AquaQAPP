@@ -15,19 +15,35 @@
       :title="shouldShowEdit ? 'Edit Sampling Design Information' : 'Add Sampling Design Information'"
     >
       <form ref="form" @submit.prevent="submitData">
-        <div class="columns">
+        <div class="columns is-multiline">
           <div class="column is-4">
             <p>Parameter</p>
-            <p>Location ID</p>
-            <p>Location Name</p>
-            <p>Water Type</p>
-            <p>Concerns</p>
           </div>
           <div class="column is-8">
             <p>{{ selectedRow.parameterLabel }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Location ID</p>
+          </div>
+          <div class="column is-8">
             <p>{{ selectedRow['Location ID'] }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Location Name</p>
+          </div>
+          <div class="column is-8">
             <p>{{ selectedRow['Location Name'] }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Water Type</p>
+          </div>
+          <div class="column is-8">
             <p>{{ selectedRow['Water Type'] }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Concerns</p>
+          </div>
+          <div class="column is-8">
             <p>{{ selectedRow.waterConcerns }}</p>
           </div>
         </div>
@@ -295,6 +311,11 @@ export default {
 </script>
 
 <style scoped>
+.is-multiline .column {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .clear {
   clear: both;
 }
