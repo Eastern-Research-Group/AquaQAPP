@@ -114,8 +114,8 @@ module.exports = {
             available on MassBays’ website (<a
               class="getting-started-link"
               target="_blank"
-              href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
-              >https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
+              href="https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
+              >https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
             >).
           </p>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
@@ -131,8 +131,8 @@ module.exports = {
               MassBays’ website (<a
                 class="getting-started-link"
                 target="_blank"
-                href="https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
-                >https://edit.mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
+                href="https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
+                >https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
               >). These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based
               monitoring programs in Massachusetts waters.
             </li>
