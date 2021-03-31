@@ -120,25 +120,29 @@ module.exports = {
           </p>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
           <p><strong id="help">Helpful Resources</strong></p>
+          <p>
+            The following resources are available on MassBays' website at <a
+              class="getting-started-link"
+              target="_blank"
+              href="https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
+              >https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
+            >:
+          </p>
           <ul>
             <li>
-              For detailed information about using AquaQAPP and guidance for selecting analytical methods, please refer to the
-              <strong>User Guide</strong>. It can be accessed via links on the top navigation bar as well as via the
-              <span class="fa fa-info-circle"></span> links on each screen.
+              <strong>AquaQAPP User Guide</strong> includes details and tips for each screen in AquaQAPP, as well as guidance
+              for selecting analytical methods, screening testing laboratories, and developing Data Quality Objectives. It is
+              also available from within AquaQAPP via the link in the top navigation bar.
             </li>
             <li>
-              <strong>Standard Operating Procedures</strong> for sampling methods referenced in AquaQAPP are available on
-              MassBays’ website (<a
-                class="getting-started-link"
-                target="_blank"
-                href="https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project"
-                >https://mass.gov/how-to/use-aquaqapp-to-plan-your-monitoring-project</a
-              >). These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based
-              monitoring programs in Massachusetts waters.
+              <strong>Standard Operating Procedures and Field Operations</strong> for all sampling methods referenced in AquaQAPP.
+              These methods have been vetted by MassDEP and EPA Region 1 and are recommended for community-based monitoring programs
+              in Massachusetts waters.
             </li>
             <li>
-              <strong>Forms and form templates</strong> to accompany the QAPP are available in an Excel workbook on MassBays’
-              website. You will be prompted to add relevant forms to your generated QAPP.
+              <strong>Templates for forms</strong> referenced in the final QAPP are available as separate tabs in an Excel
+              workbook. You will need to edit the templates to match your program needs. The generated QAPP will prompt you
+              to attach relevant forms to your final QAPP.
             </li>
           </ul>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
