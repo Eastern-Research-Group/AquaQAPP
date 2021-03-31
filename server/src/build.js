@@ -16,7 +16,6 @@ if (process.env.HEROKU_ENV === 'dev') {
   execSync('sequelize db:seed --seed ref-parameters');
   execSync('sequelize db:seed --seed ref-role');
   execSync('sequelize db:seed --seed sections');
-  execSync('sequelize db:seed --seed ref-procedure');
   execSync('sequelize db:seed --seed examples');
   // run production build
   execSync('npm run build:prod');
