@@ -248,31 +248,6 @@ module.exports = {
         value: 'Rationale',
       },
       {
-        questionId: 52,
-        value: 'Details',
-        valueId: 1,
-      },
-      {
-        questionId: 52,
-        value: 'Details',
-        valueId: 2,
-      },
-      {
-        questionId: 52,
-        value: 'Details',
-        valueId: 3,
-      },
-      {
-        questionId: 52,
-        value: 'Details',
-        valueId: 4,
-      },
-      {
-        questionId: 52,
-        value: 'Details',
-        valueId: 5,
-      },
-      {
         questionId: 53,
         value: 1,
         valueId: 1,

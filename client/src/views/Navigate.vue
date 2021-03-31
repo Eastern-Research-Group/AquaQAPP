@@ -204,7 +204,6 @@ import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
 import SampleDesign from '@/components/app/SampleDesign';
-import RecordHandlingProcedures from '@/components/app/RecordHandlingProcedures';
 import ParametersByLocation from '@/components/app/ParametersByLocation';
 
 export default {
@@ -222,7 +221,6 @@ export default {
     PersonnelTable,
     ProjectActivities,
     ParametersByLocation,
-    RecordHandlingProcedures,
     SampleDesign,
     Tabs,
     Tip,
@@ -247,7 +245,6 @@ export default {
         'Monitoring Location',
         'Parameters By Location',
         'Sampling Design Details',
-        'Record Handling Procedures',
       ],
     };
   },
@@ -288,9 +285,6 @@ export default {
         } else {
           hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
         }
-      } else if (this.currentSection.sectionName === 'recordHandling') {
-        hasEmptyFields = true;
-        if (this.qappData.details) hasEmptyFields = this.qappData.details.length < 5;
       } else if (this.currentSection.sectionName === 'parameters') {
         // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
         if (!this.pendingData.parameters && !this.pendingData.otherParameters) hasEmptyFields = true;

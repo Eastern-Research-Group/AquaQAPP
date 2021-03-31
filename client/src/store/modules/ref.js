@@ -33,7 +33,6 @@ const state = {
     { component: 'Parameters', label: 'Parameters' },
     { component: 'ProjectActivities', label: 'Project Schedule' },
     { component: 'SampleDesign', label: 'Sampling Design Details' },
-    { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
     { component: 'ParametersByLocation', label: 'Parameters By Location' },
   ],
 };
@@ -63,9 +62,6 @@ const actions = {
 
     const parameters = await axios.get('api/parameters');
     commit('SET_REF', { ref: 'parameters', data: parameters.data });
-
-    const procedures = await axios.get('api/procedures');
-    commit('SET_REF', { ref: 'procedures', data: procedures.data });
   },
 };
 

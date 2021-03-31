@@ -324,7 +324,7 @@ module.exports = {
       sectionName: 'recordHandling',
       sectionSort: 15,
       instructions:
-        'The table below displays the five required activities related to record handling. Use the “Edit” button to populate the “Details” column with a brief description of relevant activities for your monitoring project.',
+        'The text boxes below list the required activities related to record handling. In each box, enter a brief description of the relevant activities for your monitoring project.',
     });
     records.push({
       sectionNumber: '15',
