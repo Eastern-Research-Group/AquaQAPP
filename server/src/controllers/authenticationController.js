@@ -16,8 +16,9 @@ const transporter = nodemailer.createTransport(nodemailerSendGrid({ apiKey: conf
 
 const handlebarsOptions = {
   viewEngine: {
-    extName: '.hbs',
+    extName: '.html',
     partialsDir: path.resolve('./server/src/templates/'),
+    defaultLayout: false,
   },
   viewPath: path.resolve('./server/src/templates/'),
   extName: '.html',
@@ -120,7 +121,7 @@ module.exports = {
 
       const data = {
         to: updatedUserJson.email,
-        from: 'admin@aquaqapp.com',
+        from: 'aquaqapp.notifications@gmail.com',
         template: 'forgot-password-email',
         subject: 'AquaQAPP Password Reset',
         context: {
