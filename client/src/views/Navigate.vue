@@ -3,8 +3,10 @@
     <Alert v-if="dataError !== null" :message="dataError" type="error"></Alert>
     <div class="columns">
       <aside class="menu column is-one-quarter">
-        <ul class="menu-list">
-          <li v-for="section in sections" :key="section.id">
+        <div class="overlay-end"><i class="fas fa-arrow-circle-right arrow-right"></i></div>
+        <div class="overlay-start"><i class="fas fa-arrow-circle-left arrow-left"></i></div>
+        <ul class="menu-list disable-scrollbars">
+          <li v-for="section in sections" :key="section.id" :id="`section${section.id}`">
             <button
               :class="
                 `button is-text has-text-white ${
@@ -25,43 +27,48 @@
       <section class="right column is-three-quarters">
         <Alert v-if="isSectionNotAvailable()" :message="this.sectionNotAvailableMessage" type="error" />
         <form v-else @submit.prevent>
-          <LoadingIndicator v-if="isSaving" message="Saving..." class="dark is-pulled-right" />
           <Button
-            :label="hasSaved ? 'Saved' : 'Save'"
             type="primary"
             class="aq-save-btn is-pulled-right"
-            :disabled="hasSaved || checkRequiredFields()"
+            :disabled="hasSaved || !hasUnsavedData"
             :title="getSaveBtnHoverText()"
             @click.native="saveData"
-          />
-
+          >
+            {{ hasSaved ? 'Saved' : 'Save' }}
+            <LoadingIndicator v-if="isSaving" class="light" />
+          </Button>
           <MarkComplete
             @markComplete="markComplete(currentSection.sectionNumber)"
             :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
-            :disabled="checkRequiredFields()"
+            :disabled="!(currentSection.id && completedSections.indexOf(currentSection.id) > -1) && hasEmptyFields"
           />
 
-          <label v-if="currentSection.sectionName === 'gettingStarted'" class="label is-size-4">{{
-            currentSection.sectionLabel
-          }}</label>
-          <p
-            v-if="currentSection.sectionName === 'gettingStarted'"
-            class="instructions content"
-            v-html="currentSection.instructions"
-          ></p>
+          <h2 class="label is-size-4">
+            {{ currentSection.sectionLabel }}
+          </h2>
+          <p class="instructions content" v-html="currentSection.instructions"></p>
 
           <div
-            class="field"
-            v-for="(question, index) in currentQuestions.filter(
+            class="field field-padding-bottom"
+            v-for="question in currentQuestions.filter(
               (q) => customSections.map((s) => s.label).indexOf(q.section.sectionLabel) === -1
             )"
             :key="question.id"
           >
             <LoadingIndicator v-if="isFetching" class="dark" message="Loading..." />
             <div v-else>
-              <label :for="`question${question.id}`" class="label is-size-4">{{ question.questionLabel }}</label>
+              <label
+                v-if="question.questionLabel !== currentSection.sectionLabel"
+                :for="`question${question.id}`"
+                class="label is-size-5"
+                >{{ question.questionLabel }}</label
+              >
               <!-- only display instructions under first question label, since it is for the whole seciton -->
-              <p v-if="index === 0" class="instructions content" v-html="currentSection.instructions"></p>
+              <!-- <p
+                v-if="index !== 0 && currentSection.instructions"
+                class="instructions content"
+                v-html="currentSection.instructions"
+              ></p> -->
               <input
                 v-if="question.dataEntryType === 'text'"
                 :id="`question${question.id}`"
@@ -69,7 +76,7 @@
                 type="text"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
@@ -80,7 +87,7 @@
                 type="tel"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
@@ -91,56 +98,31 @@
                 type="email"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               />
+              <p class="instructions" v-if="question.dataEntryInstructions" v-html="question.dataEntryInstructions"></p>
               <textarea
                 v-if="question.dataEntryType === 'largeText'"
                 :id="`question${question.id}`"
                 class="input"
                 required
                 :placeholder="`Enter ${question.questionLabel}`"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
                 @input="hasSaved = false"
                 :maxlength="question.maxLength"
               ></textarea>
-              <HoverText
-                v-if="question.refName === 'concerns' && locationConcerns.length"
-                hoverId="concernsInfo"
-                linkText="Why are some concerns disabled?"
-              >
-                There are monitoring locations associated with these concerns. You must delete these locations before
-                the concerns can be removed.
-              </HoverText>
-              <fieldset v-if="question.dataEntryType === 'checkboxBtn'">
-                <legend class="is-sr-only">{{ question.questionLabel }}</legend>
-                <div class="columns is-multiline">
-                  <CheckboxButton
-                    v-for="option in getOptions(question.refName)"
-                    :key="option.id"
-                    :id="option.code"
-                    :name="option.label"
-                    :isSingleSelect="question.refName === 'yesNo'"
-                    :singleSelectId="question.questionLabel"
-                    :value="option.code"
-                    :disabled="locationConcerns.indexOf(option.code) > -1"
-                    :checked="!!(pendingData[question.id] && pendingData[question.id].indexOf(option.code) > -1)"
-                    @check="updatePendingData($event, question)"
-                    @click.native="triggerConcernsWarningModal(option.code)"
-                  />
-                </div>
-              </fieldset>
               <div class="btn-container has-text-right">
                 <Button
                   class="example"
-                  label="Example(s)"
+                  label="Example"
                   type="dark"
-                  v-if="question.examples.length"
-                  @click.native="() => (shouldShowExample = true)"
+                  v-if="question.examples.length > 0"
+                  @click.native="() => (shouldShowExample = question)"
                 />
               </div>
-              <Modal v-if="shouldShowExample" @close="() => (shouldShowExample = false)">
+              <Modal v-if="shouldShowExample === question" @close="() => (shouldShowExample = null)">
                 <Tabs
                   v-if="question.examples.length > 1"
                   :tabs="
@@ -152,19 +134,26 @@
                   "
                 >
                   <template v-for="(example, index) in question.examples" v-slot:[`example${index}`]>
-                    <p :key="index" class="has-text-black example-text" ref="exampleText" v-html="example.text"></p>
+                    <p
+                      :key="index"
+                      class="has-text-black example-text content"
+                      ref="exampleText"
+                      v-html="example.text"
+                    ></p>
                   </template>
                 </Tabs>
-                <p v-else class="has-text-black example-text" ref="exampleText" v-html="question.examples[0].text"></p>
+                <p
+                  v-else
+                  class="has-text-black example-text content"
+                  ref="exampleText"
+                  v-html="getExampleText(question)"
+                ></p>
               </Modal>
               <Tip v-if="question.dataEntryTip" :message="question.dataEntryTip" />
             </div>
           </div>
           <div v-if="customSection">
-            <h2 class="label is-size-4">
-              {{ currentSection.sectionLabel }}
-            </h2>
-            <p class="instructions content" v-html="currentSection.instructions"></p>
+            <!-- <p class="instructions content" v-html="currentSection.instructions"></p> -->
             <component
               :is="customSection.component"
               :questions="currentQuestions"
@@ -182,54 +171,14 @@
           <Button label="Discard Changes" type="danger" @click.native="discardChanges" />
         </div>
       </Modal>
-      <Modal v-if="shouldDisplayConcernsWarning" @close="closeConcernsWarningModal">
-        <Alert
-          message="Selecting No will remove all selected concerns from existing monitoring locations."
-          type="warning"
-        />
+      <Modal v-if="shouldDisplayParamLocationWarning" @close="shouldDisplayParamLocationWarning = false">
+        <Alert type="warning">
+          You've chosen to remove parameters that have already been associated with one or more monitoring locations.
+          Are you sure you want to delete those parameters?
+        </Alert>
         <div class="btn-container">
-          <Button label="Continue" type="success" @click.native="removeConcerns" />
-          <Button label="Cancel" type="danger" @click.native="cancelYesNo" />
-        </div>
-      </Modal>
-      <Modal v-if="shouldDisplayAddParameter" @close="closeAddParametersWarningModal" class="parametersWarningModal">
-        <div class="columns">
-          <div class="column is-9">
-            <Alert
-              message="Would you like to associate all the new parameters to monitoring locations with the corresponding water type?"
-              type="warning"
-            />
-          </div>
-          <div class="column is-3">
-            <multiselect v-model="addParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column is-offset-10">
-            <Button label="Continue" type="success" @click.native="addRemoveParams" />
-          </div>
-        </div>
-      </Modal>
-      <Modal
-        v-if="shouldDisplayRemoveParameter"
-        @close="closeRemoveParametersWarningModal"
-        class="parametersWarningModal"
-      >
-        <div class="columns">
-          <div class="column is-9">
-            <Alert
-              message="You've chosen to remove parameters that have already been associated with one or more monitoring locations, are you sure you want to delete those parameters?"
-              type="warning"
-            />
-          </div>
-          <div class="column is-3">
-            <multiselect v-model="removeParamValue" :options="yesNoOptions" placeholder="Select Option"></multiselect>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column is-offset-10">
-            <Button label="Continue" type="success" @click.native="addRemoveParams" />
-          </div>
+          <Button label="Continue and Save" type="success" @click.native="saveData" />
+          <Button label="Cancel" type="cancel" @click.native="shouldDisplayParamLocationWarning = false" />
         </div>
       </Modal>
     </div>
@@ -244,79 +193,67 @@ import Tip from '@/components/shared/Tip';
 import Button from '@/components/shared/Button';
 import Tabs from '@/components/shared/Tabs';
 import MarkComplete from '@/components/shared/MarkComplete';
-import CheckboxButton from '@/components/shared/CheckboxButton';
 import Modal from '@/components/shared/Modal';
 import HoverText from '@/components/shared/HoverText';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
-import isEqual from 'lodash/isEqual';
-import uniqBy from 'lodash/uniqBy';
-import sortBy from 'lodash/sortBy';
+import difference from 'lodash/difference';
 // Custom section components - these are used in the "customSections" loop above
+import Concerns from '@/components/app/Concerns';
 import PersonnelTable from '@/components/app/PersonnelTable';
 import Locations from '@/components/app/Locations/Locations';
 import Parameters from '@/components/app/Parameters';
 import ProjectActivities from '@/components/app/ProjectActivities';
 import SampleDesign from '@/components/app/SampleDesign';
-import RecordHandlingProcedures from '@/components/app/RecordHandlingProcedures';
 import ParametersByLocation from '@/components/app/ParametersByLocation';
 
 export default {
   components: {
     Alert,
-    Locations,
-    Tip,
     Button,
-    Tabs,
-    MarkComplete,
-    Parameters,
-    CheckboxButton,
-    PersonnelTable,
-    Modal,
+    Concerns,
     HoverText,
-    ProjectActivities,
     LoadingIndicator,
-    SampleDesign,
-    RecordHandlingProcedures,
-    ParametersByLocation,
+    Locations,
+    MarkComplete,
+    Modal,
     Multiselect,
+    Parameters,
+    PersonnelTable,
+    ProjectActivities,
+    ParametersByLocation,
+    SampleDesign,
+    Tabs,
+    Tip,
   },
   data() {
     return {
       currentSection: {},
       shouldShowExample: false,
-      hasSaved: false,
+      hasSaved: true,
       pendingData: {},
       shouldDisplayUnsavedWarning: false,
       pendingSection: null,
       sectionNotAvailableMessage: '',
       dataError: null,
-      shouldDisplayConcernsWarning: false,
-      previousParameters: [],
       shouldDisplayParametersWarning: false,
       yesNoOptions: ['Yes', 'No'],
-      removeParamValue: '',
-      addParamValue: '',
-      shouldDisplayAddParameter: false,
-      shouldDisplayRemoveParameter: false,
-      addParamsArray: [],
-      removeParamsArray: [],
+      removedParamsWithLocations: [],
+      shouldDisplayParamLocationWarning: false,
+      tableSections: [
+        'Project Organization/Personnel',
+        'Project Schedule',
+        'Monitoring Location',
+        'Parameters By Location',
+        'Sampling Design Details',
+      ],
     };
   },
   computed: {
     ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
     ...mapState('structure', ['sections', 'questions']),
-    ...mapState('ref', ['concerns', 'yesNo', 'customSections', 'parameters']),
+    ...mapState('ref', ['yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
-    ...mapGetters('structure', [
-      'concernsQuestionId',
-      'concernsDifferByLocQuestionId',
-      'locationQuestionId',
-      'parametersQuestionId',
-      'locConcernsQuestionId',
-      'sampleDesignQuestionId',
-      'paramsbyLocQuestionId',
-      'detailsQuestionId',
-    ]),
+    ...mapGetters('structure', ['getQuestionId']),
     currentQuestions() {
       return this.questions
         .filter((q) => q.sectionNumber === this.currentSection.sectionNumber)
@@ -330,19 +267,48 @@ export default {
           return 0;
         });
     },
-    locationConcerns() {
-      let concerns = [];
-      if (this.qappData[this.locConcernsQuestionId]) {
-        this.qappData[this.locConcernsQuestionId].forEach((location) => {
-          if (location.value) {
-            concerns = concerns.concat(location.value.split(','));
+    customSection() {
+      return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
+    },
+    hasEmptyFields() {
+      let hasEmptyFields = false;
+
+      if (this.currentSection.sectionName === 'sampleDesign') {
+        // Make sure sample design details have saved entries for all parameters by all locations
+        const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value.split(',').length;
+        }, 0);
+        // Use labDuplicates count to confirm as it is the first sample design question and is required
+        // Make sure labDuplicates exists in qappData before checking length to avoid error
+        if (!this.qappData.labDuplicates) {
+          hasEmptyFields = true;
+        } else {
+          hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+        }
+      } else if (this.currentSection.sectionName === 'parameters') {
+        // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
+        if (!this.pendingData.parameters && !this.pendingData.otherParameters) hasEmptyFields = true;
+      } else {
+        this.currentQuestions.forEach((q) => {
+          if (
+            (!this.pendingData[q.questionName] ||
+              (this.pendingData[q.questionName] &&
+                typeof this.pendingData[q.questionName] === 'string' &&
+                !this.pendingData[q.questionName].trim())) &&
+            (!this.qappData[q.questionName] ||
+              (this.qappData[q.questionName] &&
+                typeof this.qappData[q.questionName] === 'string' &&
+                !this.qappData[q.questionName].trim()))
+          ) {
+            hasEmptyFields = true;
           }
         });
       }
-      return concerns;
+      return hasEmptyFields;
     },
-    customSection() {
-      return this.customSections.find((s) => s.label === this.currentSection.sectionLabel);
+    hasUnsavedData() {
+      if (this.hasSaved) return false;
+      return this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length;
     },
   },
   async mounted() {
@@ -365,33 +331,57 @@ export default {
       this.getFirstUncompletedSectionIndex();
     }
   },
+  created() {
+    window.addEventListener('beforeunload', this.preventReloadIfUnsaved);
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.preventReloadIfUnsaved);
+  },
   methods: {
+    preventReloadIfUnsaved(e) {
+      if (this.hasUnsavedData) {
+        const confirmationMessage = 'You have unsaved changes. If you leave before saving, your changes will be lost.';
+        e.returnValue = confirmationMessage;
+        return confirmationMessage;
+      }
+      return undefined;
+    },
+    getExampleText(question) {
+      if (question.examples.length) {
+        return question.examples[0].text;
+      }
+      return '';
+    },
     changeSection(section) {
       this.dataError = null;
-      if (this.hasUnsavedData()) {
+      if (window.innerWidth <= 769) {
+        document
+          .getElementById(`section${section.id}`)
+          .scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      }
+      if (this.hasUnsavedData) {
         this.shouldDisplayUnsavedWarning = true;
         this.pendingSection = section;
       } else {
-        this.hasSaved = false;
         this.currentSection = section;
         // Set initial pending data based on existing qapp data
         this.pendingData = Object.assign({}, this.qappData);
         /*
-         * Locations are automatically saved upon adding or editing, so hasSaved will always be true
+         * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
+         * Parameters section has "otherParameters" question which is not required, so there is special logic for this case
          */
         if (
-          section.sectionLabel === 'Monitoring Locations' ||
-          this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length === this.currentQuestions.length ||
-          section.sectionLabel === 'Project Organization/Personnel' ||
-          section.sectionLabel === 'Parameters By Location'
+          this.tableSections.indexOf(section.sectionLabel) > -1 ||
+          this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
+            this.currentQuestions.length ||
+          (section.sectionName === 'parameters' &&
+            this.currentQuestions.filter((q) => !!this.pendingData[q.questionName]).length ===
+              this.currentQuestions.length - 1)
         ) {
           this.hasSaved = true;
         }
 
-        if (this.currentSection.sectionName === 'parameters' && this.qappData[this.parametersQuestionId]) {
-          this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
-        }
         // Set Google Analytics event for changing sections (mark each section as a page view)
         gtag('config', 'UA-37504877-5', { page_path: section.sectionLabel });
         gtag('event', 'page_view');
@@ -400,76 +390,24 @@ export default {
     discardChanges() {
       this.pendingData = {};
       this.shouldDisplayUnsavedWarning = false;
-      this.shouldDisplayAddParameter = false;
-      this.shouldDisplayRemoveParameter = false;
       this.changeSection(this.pendingSection);
       this.pendingSection = null;
-    },
-    getOptions(refName) {
-      return this[refName];
     },
     updatePendingData(e, question) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
-        let dataArray = this.pendingData[question.id] ? this.pendingData[question.id].split(',') : [];
+        let dataArray = this.pendingData[question.questionName]
+          ? this.pendingData[question.questionName].split(',')
+          : [];
         if (dataArray.indexOf(e.target.value) > -1) {
           dataArray = dataArray.filter((val) => val !== e.target.value);
         } else {
           dataArray.push(e.target.value);
         }
-        this.$set(this.pendingData, question.id, dataArray.join(','));
+        this.$set(this.pendingData, question.questionName, dataArray.join(','));
       } else {
-        this.$set(this.pendingData, question.id, e.target.value);
+        this.$set(this.pendingData, question.questionName, e.target.value);
       }
-    },
-    checkRequiredFields() {
-      let hasEmptyFields = false;
-
-      if (this.currentSection.sectionName === 'sampleDesign') {
-        hasEmptyFields = true;
-        let selectedParams = this.qappData[this.parametersQuestionId];
-        selectedParams = selectedParams.split(',');
-        let tableParams = [];
-        if (selectedParams.length > 0 && this.qappData[this.sampleDesignQuestionId]) {
-          this.qappData[this.sampleDesignQuestionId].forEach((param) => {
-            tableParams.push(param.value);
-          });
-          tableParams = uniqBy(tableParams);
-          hasEmptyFields = !isEqual(tableParams.sort(), selectedParams.sort());
-        }
-      } else if (this.currentSection.sectionName === 'recordHandling') {
-        hasEmptyFields = true;
-        if (this.qappData[this.detailsQuestionId]) hasEmptyFields = this.qappData[this.detailsQuestionId].length < 5;
-      } else {
-        this.currentQuestions.forEach((q) => {
-          if (
-            (!this.pendingData[q.id] ||
-              (this.pendingData[q.id] &&
-                typeof this.pendingData[q.id] === 'string' &&
-                !this.pendingData[q.id].trim())) &&
-            (!this.qappData[q.id] ||
-              (this.qappData[q.id] && typeof this.qappData[q.id] === 'string' && !this.qappData[q.id].trim()))
-          ) {
-            hasEmptyFields = true;
-          }
-        });
-      }
-      return hasEmptyFields;
-    },
-    hasUnsavedData() {
-      if (this.hasSaved) return false;
-      if (
-        this.currentSection.sectionLabel === 'Parameters' &&
-        this.qappData[this.parametersQuestionId] &&
-        this.pendingData[this.parametersQuestionId]
-      ) {
-        let currentParameters = [];
-        this.currentQuestions.forEach((q) => {
-          currentParameters = sortBy(this.pendingData[q.id].split(','));
-        });
-        return !isEqual(currentParameters, this.previousParameters);
-      }
-      return this.currentQuestions.filter((q) => !!this.pendingData[q.id]).length;
     },
     markComplete(sectionNumber) {
       const sectionId = this.sections.find((s) => s.sectionNumber === sectionNumber).id;
@@ -479,8 +417,10 @@ export default {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
-          !this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
-          this.currentSection.sectionLabel === 'Parameters'
+          (!this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
+            this.currentSection.sectionLabel === 'Parameters' ||
+            this.currentSection.sectionLabel === 'Water Quality Concerns') &&
+          this.currentQuestions.length
         ) {
           this.saveData();
         }
@@ -489,71 +429,56 @@ export default {
     async saveData(e, valueId = null, data) {
       // Wait for all data to be saved before setting hasSaved
       this.dataError = null;
-      this.addParamsArray = [];
-      this.removeParamsArray = [];
 
-      if (data && data.paramsByLocation) {
-        await this.$store
-          .dispatch('qapp/save', {
-            qappId: this.$store.state.qapp.id,
-            questionId: this.paramsbyLocQuestionId,
-            value: data.paramsByLocation,
-            valueId,
-          })
-          .catch((error) => {
-            if (this.dataError === null) this.dataError = error.response.data.error;
-            else this.dataError += `<br/>${error.response.data.error}`;
-          });
-      } else {
-        await Promise.all(
-          this.currentQuestions.map(async (q) => {
-            await this.$store
-              .dispatch('qapp/save', {
-                qappId: this.$store.state.qapp.id,
-                questionId: q.id,
-                value: data ? data[q.id] : this.pendingData[q.id],
-                valueId,
-              })
-              .catch((error) => {
-                if (this.dataError === null) this.dataError = error.response.data.error;
-                else this.dataError += `<br/>${error.response.data.error}`;
-              });
-          })
-        );
+      // If user is saving parameters section and has already selected parameters by location, check business logic rules
+      if (
+        this.currentSection.sectionLabel === 'Parameters' &&
+        this.qappData.parametersByLocation &&
+        !this.shouldDisplayParamLocationWarning &&
+        this.isUserRemovingLocationParameters()
+      ) {
+        this.shouldDisplayUnsavedWarning = false;
+        this.shouldDisplayParamLocationWarning = true;
+        return;
       }
+
+      const dataToSave = this.currentQuestions.map((q) => {
+        return {
+          qappId: this.$store.state.qapp.id,
+          questionId: q.id,
+          value: data ? data[q.questionName] : this.pendingData[q.questionName],
+          valueId,
+        };
+      });
+
+      // If user is removing parameters that are associated with locations, update parametersByLocation values to remove those parameters
+      if (this.removedParamsWithLocations.length) {
+        this.qappData.parametersByLocation.forEach((paramByLocValue) => {
+          const valArray = paramByLocValue.value.split(',');
+          // Filter function compares params to be deleted with existing parametersByLocation values
+          const newParamsByLocations = valArray.filter((val) => !this.removedParamsWithLocations.includes(val));
+          // If the arrays do not match, update dataToSave to include updated parametersByLocation values (with removed parameters)
+          if (newParamsByLocations.length !== valArray.filter) {
+            dataToSave.push({
+              qappId: this.$store.state.qapp.id,
+              questionId: this.getQuestionId('parametersByLocation'),
+              value: newParamsByLocations.join(','),
+              valueId: paramByLocValue.valueId,
+            });
+          }
+        });
+        this.shouldDisplayParamLocationWarning = false;
+      }
+
+      await this.$store.dispatch('qapp/save', dataToSave);
 
       this.hasSaved = this.dataError === null;
       this.shouldDisplayUnsavedWarning = false;
 
-      if (this.qappData[this.parametersQuestionId]) {
-        const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-        const currentParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
-        if (this.currentSection.sectionName === 'parameters' && !isEqual(currentParameters, this.previousParameters)) {
-          this.shouldDisplayParametersWarning = true;
-          this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
-          this.shouldDisplayAddParameter = false;
-          this.shouldDisplayRemoveParameter = false;
-          currentParameters.forEach((param) => {
-            if (this.previousParameters.indexOf(param) === -1) {
-              this.shouldDisplayAddParameter = true;
-              this.addParamsArray.push(param);
-            }
-          });
-          this.previousParameters.forEach((param) => {
-            if (currentParameters.indexOf(param) === -1) {
-              this.shouldDisplayRemoveParameter = true;
-              this.removeParamsArray.push(param);
-            }
-          });
-        }
-      }
-
-      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
+      if (this.pendingSection) {
         this.changeSection(this.pendingSection);
         this.pendingSection = null;
       }
-      if (this.qappData[this.parametersQuestionId])
-        this.previousParameters = sortBy(this.qappData[this.parametersQuestionId].split(','));
     },
     isSectionNotAvailable() {
       /* User must have saved data for concerns before viewing locations section,
@@ -562,30 +487,37 @@ export default {
       let sectionNotAvailable = false;
       if (
         this.currentSection.sectionLabel === 'Monitoring Locations' &&
-        (!this.qappData[this.concernsQuestionId] || !this.qappData[this.concernsDifferByLocQuestionId])
+        (!this.qappData.waterConcerns || !this.qappData.differByLocation)
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns section before completing this section';
-      } else if (this.currentSection.sectionLabel === 'Parameters' && !this.qappData[this.locationQuestionId]) {
+      } else if (this.currentSection.sectionLabel === 'Parameters' && !this.qappData.locationId) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage =
           'You must complete the Water Quality Concerns and Monitoring Locations sections before completing this section';
       } else if (
-        (this.currentSection.sectionLabel === 'Sampling Design' ||
+        (this.currentSection.sectionLabel === 'Sampling Design Details' ||
           this.currentSection.sectionLabel === 'Parameters By Location') &&
-        !this.qappData[this.parametersQuestionId]
+        (!this.qappData.parameters && !this.qappData.otherParameters)
       ) {
         sectionNotAvailable = true;
         this.sectionNotAvailableMessage = 'You must complete the Parameters section before completing this section';
+      } else if (
+        this.currentSection.sectionLabel === 'Sampling Design Details' &&
+        !this.qappData.parametersByLocation
+      ) {
+        sectionNotAvailable = true;
+        this.sectionNotAvailableMessage =
+          'You must complete the Parameters By Location section before completing this section';
       }
       return sectionNotAvailable;
     },
     getSaveBtnHoverText() {
-      if (this.currentSection.sectionLabel === 'Monitoring Locations') {
-        return 'Location data are automatically saved upon adding, editing, or deleting.';
+      if (this.tableSections.indexOf(this.currentSection.sectionLabel) > -1) {
+        return 'Data are automatically saved upon adding, editing, or deleting.';
       }
-      if (this.checkRequiredFields()) {
+      if (this.hasEmptyFields) {
         return 'You must complete all required fields before saving.';
       }
       return null;
@@ -613,116 +545,57 @@ export default {
       this.shouldDisplayUnsavedWarning = false;
       this.pendingSection = null;
     },
-    closeConcernsWarningModal() {
-      this.shouldDisplayConcernsWarning = false;
-    },
-    closeAddParametersWarningModal() {
-      this.shouldDisplayAddParameter = false;
-    },
-    closeRemoveParametersWarningModal() {
-      this.shouldDisplayRemoveParameter = false;
-    },
-    triggerConcernsWarningModal(value) {
-      if (value === 'N' && !!this.qappData[this.concernsQuestionId] && this.qappData[this.locationQuestionId]) {
-        this.shouldDisplayConcernsWarning = true;
-      }
-    },
-    async removeConcerns() {
-      this.shouldDisplayConcernsWarning = false;
-      this.dataError = null;
-      await this.$store
-        .dispatch('qapp/save', {
-          qappId: this.$store.state.qapp.id,
-          questionId: this.locConcernsQuestionId,
-          value: null,
-          valueId: 'remove_all_concerns',
-        })
-        .catch((error) => {
-          if (this.dataError === null) this.dataError = error.response.data.error;
-          else this.dataError += `<br/>${error.response.data.error}`;
-        });
-    },
-    cancelYesNo() {
-      this.shouldDisplayConcernsWarning = false;
-      this.pendingData[this.concernsDifferByLocQuestionId] = 'Y';
-    },
-    async addRemoveParams() {
-      this.dataError = null;
+    isUserRemovingLocationParameters() {
+      this.removedParamsWithLocations = [];
 
-      let filteredParams = [];
-      this.qappData[this.paramsbyLocQuestionId].forEach((paramByLoc) => {
-        if (paramByLoc.value !== 'Freshwater' || paramByLoc.value !== 'Saltwater') {
-          paramByLoc.value.split(',').forEach((param) => {
-            if (this.parameters.find((p) => p.id === parseInt(param, 10))) {
-              filteredParams.push({
-                valueId: paramByLoc.valueId,
-                value: paramByLoc.value,
-                waterType: this.parameters.find((p) => p.id === parseInt(param, 10)).waterType,
-              });
-            }
-          });
-        }
-        if (paramByLoc.value === 'Freshwater' || paramByLoc.value === 'Saltwater') {
-          filteredParams.push({
-            valueId: paramByLoc.valueId,
-            value: '',
-            waterType: paramByLoc.value,
-          });
-        }
+      let allParamsByLocation = [];
+      this.qappData.parametersByLocation.forEach((valObject) => {
+        allParamsByLocation = allParamsByLocation.concat(valObject.value.split(','));
       });
 
-      filteredParams = uniqBy(filteredParams, 'valueId');
+      const params = this.qappData.parameters || [];
+      const otherParams = this.qappData.otherParameters
+        ? JSON.parse(this.qappData.otherParameters).map((p) => p.name)
+        : [];
 
-      if (this.addParamsArray.length !== 0 && this.addParamValue === 'Yes') {
-        this.addParamsArray.forEach((param) => {
-          filteredParams.forEach((filteredParam) => {
-            if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-              filteredParam.value = filteredParam.value !== '' ? `${filteredParam.value},${param}` : param;
-            }
-          });
-        });
-      }
+      const pendingParams = this.pendingData.parameters || [];
+      const pendingOtherParams = this.pendingData.otherParameters
+        ? JSON.parse(this.pendingData.otherParameters).map((p) => p.name)
+        : [];
 
-      if (this.removeParamsArray.length !== 0 && this.removeParamValue === 'Yes') {
-        this.removeParamsArray.forEach((param) => {
-          filteredParams.forEach((filteredParam) => {
-            if (this.parameters.find((p) => p.id === parseInt(param, 10)).waterType === filteredParam.waterType) {
-              filteredParam.value = filteredParam.value
-                .split(',')
-                .filter((p) => p !== param)
-                .join(',');
-            }
-          });
-        });
-      }
+      // Use lodash difference function to get removed params (compare original qappData with pendingData arrays for both parameters and otherParameters)
+      const removedParams = difference(params, pendingParams).concat(difference(otherParams, pendingOtherParams));
 
-      if (this.addParamValue === 'Yes' || (this.removeParamValue === 'Yes' && filteredParams.length !== 0)) {
-        await this.$store
-          .dispatch('qapp/updateData', {
-            qappId: this.$store.state.qapp.id,
-            questionId: this.paramsbyLocQuestionId,
-            values: filteredParams,
-          })
-          .catch((error) => {
-            if (this.dataError === null) this.dataError = error.response.data.error;
-            else this.dataError += `<br/>${error.response.data.error}`;
-          });
-      }
-
-      if (this.addParamValue !== '') this.shouldDisplayAddParameter = false;
-      if (this.removeParamValue !== '') this.shouldDisplayRemoveParameter = false;
-
-      this.addParamValue = '';
-      this.removeParamValue = '';
-
-      if (this.pendingSection && !this.shouldDisplayRemoveParameter && !this.shouldDisplayAddParameter) {
-        this.changeSection(this.pendingSection);
-        this.pendingSection = null;
-      }
+      // Use filter function to determine is any selected params by location match with the params to be removed
+      this.removedParamsWithLocations = allParamsByLocation.filter((paramId) => removedParams.includes(paramId));
+      return this.removedParamsWithLocations.length;
     },
   },
 };
 </script>
+<style lang="scss">
+.getting-started {
+  a,
+  strong {
+    color: #fff;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+
+    &:hover {
+      color: whitesmoke;
+    }
+  }
+
+  .top-of-page {
+    display: block;
+    text-align: right;
+    font-size: 0.9rem;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .navigate-container {
@@ -756,6 +629,10 @@ export default {
 
 .instructions {
   margin-bottom: 1.25rem;
+
+  strong {
+    color: #fff;
+  }
 }
 
 textarea {
@@ -797,15 +674,86 @@ textarea {
 .example-text {
   margin: 0.5em 0.5em 1em 0.5em;
 }
-</style>
-
-<style>
-.parametersWarningModal .modal-content {
-  width: 800px !important;
-}
 
 .example-text ul {
   list-style: inherit;
   margin-left: 45px;
+}
+
+.field-padding-bottom:not(:last-child) {
+  margin-bottom: 2.25rem;
+}
+
+.overlay-end,
+.overlay-start {
+  display: none;
+}
+
+@media only screen and (max-width: 890px) {
+  .menu {
+    border-right: none;
+  }
+}
+
+@media only screen and (max-width: 769px) {
+  .is-one-quarter {
+    position: relative;
+  }
+
+  .overlay-end {
+    display: block;
+    position: absolute;
+    width: 1em;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    text-align: right;
+  }
+
+  .overlay-start {
+    display: block;
+    position: absolute;
+    width: 1em;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    text-align: left;
+  }
+
+  .arrow-right {
+    opacity: 0.5;
+    position: relative;
+    transform: translateY(-50%);
+    padding-right: 1em;
+  }
+
+  .arrow-left {
+    opacity: 0.5;
+    position: relative;
+    transform: translateY(-50%);
+    padding-left: 1em;
+  }
+
+  .is-one-quarter ul {
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+
+  .is-one-quarter li {
+    display: inline-block;
+  }
+
+  .disable-scrollbars {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  }
+
+  .right {
+    padding-left: 0.75rem;
+  }
 }
 </style>

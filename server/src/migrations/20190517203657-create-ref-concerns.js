@@ -13,6 +13,9 @@ module.exports = {
       label: {
         type: Sequelize.STRING,
       },
+      description: {
+        type: Sequelize.STRING,
+      },
       concernSort: {
         type: Sequelize.INTEGER,
       },

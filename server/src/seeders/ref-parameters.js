@@ -20,10 +20,12 @@ module.exports = {
     const paramConcerns = await csvToJson(path.resolve(__dirname, './data/ParamConcerns.csv'));
     paramConcerns.forEach((row) => {
       const concernId = concerns.find((c) => c.label === row.concern).id;
-      const paramId = paramsByWaterType.find((p) => p.label === row.label).id;
-      promises.push(
-        queryInterface.bulkInsert('RefParameterConcerns', [{ refConcernId: concernId, refParameterId: paramId }])
-      );
+      const params = paramsByWaterType.filter((p) => p.label === row.label);
+      params.forEach((param) => {
+        promises.push(
+          queryInterface.bulkInsert('RefParameterConcerns', [{ refConcernId: concernId, refParameterId: param.id }])
+        );
+      });
     });
 
     return Promise.all(promises);

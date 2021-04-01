@@ -55,5 +55,4 @@ module.exports = (app) => {
   app.get('/api/collection-methods', isAuthenticated, refController.collectionMethods);
   app.get('/api/coord-ref-systems', isAuthenticated, refController.coordRefSystems);
   app.get('/api/parameters', isAuthenticated, refController.parameters);
-  app.get('/api/procedures', isAuthenticated, refController.procedures);
 };

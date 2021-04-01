@@ -1,6 +1,9 @@
 <template>
   <span class="hover-info-container" tabindex="0" @keyup.esc="blur">
-    <span v-if="!icon" class="hover-link" :aria-describedby="hoverId">{{ linkText }}</span>
+    <span v-if="!icon" class="hover-link" :aria-describedby="hoverId">
+      {{ linkText }}
+      <slot name="linkContent" />
+    </span>
     <i v-if="icon" class="fa fa-info-circle" :aria-describedby="hoverId"></i>
     <span class="hover-info" role="tooltip" :id="hoverId" :style="customStyle">
       <slot />
@@ -37,7 +40,7 @@ export default {
   .hover-info {
     //  Positioning
     position: absolute;
-    bottom: 100%;
+    top: 125%;
     left: 0;
     font-weight: normal;
 
@@ -58,12 +61,12 @@ export default {
     box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
     //  Misc
-    z-index: 1;
+    z-index: 9;
 
     &::after {
       //  Positioning
       position: absolute;
-      top: 100%;
+      bottom: 100%;
       left: 20%;
 
       //  Box-model
@@ -72,8 +75,7 @@ export default {
       //  Typography
       border-width: 5px;
       border-style: solid;
-      border-color: #fff transparent transparent transparent;
-
+      border-color: transparent transparent #fff transparent;
       //  Visual
       //  Misc
       content: ' ';

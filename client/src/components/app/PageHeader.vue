@@ -4,7 +4,8 @@
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <router-link class="navbar-item is-size-5" to="/">
-            <h1>AquaQAPP</h1>
+            <img class="logo" alt="AquaQAPP Logo" src="../../assets/aquaqapp-logo.png" />
+            <h1 class="sr-only">AquaQAPP</h1>
           </router-link>
 
           <a
@@ -22,30 +23,28 @@
         </div>
 
         <div id="mainNav" :class="'navbar-menu burger' + (isActive ? ' is-active' : '')">
-          <div class="navbar-end" v-if="!$auth.check()">
-            <div class="navbar-item">
+          <div class="navbar-end">
+            <div class="navbar-item" v-if="!$auth.check()">
               <router-link class="navbar-item" to="/">
                 <strong>Log In</strong>
               </router-link>
               <router-link class="navbar-item" to="/register">
                 <strong>Register</strong>
               </router-link>
+              <a href="mailto:pamela.dibona@mass.gov;jill.carr@mass.gov;aquaqapp@erg.com" class="navbar-item">
+                <strong>Contact Us</strong>
+              </a>
             </div>
-          </div>
-          <div class="navbar-end" v-if="$auth.check()">
-            <div class="navbar-item">
-              <a class="navbar-item" href="/users_guide.pdf" target="_blank">User's Guide</a>
+            <div class="navbar-item" v-if="$auth.check()">
+              <a class="navbar-item" href="/AquaQAPP_User_Guide.pdf#page=11" target="_blank">Quick Start Guide</a>
+              <a class="navbar-item" href="/AquaQAPP_User_Guide.pdf" target="_blank">User Guide</a>
               <router-link class="navbar-item" to="/dashboard">
                 <strong>Dashboard</strong>
               </router-link>
-              <Button
-                label="Generate QAPP"
-                type="success"
-                v-if="$route.name === 'navigate'"
-                @click.native="generateQapp"
-                :disabled="completedSections.length !== sections.length"
-                :title="getGenerateBtnHoverTxt()"
-              />
+              <user-header class="user-header" v-if="$auth.check()" />
+              <a href="mailto:pamela.dibona@mass.gov;jill.carr@mass.gov;aquaqapp@erg.com" class="navbar-item">
+                <strong>Contact Us</strong>
+              </a>
             </div>
           </div>
         </div>
@@ -56,18 +55,20 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Button from '@/components/shared/Button';
+import UserHeader from './UserHeader';
 
 export default {
   props: ['userName'],
-  components: { Button },
+  components: {
+    UserHeader,
+  },
   data() {
     return {
       isActive: false,
     };
   },
   computed: {
-    ...mapState('qapp', ['completedSections']),
+    ...mapState('qapp', ['completedSections', 'isGenerating']),
     ...mapState('structure', ['sections']),
   },
   methods: {
@@ -75,54 +76,46 @@ export default {
     logout() {
       this.$auth.logout();
     },
-    getGenerateBtnHoverTxt() {
-      if (this.completedSections.length !== this.sections.length)
-        return 'All sections must be marked complete before generating document.';
-      return null;
-    },
-    async generateQapp() {
-      await this.generate();
-      this.showFile(this.$store.state.qapp.doc);
-    },
-    showFile(blob) {
-      // It is necessary to create a new blob object with mime-type explicitly set
-      // otherwise only Chrome works like it should
-      const newBlob = new Blob([blob], {
-        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      });
-
-      // IE doesn't allow using a blob object directly as link href
-      // instead it is necessary to use msSaveOrOpenBlob
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(newBlob);
-        return;
-      }
-
-      // For other browsers:
-      // Create a link pointing to the ObjectURL containing the blob.
-      const data = window.URL.createObjectURL(newBlob);
-      const link = document.createElement('a');
-      link.href = data;
-      link.download = 'test.docx';
-      link.click();
-      setTimeout(function firefoxDelay() {
-        // For Firefox it is necessary to delay revoking the ObjectURL
-        window.URL.revokeObjectURL(data);
-      }, 100);
-    },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 h1 {
   font-weight: bold;
+}
+.navbar-item .logo {
+  max-height: 2.75rem;
+  padding: 0.25rem 0;
 }
 .page-header {
   background-color: #fff;
   font-weight: bold;
 }
-.generate-btn {
-  padding: 0 0.5em;
+
+.navbar-burger {
+  height: 3.75rem;
+
+  span {
+    height: 3px;
+    width: 20px;
+
+    &:nth-child(1) {
+      top: calc(50% - 7px);
+    }
+
+    &:nth-child(3) {
+      top: calc(50% + 5px);
+    }
+  }
+
+  &.is-active span {
+    &:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    &:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+  }
 }
 </style>

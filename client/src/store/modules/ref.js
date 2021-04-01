@@ -28,11 +28,11 @@ const state = {
   ],
   customSections: [
     { component: 'PersonnelTable', label: 'Project Organization/Personnel' },
+    { component: 'Concerns', label: 'Water Quality Concerns' },
     { component: 'Locations', label: 'Monitoring Locations' },
     { component: 'Parameters', label: 'Parameters' },
-    { component: 'ProjectActivities', label: 'Project Activities' },
-    { component: 'SampleDesign', label: 'Sampling Design' },
-    { component: 'RecordHandlingProcedures', label: 'Record Handling Procedures' },
+    { component: 'ProjectActivities', label: 'Project Schedule' },
+    { component: 'SampleDesign', label: 'Sampling Design Details' },
     { component: 'ParametersByLocation', label: 'Parameters By Location' },
   ],
 };
@@ -62,9 +62,6 @@ const actions = {
 
     const parameters = await axios.get('api/parameters');
     commit('SET_REF', { ref: 'parameters', data: parameters.data });
-
-    const procedures = await axios.get('api/procedures');
-    commit('SET_REF', { ref: 'procedures', data: procedures.data });
   },
 };
 

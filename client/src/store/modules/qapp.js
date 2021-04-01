@@ -10,12 +10,23 @@ const state = {
   doc: null,
   completedSections: [],
   isSaving: false,
+  isGenerating: false,
+  generateError: false,
 };
 
 const getters = {
-  qappData(state) {
+  data(state, getters, rootState) {
+    return state.data.map((datum) => {
+      const question = rootState.structure.questions.find((q) => q.id === datum.questionId);
+      return {
+        ...datum,
+        questionName: question ? question.questionName : '',
+      };
+    });
+  },
+  qappData(state, getters) {
     // make sure multiple-entry fields are sorted properly before placing in arrays
-    const sortedData = state.data.sort((a, b) => {
+    const sortedData = getters.data.sort((a, b) => {
       if (a.valueId < b.valueId) {
         return -1;
       }
@@ -27,12 +38,12 @@ const getters = {
     const data = {};
     // use questionId: value for single-entry fields, and questionId: [array of values] for multiple-entry
     sortedData.forEach((datum) => {
-      if (Array.isArray(data[datum.questionId])) {
-        data[datum.questionId].push({ valueId: datum.valueId, value: datum.value });
+      if (Array.isArray(data[datum.questionName])) {
+        data[datum.questionName].push({ valueId: datum.valueId, value: datum.value });
       } else if (datum.valueId) {
-        data[datum.questionId] = [{ valueId: datum.valueId, value: datum.value }];
+        data[datum.questionName] = [{ valueId: datum.valueId, value: datum.value }];
       } else {
-        data[datum.questionId] = datum.value;
+        data[datum.questionName] = datum.value;
       }
     });
     return data;
@@ -81,16 +92,12 @@ const getters = {
       } else if (key && key === 'parameters') {
         const paramIds = datum.value.split(',');
         paramIds.forEach((id) => {
-          if (isNaN(id)) { // eslint-disable-line
-            // If id is not a number, that means it was entered by user as "Other". Place these in separate array
-            if (!dataObj.otherParameters) dataObj.otherParameters = [];
-            dataObj.otherParameters.push(id);
-          } else {
-            // Otherwise, find the full parameter data object and store in "parameters" array
-            if (!dataObj[key]) dataObj[key] = [];
-            dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
-          }
+          // find the full parameter data object and store in "parameters" array
+          if (!dataObj[key]) dataObj[key] = [];
+          dataObj[key].push(rootState.ref.parameters.find((p) => p.id === parseInt(id, 10)));
         });
+      } else if (key && key === 'otherParameters') {
+        dataObj[key] = datum.value ? JSON.parse(datum.value) : [];
       } else if (key) {
         dataObj[key] = datum.value;
       }
@@ -148,6 +155,7 @@ const getters = {
         });
       }
     });
+    dataObj.otherParameters = dataObj.otherParameters || [];
 
     dataObj.dateGenerated = format(new Date(), 'MMMM do, yyyy');
 
@@ -193,9 +201,18 @@ const mutations = {
   SET_IS_SAVING(state, value) {
     state.isSaving = value;
   },
+  SET_IS_GENERATING(state, value) {
+    state.isGenerating = value;
+  },
+  SET_GENERATE_ERROR(state, value) {
+    state.generateError = value;
+  },
 };
 
 const actions = {
+  async updateGenerateError({ commit }, boolean) {
+    commit('SET_GENERATE_ERROR', boolean);
+  },
   async get({ commit }, id) {
     commit('CLEAR_CURRENT_QAPP', []);
     commit('SET_IS_FETCHING', true);
@@ -220,6 +237,7 @@ const actions = {
     });
     commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
   },
+  // Payload consists of array of objects with qappId, questionId, value, and valueId (valueId is optional)
   async save({ commit }, payload) {
     // TODO: implement error handling on each save
     commit('SET_IS_SAVING', true);
@@ -228,8 +246,20 @@ const actions = {
     commit('SET_CURRENT_QAPP', qappRes.data);
     commit('SET_IS_SAVING', false);
   },
-  async updateData({ commit }, payload) {
-    const qappRes = await axios.put('api/qapps/data', payload);
+  async updateData({ commit, rootGetters }, payload) {
+    const updatedValues = {};
+    let qappRes = {};
+    if (!Array.isArray(payload.values) && typeof payload.values === 'object') {
+      Object.keys(payload.values).forEach((questionName) => {
+        updatedValues[rootGetters['structure/getQuestionId'](questionName)] = payload.values[questionName];
+      });
+      qappRes = await axios.put('api/qapps/data', {
+        ...payload,
+        values: updatedValues,
+      });
+    } else {
+      qappRes = await axios.put('api/qapps/data', payload);
+    }
     commit('SET_CURRENT_QAPP', qappRes.data);
   },
   async deleteData({ commit }, payload) {
@@ -238,14 +268,23 @@ const actions = {
   },
   async generate({ commit, getters }) {
     console.log(getters.wordDocData);
-    const doc = await axios({
-      method: 'post',
-      url: 'api/generate',
-      responseType: 'arraybuffer',
-      data: getters.wordDocData,
-    });
-
-    commit('SET_DOC', doc.data);
+    commit('SET_IS_GENERATING', true);
+    commit('SET_GENERATE_ERROR', false);
+    try {
+      const doc = await axios({
+        method: 'post',
+        url: 'api/generate',
+        responseType: 'arraybuffer',
+        data: getters.wordDocData,
+      });
+      commit('SET_GENERATE_ERROR', false);
+      commit('SET_IS_GENERATING', false);
+      commit('SET_DOC', doc.data);
+    } catch (error) {
+      commit('SET_GENERATE_ERROR', true);
+      commit('SET_IS_GENERATING', false);
+      console.log(Object.keys(error), error.message);
+    }
   },
 };
 

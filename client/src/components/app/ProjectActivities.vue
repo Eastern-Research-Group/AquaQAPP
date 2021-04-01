@@ -25,7 +25,7 @@
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             :placeholder="`Enter ${question.questionLabel}`"
             :maxlength="question.maxLength"
@@ -38,7 +38,7 @@
               type="checkbox"
               true-value="X"
               false-value=""
-              v-model="pendingData[question.id]"
+              v-model="pendingData[question.questionName]"
             />
             <label :for="question.id">{{ question.questionLabel }}</label>
           </div>
@@ -166,7 +166,7 @@ export default {
     onEdit(row) {
       this.selectedActivity = row;
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, row[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
@@ -210,7 +210,7 @@ export default {
     addActivityData() {
       const activityData = {};
       this.questions.forEach((q) => {
-        activityData[q.questionLabel] = this.pendingData[q.id];
+        activityData[q.questionLabel] = this.pendingData[q.questionName];
       });
 
       // A unique value id allows us to save multiple sets of activities to the DB, each tied to a value id
@@ -254,9 +254,9 @@ export default {
       const activity = {};
 
       // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
+      Object.keys(this.qappData).forEach((qName) => {
+        const datum = this.qappData[qName];
+        const question = this.questions.find((q) => q.questionName === qName);
         if (Array.isArray(datum) && question) {
           const key = question.questionLabel;
           datum.forEach((activityField) => {

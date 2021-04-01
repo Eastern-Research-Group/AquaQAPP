@@ -3,12 +3,10 @@
     <Table
       :columns="columns"
       :rows="rows"
-      :shouldHaveActionsCol="true"
-      :shouldHaveGlobalActions="true"
+      :shouldHaveSingleAction="'Edit'"
+      :shouldHaveGlobalActions="false"
       noDataMessage="No sampling design information has been added for selected parameters."
       @onEdit="onEdit"
-      @onDelete="onDelete"
-      @onAdd="onAddInfo"
     />
     <SideNav
       v-if="isEnteringInfo"
@@ -17,59 +15,64 @@
       :title="shouldShowEdit ? 'Edit Sampling Design Information' : 'Add Sampling Design Information'"
     >
       <form ref="form" @submit.prevent="submitData">
-        <div class="field" v-for="question in questions" :key="question.id">
+        <div class="columns is-multiline">
+          <div class="column is-4">
+            <p>Parameter</p>
+          </div>
+          <div class="column is-8">
+            <p>{{ selectedRow.parameterLabel }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Location ID</p>
+          </div>
+          <div class="column is-8">
+            <p>{{ selectedRow['Location ID'] }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Location Name</p>
+          </div>
+          <div class="column is-8">
+            <p>{{ selectedRow['Location Name'] }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Water Type</p>
+          </div>
+          <div class="column is-8">
+            <p>{{ selectedRow['Water Type'] }}</p>
+          </div>
+          <div class="column is-4">
+            <p>Concerns</p>
+          </div>
+          <div class="column is-8">
+            <p>{{ selectedRow.waterConcerns }}</p>
+          </div>
+        </div>
+        <div
+          class="field"
+          v-for="question in questions.filter(
+            (q) => q.questionLabel !== 'Parameter' && q.questionLabel !== 'Sample Location ID'
+          )"
+          :key="question.id"
+        >
           <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
-          <input
-            v-if="question.dataEntryType === 'text'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
-            class="input"
-            type="text"
-            :placeholder="`Enter ${question.questionLabel}`"
-            :maxlength="question.maxLength"
-            required
-          />
           <input
             v-if="question.dataEntryType === 'number'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="number"
             :placeholder="`Enter ${question.questionLabel}`"
             :maxlength="question.maxLength"
-            required
+            :required="question.questionLabel != 'Lab Duplicates' && question.questionLabel != 'Lab Blanks'"
           />
           <textarea
             v-if="question.dataEntryType === 'largeText'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
-            :placeholder="
-              `EPA recommends 10% QC samples per sampling event (e.g., 2 QC samples per 20 sites sampled) which can be field blanks, replicates or duplicates, or co-located samples.`
-            "
             :maxlength="question.maxLength"
             required
           ></textarea>
-          <div v-if="question.dataEntryType === 'select'">
-            <Multiselect
-              v-if="question.questionLabel === 'Parameter'"
-              v-model="pendingData[question.id]"
-              :options="getParameters()"
-              :placeholder="`Select ${question.questionLabel}`"
-              label="label"
-              track-by="id"
-            ></Multiselect>
-            <Multiselect
-              v-else
-              v-model="pendingData[question.id]"
-              :options="getOptions(question.refName)"
-              :multiple="true"
-              :taggable="true"
-              tag-placeholder="Add as other rationale"
-              placeholder="Select rationale, or type to specify other rationale"
-              @tag="addOther($event, question)"
-            ></Multiselect>
-          </div>
         </div>
         <Button
           :label="shouldShowEdit ? 'Save' : 'Add and Save'"
@@ -78,17 +81,6 @@
         />
       </form>
     </SideNav>
-    <DeleteWarning
-      v-if="shouldShowDelete"
-      title="Delete Sampling Design Information"
-      :itemLabel="
-        shouldDeleteAll
-          ? 'all sampling design information'
-          : `sampling design information for ${selectedRow.parameterLabel}`
-      "
-      @close="() => (shouldShowDelete = false)"
-      @onDelete="deleteData"
-    />
     <UnsavedWarning
       v-if="shouldDisplayUnsavedWarning"
       @onClose="() => (shouldDisplayUnsavedWarning = false)"
@@ -100,12 +92,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import Multiselect from 'vue-multiselect';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Table from '@/components/shared/Table';
-import DeleteWarning from '@/components/shared/DeleteWarning';
 
 export default {
   name: 'SampleDesign',
@@ -115,7 +105,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table, DeleteWarning, Multiselect },
+  components: { Button, SideNav, Table },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -129,12 +119,36 @@ export default {
       rows: [],
       columns: [
         {
-          key: 'parameterLabel',
-          label: 'Parameter/Method',
+          key: 'Location ID',
+          label: 'Location ID',
         },
         {
-          key: 'Number of Sample Locations',
-          label: 'Number of Sample Locations',
+          key: 'parameterLabel',
+          label: 'Parameter',
+        },
+        {
+          key: 'Field Duplicates',
+          label: 'Field Duplicates',
+        },
+        {
+          key: 'Field Blanks',
+          label: 'Field Blanks',
+        },
+        {
+          key: 'Lab Duplicates',
+          label: 'Lab Duplicates',
+        },
+        {
+          key: 'Lab Blanks',
+          label: 'Lab Blanks',
+        },
+        {
+          key: 'Lab Spikes',
+          label: 'Lab Spikes',
+        },
+        {
+          key: 'Frequency of Sampling',
+          label: 'Frequency of Sampling',
         },
       ],
     };
@@ -143,10 +157,9 @@ export default {
     ...mapState({
       qappId: (state) => state.qapp.id,
     }),
-    ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales']),
+    ...mapState('ref', ['parameters', 'locationRationales', 'sampleNumRationales', 'concerns']),
     ...mapState('structure', ['sections']),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', ['parametersQuestionId']),
   },
   mounted() {
     this.refreshData();
@@ -156,28 +169,13 @@ export default {
       this.selectedRow = row;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, row[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
       });
+      // Manually set sampleParameter to the row.Parameter value to fix bug where multiple locations have the same parameter
+      this.$set(this.pendingData, 'sampleParameter', row.Parameter);
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
       this.shouldShowEdit = true;
-    },
-    onDelete(row) {
-      this.shouldShowDelete = true;
-      if (row) {
-        this.selectedRow = row;
-        this.shouldDeleteAll = false;
-        this.shouldDeleteSingle = true;
-      } else {
-        this.shouldDeleteSingle = false;
-        this.shouldDeleteAll = true;
-      }
-    },
-    async onAddInfo() {
-      this.pendingData = {};
-      this.isEnteringInfo = true;
-      this.selectedRow = null;
-      this.shouldShowEdit = false;
     },
     submitData() {
       if (this.shouldShowEdit) {
@@ -190,7 +188,7 @@ export default {
       await this.$store.dispatch('qapp/updateData', {
         qappId: this.qappId,
         valueId: this.selectedRow.valueId,
-        values: this.cleanData(this.pendingData),
+        values: this.pendingData,
       });
       this.refreshData();
       this.isEnteringInfo = false;
@@ -198,7 +196,7 @@ export default {
     addData() {
       const sampleData = {};
       this.questions.forEach((q) => {
-        sampleData[q.questionLabel] = this.pendingData[q.id];
+        sampleData[q.questionLabel] = this.pendingData[q.questionName];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -214,123 +212,94 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      this.$emit('saveData', null, newValueId, this.pendingData);
 
       this.isEnteringInfo = false;
       this.pendingData = {};
     },
-    async deleteData() {
-      let valueIds = [];
-      if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedRow.valueId];
-      } else {
-        valueIds = this.rows.map((r) => r.valueId);
-      }
-      const questionIds = this.questions.map((q) => q.id);
-      await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
-      this.refreshData();
-      const sectionId = this.sections.find((s) => s.sectionNumber === '11').id;
-      this.$store.dispatch('qapp/deleteCompletedSection', sectionId);
-      this.shouldShowDelete = false;
-      this.shouldDeleteSingle = false;
-      this.shouldDeleteAll = false;
-    },
+
     refreshData() {
-      this.rows = [];
+      const locationQuestions = this.$store.state.structure.questions.filter(
+        (q) => q.section.sectionLabel === 'Monitoring Locations'
+      );
 
-      // Add rows to table if sample data already exists
-      const sampleDesign = {};
+      const rows = [];
+      let currentValueId = 1;
+      this.qappData.locationId.forEach((val) => {
+        const location = {};
+        locationQuestions.forEach((q) => {
+          if (this.qappData[q.questionName]) {
+            const qappDataObject = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
+            location[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
+          }
+        });
 
-      // Logic to loop through existing qapp data and set up rows for table
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
-        if (Array.isArray(datum) && question) {
-          const key = question.questionLabel;
-          datum.forEach((field) => {
-            if (typeof sampleDesign[field.valueId] === 'undefined') sampleDesign[field.valueId] = {};
-            if (question.refName) {
-              const ref = this[question.refName].find((r) => r.id === parseInt(field.value, 10));
-              if (ref) {
-                sampleDesign[field.valueId][key] = ref;
-              } else if (field.value) {
-                sampleDesign[field.valueId][key] = field.value.split(',');
+        if (location['Water Quality Concerns']) {
+          const locationConcerns = this.concerns.filter((concern) =>
+            location['Water Quality Concerns'].split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        } else {
+          const locationConcerns = this.concerns.filter((concern) =>
+            this.qappData.waterConcerns.split(',').includes(concern.code)
+          );
+          location.waterConcerns = locationConcerns.map((c) => c.label).join(', ');
+        }
+
+        const paramsByLocationObj = this.qappData.parametersByLocation.find((p) => {
+          return p.valueId === val.valueId;
+        });
+        const paramsByLocation = paramsByLocationObj ? paramsByLocationObj.value.split(',') : [];
+        paramsByLocation.forEach((paramId) => {
+          const parameterSampleData = { Parameter: paramId };
+          this.questions.forEach((q) => {
+            if (this.qappData[q.questionName]) {
+              const paramValueArray = this.qappData.sampleParameter.filter((datum) => datum.value === paramId);
+
+              if (paramValueArray.length) {
+                const sampleLocationIdObject = this.qappData.sampleLocationId.find(
+                  (datum) =>
+                    datum.value === location['Location ID'] &&
+                    paramValueArray.map((p) => p.valueId).includes(datum.valueId)
+                );
+                const qappDataObject = sampleLocationIdObject
+                  ? this.qappData[q.questionName].find((datum) => datum.valueId === sampleLocationIdObject.valueId)
+                  : null;
+                parameterSampleData[q.questionLabel] = qappDataObject ? qappDataObject.value : null;
+
+                // Manually enter location id and parameter id based on current location and parameter - avoids bugs with multiple locations with same params
+                parameterSampleData['Sample Location ID'] = location['Location ID'];
+                parameterSampleData.Parameter = paramId;
               }
-            } else {
-              sampleDesign[field.valueId][key] = field.value;
             }
           });
-        }
-      });
-
-      Object.keys(sampleDesign).forEach((sampleDesignId) => {
-        const row = sampleDesign[sampleDesignId];
-        if (Array.isArray(row.Parameter)) {
-          const otherParam = row.Parameter[0];
-          row.Parameter = row.Parameter.reduce((obj, item) => {
-            item = otherParam;
-            obj.label = item;
-            obj.id = item;
-            return obj;
-          }, {});
-        }
-        this.rows.push({
-          ...row,
-          parameterLabel: row.Parameter.label,
-          valueId: sampleDesignId,
-        });
-      });
-    },
-    getOptions(refName) {
-      // get reference data array based on refName field in questions table
-      return this[refName];
-    },
-    getParameters() {
-      const params = [];
-      const selectedParameters = this.qappData[this.parametersQuestionId];
-
-      if (selectedParameters) {
-        const paramIds = selectedParameters.split(',');
-        this.parameters.forEach((param) => {
-          if (paramIds.indexOf(param.id.toString()) > -1) {
-            params.push(param);
-          }
-        });
-
-        paramIds.forEach((param) => {
-          if (isNaN(param)) { // eslint-disable-line
-            params.push({
-              id: param,
-              label: param,
+          if (!Number.isNaN(Number(paramId))) {
+            const parameter = this.parameters.find((p) => p.id === parseInt(paramId, 10));
+            rows.push({
+              ...location,
+              'Sample Location ID': location['Location ID'],
+              ...parameterSampleData,
+              parameterLabel: parameter ? parameter.label : paramId, // Add fallback to paramId in case user entered number as "other" parameter
+              valueId: currentValueId,
             });
+            currentValueId += 1;
+          } else if (Number.isNaN(Number(paramId))) {
+            rows.push({
+              ...location,
+              'Sample Location ID': location['Location ID'],
+              ...parameterSampleData,
+              parameterLabel: paramId,
+              valueId: currentValueId,
+            });
+            currentValueId += 1;
           }
         });
-      }
-      return params;
-    },
-    cleanData() {
-      // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
-      const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qId) => {
-        if (typeof this.pendingData[qId] === 'object') {
-          // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qId])) {
-            const idArray = this.pendingData[qId].map((datum) => {
-              return datum.id || datum;
-            });
-            cleanedData[qId] = idArray.join(',');
-          } else {
-            cleanedData[qId] = this.pendingData[qId].id;
-          }
-        } else {
-          cleanedData[qId] = this.pendingData[qId];
-        }
       });
-      return cleanedData;
+      this.rows = rows;
     },
     addOther(value, question) {
       const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
-      let newVal = this.pendingData[question.id];
+      let newVal = this.pendingData[question.questionName];
       // if values already exist for this question, push entered value into array, otherwise set as array
       if (newVal) newVal.push(enteredVal);
       else newVal = [enteredVal];
@@ -342,6 +311,11 @@ export default {
 </script>
 
 <style scoped>
+.is-multiline .column {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .clear {
   clear: both;
 }

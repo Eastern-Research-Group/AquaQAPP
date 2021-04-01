@@ -37,7 +37,7 @@
           message="All fields are required. Please enter all fields to submit."
           tabindex="0"
         />
-        <div class="field" v-for="question in questions" :key="question.id">
+        <div class="field" v-for="question in currentQuestions" :key="question.id">
           <label
             v-if="question.questionLabel !== 'Water Quality Concerns' || shouldShowConcerns()"
             class="label"
@@ -47,9 +47,21 @@
           <input
             v-if="question.dataEntryType === 'text'"
             :id="`question${question.id}`"
-            v-model="pendingData[question.id]"
+            v-model="pendingData[question.questionName]"
             class="input"
             type="text"
+            :placeholder="`Enter ${question.questionLabel}`"
+            required
+          />
+          <input
+            v-if="question.dataEntryType === 'number'"
+            :id="`question${question.id}`"
+            v-model="pendingData[question.questionName]"
+            class="input"
+            type="number"
+            min="-180"
+            max="180"
+            step="0.000001"
             :placeholder="`Enter ${question.questionLabel}`"
             required
           />
@@ -61,15 +73,15 @@
                 class="is-checkradio is-info"
                 type="radio"
                 :value="option.id"
-                v-model="pendingData[question.id]"
+                v-model="pendingData[question.questionName]"
               />
               <label :key="option.name" :for="option.id">{{ option.name }}</label>
             </template>
           </template>
           <div v-if="question.dataEntryType === 'select'">
             <multiselect
-              v-if="question.questionLabel === 'Water Quality Concerns' && shouldShowConcerns()"
-              v-model="pendingData[question.id]"
+              v-if="question.questionName === 'mapWaterConcerns'"
+              v-model="pendingData[question.questionName]"
               :options="getConcerns()"
               :placeholder="`Select ${question.questionLabel}`"
               label="label"
@@ -77,25 +89,13 @@
               :multiple="true"
             ></multiselect>
             <multiselect
-              v-else-if="
-                question.questionLabel !== 'Water Quality Concerns' &&
-                  question.refName !== 'coordRefSystems' &&
-                  question.refName !== 'locationTypes'
-              "
-              v-model="pendingData[question.id]"
+              v-else
+              v-model="pendingData[question.questionName]"
               :options="getOptions(question.refName)"
               :placeholder="`Select ${question.questionLabel}`"
-              label="name"
-              track-by="name"
-            ></multiselect>
-            <multiselect
-              v-else-if="
-                question.questionLabel !== 'Water Quality Concerns' &&
-                  (question.refName === 'coordRefSystems' || question.refName === 'locationTypes')
-              "
-              v-model="pendingData[question.id]"
-              :options="getOptions(question.refName)"
-              :placeholder="`Select ${question.questionLabel}`"
+              :label="question.questionName === 'horizCollectionMethod' ? 'name' : undefined"
+              :track-by="question.questionName === 'horizCollectionMethod' ? 'id' : undefined"
+              :multiple="false"
             ></multiselect>
           </div>
         </div>
@@ -107,21 +107,13 @@
       </form>
     </SideNav>
     <DeleteWarning
-      v-if="shouldShowDelete"
+      v-if="shouldDisplayDeleteWarning"
       title="Delete Location"
-      :itemLabel="shouldDeleteAll ? 'all locations' : selectedLocation['Location Name']"
-      @close="() => (shouldShowDelete = false)"
+      :itemLabel="selectedLocation ? selectedLocation['Location Name'] : 'all locations'"
+      @close="() => (shouldDisplayDeleteWarning = false)"
       @onDelete="deleteLocationData"
-      :disabled="disabled"
-      :message="
-        (disabledAll &&
-          shouldDeleteAll &&
-          `One or more locations are associated with one or more selected parameters that must be removed before deleting all locations.`) ||
-          (disabled &&
-            `${
-              selectedLocation['Location Name']
-            } is associated with one or more selected parameters that must be removed before deleting this location.`)
-      "
+      :disabled="selectedLocationHasParameters || (!selectedLocation && anyLocationHasParameters)"
+      :message="deleteWarningMessage"
     />
     <UnsavedWarning
       v-if="shouldDisplayUnsavedWarning"
@@ -135,8 +127,6 @@
 <script>
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
-import getQuestionIdByName from '@/utils/getQuestionIdByName';
-import getLocationsTableConcerns from '@/utils/getLocationsTableConcerns';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
@@ -162,12 +152,10 @@ export default {
       map: null,
       isAddingLocation: false,
       isEnteringInfo: false,
-      shouldShowDelete: false,
+      shouldDisplayDeleteWarning: false,
       shouldShowEdit: false,
       shouldDeleteAll: false,
       shouldDeleteSingle: false,
-      latQuestionId: getQuestionIdByName(this.questions, 'locationLat'),
-      lngQuestionId: getQuestionIdByName(this.questions, 'locationLong'),
       pendingData: {},
       selectedLocation: null,
       columns: [
@@ -176,8 +164,6 @@ export default {
         { key: 'waterConcerns', label: 'Water Quality Concerns' },
       ],
       isFormIncomplete: false,
-      disabled: false,
-      disabledAll: false,
     };
   },
   computed: {
@@ -192,40 +178,48 @@ export default {
       'waterTypes',
       'parameters',
     ]),
-    ...mapState({
-      allQuestions: (state) => state.structure.questions,
-    }),
     ...mapGetters('qapp', ['qappData']),
-    ...mapGetters('structure', [
-      'concernsQuestionId',
-      'concernsDifferByLocQuestionId',
-      'locConcernsQuestionId',
-      'parametersQuestionId',
-      'waterTypeLocQuestionId',
-    ]),
+    currentQuestions() {
+      if (this.qappData.differByLocation === 'N') {
+        return this.questions.filter((q) => q.questionName !== 'mapWaterConcerns');
+      }
+      return this.questions;
+    },
+    selectedLocationHasParameters() {
+      if (!this.selectedLocation || !this.qappData.parametersByLocation) return false;
+
+      const paramsByLocationDatum = this.qappData.parametersByLocation.find(
+        (p) => p.valueId === this.selectedLocation.valueId
+      );
+      if (paramsByLocationDatum) return true;
+      return false;
+    },
+    anyLocationHasParameters() {
+      if (!this.qappData.parametersByLocation) return false;
+      let hasParams = false;
+      this.markers.forEach((marker) => {
+        if (this.qappData.parametersByLocation.find((p) => p.valueId === marker.valueId)) {
+          hasParams = true;
+        }
+      });
+      return hasParams;
+    },
+    deleteWarningMessage() {
+      if (this.selectedLocationHasParameters) {
+        return `${
+          this.selectedLocation['Location Name']
+        } is associated with one or more selected parameters that must be removed before deleting this location.`;
+      }
+      if (!this.selectedLocation && this.anyLocationHasParameters) {
+        return 'One or more locations are associated with one or more selected parameters that must be removed before deleting all locations.';
+      }
+      return null;
+    },
   },
   mounted() {
     this.refreshLocationData();
   },
   methods: {
-    onDisableDelete(location) {
-      if (location) {
-        const selectedParams = this.qappData[this.parametersQuestionId].split(',');
-        const filteredParams = [];
-        this.parameters.forEach((param) => {
-          if (selectedParams.some((p) => parseInt(p, 10) === param.id)) {
-            filteredParams.push(param);
-          }
-        });
-        if (location['Water Type'] === 'Fresh' && !!filteredParams.find((p) => p.waterType === 'Freshwater')) {
-          this.disabled = true;
-          this.disabledAll = true;
-        } else if (location['Water Type'] === 'Salt' && !!filteredParams.find((p) => p.waterType === 'Saltwater')) {
-          this.disabled = true;
-          this.disabledAll = true;
-        }
-      }
-    },
     getOptions(refName) {
       // get reference data array based on refName field in questions table
       return this[refName];
@@ -241,69 +235,58 @@ export default {
         this.map.on('click', (e) => {
           this.isFormIncomplete = false;
           this.isEnteringInfo = true;
-          this.pendingData[this.latQuestionId] = e.latlng.lat.toFixed(6);
-          this.pendingData[this.lngQuestionId] = e.latlng.lng.toFixed(6);
-
-          // Set default metadata automatically when user selects location by map
-          this.pendingData[getQuestionIdByName(this.questions, 'horizCollectionMethod')] = this.collectionMethods.find(
-            (v) => v.id === 18
-          );
+          this.pendingData.locationLat = e.latlng.lat.toFixed(6);
+          this.pendingData.locationLong = e.latlng.lng.toFixed(6);
         });
       } else if (this.map) {
         this.map.off('click');
       }
     },
+    getLocationConcerns(location) {
+      if (Array.isArray(location['Water Quality Concerns'])) {
+        return location['Water Quality Concerns'].map((c) => c.label).join(', ');
+      }
+      if (location['Water Quality Concerns']) {
+        const locationConcerns = this.concerns.filter((concern) =>
+          location['Water Quality Concerns'].split(',').includes(concern.code)
+        );
+        location['Water Quality Concerns'] = locationConcerns;
+        return locationConcerns.map((c) => c.label).join(', ');
+      }
+      const locationConcerns = this.concerns.filter((concern) =>
+        this.qappData.waterConcerns.split(',').includes(concern.code)
+      );
+      return locationConcerns.map((c) => c.label).join(', ');
+    },
     refreshLocationData() {
-      this.markers = [];
-
-      // Add markers to map if location data already exists
-      const locations = {};
-
-      // Logic to loop through existing qapp data and set up markers to be used by leaflet map
-      Object.keys(this.qappData).forEach((qId) => {
-        const datum = this.qappData[qId];
-        const question = this.questions.find((q) => q.id === parseInt(qId, 10));
-        if (Array.isArray(datum) && question) {
-          const key = question.questionLabel;
-          datum.forEach((locationField) => {
-            if (typeof locations[locationField.valueId] === 'undefined') locations[locationField.valueId] = {};
-            if (question.refName === 'concerns') {
-              locations[locationField.valueId][key] = this.concerns.filter(
-                (r) => locationField.value && locationField.value.indexOf(r.code) > -1
-              );
-            } else if (question.refName === 'locationTypes' || question.refName === 'coordRefSystems') {
-              locations[locationField.valueId][key] = this[question.refName].find((r) => r === locationField.value);
-            } else if (question.dataEntryType === 'select') {
-              locations[locationField.valueId][key] = this[question.refName].find(
-                (r) => r.id === parseInt(locationField.value, 10)
-              );
-            } else {
-              locations[locationField.valueId][key] = locationField.value;
+      const locations = [];
+      if (this.qappData.locationId) {
+        this.qappData.locationId.forEach((val) => {
+          const location = { valueId: val.valueId };
+          this.questions.forEach((q) => {
+            if (this.qappData[q.questionName]) {
+              const valueObj = this.qappData[q.questionName].find((datum) => datum.valueId === val.valueId);
+              location[q.questionLabel] = valueObj ? valueObj.value : '';
             }
           });
-        }
-      });
+          location.latLng = [parseFloat(location['Location Latitude']), parseFloat(location['Location Longitude'])];
 
-      Object.keys(locations).forEach((locationId) => {
-        const monLoc = locations[locationId];
+          // Populate concerns in Locations table (if concerns do not differ by location, use all selected concerns)
+          location.waterConcerns = this.getLocationConcerns(location);
 
-        if (this.shouldShowConcerns() && !monLoc['Water Quality Concerns']) {
-          monLoc['Water Quality Concerns'] = this.getConcerns();
-        }
-        getLocationsTableConcerns(monLoc, this.getConcerns());
-
-        this.markers.push({
-          ...monLoc,
-          valueId: locationId,
-          latLng: [parseFloat(monLoc['Location Latitude']), parseFloat(monLoc['Location Longitude'])],
+          location['Horizontal Collection Method'] = this.collectionMethods.find(
+            (m) => m.id === parseInt(location['Horizontal Collection Method'], 10)
+          );
+          locations.push(location);
         });
-      });
+      }
+      this.markers = locations;
     },
     addLocationData() {
       // Push data to markers array to display markers on map with corresponding info
       const mapData = {};
       this.questions.forEach((q) => {
-        mapData[q.questionLabel] = this.pendingData[q.id];
+        mapData[q.questionLabel] = this.pendingData[q.questionName];
       });
 
       // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
@@ -312,20 +295,18 @@ export default {
         newValueId = Math.max(...this.markers.map((marker) => marker.valueId)) + 1;
       }
 
-      getLocationsTableConcerns(mapData, this.getConcerns());
-
       // Markers array used to display pins and handle location data
       this.markers.push({
         ...mapData,
-        latLng: [this.pendingData[this.latQuestionId], this.pendingData[this.lngQuestionId]],
+        latLng: [this.pendingData.locationLat, this.pendingData.locationLong],
+        waterConcerns: this.getLocationConcerns(mapData),
         valueId: newValueId,
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
-      this.pendingData.paramsByLocation =
-        (this.pendingData[this.waterTypeLocQuestionId] === 'Fresh' && 'Freshwater') ||
-        ((this.pendingData[this.waterTypeLocQuestionId] === 'Salt' || 'Brackish') && 'Saltwater');
+      // this.pendingData.paramsByLocation =
+      //   (this.pendingData.waterType === 'Fresh' && 'Freshwater') ||
+      //   ((this.pendingData.waterType === 'Salt' || 'Brackish') && 'Saltwater');
       this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
 
       // Close location side nav, clear inputs, and turn off click event for map
@@ -346,7 +327,7 @@ export default {
       this.selectedLocation = location;
       // Set pending data by questionId from location by questionLabel
       this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.id, location[q.questionLabel]);
+        this.$set(this.pendingData, q.questionName, location[q.questionLabel]);
       });
       this.currentEditData = { ...this.pendingData };
       this.isEnteringInfo = true;
@@ -357,8 +338,8 @@ export default {
       // check that each field is completed before submitting
       this.questions.forEach((q) => {
         if (
-          (!this.pendingData[q.id] && this.shouldShowConcerns()) ||
-          (!this.pendingData[q.id] && !this.shouldShowConcerns() && q.id !== this.locConcernsQuestionId)
+          (!this.pendingData[q.questionName] && this.shouldShowConcerns()) ||
+          (!this.pendingData[q.questionName] && !this.shouldShowConcerns() && q.questionName !== 'mapWaterConcerns')
         ) {
           this.isFormIncomplete = true;
         }
@@ -383,62 +364,54 @@ export default {
       this.isEnteringInfo = false;
     },
     onDelete(location) {
-      this.shouldShowDelete = true;
-      this.disabled = false;
       if (location) {
-        this.selectedLocation = location;
-        this.shouldDeleteAll = false;
         this.shouldDeleteSingle = true;
-        this.onDisableDelete(this.selectedLocation);
-      } else if (this.disabledAll) {
-        this.disabled = true;
-        this.shouldDeleteAll = true;
+        this.selectedLocation = location;
       } else {
-        this.disabledAll = false;
-        this.shouldDeleteSingle = false;
         this.shouldDeleteAll = true;
       }
+      this.shouldDisplayDeleteWarning = true;
     },
     async deleteLocationData() {
       let valueIds = [];
-      if (this.shouldDeleteSingle) {
-        valueIds = [this.selectedLocation.valueId];
-      } else {
+      if (this.shouldDeleteAll) {
         valueIds = this.markers.map((m) => m.valueId);
+      } else {
+        valueIds = [this.selectedLocation.valueId];
       }
       const questionIds = this.questions.map((q) => q.id);
       await this.$store.dispatch('qapp/deleteData', { qappId: this.qappId, valueIds, questionIds });
       this.refreshLocationData(); // refresh markers and table data after deleting
-      this.shouldShowDelete = false;
+      this.shouldDisplayDeleteWarning = false;
       this.shouldDeleteSingle = false;
       this.shouldDeleteAll = false;
     },
     cleanData() {
       // vue-multiselect sets values to objects - set values as id instead of the full object before posting to db
       const cleanedData = {};
-      Object.keys(this.pendingData).forEach((qId) => {
-        if (typeof this.pendingData[qId] === 'object') {
+      Object.keys(this.pendingData).forEach((qName) => {
+        if (typeof this.pendingData[qName] === 'object') {
           // if array, store comma separate list of codes
-          if (Array.isArray(this.pendingData[qId])) {
-            const codesArray = this.pendingData[qId].map((datum) => {
+          if (Array.isArray(this.pendingData[qName])) {
+            const codesArray = this.pendingData[qName].map((datum) => {
               return datum.code;
             });
-            cleanedData[qId] = codesArray.join(',');
-          } else {
-            cleanedData[qId] = this.pendingData[qId].id;
+            cleanedData[qName] = codesArray.join(',');
+          } else if (this.pendingData[qName]) {
+            cleanedData[qName] = this.pendingData[qName].id;
           }
         } else {
-          cleanedData[qId] = this.pendingData[qId];
+          cleanedData[qName] = this.pendingData[qName];
         }
       });
       return cleanedData;
     },
     shouldShowConcerns() {
-      return this.qappData[this.concernsDifferByLocQuestionId] === 'Y';
+      return this.qappData.differByLocation === 'Y';
     },
     getConcerns() {
       const concerns = [];
-      const selectedConcerns = this.qappData[this.concernsQuestionId];
+      const selectedConcerns = this.qappData.waterConcerns;
       if (selectedConcerns) {
         this.concerns.forEach((concern) => {
           if (selectedConcerns.indexOf(concern.code) > -1) {

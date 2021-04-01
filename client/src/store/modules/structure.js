@@ -1,5 +1,4 @@
 import axios from 'axios';
-import getQuestionIdByName from '@/utils/getQuestionIdByName';
 
 const state = {
   sections: [],
@@ -10,41 +9,14 @@ const state = {
 };
 
 const getters = {
-  concernsQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'waterConcerns');
-  },
-  rolesQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'roles');
-  },
-  locConcernsQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'mapWaterConcerns');
-  },
-  concernsDifferByLocQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'differByLocation');
-  },
-  locationQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'locationId');
-  },
-  locationWaterTypeQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'waterType');
-  },
-  parametersQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'parameters');
-  },
-  sampleDesignQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'sampleParameter');
-  },
-  paramsbyLocQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'parametersByLocation');
-  },
-  waterTypeLocQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'waterType');
-  },
-  responsibilitiesQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'responsibilities');
-  },
-  detailsQuestionId(state) {
-    return getQuestionIdByName(state.questions, 'details');
+  getQuestionId(state) {
+    return (questionName) => {
+      const question = state.questions.find((q) => q.questionName === questionName);
+      if (question) {
+        return state.questions.find((q) => q.questionName === questionName).id;
+      }
+      return 0;
+    };
   },
 };
 

@@ -203,7 +203,7 @@ module.exports = {
       },
       {
         questionId: 42,
-        value: '3',
+        value: '18',
         valueId: 1,
       },
       {
@@ -216,28 +216,18 @@ module.exports = {
         value: '1,3',
       },
       {
+        questionId: 45,
+        value: '1,3',
+        valueId: 1,
+      },
+      {
+        questionId: 46,
+        value: 'Frequent',
+        valueId: 1,
+      },
+      {
         questionId: 47,
         value: '1',
-        valueId: 1,
-      },
-      {
-        questionId: 48,
-        value: 12,
-        valueId: 1,
-      },
-      {
-        questionId: 49,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
-        questionId: 50,
-        value: 'Rationale',
-        valueId: 1,
-      },
-      {
-        questionId: 51,
-        value: 10,
         valueId: 1,
       },
       {
@@ -246,24 +236,124 @@ module.exports = {
         valueId: 2,
       },
       {
-        questionId: 48,
-        value: 8,
-        valueId: 2,
-      },
-      {
         questionId: 49,
         value: 'Rationale',
-        valueId: 2,
       },
       {
         questionId: 50,
-        value: 'Rationale',
-        valueId: 2,
+        value: 'Samples',
       },
       {
         questionId: 51,
+        value: 'Rationale',
+      },
+      {
+        questionId: 53,
+        value: 1,
+        valueId: 1,
+      },
+      {
+        questionId: 54,
+        value: 10,
+        valueId: 1,
+      },
+      {
+        questionId: 55,
+        value: 100,
+        valueId: 1,
+      },
+      {
+        questionId: 56,
+        value: 1000,
+        valueId: 1,
+      },
+      {
+        questionId: 57,
+        value: 10000,
+        valueId: 1,
+      },
+      {
+        questionId: 71,
+        value: '12345',
+        valueId: 1,
+      },
+      {
+        questionId: 53,
+        value: 1,
+        valueId: 2,
+      },
+      {
+        questionId: 54,
         value: 10,
         valueId: 2,
+      },
+      {
+        questionId: 55,
+        value: 100,
+        valueId: 2,
+      },
+      {
+        questionId: 56,
+        value: 1000,
+        valueId: 2,
+      },
+      {
+        questionId: 57,
+        value: 10000,
+        valueId: 2,
+      },
+      {
+        questionId: 71,
+        value: '12345',
+        valueId: 2,
+      },
+      {
+        questionId: 58,
+        value: 'Extent of Study Area',
+      },
+      {
+        questionId: 59,
+        value: 'Time of Study Area',
+      },
+      {
+        questionId: 60,
+        value: 'Parameters of Study Area',
+      },
+      {
+        questionId: 61,
+        value: 'Users of Study Area',
+      },
+      {
+        questionId: 62,
+        value: 'Explaining the problem',
+      },
+      {
+        questionId: 63,
+        value: 'Manage Data',
+      },
+      {
+        questionId: 64,
+        value: 'Data Handling',
+      },
+      {
+        questionId: 65,
+        value: 'Management Requirements',
+      },
+      {
+        questionId: 67,
+        value: 'Scientific efforts',
+      },
+      {
+        questionId: 68,
+        value: 'Data gaps',
+      },
+      {
+        questionId: 69,
+        value: 'Reasoning',
+      },
+      {
+        questionId: 70,
+        value: 'Indicators',
       },
     ];
     const records = qappDataRecords.map((record) => ({
@@ -279,7 +369,7 @@ module.exports = {
       value: 'Empty QAPP',
     });
     const completedSections = [];
-    for (let i = 1; i < 15; i += 1) {
+    for (let i = 1; i < 17; i += 1) {
       completedSections.push({
         qappId: testQappId,
         sectionId: i,
