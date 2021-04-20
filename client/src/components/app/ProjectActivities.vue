@@ -44,11 +44,7 @@
           </div>
         </div>
         <Alert v-if="error" :message="error" type="error" />
-        <Button
-          :label="shouldShowEdit ? 'Edit and Save' : 'Add and Save'"
-          :type="shouldShowEdit ? 'primary' : 'success'"
-          submit
-        />
+        <SideNavSave />
       </form>
     </SideNav>
     <DeleteWarning
@@ -71,8 +67,8 @@
 import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Table from '@/components/shared/Table';
-import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
+import SideNavSave from '@/components/shared/SideNavSave';
 import DeleteWarning from '@/components/shared/DeleteWarning';
 import Alert from '@/components/shared/Alert';
 
@@ -84,7 +80,7 @@ export default {
       required: true,
     },
   },
-  components: { Table, Button, SideNav, DeleteWarning, Alert },
+  components: { Table, SideNav, SideNavSave, DeleteWarning, Alert },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -207,7 +203,7 @@ export default {
       this.refreshActivityData();
       this.isEnteringInfo = false;
     },
-    addActivityData() {
+    async addActivityData() {
       const activityData = {};
       this.questions.forEach((q) => {
         activityData[q.questionLabel] = this.pendingData[q.questionName];
@@ -225,7 +221,7 @@ export default {
           valueId: newValueId,
         });
 
-        this.$emit('saveData', null, newValueId, this.pendingData);
+        await this.$listeners.saveData(null, newValueId, this.pendingData);
 
         this.isEnteringInfo = false;
         this.pendingData = {};

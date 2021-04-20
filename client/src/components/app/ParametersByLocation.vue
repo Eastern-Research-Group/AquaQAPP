@@ -65,7 +65,7 @@
             required
           ></textarea>
         </div>
-        <Button label="Save" type="primary" submit />
+        <SideNavSave />
       </form>
     </SideNav>
     <UnsavedWarning
@@ -82,6 +82,7 @@ import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
+import SideNavSave from '@/components/shared/SideNavSave';
 import Table from '@/components/shared/Table';
 import difference from 'lodash/difference';
 import sortBy from 'lodash/sortBy';
@@ -94,7 +95,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table },
+  components: { Button, SideNav, Table, SideNavSave },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -250,7 +251,7 @@ export default {
         }
       });
 
-      this.$emit('saveData', null, this.selectedLocation.valueId, this.pendingData);
+      await this.$listeners.saveData(null, this.selectedLocation.valueId, this.pendingData);
       this.isEnteringInfo = false;
       this.shouldShowEdit = false;
       this.pendingData = {};

@@ -74,11 +74,7 @@
             required
           ></textarea>
         </div>
-        <Button
-          :label="shouldShowEdit ? 'Save' : 'Add and Save'"
-          :type="shouldShowEdit ? 'primary' : 'success'"
-          submit
-        />
+        <SideNavSave />
       </form>
     </SideNav>
     <UnsavedWarning
@@ -93,8 +89,8 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
-import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
+import SideNavSave from '@/components/shared/SideNavSave';
 import Table from '@/components/shared/Table';
 
 export default {
@@ -105,7 +101,7 @@ export default {
       required: true,
     },
   },
-  components: { Button, SideNav, Table },
+  components: { SideNav, SideNavSave, Table },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -193,7 +189,7 @@ export default {
       this.refreshData();
       this.isEnteringInfo = false;
     },
-    addData() {
+    async addData() {
       const sampleData = {};
       this.questions.forEach((q) => {
         sampleData[q.questionLabel] = this.pendingData[q.questionName];
@@ -212,7 +208,7 @@ export default {
       });
 
       // Emit saveData to parent component to save to DB
-      this.$emit('saveData', null, newValueId, this.pendingData);
+      await this.$listeners.saveData(null, newValueId, this.pendingData);
 
       this.isEnteringInfo = false;
       this.pendingData = {};

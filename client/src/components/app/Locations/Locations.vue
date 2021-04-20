@@ -99,11 +99,7 @@
             ></multiselect>
           </div>
         </div>
-        <Button
-          :label="shouldShowEdit ? 'Save' : 'Add and Save'"
-          :type="shouldShowEdit ? 'primary' : 'success'"
-          submit
-        />
+        <SideNavSave />
       </form>
     </SideNav>
     <DeleteWarning
@@ -130,8 +126,8 @@ import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
+import SideNavSave from '@/components/shared/SideNavSave';
 import Tabs from '@/components/shared/Tabs';
-import Button from '@/components/shared/Button';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
 import Alert from '@/components/shared/Alert';
@@ -144,7 +140,7 @@ export default {
       required: true,
     },
   },
-  components: { Map, SideNav, Tabs, Button, Multiselect, Table, DeleteWarning, Alert },
+  components: { Map, SideNav, SideNavSave, Tabs, Multiselect, Table, DeleteWarning, Alert },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -282,7 +278,7 @@ export default {
       }
       this.markers = locations;
     },
-    addLocationData() {
+    async addLocationData() {
       // Push data to markers array to display markers on map with corresponding info
       const mapData = {};
       this.questions.forEach((q) => {
@@ -307,7 +303,7 @@ export default {
       // this.pendingData.paramsByLocation =
       //   (this.pendingData.waterType === 'Fresh' && 'Freshwater') ||
       //   ((this.pendingData.waterType === 'Salt' || 'Brackish') && 'Saltwater');
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      await this.$listeners.saveData(null, newValueId, this.cleanData(this.pendingData));
 
       // Close location side nav, clear inputs, and turn off click event for map
       this.isAddingLocation = false;
