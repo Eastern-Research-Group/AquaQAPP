@@ -61,7 +61,7 @@
                 type="text"
                 required
                 placeholder="Enter Full Name"
-                v-model="$auth.user().name"
+                v-model="name"
                 maxlength="255"
               />
             </div>
@@ -73,7 +73,7 @@
                 type="email"
                 required
                 placeholder="Enter email"
-                v-model="$auth.user().email"
+                v-model="email"
                 maxlength="255"
               />
             </div>
@@ -85,14 +85,14 @@
                 type="text"
                 required
                 placeholder="Enter organization"
-                v-model="$auth.user().organization"
+                v-model="organization"
                 maxlength="255"
               />
             </div>
             <hr />
             <div class="field is-grouped">
               <div class="control">
-                <Button label="Save" type="info" submit />
+                <Button label="Save" type="primary" :isBusy="isSavingProfile" submit />
               </div>
               <div class="control">
                 <Button label="Change Password" type="info" @click.native="changePasswordModal" />
@@ -166,7 +166,7 @@
           <hr />
           <div class="field is-grouped">
             <div class="control">
-              <Button label="Change" type="success" submit />
+              <Button label="Change" type="success" :isBusy="isChangingPassword" submit />
             </div>
             <div class="control">
               <Button
@@ -191,7 +191,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
@@ -203,6 +203,9 @@ export default {
   components: { Button, SideNav, Alert, ExampleModal, HoverText },
   data() {
     return {
+      name: this.$auth.user().name,
+      email: this.$auth.user().email,
+      organization: this.$auth.user().organization,
       isActive: false,
       error: null,
       shouldShowProfile: false,
@@ -221,15 +224,15 @@ export default {
     async handleProfileSubmit() {
       try {
         await this.saveProfile({
-          data: {
-            name: this.name,
-            email: this.email,
-            organization: this.organization,
-          },
+          newName: this.name,
+          newEmail: this.email,
+          newOrganization: this.organization,
         });
+        await this.$auth.fetch();
+        this.name = this.$auth.user().name;
+        this.email = this.$auth.user().email;
+        this.organization = this.$auth.user().organization;
         this.showSuccessProfileMessage = true;
-        this.name = null;
-        this.email = null;
       } catch (error) {
         this.error = error.response.data.error;
       }
@@ -261,23 +264,8 @@ export default {
     },
   },
   computed: {
+    ...mapState('user', ['isSavingProfile', 'isChangingPassword']),
     ...mapGetters('qapp', ['title']),
-    name: {
-      get() {
-        return this.$store.state.user.newName;
-      },
-      set(value) {
-        this.$store.commit('user/SET_NEW_NAME', value);
-      },
-    },
-    email: {
-      get() {
-        return this.$store.state.user.newEmail;
-      },
-      set(value) {
-        this.$store.commit('user/SET_NEW_EMAIL', value);
-      },
-    },
     currentPassword: {
       get() {
         return this.$store.state.user.currentPassword;
@@ -300,14 +288,6 @@ export default {
       },
       set(value) {
         this.$store.commit('user/SET_PASSWORD_CONFIRMATION', value);
-      },
-    },
-    organization: {
-      get() {
-        return this.$store.state.user.newOrganization;
-      },
-      set(value) {
-        this.$store.commit('user/SET_ORGANIZATION', value);
       },
     },
   },

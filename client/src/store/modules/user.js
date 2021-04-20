@@ -9,6 +9,8 @@ const state = {
   newPassword: null,
   confirmNewPassword: null,
   newOrganization: null,
+  isSavingProfile: false,
+  isChangingPassword: false,
 };
 
 const mutations = {
@@ -36,6 +38,12 @@ const mutations = {
   SET_ORGANIZATION(state, value) {
     state.newOrganization = value;
   },
+  SET_IS_SAVING_PROFILE(state, value) {
+    state.isSavingProfile = value;
+  },
+  SET_IS_CHANGING_PASSWORD(state, value) {
+    state.isChangingPassword = value;
+  },
 };
 
 const actions = {
@@ -56,28 +64,23 @@ const actions = {
     };
     await axios.post('auth/resetPassword', postData);
   },
-  async saveProfile({ state }) {
-    if (!state.newName || !state.newEmail || !state.newOrganization) {
-      return;
-    }
-    const postData = {
-      newName: state.newName,
-      newEmail: state.newEmail,
-      newOrganization: state.newOrganization,
-    };
-    await axios.post('auth/user', postData);
+  async saveProfile({ commit }, data) {
+    commit('SET_IS_SAVING_PROFILE', true);
+    await axios.post('auth/user', data);
+    commit('SET_IS_SAVING_PROFILE', false);
   },
-  async changePassword() {
+  async changePassword({ commit, state }) {
     if (!state.newPassword || !state.confirmNewPassword || !state.currentPassword) {
       return;
     }
+    commit('SET_IS_CHANGING_PASSWORD', true);
     const postData = {
       currentPassword: state.currentPassword,
       newPassword: state.newPassword,
       confirmNewPassword: state.confirmNewPassword,
     };
-
     await axios.post('auth/changePassword', postData);
+    commit('SET_IS_CHANGING_PASSWORD', false);
   },
 };
 
