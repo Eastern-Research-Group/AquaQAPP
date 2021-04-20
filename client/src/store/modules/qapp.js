@@ -10,6 +10,7 @@ const state = {
   doc: null,
   completedSections: [],
   isSaving: false,
+  isMarkingComplete: false,
   isGenerating: false,
   generateError: false,
 };
@@ -201,6 +202,9 @@ const mutations = {
   SET_IS_SAVING(state, value) {
     state.isSaving = value;
   },
+  SET_IS_MARKING_COMPLETE(state, value) {
+    state.isMarkingComplete = value;
+  },
   SET_IS_GENERATING(state, value) {
     state.isGenerating = value;
   },
@@ -222,13 +226,16 @@ const actions = {
     commit('SET_IS_FETCHING', false);
   },
   async addCompletedSection({ commit, state }, sectionId) {
+    commit('SET_IS_MARKING_COMPLETE', true);
     const response = await axios.post(`api/completed-sections`, {
       qappId: state.id,
       sectionId,
     });
     commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
+    commit('SET_IS_MARKING_COMPLETE', false);
   },
   async deleteCompletedSection({ commit, state }, sectionId) {
+    commit('SET_IS_MARKING_COMPLETE', true);
     const response = await axios.delete(`api/completed-sections`, {
       data: {
         qappId: state.id,
@@ -236,6 +243,7 @@ const actions = {
       },
     });
     commit('SET_FIELD', { prop: 'completedSections', value: response.data.map((d) => d.sectionId) });
+    commit('SET_IS_MARKING_COMPLETE', false);
   },
   // Payload consists of array of objects with qappId, questionId, value, and valueId (valueId is optional)
   async save({ commit }, payload) {
@@ -247,6 +255,7 @@ const actions = {
     commit('SET_IS_SAVING', false);
   },
   async updateData({ commit, rootGetters }, payload) {
+    commit('SET_IS_SAVING', true);
     const updatedValues = {};
     let qappRes = {};
     if (!Array.isArray(payload.values) && typeof payload.values === 'object') {
@@ -261,6 +270,7 @@ const actions = {
       qappRes = await axios.put('api/qapps/data', payload);
     }
     commit('SET_CURRENT_QAPP', qappRes.data);
+    commit('SET_IS_SAVING', false);
   },
   async deleteData({ commit }, payload) {
     const qappRes = await axios.delete('api/qapps/data', { data: payload });

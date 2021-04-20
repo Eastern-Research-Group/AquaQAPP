@@ -30,17 +30,20 @@
           <Button
             type="primary"
             class="aq-save-btn is-pulled-right"
-            :disabled="hasSaved || !hasUnsavedData"
+            :disabled="hasSaved || !hasUnsavedData || isSaving"
             :title="getSaveBtnHoverText()"
             @click.native="saveData"
           >
-            {{ hasSaved ? 'Saved' : 'Save' }}
             <LoadingIndicator v-if="isSaving" class="light" />
+            <span v-else>
+              {{ hasSaved ? 'Saved' : 'Save' }}
+            </span>
           </Button>
           <MarkComplete
             @markComplete="markComplete(currentSection.sectionNumber)"
             :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
             :disabled="!(currentSection.id && completedSections.indexOf(currentSection.id) > -1) && hasEmptyFields"
+            :isBusy="isMarkingComplete"
           />
 
           <h2 class="label is-size-4">
@@ -249,7 +252,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
+    ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving', 'isMarkingComplete']),
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
@@ -659,7 +662,12 @@ textarea {
 }
 
 .aq-save-btn {
+  min-width: 4.5rem;
   margin-left: 2em;
+
+  ::v-deep .spinner {
+    margin-left: 0;
+  }
 }
 
 .fa-check {

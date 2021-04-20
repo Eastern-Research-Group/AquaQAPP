@@ -1,13 +1,17 @@
 <template>
-  <button :type="submit ? 'submit' : 'button'" :class="'button ' + getClass()">
+  <button :type="submit ? 'submit' : 'button'" :class="'button ' + getClass()" :disabled="isBusy">
     <span v-if="icon" :class="'fa fa-' + icon"></span>
     {{ label }}
     <slot />
+    <LoadingIndicator v-if="isBusy" class="light" />
   </button>
 </template>
 
 <script>
+import LoadingIndicator from './LoadingIndicator';
+
 export default {
+  components: { LoadingIndicator },
   name: 'Button',
   props: {
     label: {
@@ -30,6 +34,10 @@ export default {
     submit: {
       type: Boolean,
       required: false,
+      default: false,
+    },
+    isBusy: {
+      type: Boolean,
       default: false,
     },
   },
