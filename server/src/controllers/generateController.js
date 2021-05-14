@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
   async generate(req, res) {
     try {
-      const file = fs.readFileSync(path.resolve('server/src/templates/MasterQAPP_version4_coded_01262021.docx'));
+      const file = fs.readFileSync(path.resolve('server/src/templates/MasterQAPP_version4_coded_04052021.docx'));
       const buffer = await createReport({
         template: file,
         output: 'buffer',
