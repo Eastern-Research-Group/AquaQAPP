@@ -2,11 +2,23 @@
   <div class="aq-map-container">
     <div class="aq-map-add-btn">
       <Button
-        :label="this.isAddingLocation ? 'Cancel' : 'Add Location'"
+        :label="isAddingLocation ? 'Cancel' : 'Add Location'"
         type="dark"
         @click.native="$emit('onAddLocation', map)"
       />
       <span v-if="isAddingLocation" class="has-text-black">Select a location on the map to add.</span>
+    </div>
+    <div class="aq-map-toggle-btn">
+      <Button
+        :label="currentBasemap === 'satellite' ? 'Street View' : 'Satellite View'"
+        type="link"
+        @click.native="toggleBasemap"
+      />
+      <Button
+        :label="isViewingIds ? 'View Markers' : 'View Location IDs'"
+        type="link"
+        @click.native="isViewingIds = !isViewingIds"
+      />
     </div>
     <LMap
       ref="map"
@@ -18,6 +30,9 @@
     >
       <template v-if="markers.length">
         <LMarker v-for="(marker, index) in markers" :key="index" :latLng="marker.latLng">
+          <LIcon v-if="isViewingIds" class-name="id-marker">
+            <div class="location-id">{{ marker['Location ID'] }}</div>
+          </LIcon>
           <LPopup>
             <p>{{ marker['Location Name'] }} (ID: {{ marker['Location ID'] }})</p>
             <div class="field is-grouped">
@@ -49,7 +64,7 @@
 
 <script>
 import Button from '@/components/shared/Button';
-import { LMap, LMarker, LPopup } from 'vue2-leaflet';
+import { LIcon, LMap, LMarker, LPopup } from 'vue2-leaflet';
 import { Icon, featureGroup, marker, control } from 'leaflet';
 import 'leaflet-compass/dist/leaflet-compass.min';
 import 'leaflet-compass/dist/leaflet-compass.min.css';
@@ -66,6 +81,7 @@ Icon.Default.mergeOptions({
 
 export default {
   components: {
+    LIcon,
     LMap,
     LMarker,
     LPopup,
@@ -89,12 +105,18 @@ export default {
   },
   data() {
     return {
-      url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      apiKey: process.env.VUE_APP_ESRI_API_KEY,
+      currentBasemap: 'satellite',
+      hydroLayer: null,
+      satelliteLayer: null,
+      satelliteLabelLayer: null,
+      streetLayer: null,
+      // streetLabelLayer: null,
       zoom: 4,
       center: [39.8333333, -98.585522],
       bounds: null,
       map: null,
-      label: '',
+      isViewingIds: false,
     };
   },
   methods: {
@@ -113,19 +135,38 @@ export default {
       const toBounds = new featureGroup(pins).getBounds().pad(0.1); // eslint-disable-line
       this.map.flyToBounds(toBounds, { duration: 0.5, maxZoom: 11 });
     },
+    toggleBasemap() {
+      if (this.currentBasemap === 'satellite') {
+        this.currentBasemap = 'street';
+        this.map.removeLayer(this.satelliteLayer);
+        this.map.removeLayer(this.satelliteLabelLayer);
+        this.map.addLayer(this.streetLayer);
+        // this.map.addLayer(this.streetLabelLayer);
+        this.map.removeLayer(this.hydroLayer);
+        this.map.addLayer(this.hydroLayer);
+      } else {
+        this.currentBasemap = 'satellite';
+        this.map.removeLayer(this.streetLayer);
+        // this.map.removeLayer(this.streetLabelLayer);
+        this.map.addLayer(this.satelliteLayer);
+        this.map.addLayer(this.satelliteLabelLayer);
+        this.map.removeLayer(this.hydroLayer);
+        this.map.addLayer(this.hydroLayer);
+      }
+    },
   },
   mounted() {
     // provide easier access to the leaflet map object
     this.map = this.$refs.map.mapObject;
 
-    // Add satellite imagery layer
-    esri
-      .tiledMapLayer({
-        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-      })
-      .addTo(this.map);
+    this.satelliteLayer = esri.basemapLayer('Imagery', { apiKey: this.apiKey }).addTo(this.map);
+    this.satelliteLabelLayer = esri.basemapLayer('ImageryLabels', { apiKey: this.apiKey }).addTo(this.map);
 
-    esri
+    this.streetLayer = esri.basemapLayer('Streets', { apiKey: this.apiKey });
+    // this.streetLabelLayer = esri.basemapLayer('GrayLabels', { apiKey: this.apiKey });
+
+    // Display hydro layer on all map views
+    this.hydroLayer = esri
       .tiledMapLayer({
         url:
           'https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Esri_Hydro_Reference_Overlay/MapServer',
@@ -159,6 +200,36 @@ export default {
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
     background: white;
     border-radius: 4px;
+  }
+}
+
+.aq-map-toggle-btn {
+  position: absolute;
+  z-index: 500;
+  right: 65px;
+  top: 11px;
+
+  .button {
+    margin-left: 0.5rem;
+  }
+}
+
+.id-marker {
+  background-color: aqua;
+  color: #363636;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+
+  .location-id {
+    font-size: 14px;
+    max-width: 75px;
+    overflow-wrap: break-word;
   }
 }
 
