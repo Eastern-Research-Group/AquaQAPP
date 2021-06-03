@@ -14,7 +14,7 @@
     "test": "vue-cli-service test:unit"
   },
   "engines": {
-    "node": "10.15.3"
+    "node": "14.x"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.0.13",
@@ -37,6 +37,7 @@
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.0",
     "leaflet": "^1.4.0",
+    "leaflet-compass": "^1.5.5",
     "lodash": "^4.17.19",
     "nodemailer": "^6.1.0",
     "nodemailer-express-handlebars": "^3.0.0",
