@@ -50,7 +50,9 @@
 <script>
 import Button from '@/components/shared/Button';
 import { LMap, LMarker, LPopup } from 'vue2-leaflet';
-import { Icon, featureGroup, marker } from 'leaflet';
+import { Icon, featureGroup, marker, control } from 'leaflet';
+import 'leaflet-compass/dist/leaflet-compass.min';
+import 'leaflet-compass/dist/leaflet-compass.min.css';
 import * as esri from 'esri-leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -131,6 +133,9 @@ export default {
       .addTo(this.map);
 
     this.fitMapToMarkers();
+
+    control.scale().addTo(this.map);
+    control.compass().addTo(this.map);
   },
 };
 </script>
@@ -174,5 +179,10 @@ export default {
 
 .leaflet-bottom {
   z-index: 400;
+}
+</style>
+<style>
+.compass-alert {
+  display: none !important;
 }
 </style>
