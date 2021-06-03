@@ -64,8 +64,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Button from './Button';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
+import Button from './Button';
 
 export default {
   props: {

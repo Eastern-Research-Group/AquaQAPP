@@ -19,9 +19,9 @@ Vue.axios.defaults.headers.common.Pragma = 'no-cache';
 Vue.router = router;
 
 Vue.use(require('@websanova/vue-auth'), {
-  auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
-  http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
-  router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
+  auth: require('@websanova/vue-auth/drivers/auth/bearer'),
+  http: require('@websanova/vue-auth/drivers/http/axios.1.x'),
+  router: require('@websanova/vue-auth/drivers/router/vue-router.2.x'),
   loginData: {
     redirect: '/dashboard',
   },

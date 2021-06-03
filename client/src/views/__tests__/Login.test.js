@@ -2,9 +2,9 @@ import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import mockStore from '@/testUtils/mockStore';
 import Router from 'vue-router';
-import Login from '../Login';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
+import Login from '../Login';
 
 const localVue = createLocalVue();
 localVue.use(Router);

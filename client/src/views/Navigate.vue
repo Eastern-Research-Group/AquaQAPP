@@ -368,7 +368,7 @@ export default {
       } else {
         this.currentSection = section;
         // Set initial pending data based on existing qapp data
-        this.pendingData = Object.assign({}, this.qappData);
+        this.pendingData = { ...this.qappData };
         /*
          * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn

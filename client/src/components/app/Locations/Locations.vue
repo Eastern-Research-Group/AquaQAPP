@@ -124,13 +124,13 @@
 import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
-import Map from './Map';
 import SideNav from '@/components/shared/SideNav';
 import SideNavSave from '@/components/shared/SideNavSave';
 import Tabs from '@/components/shared/Tabs';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
 import Alert from '@/components/shared/Alert';
+import Map from './Map';
 import '../../../../static/bulma-multiselect.css';
 
 export default {
