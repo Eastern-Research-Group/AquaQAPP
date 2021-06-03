@@ -20,3 +20,9 @@ if (process.env.HEROKU_ENV === 'dev') {
   // run production build
   execSync('npm run build:prod');
 }
+
+// copy other asset files from public to dist
+execSync('cp client/public/AquaQAPP_User_Guide.pdf client/dist');
+execSync('cp client/public/robots.txt client/dist');
+execSync('cp client/public/favicon.ico client/dist');
+execSync('cp client/public/img/icons client/dist/img/icons -r');
