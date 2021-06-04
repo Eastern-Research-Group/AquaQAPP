@@ -12,13 +12,13 @@ const sequelize = process.env.DATABASE_URL
       dialectOptions: config.db.options.dialectOptions,
     })
   : new Sequelize({
-    dialect: config.db.options.dialect,
-    database: config.db.database,
-    user: config.db.user,
-    password: config.db.password,
-    host: config.db.options.host,
-    port: config.db.options.port,
-  });
+      dialect: config.db.options.dialect,
+      database: config.db.database,
+      user: config.db.user,
+      password: config.db.password,
+      host: config.db.options.host,
+      port: config.db.options.port,
+    });
 
 // Create sequelize models from each model file
 fs.readdirSync(__dirname)
