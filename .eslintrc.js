@@ -15,6 +15,7 @@ module.exports = {
         vue: 'never',
       },
     ],
+    'import/no-dynamic-require': 'off',
     'global-require': 0,
     'no-shadow': [
       'error',
