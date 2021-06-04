@@ -1,7 +1,7 @@
 {
   "name": "aquaqapp",
   "scripts": {
-    "build": "vue-cli-service build",
+    "build": "node server/src/build.js",
     "lint": "eslint . --ext .js,.vue",
     "build:dev": "npm run migrate && npm run seed && vue-cli-service build",
     "build:prod": "vue-cli-service build",
@@ -79,7 +79,6 @@
     "vue-template-compiler": "^2.5.21"
   },
   "engines": {
-    "node": "12.x",
-    "npm": "6.x"
+    "node": "14.x"
   }
 }
