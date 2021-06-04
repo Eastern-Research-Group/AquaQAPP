@@ -51,7 +51,7 @@ module.exports = {
           {
             model: QappDatum,
             attributes: ['questionId', 'value'],
-            where: { questionId: 1 }
+            where: { questionId: 1 },
             as: 'data',
           },
           {
