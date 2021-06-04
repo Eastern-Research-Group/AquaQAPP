@@ -5,9 +5,12 @@ const config = require('../config/config');
 
 const db = {};
 
+console.log(process.env.DATABASE_URL);
+
 const sequelize = process.env.DATABASE_URL
   ? new Sequelize({
       url: process.env.DATABASE_URL,
+      database: config.db.database,
       dialect: config.db.options.dialect,
       dialectOptions: config.db.options.dialectOptions,
     })
