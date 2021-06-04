@@ -8,10 +8,17 @@ const db = {};
 const sequelize = process.env.DATABASE_URL
   ? new Sequelize({
       url: process.env.DATABASE_URL,
-      dialect: config.db.dialect,
-      dialectOptions: config.db.dialectOptions,
+      dialect: config.db.options.dialect,
+      dialectOptions: config.db.options.dialectOptions,
     })
-  : new Sequelize(config.db.database, config.db.user, config.db.password, config.db.options);
+  : new Sequelize({
+    dialect: config.db.options.dialect,
+    database: config.db.database,
+    user: config.db.user,
+    password: config.db.password,
+    host: config.db.options.host,
+    port: config.db.options.port,
+  });
 
 // Create sequelize models from each model file
 fs.readdirSync(__dirname)
