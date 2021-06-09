@@ -159,10 +159,10 @@ export default {
     // provide easier access to the leaflet map object
     this.map = this.$refs.map.mapObject;
 
-    this.satelliteLayer = esri.basemapLayer('Imagery', { apiKey: this.apiKey }).addTo(this.map);
-    this.satelliteLabelLayer = esri.basemapLayer('ImageryLabels', { apiKey: this.apiKey }).addTo(this.map);
+    this.satelliteLayer = esri.basemapLayer('Imagery', { apikey: this.apiKey, apikey: this.apiKey, token: this.apiKey }).addTo(this.map);
+    this.satelliteLabelLayer = esri.basemapLayer('ImageryLabels', { apikey: this.apiKey }).addTo(this.map);
 
-    this.streetLayer = esri.basemapLayer('Streets', { apiKey: this.apiKey });
+    this.streetLayer = esri.basemapLayer('Streets', { apikey: this.apiKey });
     // this.streetLabelLayer = esri.basemapLayer('GrayLabels', { apiKey: this.apiKey });
 
     // Display hydro layer on all map views
