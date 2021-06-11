@@ -9,7 +9,7 @@
     "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "prod": "node server/src/server.js",
     "seed": "sequelize db:seed:all",
-    "server": "npm run migrate && npm run seed && nodemon --ignore 'client/*' --inspect server/src/server.js",
+    "server": "nodemon --ignore 'client/*' --inspect server/src/server.js",
     "start": "concurrently --kill-others -n server,client \"npm run server\" \"npm run client\"",
     "test": "vue-cli-service test:unit"
   },
@@ -48,7 +48,7 @@
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
     "uuid": "^3.3.2",
-    "vue": "^2.6.10",
+    "vue": "^2.6.13",
     "vue-axios": "^2.1.4",
     "vue-multiselect": "^2.1.6",
     "vue-router": "^3.0.2",
@@ -76,7 +76,7 @@
     "prettier": "^1.16.4",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.6.13"
   },
   "engines": {
     "node": "14.x"
