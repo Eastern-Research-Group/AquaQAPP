@@ -5,11 +5,9 @@ const config = require('../config/config');
 
 const db = {};
 
-console.log(process.env.DATABASE_URL);
-
 const sequelize = process.env.DATABASE_URL
   ? new Sequelize(process.env.DATABASE_URL, config.db.options)
-  : new Sequelize(config.db.database, config.db.user, config.db.password, config.db.options);
+  : new Sequelize(config.db.database, config.db.user, config.db.password, { dialect: 'postgres' });
 
 // Create sequelize models from each model file
 fs.readdirSync(__dirname)
