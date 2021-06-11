@@ -25,8 +25,9 @@
               </td>
             </tr>
             <tr v-for="(row, index) in rows" :key="index">
-              <td v-for="column in columns" :key="column.key">
-                {{ row[column.key] }}
+              <td v-for="(column, colIndex) in columns" :key="column.key">
+                <slot v-if="$scopedSlots[`cell(${colIndex})`]" :name="`cell(${colIndex})`" :row="row"></slot>
+                <span v-else>{{ row[column.key] }}</span>
               </td>
               <td v-if="shouldHaveActionsCol || shouldHaveSingleAction">
                 <div class="field is-grouped">
