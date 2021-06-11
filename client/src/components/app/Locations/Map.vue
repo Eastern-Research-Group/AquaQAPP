@@ -248,7 +248,7 @@ export default {
   font: unset;
 }
 
-.leaflet-bottom {
+.leaflet-top, .leaflet-bottom {
   z-index: 400;
 }
 </style>
