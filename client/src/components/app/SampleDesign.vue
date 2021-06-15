@@ -7,8 +7,12 @@
       noDataMessage="No sampling design information has been added for selected parameters."
     >
       <template #cell(3)="{ row }">
+        <label class="sr-only" :for="`frequency-${row.valueId}`">
+          Frequency for Location ID {{ row['Location ID'] }} and Parameter {{ row.parameterLabel }}
+        </label>
         <select
           required
+          :id="`frequency-${row.valueId}`"
           class="table-select"
           :value="getFrequencyValue(row.valueId)"
           @change="$emit('updateData', $event, questions.find((q) => q.questionName === 'frequency'), row.valueId)"
