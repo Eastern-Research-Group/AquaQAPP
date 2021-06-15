@@ -218,7 +218,7 @@ module.exports = {
       sectionName: 'waterQualityConcerns',
       sectionSort: 5,
       instructions:
-        '<p>Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. Hover over each box below to see a description of the concern. AquaQAPP will suggest parameters based on the concerns you select here; you will also have the opportunity to select additional monitoring parameters on the Parameters screen.</p><p>If you are selecting the "General Environmental Health: Benthic," AquaQAPP will automatically select the "General Environmental Health: Physical/Chemical Water Quality" concern, per MassDEP requirements.</p>',
+        '<p>Check all water quality concerns motivating your project and indicate if water quality concerns differ by sampling location. Hover over each box below to see a description of the concern. AquaQAPP will suggest parameters based on the concerns you select here; you will also have the opportunity to select additional monitoring parameters on the Parameters screen.</p><p>If you are selecting "General Environmental Health: Benthic," AquaQAPP will automatically select the "General Environmental Health: Physical/Chemical Water Quality" concern, per MassDEP requirements.</p>',
     });
     records.push({
       sectionNumber: '5',
