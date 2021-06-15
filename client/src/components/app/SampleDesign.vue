@@ -3,80 +3,21 @@
     <Table
       :columns="columns"
       :rows="rows"
-      :shouldHaveSingleAction="'Edit'"
       :shouldHaveGlobalActions="false"
       noDataMessage="No sampling design information has been added for selected parameters."
-      @onEdit="onEdit"
-    />
-    <SideNav
-      v-if="isEnteringInfo"
-      :beforeClose="checkSidenavData"
-      :handleClose="() => (this.isEnteringInfo = false)"
-      :title="shouldShowEdit ? 'Edit Sampling Design Information' : 'Add Sampling Design Information'"
     >
-      <form ref="form" @submit.prevent="submitData">
-        <div class="columns is-multiline">
-          <div class="column is-4">
-            <p>Parameter</p>
-          </div>
-          <div class="column is-8">
-            <p>{{ selectedRow.parameterLabel }}</p>
-          </div>
-          <div class="column is-4">
-            <p>Location ID</p>
-          </div>
-          <div class="column is-8">
-            <p>{{ selectedRow['Location ID'] }}</p>
-          </div>
-          <div class="column is-4">
-            <p>Location Name</p>
-          </div>
-          <div class="column is-8">
-            <p>{{ selectedRow['Location Name'] }}</p>
-          </div>
-          <div class="column is-4">
-            <p>Water Type</p>
-          </div>
-          <div class="column is-8">
-            <p>{{ selectedRow['Water Type'] }}</p>
-          </div>
-          <div class="column is-4">
-            <p>Concerns</p>
-          </div>
-          <div class="column is-8">
-            <p>{{ selectedRow.waterConcerns }}</p>
-          </div>
-        </div>
-        <div
-          class="field"
-          v-for="question in questions.filter(
-            (q) => q.questionLabel !== 'Parameter' && q.questionLabel !== 'Sample Location ID'
-          )"
-          :key="question.id"
+      <template #cell(3)="{ row }">
+        <select
+          required
+          class="table-select"
+          :value="getFrequencyValue(row.valueId)"
+          @change="$emit('updateData', $event, questions.find((q) => q.questionName === 'frequency'), row.valueId)"
         >
-          <label class="label" :for="`question${question.id}`">{{ question.questionLabel }}</label>
-          <input
-            v-if="question.dataEntryType === 'number'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.questionName]"
-            class="input"
-            type="number"
-            :placeholder="`Enter ${question.questionLabel}`"
-            :maxlength="question.maxLength"
-            :required="question.questionLabel != 'Lab Duplicates' && question.questionLabel != 'Lab Blanks'"
-          />
-          <textarea
-            v-if="question.dataEntryType === 'largeText'"
-            :id="`question${question.id}`"
-            v-model="pendingData[question.questionName]"
-            class="input"
-            :maxlength="question.maxLength"
-            required
-          ></textarea>
-        </div>
-        <SideNavSave />
-      </form>
-    </SideNav>
+          <option hidden selected disabled value="">Select a Frequency</option>
+          <option v-for="frequency in frequencies" :key="frequency" :value="frequency">{{ frequency }}</option>
+        </select>
+      </template>
+    </Table>
     <UnsavedWarning
       v-if="shouldDisplayUnsavedWarning"
       @onClose="() => (shouldDisplayUnsavedWarning = false)"
@@ -89,8 +30,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
-import SideNav from '@/components/shared/SideNav';
-import SideNavSave from '@/components/shared/SideNavSave';
 import Table from '@/components/shared/Table';
 
 export default {
@@ -100,18 +39,15 @@ export default {
       type: Array,
       required: true,
     },
+    pendingData: {
+      type: Object,
+      required: true,
+    },
   },
-  components: { SideNav, SideNavSave, Table },
+  components: { Table },
   mixins: [unsavedChanges],
   data() {
     return {
-      isEnteringInfo: false,
-      shouldShowEdit: false,
-      shouldShowDelete: false,
-      shouldDeleteAll: false,
-      shouldDeleteSingle: false,
-      selectedRow: null,
-      pendingData: {},
       rows: [],
       columns: [
         {
@@ -123,29 +59,25 @@ export default {
           label: 'Parameter',
         },
         {
-          key: 'Field Duplicates',
-          label: 'Field Duplicates',
-        },
-        {
-          key: 'Field Blanks',
-          label: 'Field Blanks',
-        },
-        {
-          key: 'Lab Duplicates',
-          label: 'Lab Duplicates',
-        },
-        {
-          key: 'Lab Blanks',
-          label: 'Lab Blanks',
-        },
-        {
-          key: 'Lab Spikes',
-          label: 'Lab Spikes',
+          key: 'Water Type',
+          label: 'Water Type',
         },
         {
           key: 'Frequency of Sampling',
           label: 'Frequency of Sampling',
         },
+      ],
+      frequencies: [
+        'Daily',
+        'Twice per week',
+        'Weekly',
+        'Every other week',
+        'Twice per month',
+        'Monthly',
+        'Every other month',
+        'Weather events',
+        'Once per season',
+        'Once per year',
       ],
     };
   },
@@ -161,59 +93,11 @@ export default {
     this.refreshData();
   },
   methods: {
-    onEdit(row) {
-      this.selectedRow = row;
-      // Set pending data by questionId from location by questionLabel
-      this.questions.forEach((q) => {
-        this.$set(this.pendingData, q.questionName, row[q.questionLabel]);
-      });
-      // Manually set sampleParameter to the row.Parameter value to fix bug where multiple locations have the same parameter
-      this.$set(this.pendingData, 'sampleParameter', row.Parameter);
-      this.currentEditData = { ...this.pendingData };
-      this.isEnteringInfo = true;
-      this.shouldShowEdit = true;
+    getFrequencyValue(valueId) {
+      if (!this.pendingData.frequency) return '';
+      const existingValue = this.pendingData.frequency.find((d) => d.valueId === valueId);
+      return existingValue ? existingValue.value : '';
     },
-    submitData() {
-      if (this.shouldShowEdit) {
-        this.editData();
-      } else {
-        this.addData();
-      }
-    },
-    async editData() {
-      await this.$store.dispatch('qapp/updateData', {
-        qappId: this.qappId,
-        valueId: this.selectedRow.valueId,
-        values: this.pendingData,
-      });
-      this.refreshData();
-      this.isEnteringInfo = false;
-    },
-    async addData() {
-      const sampleData = {};
-      this.questions.forEach((q) => {
-        sampleData[q.questionLabel] = this.pendingData[q.questionName];
-      });
-
-      // A unique value id allows us to save multiple sets of locations to the DB, each tied to a value id
-      let newValueId = 1;
-      if (this.rows.length) {
-        newValueId = Math.max(...this.rows.map((row) => row.valueId)) + 1;
-      }
-
-      this.rows.push({
-        ...sampleData,
-        parameterLabel: sampleData.Parameter.label,
-        valueId: newValueId,
-      });
-
-      // Emit saveData to parent component to save to DB
-      await this.$listeners.saveData(null, newValueId, this.pendingData);
-
-      this.isEnteringInfo = false;
-      this.pendingData = {};
-    },
-
     refreshData() {
       const locationQuestions = this.$store.state.structure.questions.filter(
         (q) => q.section.sectionLabel === 'Monitoring Locations'
@@ -293,20 +177,11 @@ export default {
       });
       this.rows = rows;
     },
-    addOther(value, question) {
-      const enteredVal = value.replace(/,/gi, ''); // replace all commas in entered value, since we split stored values by comma
-      let newVal = this.pendingData[question.questionName];
-      // if values already exist for this question, push entered value into array, otherwise set as array
-      if (newVal) newVal.push(enteredVal);
-      else newVal = [enteredVal];
-      // set pending data object to the new value
-      this.$set(this.pendingData, question.id, newVal);
-    },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .is-multiline .column {
   padding-top: 0;
   padding-bottom: 0;
@@ -314,6 +189,23 @@ export default {
 
 .clear {
   clear: both;
+}
+
+.table-select {
+  padding: 5px;
+  font-size: 1rem;
+
+  &:invalid {
+    color: #a9a9a9;
+  }
+
+  option {
+    color: #363636;
+  }
+
+  .placeholder {
+    color: #a9a9a9;
+  }
 }
 
 textarea {
