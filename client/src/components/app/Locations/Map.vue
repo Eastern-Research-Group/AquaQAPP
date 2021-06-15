@@ -159,7 +159,7 @@ export default {
     // provide easier access to the leaflet map object
     this.map = this.$refs.map.mapObject;
 
-    this.satelliteLayer = esri.basemapLayer('Imagery', { apikey: this.apiKey, apikey: this.apiKey, token: this.apiKey }).addTo(this.map);
+    this.satelliteLayer = esri.basemapLayer('Imagery', { apikey: this.apiKey }).addTo(this.map);
     this.satelliteLabelLayer = esri.basemapLayer('ImageryLabels', { apikey: this.apiKey }).addTo(this.map);
 
     this.streetLayer = esri.basemapLayer('Streets', { apikey: this.apiKey });
@@ -248,7 +248,8 @@ export default {
   font: unset;
 }
 
-.leaflet-top, .leaflet-bottom {
+.leaflet-top,
+.leaflet-bottom {
   z-index: 400;
 }
 </style>
