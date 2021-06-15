@@ -18,6 +18,7 @@ module.exports = {
             <li><a class="getting-started-link" href="#before">Before You Start</a></li>
             <li><a class="getting-started-link" href="#navigating">Navigating AquaQAPP</a></li>
             <li><a class="getting-started-link" href="#help">Helpful Resources</a></li>
+            <li><a class="getting-started-link" href="#generating">Generating Your QAPP</a></li>
             <li><a class="getting-started-link" href="#data">Data Usage</a></li>
           </ul>
           <p><strong id="scope">Scope of AquaQAPP</strong></p>
@@ -146,7 +147,7 @@ module.exports = {
             </li>
           </ul>
           <a href="#gettingStarted" class="top-of-page"><span class="fa fa-arrow-up"></span>Back to top</a>
-          <p><strong id="data">Generating Your QAPP</strong></p>
+          <p><strong id="generating">Generating Your QAPP</strong></p>
           <p>
             Section 5 of the User Guide describes the process for generating and completing your QAPP. It is important that you
             review the entire document to make sure you understand the contents, and confirm it reflects your program’s specific
