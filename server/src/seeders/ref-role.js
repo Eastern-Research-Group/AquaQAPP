@@ -23,6 +23,11 @@ module.exports = {
       label: 'Data Manager',
       responsibilities: 'Data collection, management, analysis and interpretation.',
     });
+    records.push({
+      code: 'LM',
+      label: 'Laboratory Manager',
+      responsibilities: 'Laboratory management.',
+    });
     return queryInterface.bulkInsert('RefRoles', records);
   },
 

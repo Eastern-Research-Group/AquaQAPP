@@ -58,7 +58,7 @@ module.exports = {
           <ul>
             <li>
               Contact information for the following personnel in the organization coordinating the monitoring project: Project
-              Manager, QA Manager, Field Coordinator, and Data Manager.
+              Manager, QA Manager, Field Coordinator, Data Manager, and Laboratory Manager.
             </li>
             <li>Contact information for the individual who will serve as the primary contact for the project.</li>
             <li>The environmental concern(s) that prompted your project.</li>
@@ -209,7 +209,7 @@ module.exports = {
       sectionName: 'projectOrganization',
       sectionSort: 4,
       instructions:
-        'Use the "Add" button to populate the table with information about project organization and personnel. Enter information in the pop-up window for all relevant personnel and associated organizations. You must provide names and contact information for the Project Manager, QA Manager, Field Coordinator, and Data Manager roles. The same person may fill more than one role; only one person can serve as the primary contact. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
+        'Use the "Add" button to populate the table with information about project organization and personnel. Enter information in the pop-up window for all relevant personnel and associated organizations. You must provide names and contact information for the Project Manager, QA Manager, Field Coordinator, Data Manager, and Laboratory Manager roles. The same person may fill more than one role; only one person can serve as the primary contact. Edit or delete existing rows of information by clicking the "Edit" or "Delete" buttons in each row of interest.',
     });
     records.push({
       sectionNumber: '9',
