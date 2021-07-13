@@ -15,7 +15,7 @@
           :id="`frequency-${row.valueId}`"
           class="table-select"
           :value="getFrequencyValue(row.valueId)"
-          @change="$emit('updateData', $event, questions.find((q) => q.questionName === 'frequency'), row.valueId)"
+          @change="onSave($event, row)"
         >
           <option hidden selected disabled value="">Select a Frequency</option>
           <option v-for="frequency in frequencies" :key="frequency" :value="frequency">{{ frequency }}</option>
@@ -180,6 +180,21 @@ export default {
         });
       });
       this.rows = rows;
+    },
+    onSave(event, row) {
+      this.$emit('updateData', event, this.questions.find((q) => q.questionName === 'frequency'), row.valueId);
+      this.$emit(
+        'updateData',
+        { target: { value: row['Location ID'] } },
+        this.questions.find((q) => q.questionName === 'sampleLocationId'),
+        row.valueId
+      );
+      this.$emit(
+        'updateData',
+        { target: { value: row.Parameter } },
+        this.questions.find((q) => q.questionName === 'sampleParameter'),
+        row.valueId
+      );
     },
   },
 };

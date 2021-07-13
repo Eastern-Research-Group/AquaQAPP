@@ -409,6 +409,7 @@ export default {
         this.$set(this.pendingData, question.questionName, dataArray.join(','));
       } else if (valueId) {
         const existingData = this.pendingData[question.questionName] || [];
+        this.pendingData[question.questionName] = existingData;
         const existingValueIndex = existingData.findIndex((v) => v.valueId === valueId);
         const indexToUpdate = existingValueIndex > -1 ? existingValueIndex : existingData.length;
         this.$set(this.pendingData[question.questionName], indexToUpdate, { value: e.target.value, valueId });
