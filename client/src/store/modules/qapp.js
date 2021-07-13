@@ -113,11 +113,29 @@ const getters = {
       }
 
       if (dataObj.sampleDesign) {
+        dataObj.sampleEvents = [];
         dataObj.sampleDesign.forEach((s) => {
           const parameter = rootState.ref.parameters.find((p) => p.id === parseInt(s.sampleParameter, 10));
           if (parameter) {
+            s.parameterId = parameter.id;
             s.sampleParameter = parameter.label;
             s.monitoringCategory = parameter.monitoringCategory;
+          }
+          const existingEvent = dataObj.sampleEvents.find(
+            (e) =>
+              e.sampleParameter === s.sampleParameter &&
+              e.monitoringCategory === s.monitoringCategory &&
+              s.frequency === e.frequency
+          );
+          if (existingEvent) {
+            existingEvent.numberOfSamples += 1;
+          } else {
+            dataObj.sampleEvents.push({
+              sampleParameter: s.sampleParameter,
+              monitoringCategory: s.monitoringCategory,
+              frequency: s.frequency,
+              numberOfSamples: 1,
+            });
           }
         });
       }
