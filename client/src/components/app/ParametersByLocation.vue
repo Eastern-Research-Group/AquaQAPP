@@ -1,6 +1,6 @@
 <template>
   <div class="clear">
-    <Button label="Select All" type="primary" @click.native="selectAllParams"></Button>
+    <Button label="Select All" type="dark-gray" @click.native="selectAllParams"></Button>
     <Table :columns="columns" :rows="locations" shouldHaveSingleAction="Edit" @onEdit="onEdit" />
     <SideNav
       v-if="isEnteringInfo"

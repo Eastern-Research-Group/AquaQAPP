@@ -92,7 +92,7 @@
             <hr />
             <div class="field is-grouped">
               <div class="control">
-                <Button label="Save" type="primary" :isBusy="isSavingProfile" submit />
+                <Button label="Save" type="success" :isBusy="isSavingProfile" submit />
               </div>
               <div class="control">
                 <Button label="Change Password" type="info" @click.native="changePasswordModal" />

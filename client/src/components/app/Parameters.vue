@@ -50,7 +50,13 @@
             </label>
             <div class="field has-addons">
               <div class="control other-input">
-                <input id="otherParam" v-model="otherInputValue" class="input" type="text" />
+                <input
+                  id="otherParam"
+                  v-model="otherInputValue"
+                  class="input"
+                  type="text"
+                  @keyup.enter="addOtherParam"
+                />
               </div>
               <div class="control">
                 <button
@@ -73,8 +79,8 @@
           <div class="column is-4">
             <p class="has-text-centered">Selected Parameters</p>
             <div class="box selected-parameters">
+              <p class="selected-param-header">Fresh Parameters</p>
               <ul class="selected-param-group">
-                <p class="selected-param-header">Fresh Parameters</p>
                 <li
                   v-for="param in sortedParams.filter((p) => p.waterType === 'Freshwater')"
                   :key="param.id"
@@ -95,8 +101,8 @@
                   <span class="fa fa-times" @click="clearOtherParam(param)"></span>
                 </li>
               </ul>
-              <ul class="selected-param-group bottom">
-                <p class="selected-param-header">Marine/Estuarine Parameters</p>
+              <p class="selected-param-header bottom">Marine/Estuarine Parameters</p>
+              <ul class="selected-param-group">
                 <li
                   v-for="param in sortedParams.filter((p) => p.waterType === 'Saltwater')"
                   :key="param.id"
@@ -260,19 +266,19 @@ export default {
 }
 
 .selected-param-group {
-  height: 50%;
+  height: 42%;
   padding-bottom: 0.5rem;
   overflow: auto;
-
-  &.bottom {
-    border-top: 2px solid $blue;
-    padding-top: 0.5rem;
-  }
 }
 
 .selected-param-header {
   font-weight: bold;
   margin-bottom: 0.25rem;
+
+  &.bottom {
+    border-top: 2px solid $blue;
+    padding-top: 0.5rem;
+  }
 }
 
 .arrows {

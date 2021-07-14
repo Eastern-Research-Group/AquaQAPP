@@ -31,7 +31,7 @@
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
-            <Button class="is-fullwidth is-size-5" label="Log In" type="primary" submit />
+            <Button class="is-fullwidth is-size-5" label="Log In" type="dark" submit />
           </div>
         </div>
       </form>
@@ -40,7 +40,7 @@
         class="is-fullwidth"
         label="Forgot Password?"
         @click.native="() => (shouldShowReset = true)"
-        type="link"
+        type="text"
       />
       <SideNav v-if="shouldShowReset" title="Forgot Password?" :handleClose="() => (shouldShowReset = false)">
         <form @submit.prevent="resetPassword">
@@ -53,7 +53,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <Button class="is-fullwidth" label="Send Email" type="primary" submit />
+              <Button class="is-fullwidth" label="Send Email" type="link" submit />
             </div>
           </div>
           <Alert v-if="showSuccessMessage" :message="successMessage" type="success" />

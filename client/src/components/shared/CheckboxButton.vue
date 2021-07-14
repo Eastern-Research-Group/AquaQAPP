@@ -10,7 +10,7 @@
       :checked="checked"
       :disabled="disabled"
     />
-    <label :id="id" :for="id" :title="title">{{ name }}<slot></slot></label>
+    <label :for="id" :title="title">{{ name }}<slot></slot></label>
   </div>
 </template>
 
@@ -63,15 +63,17 @@ export default {
   display: flex;
 
   & > .is-checkradio.is-block + label {
+    font-size: 18px;
     min-height: 90px;
     background-color: $darkBlue;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 10px;
+    padding: 20px;
     color: white;
     text-align: center;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 
     &:hover {
       background-color: darken($darkBlue, 5);
@@ -87,7 +89,7 @@ export default {
   }
 
   & > .is-checkradio.is-info.is-block:checked + label {
-    background-color: $green;
+    background-color: $greenContrast;
 
     &:hover {
       background-color: darken($green, 5);

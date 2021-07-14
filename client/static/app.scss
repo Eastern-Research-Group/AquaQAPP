@@ -107,5 +107,25 @@ button, a, input, .switch .checkbox {
   }
 }
 
+.multiselect {
+  // Multiselect overrides
+  .multiselect__tag {
+    background-color: $greenContrast;
+  }
+
+  .multiselect__option--highlight {
+    &, &::after {
+      background-color: $blue;
+    }
+  }
+
+  .multiselect__option--selected.multiselect__option--highlight {
+    &, &::after {
+      background-color: $red;
+    }
+  }
+}
+
+
 // Import font-awesome
 @import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';

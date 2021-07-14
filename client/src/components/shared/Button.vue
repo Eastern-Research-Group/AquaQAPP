@@ -51,3 +51,48 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../../../static/variables';
+
+.button {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.is-dark-gray {
+  border-color: transparent;
+  background-color: #363636;
+  color: #fff;
+
+  &:hover {
+    background-color: lighten(#363636, 10);
+  }
+}
+
+.is-primary {
+  color: #363636;
+}
+
+.is-success {
+  background-color: $greenContrast;
+}
+
+.is-text {
+  box-shadow: none;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+    text-decoration: underline !important;
+  }
+
+  &:focus {
+    background: none;
+    color: #fff;
+  }
+}
+
+.button .fa {
+  margin-right: 0.5rem;
+}
+</style>

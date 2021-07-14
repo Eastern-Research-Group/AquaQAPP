@@ -1,5 +1,5 @@
 <template>
-  <Button label="Save" type="primary" :isBusy="isSaving" submit />
+  <Button label="Save" type="link" :isBusy="isSaving" submit />
 </template>
 
 <script>

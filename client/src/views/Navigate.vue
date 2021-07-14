@@ -28,7 +28,7 @@
         <Alert v-if="isSectionNotAvailable()" :message="this.sectionNotAvailableMessage" type="error" />
         <form v-else @submit.prevent>
           <Button
-            type="primary"
+            type="dark"
             class="aq-save-btn is-pulled-right"
             :disabled="hasSaved || !hasUnsavedData || isSaving"
             :title="getSaveBtnHoverText()"
@@ -118,9 +118,8 @@
               ></textarea>
               <div class="btn-container has-text-right">
                 <Button
-                  class="example"
                   label="Example"
-                  type="dark"
+                  type="dark-gray"
                   v-if="question.examples.length > 0"
                   @click.native="() => (shouldShowExample = question)"
                 />
