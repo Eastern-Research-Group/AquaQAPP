@@ -7,10 +7,10 @@
         type="checkbox"
         @change="$emit('markComplete')"
         :checked="complete"
-        :disabled="disabled"
+        :disabled="disabled || isBusy"
       />
       <span
-        class="slider is-success"
+        :class="`slider is-success ${isBusy ? 'is-busy' : ''}`"
         :title="disabled ? 'You must complete all required fields before marking complete.' : ''"
       ></span>
     </label>
@@ -32,6 +32,10 @@ export default {
     disabled: {
       type: Boolean,
       required: false,
+      default: false,
+    },
+    isBusy: {
+      type: Boolean,
       default: false,
     },
   },
@@ -105,6 +109,10 @@ export default {
       background-color: white;
       transition: 0.4s;
       border-radius: 4px;
+    }
+
+    &.is-busy {
+      opacity: 0.5;
     }
   }
 }

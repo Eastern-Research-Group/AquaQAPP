@@ -11,7 +11,7 @@
             type="success"
             v-if="$route.name === 'navigate'"
             @click.native="generateQapp"
-            :disabled="completedSections.length !== sections.length"
+            :disabled="completedSections.length !== sections.length || isGenerating"
             :title="getGenerateBtnHoverTxt()"
           >
             <LoadingIndicator v-if="isGenerating" class="light i-block"

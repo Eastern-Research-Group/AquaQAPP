@@ -3,7 +3,7 @@
     <div class="modal-background" @click="close"></div>
     <div
       :class="`modal-content ${this.shouldDismiss ? 'dismiss' : ''}`"
-      @keydown.native.esc="close"
+      @keydown.esc="close"
       role="dialog"
       aria-modal="true"
     >

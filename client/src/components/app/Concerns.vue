@@ -22,10 +22,15 @@
     <fieldset class="field">
       <legend class="is-sr-only">{{ concernsQuestion.label }}</legend>
       <div class="columns is-multiline">
-        <HoverText v-for="option in getOptions('concerns')" :key="option.id" class="hover-text column is-one-third">
+        <HoverText
+          v-for="option in getOptions('concerns')"
+          :key="option.id"
+          :hoverId="`hover_${option.code}`"
+          class="hover-text column is-one-third"
+        >
           <template #linkContent>
             <CheckboxButton
-              :id="option.code"
+              :id="`concern_${option.code}`"
               :value="option.code"
               :disabled="locationConcerns.indexOf(option.code) > -1"
               :checked="!!(pendingData.waterConcerns && pendingData.waterConcerns.indexOf(option.code) > -1)"

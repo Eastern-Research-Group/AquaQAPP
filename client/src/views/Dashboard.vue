@@ -7,7 +7,7 @@
       </div>
       <div class="column has-text-right">
         <Button
-          class="is-size-5"
+          class="is-size-5 add-qapp-btn"
           label="Add QAPP"
           type="success"
           @click.native="() => (shouldShowAdd = true)"
@@ -160,3 +160,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.add-qapp-btn {
+  font-weight: bold;
+  background-color: #3aa02b;
+}
+</style>

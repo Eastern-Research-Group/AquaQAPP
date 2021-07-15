@@ -28,19 +28,22 @@
         <Alert v-if="isSectionNotAvailable()" :message="this.sectionNotAvailableMessage" type="error" />
         <form v-else @submit.prevent>
           <Button
-            type="primary"
+            type="dark"
             class="aq-save-btn is-pulled-right"
-            :disabled="hasSaved || !hasUnsavedData"
+            :disabled="hasSaved || !hasUnsavedData || isSaving"
             :title="getSaveBtnHoverText()"
             @click.native="saveData"
           >
-            {{ hasSaved ? 'Saved' : 'Save' }}
             <LoadingIndicator v-if="isSaving" class="light" />
+            <span v-else>
+              {{ hasSaved ? 'Saved' : 'Save' }}
+            </span>
           </Button>
           <MarkComplete
             @markComplete="markComplete(currentSection.sectionNumber)"
             :complete="currentSection.id && completedSections.indexOf(currentSection.id) > -1"
             :disabled="!(currentSection.id && completedSections.indexOf(currentSection.id) > -1) && hasEmptyFields"
+            :isBusy="isMarkingComplete"
           />
 
           <h2 class="label is-size-4">
@@ -115,9 +118,8 @@
               ></textarea>
               <div class="btn-container has-text-right">
                 <Button
-                  class="example"
                   label="Example"
-                  type="dark"
+                  type="dark-gray"
                   v-if="question.examples.length > 0"
                   @click.native="() => (shouldShowExample = question)"
                 />
@@ -244,12 +246,11 @@ export default {
         'Project Schedule',
         'Monitoring Location',
         'Parameters By Location',
-        'Sampling Design Details',
       ],
     };
   },
   computed: {
-    ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving']),
+    ...mapState('qapp', ['completedSections', 'isFetching', 'isSaving', 'isMarkingComplete']),
     ...mapState('structure', ['sections', 'questions']),
     ...mapState('ref', ['yesNo', 'customSections']),
     ...mapGetters('qapp', ['qappData', 'wordDocData']),
@@ -278,12 +279,12 @@ export default {
         const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.value.split(',').length;
         }, 0);
-        // Use labDuplicates count to confirm as it is the first sample design question and is required
-        // Make sure labDuplicates exists in qappData before checking length to avoid error
-        if (!this.qappData.labDuplicates) {
+        // Use frequency count to confirm as it is the first sample design question and is required
+        // Make sure frequency exists in qappData before checking length to avoid error
+        if (!this.pendingData.frequency) {
           hasEmptyFields = true;
         } else {
-          hasEmptyFields = paramsByLocationCount !== this.qappData.labDuplicates.length;
+          hasEmptyFields = paramsByLocationCount !== this.pendingData.frequency.length;
         }
       } else if (this.currentSection.sectionName === 'parameters') {
         // User can either select parameters or enter their own, so we only need to check if at least one of these cases has happened
@@ -365,7 +366,7 @@ export default {
       } else {
         this.currentSection = section;
         // Set initial pending data based on existing qapp data
-        this.pendingData = Object.assign({}, this.qappData);
+        this.pendingData = { ...this.qappData };
         /*
          * Table/Sidenav-based screens are automatically saved upon adding or editing, so hasSaved will always be true
          * If all fields are filled upon coming to new section, set hasSaved to true and de-activate save btn
@@ -393,7 +394,7 @@ export default {
       this.changeSection(this.pendingSection);
       this.pendingSection = null;
     },
-    updatePendingData(e, question) {
+    updatePendingData(e, question, valueId) {
       this.hasSaved = false;
       if (question.refName && question.refName !== 'yesNo') {
         let dataArray = this.pendingData[question.questionName]
@@ -405,6 +406,12 @@ export default {
           dataArray.push(e.target.value);
         }
         this.$set(this.pendingData, question.questionName, dataArray.join(','));
+      } else if (valueId) {
+        const existingData = this.pendingData[question.questionName] || [];
+        this.pendingData[question.questionName] = existingData;
+        const existingValueIndex = existingData.findIndex((v) => v.valueId === valueId);
+        const indexToUpdate = existingValueIndex > -1 ? existingValueIndex : existingData.length;
+        this.$set(this.pendingData[question.questionName], indexToUpdate, { value: e.target.value, valueId });
       } else {
         this.$set(this.pendingData, question.questionName, e.target.value);
       }
@@ -417,9 +424,7 @@ export default {
         this.$store.dispatch('qapp/addCompletedSection', sectionId);
         // Locations and personnel are automatically saved upon add/edit, so don't saveData on markComplete
         if (
-          (!this.customSections.find((s) => s.label === this.currentSection.sectionLabel) ||
-            this.currentSection.sectionLabel === 'Parameters' ||
-            this.currentSection.sectionLabel === 'Water Quality Concerns') &&
+          !this.tableSections.find((s) => s.label === this.currentSection.sectionLabel) &&
           this.currentQuestions.length
         ) {
           this.saveData();
@@ -442,13 +447,29 @@ export default {
         return;
       }
 
-      const dataToSave = this.currentQuestions.map((q) => {
-        return {
-          qappId: this.$store.state.qapp.id,
-          questionId: q.id,
-          value: data ? data[q.questionName] : this.pendingData[q.questionName],
-          valueId,
-        };
+      const dataToSave = [];
+
+      this.currentQuestions.forEach((q) => {
+        const value = data ? data[q.questionName] : this.pendingData[q.questionName];
+
+        // If value is array of values with valueIds, loop through to save each separately
+        if (Array.isArray(value)) {
+          value.forEach((valObject) => {
+            dataToSave.push({
+              qappId: this.$store.state.qapp.id,
+              questionId: q.id,
+              value: valObject.value,
+              valueId: valObject.valueId,
+            });
+          });
+        } else {
+          dataToSave.push({
+            qappId: this.$store.state.qapp.id,
+            questionId: q.id,
+            value: data ? data[q.questionName] : this.pendingData[q.questionName],
+            valueId,
+          });
+        }
       });
 
       // If user is removing parameters that are associated with locations, update parametersByLocation values to remove those parameters
@@ -659,7 +680,12 @@ textarea {
 }
 
 .aq-save-btn {
+  min-width: 4.5rem;
   margin-left: 2em;
+
+  ::v-deep .spinner {
+    margin-left: 0;
+  }
 }
 
 .fa-check {

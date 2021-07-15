@@ -2,7 +2,7 @@ version: 2
 jobs:
   develop-branch:
     docker:
-      - image: circleci/node:dubnium-stretch
+      - image: circleci/node:14
     environment:
       HEROKU_APP_NAME: aquaqapp-dev
     steps:
@@ -42,7 +42,7 @@ jobs:
 
   stage-branch:
     docker:
-      - image: circleci/node:dubnium-stretch
+      - image: circleci/node:14
     environment:
       HEROKU_APP_NAME: massbaysaquaqapp
     steps:

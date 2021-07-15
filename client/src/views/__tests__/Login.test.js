@@ -2,9 +2,9 @@ import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import mockStore from '@/testUtils/mockStore';
 import Router from 'vue-router';
-import Login from '../Login';
 import SideNav from '@/components/shared/SideNav';
 import Alert from '@/components/shared/Alert';
+import Login from '../Login';
 
 const localVue = createLocalVue();
 localVue.use(Router);
@@ -35,7 +35,7 @@ describe('Login', () => {
 
   test('opens reset password pane when clicked', () => {
     const wrapper = mount(Login, { store, localVue, router });
-    wrapper.find('.button.is-link').trigger('click');
+    wrapper.find('.button.is-text').trigger('click');
     expect(wrapper.vm.shouldShowReset).toBe(true);
     expect(wrapper.find(SideNav).exists()).toBe(true);
     expect(wrapper.html()).toContain('<span class="title is-size-4">Forgot Password?</span>');
@@ -44,7 +44,7 @@ describe('Login', () => {
   test('triggers resetPassword method when reset form submitted', () => {
     const wrapper = mount(Login, { store, localVue, router });
     wrapper.vm.resetPassword = jest.fn();
-    wrapper.find('.button.is-link').trigger('click');
+    wrapper.find('.button.is-text').trigger('click');
     wrapper
       .find(SideNav)
       .find('form')
@@ -64,7 +64,7 @@ describe('Login', () => {
   test('displays reset password error when error exists', () => {
     const wrapper = mount(Login, { store, localVue, router });
     wrapper.vm.resetError = 'This is an error message!';
-    wrapper.find('.button.is-link').trigger('click');
+    wrapper.find('.button.is-text').trigger('click');
     const alert = wrapper.find(SideNav).find(Alert);
     expect(alert.props().type).toBe('error');
     expect(alert.exists()).toBe(true);

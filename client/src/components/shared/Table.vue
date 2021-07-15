@@ -25,15 +25,16 @@
               </td>
             </tr>
             <tr v-for="(row, index) in rows" :key="index">
-              <td v-for="column in columns" :key="column.key">
-                {{ row[column.key] }}
+              <td v-for="(column, colIndex) in columns" :key="column.key">
+                <slot v-if="$scopedSlots[`cell(${colIndex})`]" :name="`cell(${colIndex})`" :row="row"></slot>
+                <span v-else>{{ row[column.key] }}</span>
               </td>
               <td v-if="shouldHaveActionsCol || shouldHaveSingleAction">
                 <div class="field is-grouped">
                   <div class="control" v-if="shouldHaveActionsCol || shouldHaveSingleAction === 'Edit'">
                     <Button
                       label="Edit"
-                      type="primary"
+                      type="link"
                       icon="edit"
                       :shouldShowIcon="true"
                       @click.native="$emit('onEdit', row)"
@@ -52,20 +53,32 @@
               </td>
             </tr>
           </tbody>
+          <tfoot v-if="shouldHaveGlobalActions">
+            <tr>
+              <td colspan="100">
+                <div class="has-text-right btn-container">
+                  <Button label="Add" icon="plus" type="success" @click.native="$emit('onAdd')" />
+                  <Button
+                    label="Delete All"
+                    icon="trash-alt"
+                    type="danger"
+                    @click.native="$emit('onDelete')"
+                    :disabled="!rows.length"
+                  />
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
-    </div>
-    <div v-if="shouldHaveGlobalActions" class="has-text-right btn-container">
-      <Button label="Add" type="success" @click.native="$emit('onAdd')" />
-      <Button label="Delete All" type="danger" @click.native="$emit('onDelete')" :disabled="!rows.length" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Button from './Button';
 import LoadingIndicator from '@/components/shared/LoadingIndicator';
+import Button from './Button';
 
 export default {
   props: {
@@ -102,9 +115,21 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .btn-container .button {
   margin-left: 1em;
   width: 6em;
+}
+
+tfoot {
+  background-color: #f1f1f1;
+
+  td {
+    padding-top: 1rem;
+  }
+
+  .btn-container .button {
+    width: auto;
+  }
 }
 </style>

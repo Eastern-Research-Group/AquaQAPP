@@ -50,7 +50,8 @@ module.exports = {
         include: [
           {
             model: QappDatum,
-            attributes: ['questionId', 'value', 'valueId'],
+            attributes: ['questionId', 'value'],
+            where: { questionId: 1 },
             as: 'data',
           },
           {

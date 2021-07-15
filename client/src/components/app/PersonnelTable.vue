@@ -118,7 +118,7 @@
             </div>
           </div>
         </div>
-        <Button label="Save" :type="shouldShowEdit ? 'primary' : 'success'" submit />
+        <SideNavSave />
       </form>
     </SideNav>
     <DeleteWarning
@@ -142,8 +142,8 @@ import Multiselect from 'vue-multiselect';
 import { mapState, mapGetters } from 'vuex';
 import unsavedChanges from '@/mixins/unsavedChanges';
 import Alert from '@/components/shared/Alert';
-import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
+import SideNavSave from '@/components/shared/SideNavSave';
 import Table from '@/components/shared/Table';
 import DeleteWarning from '@/components/shared/DeleteWarning';
 import '../../../static/bulma-multiselect.css';
@@ -156,7 +156,7 @@ export default {
       required: true,
     },
   },
-  components: { Alert, Button, SideNav, Table, DeleteWarning, Multiselect },
+  components: { Alert, SideNav, Table, DeleteWarning, Multiselect, SideNavSave },
   mixins: [unsavedChanges],
   data() {
     return {
@@ -201,6 +201,7 @@ export default {
       qappId: (state) => state.qapp.id,
     }),
     ...mapState('ref', ['roles']),
+    ...mapState('qapp', ['isSaving']),
     ...mapGetters('qapp', ['qappData']),
     ...mapGetters('structure', ['getQuestionId']),
     combinedRoles() {
@@ -349,7 +350,7 @@ export default {
       this.isEnteringInfo = false;
       this.shouldDisplayResponsibilities = false;
     },
-    addPersonnelData() {
+    async addPersonnelData() {
       const personnelData = {};
       this.questions.forEach((q) => {
         personnelData[q.questionLabel] = this.pendingData[q.questionName];
@@ -367,7 +368,7 @@ export default {
         valueId: newValueId,
       });
 
-      this.$emit('saveData', null, newValueId, this.cleanData(this.pendingData));
+      await this.$listeners.saveData(null, newValueId, this.cleanData(this.pendingData));
 
       this.shouldDisplayResponsibilities = false;
       this.isEnteringInfo = false;

@@ -23,6 +23,12 @@ module.exports = {
       label: 'Data Manager',
       responsibilities: 'Data collection, management, analysis and interpretation.',
     });
+    records.push({
+      code: 'LM',
+      label: 'Laboratory Manager',
+      responsibilities:
+        'Provide laboratory QAPP and SOPs for attachment to the QAPP, communicate with the QA Manager regarding laboratory corrective actions, deliver corrective action files and data reports to the Project Manager.',
+    });
     return queryInterface.bulkInsert('RefRoles', records);
   },
 

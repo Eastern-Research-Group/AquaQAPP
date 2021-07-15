@@ -65,6 +65,7 @@ export default {
 
         &.is-active button {
           background-color: $lightBlue;
+          color: #363636;
           font-weight: bold;
 
           &:hover {
