@@ -92,7 +92,8 @@ module.exports = {
           <strong id="navigating">Navigating AquaQAPP</strong>
           <p>
             AquaQAPP functions like a wizard that uses user-provided content to generate a custom QAPP. As you proceed through
-            the AquaQAPP screens, you will be prompted to enter information about your project.
+            the AquaQAPP screens, you will be prompted to enter information about your project. Open or print the User Guide to
+            keep nearby as you proceed.
           </p>
           <p>
             Click on the section titles in the left-hand column to move between screens. As you add information to each
@@ -272,8 +273,25 @@ module.exports = {
       sectionLabel: 'Monitoring Locations',
       sectionName: 'monitoringLocations',
       sectionSort: 10,
-      instructions:
-        '<p>Add monitoring locations in one of two ways:</p><ul><li>Using the Map tab, click "Add Location" and then click on the field site on the map. Complete the fields in the pop-up window to provide details about each field site.</li><li>Using the List tab, click the "Add" button to add a field site. Complete the fields in the pop-up window to provide details about each field site.</li></ul><p>Monitoring locations will appear on both tabs once added. Edit or delete existing rows of information by clicking the “Edit” or “Delete” buttons in each row of interest on the List tab.</p>',
+      instructions: `
+        <p>Add monitoring locations in one of two ways:</p>
+        <ul>
+          <li>
+            Using the Map tab, click "Add Location" and then click on the field site on the map. Complete the fields in
+            the pop-up window to provide details about each field site.</li><li>Using the List tab, click the "Add" button
+            to add a field site. Complete the fields in the pop-up window to provide details about each field site.
+          </li>
+        </ul>
+        <p>
+          Monitoring locations will appear on both tabs once added. Edit or delete existing rows of information by clicking
+          the “Edit” or “Delete” buttons in each row of interest on the List tab.
+        </p>
+        <p>
+          <strong>If your water quality concerns differ by sampling locations:</strong> For any locations with the concern
+          "General Environmental Health: Benthic," you must also select the concern "General Environmental Health:
+          Physical/Chemical Water Quality," per MassDEP requirements.
+        </p>
+      `,
     });
     records.push({
       sectionNumber: '11',
@@ -328,8 +346,13 @@ module.exports = {
       sectionLabel: 'Sampling Design Details',
       sectionName: 'sampleDesign',
       sectionSort: 14,
-      instructions:
-        '<p>The table below lists all monitoring locations and the parameters measured at each location. Add sampling design details by clicking the "Edit" button in each row of interest and completing the fields in the pop-up window.</p>',
+      instructions: `
+        <p>
+          Parameters for each sampling location are compiled on this screen, based on the information provided in previous
+          screens. For each entry, use the drop-down menu to select the sampling frequency (representing a sampling event)
+          planned for that parameter.
+        </p>
+      `,
     });
     records.push({
       sectionNumber: '14',
