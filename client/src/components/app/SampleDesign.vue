@@ -108,7 +108,11 @@ export default {
       );
 
       const rows = [];
-      let currentValueId = 1;
+      // Set currentValueId to the first available valueId (make sure to not duplicate existing saved one)
+      let currentValueId =
+        this.qappData.sampleLocationId && this.qappData.sampleLocationId.length
+          ? Math.max(...this.qappData.sampleLocationId.map((s) => s.valueId)) + 1
+          : 1;
       this.qappData.locationId.forEach((val) => {
         const location = {};
         locationQuestions.forEach((q) => {
@@ -154,17 +158,20 @@ export default {
                 // Manually enter location id and parameter id based on current location and parameter - avoids bugs with multiple locations with same params
                 parameterSampleData['Sample Location ID'] = location['Location ID'];
                 parameterSampleData.Parameter = paramId;
+                parameterSampleData.valueId = sampleLocationIdObject ? sampleLocationIdObject.valueId : null;
               }
             }
           });
           if (!Number.isNaN(Number(paramId))) {
+            // In case user somehow did not select any params for a location, return and do not add a row to the table
+            if (paramId === '') return;
             const parameter = this.parameters.find((p) => p.id === parseInt(paramId, 10));
             rows.push({
               ...location,
               'Sample Location ID': location['Location ID'],
               ...parameterSampleData,
               parameterLabel: parameter ? parameter.label : paramId, // Add fallback to paramId in case user entered number as "other" parameter
-              valueId: currentValueId,
+              valueId: parameterSampleData.valueId ? parameterSampleData.valueId : currentValueId,
             });
             currentValueId += 1;
           } else if (Number.isNaN(Number(paramId))) {
@@ -173,7 +180,7 @@ export default {
               'Sample Location ID': location['Location ID'],
               ...parameterSampleData,
               parameterLabel: paramId,
-              valueId: currentValueId,
+              valueId: parameterSampleData.valueId ? parameterSampleData.valueId : currentValueId,
             });
             currentValueId += 1;
           }
