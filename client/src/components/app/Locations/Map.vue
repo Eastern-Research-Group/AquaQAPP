@@ -39,7 +39,7 @@
               <div class="control">
                 <Button
                   label="Edit"
-                  type="primary"
+                  type="link"
                   icon="edit"
                   :shouldShowIcon="true"
                   @click.native="$emit('onEdit', marker)"

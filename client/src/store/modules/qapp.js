@@ -1,5 +1,6 @@
 import axios from 'axios';
 import format from 'date-fns/format';
+import difference from 'lodash/difference';
 
 const state = {
   id: null,
@@ -120,6 +121,12 @@ const getters = {
             s.parameterId = parameter.id;
             s.sampleParameter = parameter.label;
             s.monitoringCategory = parameter.monitoringCategory;
+          } else if (getters.qappData.otherParameters) {
+            const otherParam = JSON.parse(getters.qappData.otherParameters).find((p) => p.name === s.sampleParameter);
+            if (otherParam) {
+              s.monitoringCategory =
+                otherParam.waterType === 'Salt' ? 'Saltwater Water Quality' : 'Freshwater Water Quality';
+            }
           }
           const existingEvent = dataObj.sampleEvents.find(
             (e) =>
@@ -313,6 +320,51 @@ const actions = {
       commit('SET_IS_GENERATING', false);
       console.log(Object.keys(error), error.message);
     }
+  },
+  async deleteParamsByLocation({ dispatch, state, getters, rootState }, { locationId, locationValueId, pendingData }) {
+    // Before saving, need to check if there are existing sample design detail records for the same location/param combination for the parameters to be removed
+    // If so, delete the sample design detail records before the parameters are removed
+    const paramsByLocationObj = getters.qappData.parametersByLocation.find((p) => p.valueId === locationValueId);
+    if (!paramsByLocationObj) return;
+    const removedParams = difference(
+      paramsByLocationObj.value.split(','),
+      // selectedLocation['Parameters By Location'].split(','),
+      pendingData.parametersByLocation.split(',')
+    );
+    const valueIdsToDelete = [];
+    // Make sure sampling design details have been entered first
+    if (getters.qappData.sampleParameter) {
+      removedParams.forEach((paramId) => {
+        const sampleParameters = getters.qappData.sampleParameter.filter((p) => p.value === paramId);
+        if (sampleParameters.length) {
+          const sampleLocationObject = getters.qappData.sampleLocationId.find(
+            (datum) => datum.value === locationId && sampleParameters.map((p) => p.valueId).includes(datum.valueId)
+          );
+          // If parameter and location combo is found in sample design data, add to valueIdsToDelete
+          if (sampleLocationObject) {
+            valueIdsToDelete.push(sampleLocationObject.valueId);
+          }
+        }
+      });
+    }
+
+    // Complete delete action if there are sample design records to delete
+    if (valueIdsToDelete.length) {
+      const samplingDesignQuestions = rootState.structure.questions.filter(
+        (q) => q.section.sectionLabel === 'Sampling Design Details'
+      );
+      await dispatch('deleteData', {
+        qappId: state.id,
+        valueIds: valueIdsToDelete,
+        questionIds: [samplingDesignQuestions.map((q) => q.id)],
+      });
+    }
+
+    await dispatch('updateData', {
+      qappId: state.id,
+      valueId: locationValueId,
+      values: pendingData,
+    });
   },
 };
 
