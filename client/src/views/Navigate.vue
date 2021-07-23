@@ -480,11 +480,13 @@ export default {
           const newParamsByLocations = valArray.filter((val) => !this.removedParamsWithLocations.includes(val));
           // If the arrays do not match, update dataToSave to include updated parametersByLocation values (with removed parameters)
           if (newParamsByLocations.length !== valArray.filter) {
-            dataToSave.push({
-              qappId: this.$store.state.qapp.id,
-              questionId: this.getQuestionId('parametersByLocation'),
-              value: newParamsByLocations.join(','),
-              valueId: paramByLocValue.valueId,
+            const pendingParamData = { parametersByLocation: newParamsByLocations.join(',') };
+            const locationId = this.qappData.locationId.find((l) => l.valueId === paramByLocValue.valueId);
+            // Dispatch deleteParamsByLocation action which will also delete any related Sampling Design records
+            this.$store.dispatch('qapp/deleteParamsByLocation', {
+              locationId,
+              locationValueId: paramByLocValue.valueId,
+              pendingData: pendingParamData,
             });
           }
         });

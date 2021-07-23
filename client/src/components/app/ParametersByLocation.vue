@@ -257,48 +257,12 @@ export default {
       this.pendingData = {};
     },
     async editData() {
-      // Before saving, need to check if there are existing sample design detail records for the same location/param combination for the parameters to be removed
-      // If so, delete the sample design detail records before the parameters are removed
-      const removedParams = difference(
-        this.selectedLocation['Parameters By Location'].split(','),
-        this.pendingData.parametersByLocation.split(',')
-      );
-      const valueIdsToDelete = [];
-      // Make sure sampling design details have been entered first
-      if (this.qappData.sampleParameter) {
-        removedParams.forEach((paramId) => {
-          const sampleParameters = this.qappData.sampleParameter.filter((p) => p.value === paramId);
-          if (sampleParameters.length) {
-            const sampleLocationObject = this.qappData.sampleLocationId.find(
-              (datum) =>
-                datum.value === this.selectedLocation['Location ID'] &&
-                sampleParameters.map((p) => p.valueId).includes(datum.valueId)
-            );
-            // If parameter and location combo is found in sample design data, add to valueIdsToDelete
-            if (sampleLocationObject) {
-              valueIdsToDelete.push(sampleLocationObject.valueId);
-            }
-          }
-        });
-      }
-
-      // Complete delete action if there are sample design records to delete
-      if (valueIdsToDelete.length) {
-        const samplingDesignQuestions = this.$store.state.structure.questions.filter(
-          (q) => q.section.sectionLabel === 'Sampling Design Details'
-        );
-        await this.$store.dispatch('qapp/deleteData', {
-          qappId: this.$store.state.qapp.id,
-          valueIds: [valueIdsToDelete],
-          questionIds: [samplingDesignQuestions.map((q) => q.id)],
-        });
-      }
-
-      await this.$store.dispatch('qapp/updateData', {
-        qappId: this.qappId,
-        valueId: this.selectedLocation.valueId,
-        values: this.pendingData,
+      await this.$store.dispatch('qapp/deleteParamsByLocation', {
+        locationId: this.selectedLocation['Location ID'],
+        locationValueId: this.selectedLocation.valueId,
+        pendingData: this.pendingData,
       });
+
       this.refreshLocationData(); // refresh markers and table data after editing
       this.isEnteringInfo = false;
     },
