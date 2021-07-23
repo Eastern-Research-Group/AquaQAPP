@@ -574,12 +574,12 @@ export default {
         allParamsByLocation = allParamsByLocation.concat(valObject.value.split(','));
       });
 
-      const params = this.qappData.parameters || [];
+      const params = this.qappData.parameters ? this.qappData.parameters.split(',') : [];
       const otherParams = this.qappData.otherParameters
         ? JSON.parse(this.qappData.otherParameters).map((p) => p.name)
         : [];
 
-      const pendingParams = this.pendingData.parameters || [];
+      const pendingParams = this.pendingData.parameters ? this.pendingData.parameters.split(',') : [];
       const pendingOtherParams = this.pendingData.otherParameters
         ? JSON.parse(this.pendingData.otherParameters).map((p) => p.name)
         : [];
