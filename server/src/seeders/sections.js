@@ -287,7 +287,7 @@ module.exports = {
           the “Edit” or “Delete” buttons in each row of interest on the List tab.
         </p>
         <p>
-          <strong>If your water quality concerns differ by sampling locations:</strong> For any locations with the concern
+          <span class="has-text-weight-bold">If your water quality concerns differ by sampling locations:</span> For any locations with the concern
           "General Environmental Health: Benthic," you must also select the concern "General Environmental Health:
           Physical/Chemical Water Quality," per MassDEP requirements.
         </p>
