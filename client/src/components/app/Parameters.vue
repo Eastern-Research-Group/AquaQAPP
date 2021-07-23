@@ -161,7 +161,8 @@ export default {
     ...mapState('ref', ['concerns', 'parameters', 'waterTypes']),
     ...mapGetters('qapp', ['qappData']),
     waterTypes() {
-      let waterTypes = this.qappData.waterType.map((v) => v.value);
+      // Treat Estuarine the same as Marine
+      let waterTypes = this.qappData.waterType.map((v) => (v.value === 'Estuarine' ? 'Salt' : v.value));
       waterTypes = waterTypes.filter((v, i, a) => a.indexOf(v) === i); // unique list of water types
       return waterTypes.map((v) => {
         if (v === 'Salt') {
