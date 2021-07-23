@@ -121,6 +121,12 @@ const getters = {
             s.parameterId = parameter.id;
             s.sampleParameter = parameter.label;
             s.monitoringCategory = parameter.monitoringCategory;
+          } else if (getters.qappData.otherParameters) {
+            const otherParam = JSON.parse(getters.qappData.otherParameters).find((p) => p.name === s.sampleParameter);
+            if (otherParam) {
+              s.monitoringCategory =
+                otherParam.waterType === 'Salt' ? 'Saltwater Water Quality' : 'Freshwater Water Quality';
+            }
           }
           const existingEvent = dataObj.sampleEvents.find(
             (e) =>
