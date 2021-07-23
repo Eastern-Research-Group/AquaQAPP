@@ -84,7 +84,6 @@ import Button from '@/components/shared/Button';
 import SideNav from '@/components/shared/SideNav';
 import SideNavSave from '@/components/shared/SideNavSave';
 import Table from '@/components/shared/Table';
-import difference from 'lodash/difference';
 import sortBy from 'lodash/sortBy';
 
 export default {
