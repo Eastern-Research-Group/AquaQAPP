@@ -484,7 +484,7 @@ export default {
             const locationId = this.qappData.locationId.find((l) => l.valueId === paramByLocValue.valueId);
             // Dispatch deleteParamsByLocation action which will also delete any related Sampling Design records
             this.$store.dispatch('qapp/deleteParamsByLocation', {
-              locationId,
+              locationId: locationId ? locationId.value : null,
               locationValueId: paramByLocValue.valueId,
               pendingData: pendingParamData,
             });
