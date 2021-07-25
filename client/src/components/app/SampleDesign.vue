@@ -142,7 +142,9 @@ export default {
           const parameterSampleData = { Parameter: paramId };
           this.questions.forEach((q) => {
             if (this.qappData[q.questionName]) {
-              const paramValueArray = this.qappData.sampleParameter.filter((datum) => datum.value === paramId);
+              const paramValueArray = this.qappData.sampleParameter
+                ? this.qappData.sampleParameter.filter((datum) => datum.value === paramId)
+                : [];
 
               if (paramValueArray.length) {
                 const sampleLocationIdObject = this.qappData.sampleLocationId.find(

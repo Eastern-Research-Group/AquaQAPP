@@ -187,7 +187,7 @@ export default {
       const paramsByLocationDatum = this.qappData.parametersByLocation.find(
         (p) => p.valueId === this.selectedLocation.valueId
       );
-      if (paramsByLocationDatum) return true;
+      if (paramsByLocationDatum && !!paramsByLocationDatum.value) return true;
       return false;
     },
     anyLocationHasParameters() {
