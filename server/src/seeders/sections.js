@@ -198,8 +198,8 @@ module.exports = {
     records.push({
       sectionNumber: '2',
       sectionLevel: '1',
-      sectionLabel: 'General Information',
-      sectionName: 'generalInformation',
+      sectionLabel: 'QAPP Title',
+      sectionName: 'qappTitle',
       sectionSort: 2,
       instructions:
         'Enter the title of your QAPP. This title will be used in the generated Word document and to identify your QAPP within AquaQAPP.',
@@ -301,7 +301,7 @@ module.exports = {
       sectionSort: 11,
       instructions: `
         <p>
-          Using the appropriate tab for freshwater and marine/estuarine locations, select all parameters you plan to measure.
+          Using the appropriate tab for freshwater ("Fresh") and marine/estuarine ("Marine/Estuarine") locations, select all parameters you plan to measure.
         </p>
         <p>
           The first box displays suggested parameters based on your selected water type(s) and concern(s). The middle box
@@ -325,7 +325,7 @@ module.exports = {
             For benthic sampling in wadeable streams, select temperature, conductivity, and dissolved oxygen.
           </li>
           <li>
-            For benthic sampling in estuarine or marine waters, select sample penetration depth, sediment volume, sediment
+            For benthic sampling in marine/estuarine waters, select sample penetration depth, sediment volume, sediment
             texture, temperature, salinity, and dissolved oxygen.
           </li>
         </ul>

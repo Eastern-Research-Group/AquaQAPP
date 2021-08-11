@@ -168,7 +168,7 @@ export default {
         if (v === 'Salt') {
           return {
             id: v,
-            name: 'Marine',
+            name: 'Marine/Estuarine',
           };
         }
         if (v === 'Fresh') {
