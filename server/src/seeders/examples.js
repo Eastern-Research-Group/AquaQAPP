@@ -96,6 +96,76 @@ module.exports = {
         <p>This project will be considered fully successful if at least 80% of the anticipated number of samples are collected, analyzed, and determined to meet data quality objectives.</p>
       `,
     });
+    records.push({
+      questionId: 72,
+      text: `
+        <p>
+          All data will be recorded either (1) electronically onto computer storage media or (2) manually onto established data
+          forms. All manual data collection notes will be made in permanent ink, initialed, and dated, and no erasures or obliterations
+          will be made. If an incorrect entry is made, the information will be crossed out with a single strike mark and the correct
+          entry will be made, initialed, and dated by the person making the correction. Corrections to electronically captured data
+          will be documented on a hard-copy of the form or in a field notebook. Completed data forms will be signed and dated by the
+          individual recording the data. Manual and electronic data entries will indicate the person collecting and/or entering the
+          data.
+        </p>
+        <p>
+          The Field Manager will be responsible for training volunteers’ data collection and use of forms. The Project Manager will
+          review all forms for completeness according to the standards above within 3 days of sampling, and will be responsible for the
+          storage of all forms. The Quality Assurance Manager shall retain all updated versions of the QAPP and be responsible for
+          distribution of the current version of the QAPP to project personnel. Changes made to a project form will be documented on the
+          form with appropriate versioning notes.
+        </p>
+      `,
+    });
+    records.push({
+      questionId: 73,
+      text: `
+        <p>
+          Field Data Forms will be filled out by sampling volunteers and retained with project records by the Project Manager. The
+          Project Manager will produce the Secondary Data Table to be included in the QAPP and final project report, and receive
+          laboratory data reports to be maintained with project records.
+        </p>
+        <p>
+          The Field Manager will complete the following forms; those marked with (*) will be retained with project records by the
+          Project Manager: Site Assessment*, Training Logs*, Training check-in sheets*, Sample Labels, Sample Logs*, Chain-of-Custody*,
+          Corrective Action Reports*, Instrument Calibration and Maintenance Log*
+        </p>
+      `,
+    });
+    records.push({
+      questionId: 74,
+      text: `
+        <p>
+          The final project report will include the following components: Final project QAPP, Summary of Corrective Actions, Secondary
+          Data Table, and a data evaluation summary prepared by the Quality Assurance Manager. The data evaluation summary will detail
+          how the resulting dataset compares with the program’s data quality objectives. To do this, the QAM will: conduct review of all
+          Corrective Action Reports, compare results to historical data to assess “reasonableness,” utilize pre-and post-monitoring meter
+          calibration data to validate field readings, and calculate Data Quality Indicators for comparison to the Data Quality Objectives.
+          With the Project Manager, the QAM will evaluate attainment of data quality objectives, determine limitations to be placed on
+          data use, or whether a revision of the data quality objectives is allowable.
+        </p>
+      `,
+    });
+    records.push({
+      questionId: 75,
+      text: `
+        <p>
+          Any status reports, final reports or data quality reports associated with the project will be in a digital format (e.g. Word). Data
+          will be formatted using excel-based templates and uploaded to EPA’s Water Quality eXchange portal.
+        </p>
+      `,
+    });
+    records.push({
+      questionId: 76,
+      text: `
+        <p>
+          Field data sheets, chain of custody forms, and training records are archived by month and year in a permanent file. Hardcopy and
+          electronic copies of these data are maintained permanently by the program office. Electronic copies are appropriately backed up
+          either on the cloud or on a dedicated hard drive.
+        </p>
+      `,
+    });
+
     return queryInterface.bulkInsert('Examples', records);
   },
 
