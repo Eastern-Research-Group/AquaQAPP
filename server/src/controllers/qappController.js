@@ -42,10 +42,7 @@ module.exports = {
   async index(req, res) {
     try {
       const qapps = await Qapp.findAll({
-        order: [
-          // Will escape title and validate DESC against a list of valid direction parameters
-          ['completedSections', 'sectionId', 'ASC'],
-        ],
+        order: [['updatedAt', 'DESC']],
         where: { userId: req.user.id, archived: false },
         include: [
           {
