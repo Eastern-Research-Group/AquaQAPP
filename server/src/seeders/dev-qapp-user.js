@@ -222,8 +222,13 @@ module.exports = {
       },
       {
         questionId: 46,
-        value: 'Frequent',
+        value: 'Daily',
         valueId: 1,
+      },
+      {
+        questionId: 46,
+        value: 'Daily',
+        valueId: 2,
       },
       {
         questionId: 47,
@@ -248,59 +253,9 @@ module.exports = {
         value: 'Rationale',
       },
       {
-        questionId: 53,
-        value: 1,
-        valueId: 1,
-      },
-      {
-        questionId: 54,
-        value: 10,
-        valueId: 1,
-      },
-      {
-        questionId: 55,
-        value: 100,
-        valueId: 1,
-      },
-      {
-        questionId: 56,
-        value: 1000,
-        valueId: 1,
-      },
-      {
-        questionId: 57,
-        value: 10000,
-        valueId: 1,
-      },
-      {
         questionId: 71,
         value: '12345',
         valueId: 1,
-      },
-      {
-        questionId: 53,
-        value: 1,
-        valueId: 2,
-      },
-      {
-        questionId: 54,
-        value: 10,
-        valueId: 2,
-      },
-      {
-        questionId: 55,
-        value: 100,
-        valueId: 2,
-      },
-      {
-        questionId: 56,
-        value: 1000,
-        valueId: 2,
-      },
-      {
-        questionId: 57,
-        value: 10000,
-        valueId: 2,
       },
       {
         questionId: 71,
