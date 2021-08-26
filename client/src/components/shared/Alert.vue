@@ -42,8 +42,8 @@ export default {
           return 'fa-exclamation-triangle';
         case 'info':
           return 'fa-info-circle';
-        default:
         case 'success':
+        default:
           return 'fa-check-circle';
       }
     },
@@ -55,8 +55,8 @@ export default {
           return 'is-warning';
         case 'info':
           return 'is-primary';
-        default:
         case 'success':
+        default:
           return 'is-success';
       }
     },

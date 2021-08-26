@@ -30,7 +30,7 @@
       :handleClose="() => (shouldShowAdd = false)"
       title="Add QAPP"
     >
-      <!-- #deafult="props" gives us access to SideNav's props from inside this template tag -->
+      <!-- The #deafult="props" gives us access to SideNav's props from inside this template tag -->
       <template #default="props">
         <form id="addQappForm" @submit.prevent="handleSubmit">
           <div class="field">

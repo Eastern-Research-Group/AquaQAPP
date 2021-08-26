@@ -76,15 +76,12 @@ export default {
 
       &:before {
         background-color: $green;
+        transform: translateX(20px);
       }
     }
 
     &:focus + .slider {
       box-shadow: 0 0 1px #ccc;
-    }
-
-    &:checked + .slider:before {
-      transform: translateX(20px);
     }
   }
 

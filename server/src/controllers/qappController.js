@@ -206,6 +206,8 @@ module.exports = {
 
       // Reload QAPP instance to ensure all associations are up to date
       const qapp = await Qapp.findByPk(qappId);
+      qapp.changed('updatedAt', true);
+      await qapp.save();
       await qapp.reload();
 
       // redirect to return latest QAPP with data
@@ -258,6 +260,8 @@ module.exports = {
 
       // Reload QAPP instance to ensure all associations are up to date
       const qapp = await Qapp.findByPk(req.body.qappId);
+      qapp.changed('updatedAt', true);
+      await qapp.save();
       await qapp.reload();
 
       // redirect to return latest QAPP with data
@@ -280,6 +284,8 @@ module.exports = {
 
       // Reload QAPP instance to ensure all associations are up to date
       const qapp = await Qapp.findByPk(req.body.qappId);
+      qapp.changed('updatedAt', true);
+      await qapp.save();
       await qapp.reload();
 
       // redirect to return latest QAPP with data

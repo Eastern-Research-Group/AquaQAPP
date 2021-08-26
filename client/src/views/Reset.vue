@@ -27,7 +27,7 @@
         <Alert v-if="error" :message="error" type="error" />
         <div class="field">
           <div class="control">
-            <button class="button is-primary is-fullwidth">Reset</button>
+            <button class="button is-dark is-fullwidth">Reset</button>
           </div>
         </div>
         <Alert v-if="showSuccessMessage" v-bind:isMessageHTML="true" v-bind:message="successMessage" type="success" />
@@ -104,6 +104,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
