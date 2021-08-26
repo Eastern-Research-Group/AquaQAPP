@@ -329,6 +329,11 @@ module.exports = {
             texture, temperature, salinity, and dissolved oxygen.
           </li>
         </ul>
+        <p class="is-italic">
+          <span class="has-text-weight-bold">Reminder: </span>
+          Ensure that all parameters are also associated with a location ("Parameters By Location” screen) and frequency of sampling
+          ("Sampling Design Details" screen), or there will be missing information in your final generated QAPP.
+        </p>
       `,
     });
     records.push({
