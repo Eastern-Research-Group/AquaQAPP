@@ -1,10 +1,12 @@
 require('dotenv').config();
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const history = require('connect-history-api-fallback');
 const config = require('./config/config');
 
 const app = express();
+app.use(compression());
 app.use(express.json());
 
 // Only enable CORS on local environment
