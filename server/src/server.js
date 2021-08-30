@@ -5,9 +5,14 @@ const history = require('connect-history-api-fallback');
 const config = require('./config/config');
 
 const app = express();
-
 app.use(express.json());
-app.use(cors());
+
+// Only enable CORS on local environment
+if (process.env.NODE_ENV === 'local') {
+  app.use(cors());
+}
+
+// History allows for both vue-router and express server to serve URLs
 app.use(history());
 
 require('./config/passport');
