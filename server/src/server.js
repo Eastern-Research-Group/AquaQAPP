@@ -1,11 +1,25 @@
 require('dotenv').config();
 const express = require('express');
+const compression = require('compression');
+const helmet = require('helmet');
 const cors = require('cors');
 const history = require('connect-history-api-fallback');
 const config = require('./config/config');
 
 const app = express();
-app.use(express.json());
+app.use(compression()); // adds gzip compression to responses
+// helmet adds/configures security-related headers - need to add custom exception for google analytics
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'script-src': ["'self'", "'unsafe-inline'", 'googletagmanager.com', '*.googletagmanager.com'],
+      },
+    },
+  })
+);
+app.use(express.json()); // enables json responses for API
 
 // Only enable CORS on local environment
 if (process.env.NODE_ENV === 'local') {
