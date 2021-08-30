@@ -66,7 +66,7 @@
           <Alert v-if="error" :message="error" type="error" />
           <div class="field">
             <div class="control">
-              <Button class="is-fullwidth is-size-5" label="Register" type="primary" submit />
+              <Button class="is-fullwidth is-size-5" label="Register" type="dark" submit />
             </div>
           </div>
         </form>

@@ -184,7 +184,7 @@ module.exports = {
 
         const data = {
           to: updatedUser.email,
-          from: 'admin@aquaqapp.com',
+          from: 'aquaqapp.notifications@gmail.com',
           template: 'reset-password-email',
           subject: 'Password Reset Confirmation',
           context: {
@@ -197,7 +197,10 @@ module.exports = {
           if (!err) {
             return res.json({ message: 'Password reset' });
           }
-          return console.error(err);
+          console.error(err);
+          return res.status(500).send({
+            error: 'There was an error resetting your password. Please try again or contact support.',
+          });
         });
       }
       return res.status(422).send({

@@ -66,7 +66,6 @@ export default {
     font-size: 18px;
     min-height: 90px;
     background-color: $darkBlue;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;

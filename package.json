@@ -19,7 +19,6 @@
     "axios": "^0.21.1",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.3",
-    "body-parser": "^1.18.3",
     "bulma": "^0.7.4",
     "bulma-checkradio": "^1.1.0",
     "connect-history-api-fallback": "^1.6.0",
