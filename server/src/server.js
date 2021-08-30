@@ -8,7 +8,17 @@ const config = require('./config/config');
 
 const app = express();
 app.use(compression()); // adds gzip compression to responses
-app.use(helmet()); // adds/configures security-related headers
+// helmet adds/configures security-related headers - need to add custom exception for google analytics
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'script-src': ["'self'", "'unsafe-inline'", 'googletagmanager.com', '*.googletagmanager.com'],
+      },
+    },
+  })
+);
 app.use(express.json()); // enables json responses for API
 
 // Only enable CORS on local environment
