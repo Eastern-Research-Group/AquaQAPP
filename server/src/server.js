@@ -14,9 +14,15 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        'default-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com'],
-        'script-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com'],
-        'img-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com'],
+        'default-src': [
+          "'self'",
+          "'unsafe-inline'",
+          '*.googletagmanager.com',
+          '*.google-analytics.com',
+          '*.arcgis.com',
+        ],
+        'script-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com', '*.arcgis.com'],
+        'img-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com', '*.arcgis.com'],
       },
     },
   })
