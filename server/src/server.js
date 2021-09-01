@@ -22,7 +22,17 @@ app.use(
           '*.arcgis.com',
         ],
         'script-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com', '*.arcgis.com'],
-        'img-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com', '*.arcgis.com'],
+        'img-src': [
+          "'self'",
+          "'unsafe-inline'",
+          '*.googletagmanager.com',
+          '*.google-analytics.com',
+          '*.arcgis.com',
+          '*.arcgisonline.com',
+          'data:image/png',
+          'data:image/svg+xml',
+          'data:image/svg',
+        ],
       },
     },
   })
