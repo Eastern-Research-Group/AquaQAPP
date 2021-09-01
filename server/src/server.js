@@ -32,6 +32,7 @@ app.use(
           'data:image/png',
           'data:image/svg+xml',
           'data:image/svg',
+          'data:image/gif',
         ],
       },
     },
