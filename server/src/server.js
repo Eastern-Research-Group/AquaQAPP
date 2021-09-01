@@ -20,6 +20,7 @@ app.use(
           '*.googletagmanager.com',
           '*.google-analytics.com',
           '*.arcgis.com',
+          '*.arcgisonline.com',
         ],
         'script-src': ["'self'", "'unsafe-inline'", '*.googletagmanager.com', '*.google-analytics.com', '*.arcgis.com'],
         'img-src': [
