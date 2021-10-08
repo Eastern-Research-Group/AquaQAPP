@@ -1,6 +1,7 @@
 version: 2
 jobs:
   develop-branch:
+    working_directory: ~/project/app # directory where steps will run
     docker:
       - image: circleci/node:14
     environment:
@@ -41,6 +42,7 @@ jobs:
             git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
 
   stage-branch:
+    working_directory: ~/project/app # directory where steps will run
     docker:
       - image: circleci/node:14
     environment:
@@ -80,18 +82,6 @@ jobs:
           command: |
             git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
 
-  master-branch:
-    docker:
-      - image: buildpack-deps:trusty
-    environment:
-      HEROKU_APP_NAME: aquaqapp
-    steps:
-      - checkout
-      - run:
-          name: Deploy $HEROKU_APP_NAME to Heroku
-          command: |
-            git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:refs/heads/master
-
 workflows:
   version: 2
   main:
@@ -104,7 +94,3 @@ workflows:
           filters:
             branches:
               only: staging
-      - master-branch:
-          filters:
-            branches:
-              only: master
