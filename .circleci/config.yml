@@ -21,9 +21,6 @@ jobs:
           name: Update npm
           command: |
             sudo npm install -g npm
-      - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: dependency-cache-{{ checksum "app/package.json" }}
       - run:
           name: Build npm dependencies
           command: |
@@ -62,9 +59,6 @@ jobs:
           name: Update npm
           command: |
             sudo npm install -g npm
-      - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: dependency-cache-{{ checksum "app/package.json" }}
       - run:
           name: Build npm dependencies
           command: |
