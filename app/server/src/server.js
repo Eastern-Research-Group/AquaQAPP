@@ -36,7 +36,7 @@ app.use(
     },
   })
 );
-app.use(express.json()); // enables json responses for API
+app.use(express.json({ limit: '50mb' })); // enables json responses for API
 
 // Only enable CORS on local environment
 if (process.env.NODE_ENV === 'local') {
