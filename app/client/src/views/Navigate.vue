@@ -270,7 +270,10 @@ export default {
       if (this.currentSection.sectionName === 'sampleDesign') {
         // Make sure sample design details have saved entries for all parameters by all locations
         const paramsByLocationCount = this.qappData.parametersByLocation.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue.value.split(',').length;
+          if (currentValue.value) {
+            return accumulator + currentValue.value.split(',').length;
+          }
+          return accumulator;
         }, 0);
         // Use frequency count to confirm as it is the first sample design question and is required
         // Make sure frequency exists in qappData before checking length to avoid error

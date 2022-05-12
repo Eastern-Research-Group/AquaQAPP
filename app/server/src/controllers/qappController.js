@@ -16,7 +16,7 @@ async function checkFieldLength(question, body) {
   if (question.id !== body.questionId) return `Data condition error - ${question.id} !== ${body.questionId}`;
 
   if (['text', 'email', 'tel', 'largeText'].indexOf(question.dataEntryType) !== -1) {
-    if (body.value !== undefined) {
+    if (body.value !== undefined && body.value !== null) {
       const size = body.value.length;
       if (size === 0) {
         // If a question is blank but section has already been marked complete, make sure to un-mark as complete
