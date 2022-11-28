@@ -2,11 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const config = require('../config/config');
+const sequelizeConfig = require('../config/sequelize.config');
 
 const db = {};
 
 const sequelize = process.env.DATABASE_URL
-  ? new Sequelize(process.env.DATABASE_URL, config.db.options)
+  ? new Sequelize(process.env.DATABASE_URL, sequelizeConfig.production)
   : new Sequelize(config.db.database, config.db.user, config.db.password, { dialect: 'postgres' });
 
 // Create sequelize models from each model file
